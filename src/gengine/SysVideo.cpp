@@ -47,7 +47,7 @@ SysVideo::setCaption(const std::string &title)
  * @param title utf-8 string
  * @return true for success
  */
-#ifdef HAVE_X11
+#if defined(HAVE_X11) && !defined(DISABLE_X11) && defined(unix)
 #include <X11/Xutil.h>
 bool
 sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
@@ -101,7 +101,7 @@ sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
 }
 #else
 bool
-sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
+sysSetCaption(SDL_SysWMinfo * /*info*/, const std::string &/*title*/)
 {
     return false;
 }
