@@ -2,7 +2,7 @@
 all:
 	touch ChangeLog # cvs2cl
 	-libtoolize --force >/dev/null
-	aclocal
+	aclocal -I .
 	automake -a
 	autoconf
 	@echo "Don't forget to run ./configure"
