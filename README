@@ -1,4 +1,6 @@
-Fish Fillets - Next Generation (implementation in C++).
+Fish Fillets - Next Generation
+http://fillets.sf.net
+------------------------------
 
 Compile requirements:
 - (autoconf, automake) OR aap
@@ -31,8 +33,7 @@ How to run:
 
 Alternative you can copy all game data to $HOME/.fillets-ng
 
-
-//-----------------------------------------------------------------
-Homepage:
-http://fillets.sf.net
+Controls:
+small fish ... arrows
+big fish ... keypad (4568)
 
