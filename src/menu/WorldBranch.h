@@ -3,6 +3,8 @@
 
 class Path;
 class LevelNode;
+class LevelDesc;
+class ResDialogPack;
 
 #include "Scripter.h"
 
@@ -15,6 +17,7 @@ class WorldBranch : public Scripter {
     private:
         LevelNode *m_root;
         LevelNode *m_ending;
+        ResDialogPack *m_outPack;
     private:
         bool wasSolved(const std::string &codename);
         void prepareNode(LevelNode *node, bool hidden);
@@ -22,7 +25,10 @@ class WorldBranch : public Scripter {
     public:
         WorldBranch(LevelNode *root);
 
-        LevelNode* parseMap(const Path &datafile, LevelNode **outEnding);
+        LevelNode* parseMap(const Path &datafile, LevelNode **outEnding,
+                ResDialogPack *des);
+
+        void addDesc(const std::string &codename, LevelDesc *desc);
         void addNode(const std::string &parent, LevelNode *new_node,
                 bool hidden);
         void setEnding(LevelNode *new_node);

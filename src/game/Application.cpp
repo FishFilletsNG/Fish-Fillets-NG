@@ -129,6 +129,8 @@ Application::prepareOptions(int argc, char *argv[])
             "Sound volume in percentage");
     params.addParam("volume_music", OptionParams::TYPE_NUMBER,
             "Music volume in percentage");
+    params.addParam("worldmap", OptionParams::TYPE_STRING,
+            "Path to worldmap file.");
     OptionAgent::agent()->parseCmdOpt(argc, argv, params);
 }
 //-----------------------------------------------------------------

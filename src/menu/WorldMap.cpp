@@ -15,7 +15,6 @@
 #include "StateManager.h"
 #include "WorldInput.h"
 
-#include "worldmap-script.h"
 #include "Log.h"
 #include "Path.h"
 #include "WorldBranch.h"
@@ -25,7 +24,6 @@
 #include "LogicException.h"
 #include "ResDialogPack.h"
 #include "LevelDesc.h"
-#include "ScriptState.h"
 #include "Level.h"
 #include "Pedometer.h"
 #include "LayeredPicture.h"
@@ -47,8 +45,6 @@ WorldMap::WorldMap()
     takeHandler(new WorldInput(this));
     registerDrawable(m_bg);
     registerDrawable(this);
-
-    m_script->registerFunc("worldmap_addDesc", script_worldmap_addDesc);
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
@@ -86,27 +82,19 @@ WorldMap::prepareBg()
     m_activeMask = m_bg->getNoMask();
 }
 //-----------------------------------------------------------------
-    void
-WorldMap::addDesc(const std::string &codename, LevelDesc *desc)
-{
-    m_descPack->addRes(codename, desc);
-}
-//-----------------------------------------------------------------
 /**
  * Read dots postions and level descriptions.
  * @throws LogicException when cannot parse data file
  */
     void
-WorldMap::initMap(const Path &mapfile, const Path &descfile)
+WorldMap::initMap(const Path &mapfile)
 {
     WorldBranch parser(NULL);
-    m_startNode = parser.parseMap(mapfile, &m_ending);
+    m_startNode = parser.parseMap(mapfile, &m_ending, m_descPack);
     if (NULL == m_startNode) {
         throw LogicException(ExInfo("cannot create world map")
                 .addInfo("file", mapfile.getNative()));
     }
-
-    scriptInclude(descfile);
 }
 //-----------------------------------------------------------------
 /**

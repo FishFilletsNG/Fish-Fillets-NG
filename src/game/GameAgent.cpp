@@ -29,10 +29,8 @@ GameAgent::own_init()
     m_manager = new StateManager();
     Path pathMap = Path::dataReadPath(OptionAgent::agent()->getParam(
                 "worldmap", "script/worldmap.lua"));
-    Path pathDesc = Path::dataReadPath(OptionAgent::agent()->getParam(
-                "worlddesc", "script/worlddesc.lua"));
     WorldMap *worldmap = new WorldMap();
-    worldmap->initMap(pathMap, pathDesc);
+    worldmap->initMap(pathMap);
     m_manager->pushState(NULL, worldmap);
 
     keyBinding();
