@@ -25,8 +25,8 @@ ResDialogPack::unloadRes(Dialog *res)
  * One string must excatly be starting substring of the other.
  */
 int
-ResDialogPack::matchScore(const std::string first,
-        const std::string second) const
+ResDialogPack::matchScore(const std::string &first,
+        const std::string &second) const
 {
     int score = 0;
     int minSize = min(first.size(), second.size());

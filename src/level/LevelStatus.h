@@ -27,8 +27,8 @@ class LevelStatus {
         std::string getSolutionFilename();
     public:
         LevelStatus() { m_complete = false; m_wasRunning = false; }
-        void prepareRun(const std::string codename,
-                const std::string levelName, const std::string &poster);
+        void prepareRun(const std::string &codename,
+                const std::string &levelName, const std::string &poster);
         std::string getLevelName() const { return m_levelName; }
         PosterState *createPoster() const;
 
