@@ -38,7 +38,7 @@ KeyStroke::KeyStroke(SDLKey sym, int mod)
 //-----------------------------------------------------------------
 /**
  * Strip ignored modes.
- * KMOD_NUM|KMOD_CAPS|KMOD_MODE are ignored.
+ * KMOD_SHIFT|KMOD_NUM|KMOD_CAPS|KMOD_MODE are ignored.
  */
     int
 KeyStroke::modStrip(int mod)
