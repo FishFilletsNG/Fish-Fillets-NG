@@ -227,7 +227,8 @@ Rules::changeState()
 //-----------------------------------------------------------------
 /**
  * Let model to go out of room.
- * @return out depth, 0 for normal, 1 for going out, 2... for on the way
+ * @return out depth, 0 for normal, 1 for going out,
+ * 2... for on the way, -1 for out of screen
  */
 int
 Rules::actionOut()
@@ -245,7 +246,7 @@ Rules::actionOut()
             else {
                 if (m_outDepth > 0) {
                     m_model->change_goOut();
-                    m_outDepth = 0;
+                    m_outDepth = -1;
                 }
             }
         }

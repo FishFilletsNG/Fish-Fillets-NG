@@ -260,12 +260,12 @@ Room::fallout(bool interactive)
                 m_locker->ensurePhases(3);
             }
         }
+        else if (outDepth == -1) {
+            m_levelScript->interruptPlan();
+            m_controls->checkActive();
+        }
     }
 
-    if (wentOut) {
-        m_levelScript->interruptPlan();
-        m_controls->checkActive();
-    }
     return wentOut;
 }
 //-----------------------------------------------------------------
