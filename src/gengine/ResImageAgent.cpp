@@ -14,49 +14,19 @@
 #include "SDL_image.h"
 
 //-----------------------------------------------------------------
-/**
- * Load unshared image from file
- * and convert image to diplayformat.
- *
- * @return loaded surface
- * @throws ImgException when image cannot be loaded
- * @throws SDLException when image cannot be converted
- */
-SDL_Surface *
-ResImageAgent::loadImage(const Path &file)
+ResImageAgent::ResImageAgent()
 {
-    SDL_Surface *raw_image = IMG_Load(file.getNative().c_str());
-    if (NULL == raw_image) {
-        throw ImgException(ExInfo("Load")
-                .addInfo("file", file.getNative()));
-    }
-
-    SDL_Surface *surface = SDL_DisplayFormatAlpha(raw_image);
-    if (NULL == surface) {
-        throw SDLException(ExInfo("DisplayFormat")
-                .addInfo("file", file.getNative()));
-    }
-    SDL_FreeSurface(raw_image);
-
-    return surface;
+    m_pack = new ResImagePack();
 }
 //-----------------------------------------------------------------
-/**
- * Store image from file.
- *
- * @throws ImgException when image cannot be loaded
- * @throws SDLException when image cannot be converted
- */
-void
-ResImageAgent::addImage(const std::string &name, const Path &file)
+ResImageAgent::~ResImageAgent()
 {
-    SDL_Surface *surface = loadImage(file);
-    addRes(name, surface);
+    delete m_pack;
 }
 //-----------------------------------------------------------------
 void
-ResImageAgent::unloadRes(SDL_Surface *res)
+ResImageAgent::own_shutdown()
 {
-    SDL_FreeSurface(res);
+    m_pack->removeAll();
 }
 

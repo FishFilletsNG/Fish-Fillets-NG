@@ -8,6 +8,7 @@
  */
 #include "GameAgent.h"
 
+#include "Log.h"
 #include "LogicException.h"
 
 #include "SoundAgent.h"

@@ -2,11 +2,11 @@
 #define HEADER_VIEW_H
 
 class Cube;
+class ResImagePack;
 
 #include "IDrawer.h"
 #include "NoCopy.h"
 #include "Path.h"
-#include "ResImageAgent.h"
 
 #include "SDL.h"
 
@@ -18,7 +18,7 @@ class View : public IDrawer, public NoCopy {
         const Cube *m_model;
         int m_animShift;
         int m_shiftSize;
-        ResImageAgent *m_anim;
+        ResImagePack *m_anim;
     private:
         void computeShiftSize();
     protected:

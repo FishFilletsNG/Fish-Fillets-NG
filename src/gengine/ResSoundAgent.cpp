@@ -12,6 +12,15 @@
 
 //-----------------------------------------------------------------
 /**
+ * Free all resources.
+ */
+    void
+ResSoundAgent::own_shutdown()
+{
+    removeAll();
+}
+//-----------------------------------------------------------------
+/**
  * @throws MixException when sound cannot be loaded.
  */
 void

@@ -1,7 +1,8 @@
 #ifndef HEADER_RESSOUNDAGENT_H
 #define HEADER_RESSOUNDAGENT_H
 
-#include "ResourceAgent.h"
+#include "BaseAgent.h"
+#include "ResourcePack.h"
 #include "Name.h"
 #include "Path.h"
 
@@ -10,14 +11,13 @@
 /**
  * Sound resources.
  */
-class ResSoundAgent : public ResourceAgent<Mix_Chunk*> {
+class ResSoundAgent : public BaseAgent, public ResourcePack<Mix_Chunk*> {
     AGENT(ResSoundAgent, Name::RESSOUND_NAME);
     protected:
     virtual void unloadRes(Mix_Chunk *res);
+    virtual void own_shutdown();
     public:
     void addSound(const std::string &name, const Path &file);
-
-    //FIXME: stop music before shutdown?
 };
 
 #endif

@@ -9,7 +9,7 @@
 #include "View.h"
 
 #include "Log.h"
-#include "ResImageAgent.h"
+#include "ResImagePack.h"
 #include "GameAgent.h"
 #include "Cube.h"
 
@@ -22,8 +22,7 @@
 View::View(const Path &picture)
 {
     try {
-        //NOTE: hack ResImageAgent as sprites holder
-        m_anim = new ResImageAgent();
+        m_anim = new ResImagePack();
         m_anim->addImage("default", picture);
         setAnim("default");
 
@@ -39,6 +38,7 @@ View::View(const Path &picture)
 //-----------------------------------------------------------------
 View::~View()
 {
+    m_anim->removeAll();
     delete m_anim;
 }
 //-----------------------------------------------------------------

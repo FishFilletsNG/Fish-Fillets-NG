@@ -1,7 +1,8 @@
 #ifndef HEADER_RESIMAGEAGENT_H
 #define HEADER_RESIMAGEAGENT_H
 
-#include "ResourceAgent.h"
+#include "BaseAgent.h"
+#include "ResImagePack.h"
 #include "Name.h"
 #include "Path.h"
 
@@ -10,13 +11,21 @@
 /**
  * Image resources and image loading.
  */
-class ResImageAgent : public ResourceAgent<SDL_Surface*> {
+class ResImageAgent : public BaseAgent {
     AGENT(ResImageAgent, Name::RESIMAGE_NAME);
+    private:
+    ResImagePack *m_pack;
     protected:
-    virtual void unloadRes(SDL_Surface *res);
+    virtual void own_shutdown();
     public:
-    SDL_Surface *loadImage(const Path &file);
-    void addImage(const std::string &name, const Path &file);
+    ResImageAgent();
+    virtual ~ResImageAgent();
+
+    SDL_Surface *loadImage(const Path &file) { return m_pack->loadImage(file); }
+    void addImage(const std::string &name, const Path &file)
+    {
+        m_pack->addImage(name, file);
+    }
 };
 
 #endif
