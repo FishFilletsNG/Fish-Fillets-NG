@@ -13,11 +13,13 @@ class LayeredPicture;
 #include "Drawable.h"
 #include "GameState.h"
 #include "DescFinder.h"
+#include "Scripter.h"
 
 /**
  * Map with path from one level to another.
  */
-class WorldMap : public GameState, public DescFinder, public Drawable {
+class WorldMap : public GameState, public DescFinder, public Drawable,
+                 public Scripter {
     private:
         LevelNode *m_startNode;
         LevelNode *m_selected;

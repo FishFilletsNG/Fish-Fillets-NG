@@ -5,9 +5,6 @@ extern "C" {
 #include "lua.h"
 }
 
-extern int script_file_include(lua_State *L) throw();
-extern int script_file_exists(lua_State *L) throw();
-
 extern int script_game_planAction(lua_State *L) throw();
 extern int script_game_isPlanning(lua_State *L) throw();
 extern int script_game_killPlan(lua_State *L) throw();

@@ -14,13 +14,16 @@
 #include "ScriptException.h"
 #include "DemoMode.h"
 
+extern "C" {
+#include "lua.h"
+}
 #include <stdio.h>
 
 //-----------------------------------------------------------------
    inline LevelStatus *
 getStatus(lua_State *L)
 {
-    return static_cast<LevelStatus*>(script_getLeader(L));
+    return dynamic_cast<LevelStatus*>(script_getLeader(L));
 }
 
 
@@ -28,8 +31,8 @@ getStatus(lua_State *L)
 /**
  * void status_readMoves(saved_moves)
  */
-    int
-LevelStatus::script_status_readMoves(lua_State *L) throw()
+    static int
+script_status_readMoves(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *saved_moves = luaL_checkstring(L, 1);
@@ -37,14 +40,20 @@ LevelStatus::script_status_readMoves(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+
+//-----------------------------------------------------------------
+LevelStatus::LevelStatus()
+{
+    m_complete = false;
+    m_wasRunning = false;
+    m_script->registerFunc("status_readMoves", script_status_readMoves);
+}
 //-----------------------------------------------------------------
     void
 LevelStatus::readMoves(const std::string &savedMoves)
 {
     m_savedMoves = savedMoves;
 }
-
-
 //-----------------------------------------------------------------
 void
 LevelStatus::prepareRun(const std::string &codename, const std::string &poster)
@@ -53,18 +62,6 @@ LevelStatus::prepareRun(const std::string &codename, const std::string &poster)
     m_wasRunning = false;
     m_codename = codename;
     m_poster = poster;
-}
-//-----------------------------------------------------------------
-/**
- * Return new prepared script.
- */
-    ScriptState *
-LevelStatus::createScript()
-{
-    ScriptState *script = new ScriptState();
-    script->registerFunc("status_readMoves", script_status_readMoves);
-    script->registerLeader(this);
-    return script;
 }
 //-----------------------------------------------------------------
 std::string
@@ -90,15 +87,13 @@ LevelStatus::readSolvedMoves()
 
     Path oldSolution = Path::dataReadPath(getSolutionFilename());
     if (oldSolution.exists()) {
-        ScriptState *script = createScript();
         try {
-            script->doFile(oldSolution);
-            script->doString("status_readMoves(saved_moves)");
+            scriptInclude(oldSolution);
+            scriptDo("status_readMoves(saved_moves)");
         }
         catch (ScriptException &e) {
             LOG_WARNING(e.info());
         }
-        delete script;
     }
 
     return m_savedMoves;

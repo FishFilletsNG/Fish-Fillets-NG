@@ -20,7 +20,7 @@
     inline WorldBranch *
 getBranch(lua_State *L)
 {
-    return static_cast<WorldBranch*>(script_getLeader(L));
+    return dynamic_cast<WorldBranch*>(script_getLeader(L));
 }
 //-----------------------------------------------------------------
 /**
@@ -65,10 +65,32 @@ script_branch_setEnding(lua_State *L) throw()
 
 }
 //-----------------------------------------------------------------
+/**
+ * void node_bestSolution(codename, moves, author)
+ */
+    int
+script_node_bestSolution(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *codename = luaL_checkstring(L, 1);
+    int moves = luaL_checkint(L, 2);
+    const char *author = luaL_checkstring(L, 3);
+
+    getBranch(L)->bestSolution(codename, moves, author);
+    END_NOEXCEPTION;
+    return 0;
+
+}
+
+//-----------------------------------------------------------------
 WorldBranch::WorldBranch(LevelNode *root)
 {
     m_root = root;
     m_ending = NULL;
+
+    m_script->registerFunc("branch_addNode", script_branch_addNode);
+    m_script->registerFunc("branch_setEnding", script_branch_setEnding);
+    m_script->registerFunc("node_bestSolution", script_node_bestSolution);
 }
 //-----------------------------------------------------------------
 /**
@@ -81,11 +103,7 @@ WorldBranch::WorldBranch(LevelNode *root)
 LevelNode *
 WorldBranch::parseMap(const Path &datafile, LevelNode **outEnding)
 {
-    ScriptState script;
-    script.registerLeader(this);
-    script.registerFunc("branch_addNode", script_branch_addNode);
-    script.registerFunc("branch_setEnding", script_branch_setEnding);
-    script.doFile(datafile);
+    scriptInclude(datafile);
 
     if (m_ending) {
         if (outEnding) {
@@ -131,6 +149,28 @@ WorldBranch::setEnding(LevelNode *new_node)
         m_ending->setState(LevelNode::STATE_OPEN);
     }
     m_ending->setDepth(-1);
+}
+//-----------------------------------------------------------------
+/**
+ * Store best solution author.
+ * @param codename level codename
+ * @param moves number of moves in solution
+ * @param author solution author
+ */
+void
+WorldBranch::bestSolution(const std::string &codename, int moves,
+                const std::string &author)
+{
+    LevelNode *node = m_root->findNamed(codename);
+    if (node) {
+        node->bestSolution(moves, author);
+    }
+    else {
+        throw LogicException(ExInfo("there is no such node")
+                .addInfo("codename", codename)
+                .addInfo("moves", moves)
+                .addInfo("author", author));
+    }
 }
 //-----------------------------------------------------------------
 /**

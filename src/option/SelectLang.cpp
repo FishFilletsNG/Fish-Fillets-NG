@@ -19,7 +19,7 @@
     inline SelectLang *
 getSelect(lua_State *L)
 {
-    return static_cast<SelectLang*>(script_getLeader(L));
+    return dynamic_cast<SelectLang*>(script_getLeader(L));
 }
 //-----------------------------------------------------------------
 /**
@@ -45,10 +45,8 @@ SelectLang::SelectLang(const Path &datafile)
 {
     m_activeRow = new HBox();
 
-    ScriptState script;
-    script.registerLeader(this);
-    script.registerFunc("select_addFlag", script_select_addFlag);
-    script.doFile(datafile);
+    m_script->registerFunc("select_addFlag", script_select_addFlag);
+    scriptInclude(datafile);
 
     addWidget(m_activeRow);
 }

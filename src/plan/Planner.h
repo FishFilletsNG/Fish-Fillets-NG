@@ -2,11 +2,10 @@
 #define HEADER_PLANNER_H
 
 class Path;
-class ScriptState;
 class CommandQueue;
 class DialogStack;
 
-#include "NoCopy.h"
+#include "Scripter.h"
 
 #include "SDL.h"
 #include <string>
@@ -14,20 +13,16 @@ class DialogStack;
 /**
  * Action planner.
  */
-class Planner : public NoCopy {
+class Planner : public Scripter {
     private:
         CommandQueue *m_plan;
         DialogStack *m_dialogs;
-    protected:
-        ScriptState *m_script;
     private:
         void registerScriptFuncs();
     public:
         Planner();
         virtual ~Planner();
 
-        void scriptInclude(const Path &filename);
-        void scriptDo(const std::string &input);
         bool satisfyPlan();
         void killPlan();
         virtual void interruptPlan();

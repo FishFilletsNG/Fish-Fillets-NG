@@ -32,6 +32,8 @@ class LevelNode : public NoCopy {
         int m_depth;
         typedef std::vector<class LevelNode*> t_children;
         t_children m_children;
+        int m_bestMoves;
+        std::string m_bestAuthor;
     private:
         bool isUnder(const V2 &cursor) const;
     public:
@@ -42,6 +44,10 @@ class LevelNode : public NoCopy {
         eState getState() const { return m_state; }
         void setDepth(int depth) { m_depth = depth; }
         int getDepth() const { return m_depth; }
+
+        void bestSolution(int moves, const std::string &author);
+        int getBestMoves() const { return m_bestMoves; }
+        std::string getBestAuthor() const { return m_bestAuthor; }
 
         std::string getCodename() const { return m_codename; }
         V2 getLoc() const { return m_loc; }

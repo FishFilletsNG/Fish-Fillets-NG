@@ -8,8 +8,11 @@
  */
 #include "def-script.h"
 
+#include "Path.h"
+#include "Scripter.h"
+
 //-----------------------------------------------------------------
-    void *
+    Scripter *
 script_getLeader(lua_State *L)
 {
     lua_pushstring(L, script_getLeaderName());
@@ -19,7 +22,7 @@ script_getLeader(lua_State *L)
                 .addInfo("key", script_getLeaderName()).what());
     }
     luaL_checktype(L, -1, LUA_TLIGHTUSERDATA);
-    void *result = lua_touserdata(L, -1);
+    Scripter *result = static_cast<Scripter*>(lua_touserdata(L, -1));
     lua_pop(L, 1);
 
     return result;
@@ -84,6 +87,41 @@ script_debugStack(lua_State *L)
     }
     lua_concat(L, lua_gettop(L));
     //NOTE: return debug_message
+    return 1;
+}
+
+//-----------------------------------------------------------------
+/**
+ * void file_include(filename)
+ *
+ * Do file in usedir or systemdir.
+ */
+    int
+script_file_include(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *filename = luaL_checkstring(L, 1);
+
+    script_getLeader(L)->scriptInclude(Path::dataReadPath(filename));
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * bool file_exists(filename)
+ *
+ * Returns true when such file exists in userdir or systemdir.
+ */
+    int
+script_file_exists(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *filename = luaL_checkstring(L, 1);
+
+    bool exists = Path::dataReadPath(filename).exists();
+    lua_pushboolean(L, exists);
+    END_NOEXCEPTION;
+    //NOTE: return exists
     return 1;
 }
 

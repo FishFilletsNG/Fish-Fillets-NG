@@ -47,6 +47,8 @@ WorldMap::WorldMap()
     takeHandler(new WorldInput(this));
     registerDrawable(m_bg);
     registerDrawable(this);
+
+    m_script->registerFunc("worldmap_addDesc", script_worldmap_addDesc);
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
@@ -104,10 +106,7 @@ WorldMap::initMap(const Path &mapfile, const Path &descfile)
                 .addInfo("file", mapfile.getNative()));
     }
 
-    ScriptState script;
-    script.registerLeader(this);
-    script.registerFunc("worldmap_addDesc", script_worldmap_addDesc);
-    script.doFile(descfile);
+    scriptInclude(descfile);
 }
 //-----------------------------------------------------------------
 /**

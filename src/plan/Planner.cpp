@@ -20,19 +20,14 @@
 //-----------------------------------------------------------------
 Planner::Planner()
 {
-    m_script = new ScriptState();
     m_plan = new CommandQueue();
     m_dialogs = new DialogStack();
-    m_script->registerLeader(this);
     registerScriptFuncs();
 }
 //-----------------------------------------------------------------
     void
 Planner::registerScriptFuncs()
 {
-    m_script->registerFunc("file_include", script_file_include);
-    m_script->registerFunc("file_exists", script_file_exists);
-
     m_script->registerFunc("game_planAction", script_game_planAction);
     m_script->registerFunc("game_isPlanning", script_game_isPlanning);
     m_script->registerFunc("game_killPlan", script_game_killPlan);
@@ -54,26 +49,7 @@ Planner::~Planner()
 {
     //NOTE: planned ScriptCmd must be removed before script
     delete m_plan;
-    delete m_script;
     delete m_dialogs;
-}
-//-----------------------------------------------------------------
-/**
- * Include this script file.
- */
-    void
-Planner::scriptInclude(const Path &filename)
-{
-    m_script->doFile(filename);
-}
-//-----------------------------------------------------------------
-/**
- * Run this command.
- */
-    void
-Planner::scriptDo(const std::string &input)
-{
-    m_script->doString(input);
 }
 //-----------------------------------------------------------------
 /**

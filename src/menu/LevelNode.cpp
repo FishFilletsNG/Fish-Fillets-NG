@@ -24,6 +24,7 @@ LevelNode::LevelNode(const std::string &codename, const Path &datafile,
 {
     m_state = STATE_FAR;
     m_depth = 1;
+    m_bestMoves = -1;
 }
 //-----------------------------------------------------------------
 /**
@@ -63,6 +64,13 @@ LevelNode::setState(eState state)
             break;
     }
     m_state = state;
+}
+//-----------------------------------------------------------------
+void
+LevelNode::bestSolution(int moves, const std::string &author)
+{
+    m_bestMoves = moves;
+    m_bestAuthor = author;
 }
 //-----------------------------------------------------------------
 /**

@@ -26,6 +26,7 @@ MouseControl::MouseControl(Controls *controls, const View *view,
 /**
  * Left button finds shortest path.
  * Right button moves to the cursor.
+ * @return whether a move was made
  */
 bool
 MouseControl::mouseDrive(const InputProvider *input) const
@@ -44,6 +45,7 @@ MouseControl::mouseDrive(const InputProvider *input) const
 /**
  * Move along shortest path without pushing.
  * @param field destination field
+ * @return whether a move was made
  */
 bool
 MouseControl::moveTo(const V2 &field) const
@@ -62,6 +64,7 @@ MouseControl::moveTo(const V2 &field) const
 /**
  * Move direct to the destination.
  * @param field destination field
+ * @return whether a move was made
  */
 bool
 MouseControl::moveHardTo(const V2 &field) const

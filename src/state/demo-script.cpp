@@ -18,7 +18,7 @@
     inline DemoMode *
 getDemo(lua_State *L)
 {
-    return static_cast<DemoMode*>(script_getLeader(L));
+    return dynamic_cast<DemoMode*>(script_getLeader(L));
 }
 
 //-----------------------------------------------------------------

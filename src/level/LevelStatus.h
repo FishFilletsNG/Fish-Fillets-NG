@@ -1,19 +1,14 @@
 #ifndef HEADER_LEVELSTATUS_H
 #define HEADER_LEVELSTATUS_H
 
-class ScriptState;
 class GameState;
 
-#include <string>
-
-extern "C" {
-#include "lua.h"
-}
+#include "Scripter.h"
 
 /**
  * Status of level after a game.
  */
-class LevelStatus {
+class LevelStatus : public Scripter {
     private:
         bool m_complete;
         bool m_wasRunning;
@@ -21,11 +16,9 @@ class LevelStatus {
         std::string m_poster;
         std::string m_savedMoves;
     private:
-        static int script_status_readMoves(lua_State *L) throw();
-        ScriptState *createScript();
         std::string getSolutionFilename();
     public:
-        LevelStatus() { m_complete = false; m_wasRunning = false; }
+        LevelStatus();
         void prepareRun(const std::string &codename,
                 const std::string &poster);
         GameState *createPoster() const;

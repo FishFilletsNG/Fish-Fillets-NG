@@ -367,12 +367,13 @@ Room::unBusyUnits()
     void
 Room::loadMove(char move)
 {
+    static const bool NO_INTERACTIVE = false;
     bool falling = true;
     while (falling) {
-        falling = beginFall(false);
+        falling = beginFall(NO_INTERACTIVE);
         makeMove(move);
 
-        finishRound(false);
+        finishRound(NO_INTERACTIVE);
     }
 }
 //-----------------------------------------------------------------

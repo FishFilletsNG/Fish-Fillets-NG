@@ -159,7 +159,7 @@ ScriptState::unref(int funcRef)
  * Register light userdata for lua script.
  */
 void
-ScriptState::registerLeader(void *leader)
+ScriptState::registerLeader(Scripter *leader)
 {
     lua_pushstring(m_state, script_getLeaderName());
     lua_pushlightuserdata(m_state, leader);

@@ -1,6 +1,8 @@
 #ifndef HEADER_DEF_SCRIPT_H
 #define HEADER_DEF_SCRIPT_H
 
+class Scripter;
+
 #include "Log.h"
 
 #include <stdexcept>
@@ -23,7 +25,11 @@ catch (...) { \
 }
 
 inline const char *script_getLeaderName() { return "script_leader"; }
-extern void *script_getLeader(lua_State *L);
+extern Scripter *script_getLeader(lua_State *L);
 extern int script_debugStack(lua_State *L);
+
+extern int script_file_include(lua_State *L) throw();
+extern int script_file_exists(lua_State *L) throw();
+
 
 #endif

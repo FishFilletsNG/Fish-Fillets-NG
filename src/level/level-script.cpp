@@ -22,7 +22,7 @@
     inline LevelScript *
 getLevelScript(lua_State *L)
 {
-    return static_cast<LevelScript*>(script_getLeader(L));
+    return dynamic_cast<LevelScript*>(script_getLeader(L));
 }
 //-----------------------------------------------------------------
     inline Level *

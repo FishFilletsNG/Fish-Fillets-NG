@@ -69,7 +69,6 @@ script_options_setParam(lua_State *L) throw()
     int
 script_options_getParam(lua_State *L) throw()
 {
-    int result_count = 0;
     BEGIN_NOEXCEPTION;
     const char *name = luaL_checkstring(L, 1);
     std::string value = OptionAgent::agent()->getParam(name);

@@ -25,7 +25,7 @@ class Actor;
     inline Planner *
 getPlanner(lua_State *L)
 {
-    return static_cast<Planner*>(script_getLeader(L));
+    return dynamic_cast<Planner*>(script_getLeader(L));
 }
 //-----------------------------------------------------------------
     inline DialogStack *
@@ -33,44 +33,6 @@ getDialogs(lua_State *L)
 {
     return getPlanner(L)->dialogs();
 }
-
-
-//-----------------------------------------------------------------
-/**
- * void file_include(filename)
- *
- * Do file in usedir or systemdir.
- */
-    int
-script_file_include(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    const char *filename = luaL_checkstring(L, 1);
-
-    getPlanner(L)->scriptInclude(Path::dataReadPath(filename));
-    END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
-    return 0;
-}
-//-----------------------------------------------------------------
-/**
- * bool file_exists(filename)
- *
- * Returns true when such file exists in userdir or systemdir.
- */
-    int
-script_file_exists(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    const char *filename = luaL_checkstring(L, 1);
-
-    bool exists = Path::dataReadPath(filename).exists();
-    lua_pushboolean(L, exists);
-    END_NOEXCEPTION;
-    //NOTE: return exists
-    return 1;
-}
-
 
 //-----------------------------------------------------------------
 /**

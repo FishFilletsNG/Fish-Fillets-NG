@@ -4,14 +4,14 @@
 class Path;
 class LevelNode;
 
-#include "NoCopy.h"
+#include "Scripter.h"
 
 #include <string>
 
 /**
  * Can read graph of level nodes.
  */
-class WorldBranch : public NoCopy {
+class WorldBranch : public Scripter {
     private:
         LevelNode *m_root;
         LevelNode *m_ending;
@@ -26,6 +26,8 @@ class WorldBranch : public NoCopy {
         void addNode(const std::string &parent, LevelNode *new_node,
                 bool hidden);
         void setEnding(LevelNode *new_node);
+        void bestSolution(const std::string &codename, int moves,
+                const std::string &author);
 };
 
 #endif

@@ -16,7 +16,7 @@
     inline WorldMap *
 getWorld(lua_State *L)
 {
-    return static_cast<WorldMap*>(script_getLeader(L));
+    return dynamic_cast<WorldMap*>(script_getLeader(L));
 }
 
 //-----------------------------------------------------------------

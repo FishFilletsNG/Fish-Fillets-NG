@@ -2,6 +2,7 @@
 #define HEADER_SCRIPTSTATE_H
 
 class Path;
+class Scripter;
 
 #include "NoCopy.h"
 
@@ -32,7 +33,7 @@ class ScriptState : public NoCopy {
         void unref(int funcRef);
 
         void registerFunc(const char *name, lua_CFunction func);
-        void registerLeader(void *leader);
+        void registerLeader(Scripter *leader);
 };
 
 #endif
