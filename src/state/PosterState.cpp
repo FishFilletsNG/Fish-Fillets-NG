@@ -32,8 +32,6 @@ PosterState::~PosterState()
     void
 PosterState::own_initState()
 {
-    //TODO: will the screen blink when there is pushed state
-    // after this?
     OptionAgent *options = OptionAgent::agent();
     options->setParam("screen_width", m_bg->getW());
     options->setParam("screen_height", m_bg->getH());

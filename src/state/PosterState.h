@@ -11,8 +11,9 @@ class Picture;
  */
 class PosterState : public GameState {
     private:
-        Picture *m_bg;
         GameState *m_nextState;
+    protected:
+        Picture *m_bg;
     protected:
         virtual void own_initState();
         virtual void own_updateState() {}

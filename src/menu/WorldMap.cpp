@@ -31,6 +31,7 @@
 #include "LayeredPicture.h"
 #include "MenuOptions.h"
 #include "PosterState.h"
+#include "PosterScroller.h"
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap()
@@ -285,8 +286,8 @@ WorldMap::runIntro()
     void
 WorldMap::runCredits()
 {
-    LOG_INFO(ExInfo("credits are not implemented yet"));
-    //pushState(new PosterState(Path::dataReadPath("images/menu/intro.png")));
+    pushState(new PosterScroller(
+                Path::dataReadPath("images/menu/credits.png")));
 }
 //-----------------------------------------------------------------
     void
