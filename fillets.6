@@ -40,20 +40,13 @@ Show summary of options.
 .B \-v, \-\-version
 Show version of program.
 .TP
-.B loglevel=<number>
-Loglevel uses same numbers as syslog.
-.br
-for ex.: 3 for ERROR, 4 for WARNING, 6 for INFO, 7 for DEBUG
-.br
-Default: loglevel=6
+.B \-c, \-\-config
+Show config variables and values.
 .TP
-.B systemdir=<path>
-Path to game data.
-.TP
-.B userdir=<path>
-Path to game data.
+.B fullscreen=<boolean>
+Turn fullscreen on/off.
 .br
-Default: userdir=$HOME/.fillets-ng
+Default: fullscreen=0
 .TP
 .B lang=<code>
 ISO 639 2-letter code (for ex.: en, cs, fr, de)
@@ -62,20 +55,42 @@ see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
 .br
 Default: lang=LC_MESSAGES
 .TP
-.B fullscreen=<boolean>
-Turn fullscreen on/off.
+.B loglevel=<number>
+Loglevel uses same numbers as syslog.
 .br
-Default: fullscreen=0
+for ex.: 3 for ERROR, 4 for WARNING, 6 for INFO, 7 for DEBUG
+.br
+Default: loglevel=6
+.TP
+.B show_steps=<boolean>
+Show step counter in level.
+.br
+Default: show_steps=0
 .TP
 .B sound=<boolean>
 Turn sound on/off.
 .br
 Default: sound=1
 .TP
-.B show_steps=<boolean>
-Show step counter in level.
+.B speech=<code>
+ISO 639 2-letter code (for ex.: en, cs, fr, de)
 .br
-Default: show_steps=0
+see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
+.br
+Default: same as lang
+.TP
+.B subtitles=<boolean>
+Show subtitles in level.
+.br
+Default: subtitles=1
+.TP
+.B systemdir=<path>
+Path to game data.
+.TP
+.B userdir=<path>
+Path to game data.
+.br
+Default: userdir=$HOME/.fillets-ng
 .TP
 .B volume_sound=<number>
 Sound volume in percentage.
