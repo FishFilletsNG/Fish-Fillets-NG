@@ -123,6 +123,12 @@ AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
 
 ###################################################
+# Check for windres for win32 icon. 
+AC_CHECK_PROGS(WINDRES, [i386-mingw32msvc-windres i586-mingw32msvc-windres], "")
+AM_CONDITIONAL(HAVE_WINDRES, test x$WINDRES != x)
+AC_SUBST(WINDRES)
+
+###################################################
 # Debug on/off
 AC_ARG_ENABLE(debug,
               [  --enable-debug          Print debug messages],

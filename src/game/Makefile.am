@@ -7,5 +7,16 @@ bin_PROGRAMS = fillets
 
 fillets_SOURCES = Application.cpp Application.h GameAgent.cpp GameAgent.h main.cpp
 
-fillets_LDADD = ../menu/libmenu.a ../level/liblevel.a ../state/libstate.a ../option/liboption.a ../plan/libplan.a ../widget/libwidget.a ../effect/libeffect.a ../gengine/libgengine.a $(SDL_GFX_LIBS) $(SDL_LIBS) $(LUA_LIBS) $(BOOST_LIBS)
+EXTRA_DIST = fillets.rc fillets.ico
+
+if HAVE_WINDRES
+ICON_LIBS = fillets_ico.o
+fillets_ico.o: fillets.rc fillets.ico
+	@WINDRES@ fillets.rc -O coff -o $@
+else
+ICON_LIBS =
+endif
+
+
+fillets_LDADD = ../menu/libmenu.a ../level/liblevel.a ../state/libstate.a ../option/liboption.a ../plan/libplan.a ../widget/libwidget.a ../effect/libeffect.a ../gengine/libgengine.a $(SDL_GFX_LIBS) $(SDL_LIBS) $(LUA_LIBS) $(BOOST_LIBS) $(ICON_LIBS)
 
