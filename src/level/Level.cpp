@@ -291,6 +291,8 @@ Level::saveGame(const std::string &models)
             fputs("\nsaved_models = ", saveFile);
             fputs(models.c_str(), saveFile);
             fclose(saveFile);
+            LOG_INFO(ExInfo("game is saved")
+                    .addInfo("codename", m_codename));
         }
         else {
             LOG_WARNING(ExInfo("cannot save game")
