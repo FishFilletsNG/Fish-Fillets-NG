@@ -226,6 +226,9 @@ VideoAgent::receiveString(const StringMsg *msg)
                 toggleFullScreen();
             }
         }
+        else {
+            throw UnknownMsgException(msg);
+        }
     }
     else {
         throw UnknownMsgException(msg);

@@ -418,7 +418,6 @@ Level::nextShowAction()
     bool
 Level::action_restart()
 {
-    //FIXME: list of drawers does not support drawers change
     own_cleanState();
     m_restartCounter++;
     //TODO: is ok to run the script on second time?

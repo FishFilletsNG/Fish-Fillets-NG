@@ -136,7 +136,6 @@ WorldMap::own_resumeState()
 
         SoundAgent::agent()->playMusic(
                 Path::dataReadPath("music/menu.ogg"), NULL);
-        //TODO: set with and height in one step
         OptionAgent *options = OptionAgent::agent();
         options->setParam("caption", findDesc("menu"));
         options->setParam("screen_width", m_bg->getW());
@@ -287,6 +286,7 @@ WorldMap::runIntro()
 WorldMap::runCredits()
 {
     LOG_INFO(ExInfo("credits are not implemented yet"));
+    //pushState(new PosterState(Path::dataReadPath("images/menu/intro.png")));
 }
 //-----------------------------------------------------------------
     void

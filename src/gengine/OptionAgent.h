@@ -30,6 +30,8 @@ class OptionAgent : public BaseAgent {
                 std::string *out_name, std::string *out_value);
         std::string getHelpInfo(const OptionParams &params) const;
         std::string getVersionInfo() const;
+        void readSystemConfig();
+        void readUserConfig();
     protected:
         virtual void own_init();
         virtual void own_shutdown();
@@ -49,6 +51,7 @@ class OptionAgent : public BaseAgent {
                 int implicit=0) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
+        void receiveString(const StringMsg *msg);
 };
 
 #endif

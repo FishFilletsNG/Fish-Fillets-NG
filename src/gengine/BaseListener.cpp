@@ -16,7 +16,8 @@
 
 //-----------------------------------------------------------------
 /**
- * Register self as watcher for param
+ * Register self as watcher for param.
+ * String msg param_changed(param) will be send when param has changed.
  */
     void
 BaseListener::registerWatcher(const std::string &param)

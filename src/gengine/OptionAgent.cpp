@@ -19,10 +19,12 @@
 #include "LogicException.h"
 #include "ScriptException.h"
 #include "OptionParams.h"
+#include "StringMsg.h"
+#include "UnknownMsgException.h"
 #include "minmax.h"
 
-#include <string.h>
-#include <locale.h>
+#include <string.h> //strlen
+#include <locale.h> //setlocale
 
 #ifndef LC_MESSAGES
 #define LC_MESSAGES LC_CTYPE
@@ -52,25 +54,6 @@ OptionAgent::own_init()
     prepareVersion();
     prepareDataPaths();
     prepareLang();
-
-    try {
-        Path systemConfig = Path::dataSystemPath(CONFIG_FILE);
-        if (systemConfig.exists()) {
-            ScriptAgent::agent()->doFile(systemConfig);
-        }
-    }
-    catch (ScriptException &e) {
-        LOG_WARNING(e.info());
-    }
-    try {
-        Path userConfig = Path::dataUserPath(CONFIG_FILE);
-        if (userConfig.exists()) {
-            ScriptAgent::agent()->doFile(userConfig);
-        }
-    }
-    catch (ScriptException &e) {
-        LOG_WARNING(e.info());
-    }
 }
 //-----------------------------------------------------------------
 /**
@@ -107,6 +90,8 @@ OptionAgent::prepareVersion()
     void
 OptionAgent::prepareDataPaths()
 {
+    registerWatcher("systemdir");
+    registerWatcher("userdir");
     OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
 
     std::string userdir = "";
@@ -355,5 +340,61 @@ std::string
 OptionAgent::getVersionInfo() const
 {
     return getParam("package") + " " + getParam("version");
+}
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - param_changed(systemdir) ... reread system options
+ * - param_changed(userdir) ... reread user options
+ *
+ * @throws UnknownMsgException
+ */
+    void
+OptionAgent::receiveString(const StringMsg *msg)
+{
+    if (msg->equalsName("param_changed")) {
+        std::string param = msg->getValue();
+        if ("systemdir" == param) {
+            readSystemConfig();
+        }
+        else if ("userdir" == param) {
+            readUserConfig();
+        }
+        else {
+            throw UnknownMsgException(msg);
+        }
+    }
+    else {
+        throw UnknownMsgException(msg);
+    }
+}
+//-----------------------------------------------------------------
+void
+OptionAgent::readSystemConfig()
+{
+    try {
+        Path systemConfig = Path::dataSystemPath(CONFIG_FILE);
+        if (systemConfig.exists()) {
+            ScriptAgent::agent()->doFile(systemConfig);
+        }
+    }
+    catch (ScriptException &e) {
+        LOG_WARNING(e.info());
+    }
+}
+//-----------------------------------------------------------------
+void
+OptionAgent::readUserConfig()
+{
+    try {
+        Path userConfig = Path::dataUserPath(CONFIG_FILE);
+        if (userConfig.exists()) {
+            ScriptAgent::agent()->doFile(userConfig);
+        }
+    }
+    catch (ScriptException &e) {
+        LOG_WARNING(e.info());
+    }
 }
 
