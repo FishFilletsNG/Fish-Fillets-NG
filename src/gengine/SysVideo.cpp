@@ -79,8 +79,6 @@ bool
 sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
 {
     bool result = false;
-    LOG_DEBUG(ExInfo("TEST: win")
-            .addInfo("title", title));
     LPWSTR lpszW = new WCHAR[title.size()];
     if (MultiByteToWideChar(CP_UTF8, 0, title.c_str(), -1,
                 lpszW, title.size()))
