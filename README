@@ -21,9 +21,13 @@ Library LUA (script language, used for debug console, configuration, levels,...)
 - liblua50, www.lua.org
 - liblualib50
 
-Library Boost - http://www.boost.org/
-- libboost_filesystem (portable filesystem paths)
 
+(To compile on non Unix machine, use src/gengine/FsPath_boost.cpp
+ instead of src/gengine/FsPath.cpp
+
+    Library Boost - http://www.boost.org/
+    - libboost_filesystem (portable filesystem paths)
+)
 
 
 How to run
