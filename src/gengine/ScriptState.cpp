@@ -27,11 +27,35 @@ ScriptState::ScriptState()
     luaopen_string(m_state);
     luaopen_math(m_state);
     luaopen_table(m_state);
+
+    prepareErrorHandler();
 }
 //-----------------------------------------------------------------
 ScriptState::~ScriptState()
 {
     lua_close(m_state);
+}
+//-----------------------------------------------------------------
+/**
+ * Prepare error handler at global stack.
+ */
+void
+ScriptState::prepareErrorHandler()
+{
+    lua_pushliteral(m_state, "_TRACEBACK");
+    lua_pushcfunction(m_state, script_debugStack);
+    lua_settable(m_state, LUA_GLOBALSINDEX);
+}
+//-----------------------------------------------------------------
+/**
+ * Insert error handler at given local index.
+ */
+void
+ScriptState::insertErrorHandler(int index)
+{
+    lua_pushliteral(m_state, "_TRACEBACK");
+    lua_rawget(m_state, LUA_GLOBALSINDEX);
+    lua_insert(m_state, index);
 }
 //-----------------------------------------------------------------
 /**
@@ -46,7 +70,10 @@ ScriptState::~ScriptState()
 ScriptState::callStack(int error, int params, int returns)
 {
     if (0 == error) {
-        error = lua_pcall(m_state, params, returns, 0);
+        int base = lua_gettop(m_state) - params;
+        insertErrorHandler(base);
+        error = lua_pcall(m_state, params, returns, base);
+        lua_remove(m_state, base);
     }
 
     if (error) {
@@ -100,17 +127,20 @@ ScriptState::registerFunc(const char *name, lua_CFunction func)
 bool
 ScriptState::callCommand(int funcRef, int param)
 {
+    int numResults = 1;
     lua_rawgeti(m_state, LUA_REGISTRYINDEX, funcRef);
     lua_pushnumber(m_state, param);
-    callStack(0, 1, 1);
+    callStack(0, 1, numResults);
 
     if (0 == lua_isboolean(m_state, -1)) {
         const char *type = lua_typename(m_state, lua_type(m_state, -1));
-        lua_pop(m_state, 1);
-        throw ScriptException(ExInfo("script failure - boolean excepted")
+        lua_pop(m_state, numResults);
+        throw ScriptException(ExInfo("script failure - boolean expected")
                 .addInfo("got", type));
     }
-    return lua_toboolean(m_state, -1);
+    bool result = lua_toboolean(m_state, -1);
+    lua_pop(m_state, numResults);
+    return result;
 }
 //-----------------------------------------------------------------
 /**

@@ -27,6 +27,6 @@ catch (...) { \
 
 inline const char *script_getLeaderName() { return "script_leader"; }
 extern void *script_getLeader(lua_State *L);
-extern void script_debugStack(lua_State *L);
+extern int script_debugStack(lua_State *L);
 
 #endif

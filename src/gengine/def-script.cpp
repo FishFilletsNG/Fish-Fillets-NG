@@ -25,20 +25,65 @@ script_getLeader(lua_State *L)
     return result;
 }
 //-----------------------------------------------------------------
-void
+/**
+ * char *debugStack(error_message)
+ */
+    int
 script_debugStack(lua_State *L)
 {
+    //NOTE: stolen from "ldblib.c" in lua sources
+    /* size of the first part of the stack */
+    static const int LEVELS1 = 12;
+    /* size of the second part of the stack */
+    static const int LEVELS2 = 10;
+
+    int level = 1;  /* skip level 0 (it's this function) */
+    int firstpart = 1;  /* still before eventual `...' */
     lua_Debug ar;
-    if (lua_getstack(L, 0, &ar) && lua_getinfo(L, "Snl", &ar)) {
-        LOG_INFO(ExInfo("script stack")
-                .addInfo("source", ar.short_src)
-                .addInfo("linedefined", ar.linedefined)
-                .addInfo("line", ar.currentline)
-                .addInfo("name", ar.name)
-                .addInfo("namewhat", ar.namewhat));
+    if (lua_gettop(L) == 0)
+      lua_pushliteral(L, "");
+    else if (!lua_isstring(L, 1)) return 1;  /* no string message */
+    else lua_pushliteral(L, "\n");
+    lua_pushliteral(L, "stack traceback:");
+    while (lua_getstack(L, level++, &ar)) {
+      if (level > LEVELS1 && firstpart) {
+        /* no more than `LEVELS2' more levels? */
+        if (!lua_getstack(L, level+LEVELS2, &ar))
+          level--;  /* keep going */
+        else {
+          lua_pushliteral(L, "\n\t...");  /* too many levels */
+          while (lua_getstack(L, level+LEVELS2, &ar))  /* find last levels */
+            level++;
+        }
+        firstpart = 0;
+        continue;
+      }
+      lua_pushliteral(L, "\n\t");
+      lua_getinfo(L, "Snl", &ar);
+      lua_pushfstring(L, "%s:", ar.short_src);
+      if (ar.currentline > 0)
+        lua_pushfstring(L, "%d:", ar.currentline);
+      switch (*ar.namewhat) {
+        case 'g':  /* global */ 
+        case 'l':  /* local */
+        case 'f':  /* field */
+        case 'm':  /* method */
+          lua_pushfstring(L, " in function `%s'", ar.name);
+          break;
+        default: {
+          if (*ar.what == 'm')  /* main? */
+            lua_pushfstring(L, " in main chunk");
+          else if (*ar.what == 'C' || *ar.what == 't')
+            lua_pushliteral(L, " ?");  /* C function or tail call */
+          else
+            lua_pushfstring(L, " in function <%s:%d>",
+                               ar.short_src, ar.linedefined);
+        }
+      }
+      lua_concat(L, lua_gettop(L));
     }
-    else {
-        LOG_WARNING(ExInfo("cannot get script stack"));
-    }
+    lua_concat(L, lua_gettop(L));
+    //NOTE: return debug_message
+    return 1;
 }
 
