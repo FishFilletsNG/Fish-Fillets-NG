@@ -106,22 +106,25 @@ Rules::occupyNewPos()
  * @return true when fish is dead
  */
     bool
-Rules::checkDead()
+Rules::checkDead(Cube::eAction lastAction)
 {
-    //TODO: after falling phase is sufficient to check only DeadFall
+    //NOTE: after falling phase is sufficient to check only DeadFall
     bool dead = false;
 
     if (m_model->isAlive()) {
-        if (checkDeadMove()) {
-            dead = true;
-        }
-        else {
-            if (checkDeadFall()) {
-                dead = true;
-            }
-            else {
-                dead = checkDeadStress();
-            }
+        switch (lastAction) {
+            case Cube::ACTION_FALL:
+                dead = checkDeadFall();
+                break;
+            case Cube::ACTION_MOVE:
+                dead = checkDeadMove();
+                if (!dead) {
+                    dead = checkDeadStress();
+                }
+                break;
+            default:
+                dead = false;
+                break;
         }
 
         if (dead) {

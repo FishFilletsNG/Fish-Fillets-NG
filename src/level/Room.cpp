@@ -49,7 +49,7 @@ Room::Room(int w, int h, const Path &picture,
     m_controls = new Controls(m_locker);
     m_view = new View(ModelList(&m_models));
     m_impact = Cube::NONE;
-    m_fresh = true;
+    m_lastAction = Cube::ACTION_NO;
     m_soundPack = new ResSoundPack();
     m_startTime = TimerAgent::agent()->getCycles();
 }
@@ -159,9 +159,11 @@ Room::askField(const V2 &loc)
     void
 Room::nextRound(const InputProvider *input)
 {
-    bool falling = beginFall();
-    if (!falling) {
-        m_controls->driving(input);
+    beginFall();
+    if (isFresh()) {
+        if (m_controls->driving(input)) {
+            m_lastAction = Cube::ACTION_MOVE;
+        }
     }
 
     finishRound();
@@ -226,7 +228,7 @@ Room::prepareRound()
         (*i)->rules()->occupyNewPos();
     }
     for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
-        bool die = (*j)->rules()->checkDead();
+        bool die = (*j)->rules()->checkDead(m_lastAction);
         interrupt |= die;
         if (die) {
             playDead(*j);
@@ -368,18 +370,22 @@ Room::loadMove(char move)
     bool
 Room::beginFall(bool interactive)
 {
-    m_fresh = true;
     prepareRound();
+    m_lastAction = Cube::ACTION_NO;
 
-    bool falling = fallout(interactive);
-    if (!falling) {
-        falling = falldown();
+    bool out = fallout(interactive);
+    if (out) {
+        m_lastAction = Cube::ACTION_MOVE;
+    }
+    else {
+        if (falldown()) {
+            m_lastAction = Cube::ACTION_FALL;
+        }
         if (interactive) {
             playImpact();
         }
     }
-    m_fresh = !falling;
-    return falling;
+    return m_lastAction != Cube::ACTION_NO;
 }
 //-----------------------------------------------------------------
 /**
@@ -391,12 +397,12 @@ Room::beginFall(bool interactive)
 Room::makeMove(char move)
 {
     bool result = false;
-    if (m_fresh) {
+    if (isFresh()) {
         if (!m_controls->makeMove(move)) {
             throw LoadException(ExInfo("load error - bad move")
                     .addInfo("move", std::string(1, move)));
         }
-        m_fresh = false;
+        m_lastAction = Cube::ACTION_MOVE;
         result = true;
     }
     return result;
@@ -434,7 +440,7 @@ Room::isSolvable() const
 bool
 Room::isSolved() const
 {
-    if (!m_fresh) {
+    if (!isFresh()) {
         return false;
     }
     Cube::t_models::const_iterator end = m_models.end();

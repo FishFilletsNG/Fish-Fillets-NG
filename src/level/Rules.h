@@ -20,11 +20,6 @@ class Rules : public NoCopy {
             DIR_LEFT,
             DIR_RIGHT
         };
-        enum eFall {
-            FALL_NO,
-            FALL_NOW,
-            FALL_LAST
-        };
     private:
         eDir m_dir;
         bool m_readyToDie;
@@ -63,7 +58,7 @@ class Rules : public NoCopy {
         void takeField(Field *field);
 
         void occupyNewPos();
-        bool checkDead();
+        bool checkDead(Cube::eAction lastAction);
         void changeState();
         void finishRound();
 

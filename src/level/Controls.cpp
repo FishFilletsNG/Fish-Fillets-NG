@@ -62,15 +62,21 @@ Controls::addUnit(Unit *unit)
  * Let drivers to drive.
  * Only one driver can drive at the same time.
  * @param input wrapped input
+ * @return true when a fish has moved (switch does not count)
  */
-    void
+    bool
 Controls::driving(const InputProvider *input)
 {
+    bool moved = false;
     if (!useSwitch()) {
         if (!useStroke()) {
-            driveUnit(input);
+            moved = driveUnit(input);
+        }
+        else {
+            moved = true;
         }
     }
+    return moved;
 }
 //-----------------------------------------------------------------
 /**
@@ -106,7 +112,7 @@ Controls::useStroke()
     return result;
 }
 //-----------------------------------------------------------------
-void
+    bool
 Controls::driveUnit(const InputProvider *input)
 {
     char moved = ControlSym::SYM_NONE;
@@ -128,6 +134,7 @@ Controls::driveUnit(const InputProvider *input)
     if (moved != ControlSym::SYM_NONE) {
         m_moves.push_back(moved);
     }
+    return (moved != ControlSym::SYM_NONE);
 }
 //-----------------------------------------------------------------
     void

@@ -34,8 +34,8 @@ class Room : public StepCounter, public Drawable {
         View *m_view;
         Cube::t_models m_models;
         Cube::eWeight m_impact;
+        Cube::eAction m_lastAction;
         int m_startTime;
-        bool m_fresh;
     private:
         void killPlan();
         void prepareRound();
@@ -43,6 +43,7 @@ class Room : public StepCounter, public Drawable {
         bool falldown();
         void playImpact();
         void playDead(Cube *model);
+        bool isFresh() const { return m_lastAction == Cube::ACTION_NO; }
     public:
         Room(int w, int h, const Path &picture,
                 PhaseLocker *locker, Planner *levelScript);

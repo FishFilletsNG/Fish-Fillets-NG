@@ -30,14 +30,14 @@ class Controls : public StepCounter, public NoCopy {
     private:
         bool useSwitch();
         bool useStroke();
-        void driveUnit(const InputProvider *input);
+        bool driveUnit(const InputProvider *input);
         void setActive(t_units::iterator active);
     public:
         Controls(PhaseLocker *locker);
         ~Controls();
         void addUnit(Unit *unit);
 
-        void driving(const InputProvider *input);
+        bool driving(const InputProvider *input);
         void lockPhases();
 
         void checkActive();

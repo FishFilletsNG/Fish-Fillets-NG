@@ -23,6 +23,11 @@ class Cube : public NoCopy {
             HEAVY,
             FIXED
         };
+        enum eAction {
+            ACTION_NO,
+            ACTION_FALL,
+            ACTION_MOVE
+        };
     private:
         int m_index;
         bool m_busy;
