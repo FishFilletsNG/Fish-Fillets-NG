@@ -85,6 +85,11 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 )
 
 ###################################################
+# Test X11
+AC_TRY_COMPILE([#include <X11/Xutil.h>], ,
+        AC_DEFINE(HAVE_X11))
+
+###################################################
 # enable C++ language
 AC_LANG(C++)
 

@@ -19,10 +19,15 @@
 #include "IDrawer.h"
 #include "OptionAgent.h"
 
+#include "SDL_syswm.h"
 #include "SDL_image.h"
 #include <stdlib.h>
 #include <algorithm>
 #include <functional>
+
+#ifdef HAVE_X11
+#include <X11/Xutil.h>
+#endif
 
 //-----------------------------------------------------------------
 /**
@@ -30,7 +35,7 @@
  * Register watcher for "fullscren" and "screen_*" options.
  * @throws SDLException if there is no usuable video mode
  */
-void
+    void
 VideoAgent::own_init()
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -48,7 +53,7 @@ VideoAgent::own_init()
  * Draw all drawer from list.
  * First will be drawed first.
  */
-void
+    void
 VideoAgent::own_update()
 {
     std::for_each(m_drawers.begin(), m_drawers.end(),
@@ -60,7 +65,7 @@ VideoAgent::own_update()
 /**
  * Shutdown SDL.
  */
-void
+    void
 VideoAgent::own_shutdown()
 {
     SDL_Quit();
@@ -70,7 +75,7 @@ VideoAgent::own_shutdown()
 /**
  * Register self as watcher for param
  */
-void
+    void
 VideoAgent::registerWatcher(const std::string &param)
 {
     StringMsg *event = new StringMsg(this, "param_changed", param);
@@ -109,7 +114,7 @@ VideoAgent::initVideoMode()
     int screen_width = options->getAsInt("screen_width", 640);
     int screen_height = options->getAsInt("screen_height", 480);
 
-    SDL_WM_SetCaption(options->getParam("caption", "A game").c_str(), NULL);
+    setCaption(options->getParam("caption", "A game"));
     if (NULL == m_screen
             || m_screen->w != screen_width
             || m_screen->h != screen_height)
@@ -198,7 +203,7 @@ VideoAgent::toggleFullScreen()
  *
  * @throws UnknownMsgException
  */
-void
+    void
 VideoAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("fullscreen")) {
@@ -222,7 +227,7 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
  *
  * @throws UnknownMsgException
  */
-void
+    void
 VideoAgent::receiveString(const StringMsg *msg)
 {
     if (msg->equalsName("param_changed")) {
@@ -244,7 +249,7 @@ VideoAgent::receiveString(const StringMsg *msg)
  * Store pointer to drawer at the end of draw list.
  * Drawer will obtain pointer to screen.
  */
-void
+    void
 VideoAgent::acceptDrawer(IDrawer *drawer)
 {
     m_drawers.push_back(drawer);
@@ -255,7 +260,7 @@ VideoAgent::acceptDrawer(IDrawer *drawer)
  * Remove drawer from list.
  * Drawer will not be deleted.
  */
-void
+    void
 VideoAgent::removeDrawer(const IDrawer *drawer)
 {
     t_drawers::iterator end = m_drawers.end();
@@ -270,7 +275,7 @@ VideoAgent::removeDrawer(const IDrawer *drawer)
 /**
  * Switch drawers to new screen.
  */
-void
+    void
 VideoAgent::updateDrawersScreen()
 {
     t_drawers::iterator end = m_drawers.end();
@@ -278,5 +283,44 @@ VideoAgent::updateDrawersScreen()
         (*i)->takeScreen(m_screen);
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Set window title.
+ * @param title UTF-8 string
+ */
+    void
+VideoAgent::setCaption(const std::string &title)
+{
+    bool done = false;
+#ifdef HAVE_X11
+#ifdef X_HAVE_UTF8_STRING
+    SDL_SysWMinfo info;
+    SDL_VERSION(&info.version);
+
+    if (SDL_GetWMInfo(&info) > 0) {
+        if (info.subsystem == SDL_SYSWM_X11) {
+            info.info.x11.lock_func();
+
+            XTextProperty titleprop;
+            char *text_list = const_cast<char*>(title.c_str());
+
+            Xutf8TextListToTextProperty(info.info.x11.display, &text_list, 1,
+                    XUTF8StringStyle, &titleprop);
+            XSetWMName(info.info.x11.display, info.info.x11.wmwindow,
+                    &titleprop);
+            XFree(titleprop.value);
+            XSync(info.info.x11.display, False);
+            info.info.x11.unlock_func();
+            done = true;
+        }
+    }
+#endif
+#endif
+
+    if (!done) {
+        SDL_WM_SetCaption(title.c_str(), NULL);
+    }
+}
+
 
 

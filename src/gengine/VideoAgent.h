@@ -34,6 +34,7 @@ class VideoAgent : public BaseAgent {
         void toggleFullScreen();
         static void setTransparent(SDL_Surface *surface);
         void updateDrawersScreen();
+        void setCaption(const std::string &title);
 
     protected:
         virtual void own_init();
