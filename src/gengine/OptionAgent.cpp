@@ -236,7 +236,7 @@ void
 OptionAgent::setPersistent(const std::string &name, const std::string &value)
 {
     //NOTE: path must be created before change of environ
-    Path config = Path::dataUserPath(CONFIG_FILE);
+    Path config = Path::dataWritePath(CONFIG_FILE);
 
     Environ *swap_env = m_environ;
     m_environ = new Environ();
