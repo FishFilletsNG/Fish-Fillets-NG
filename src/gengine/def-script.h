@@ -16,13 +16,10 @@ extern "C" {
 #define END_NOEXCEPTION \
 } \
 catch (std::exception &e) { \
-    LOG_WARNING(ExInfo("script error") \
-            .addInfo("what", e.what())); \
-        luaL_error(L, e.what()); \
+    luaL_error(L, e.what()); \
 } \
 catch (...) { \
-    LOG_ERROR(ExInfo("script error")); \
-        luaL_error(L, "unknown exception"); \
+    luaL_error(L, "unknown exception"); \
 }
 
 inline const char *script_getLeaderName() { return "script_leader"; }

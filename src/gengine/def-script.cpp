@@ -31,7 +31,7 @@ script_getLeader(lua_State *L)
     int
 script_debugStack(lua_State *L)
 {
-    //NOTE: stolen from "ldblib.c" in lua sources
+    //NOTE: stolen from "lua/ldblib.c"
     /* size of the first part of the stack */
     static const int LEVELS1 = 12;
     /* size of the second part of the stack */
