@@ -198,18 +198,22 @@ Level::countDown()
 {
     bool result = false;
     if (m_countdown == -1) {
-        switch (m_roomState) {
-            case ROOM_COMPLETE:
-                //NOTE: original was m_countdown=30, but with a dialog
-                m_countdown = 5;
-                break;
-            case ROOM_WRONG:
-                //NOTE: don't forget to change briefcase_help_demo too
-                m_countdown = 70;
-                break;
-            default:
-                assert(!"unknown room state for countdown");
-                break;
+        if (m_replayMode) {
+            m_countdown = 0;
+        }
+        else {
+            switch (m_roomState) {
+                case ROOM_COMPLETE:
+                    m_countdown = 30;
+                    break;
+                case ROOM_WRONG:
+                    //NOTE: don't forget to change briefcase_help_demo too
+                    m_countdown = 70;
+                    break;
+                default:
+                    assert(!"unknown room state for countdown");
+                    break;
+            }
         }
     }
     else if (m_countdown > 0) {
