@@ -24,7 +24,7 @@ void
 PosterScroller::own_initState()
 {
     m_screenH = OptionAgent::agent()->getAsInt("screen_height");
-    m_shift = -m_screenH;
+    m_shift = -m_screenH + SHIFT_SPEED;
 }
 //-----------------------------------------------------------------
 void
