@@ -472,7 +472,7 @@ script_model_setBusy(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    bool busy = luaL_checkint(L, 2);
+    bool busy = lua_toboolean(L, 2);
     Cube *model = getModel(L, model_index);
     model->setBusy(busy);
 
