@@ -8,6 +8,7 @@
  */
 #include "demo-script.h"
 
+#include "Path.h"
 #include "DemoMode.h"
 #include "Picture.h"
 
