@@ -485,6 +485,9 @@ Cube::moveDir(eDir dir)
     void
 Cube::moveDirBrute(eDir dir)
 {
+    //NOTE: make place after oneself, e.g. object in U
+    m_mask->unmask();
+
     Cube::t_models resist = m_mask->getResist(dir);
     Cube::t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
@@ -492,6 +495,7 @@ Cube::moveDirBrute(eDir dir)
     }
 
     m_dir = dir;
+    m_mask->mask();
 }
 
 //-----------------------------------------------------------------
