@@ -182,17 +182,19 @@ Controls::getNeededPhases(int speedup) const
     static const int SPEED_WARP2 = 10;
 
     int phases = 3;
-    if ((*m_active)->isTurning()) {
-        phases = (*m_active)->countAnimPhases("turn");
-    }
-    else if (speedup > SPEED_WARP2) {
-        phases = (*m_active)->countAnimPhases("swam") / 6;
-    }
-    else if (speedup > SPEED_WARP1) {
-        phases = (*m_active)->countAnimPhases("swam") / 3;
-    }
-    else {
-        phases = (*m_active)->countAnimPhases("swam") / 2;
+    if (m_active != m_units.end()) {
+        if ((*m_active)->isTurning()) {
+            phases = (*m_active)->countAnimPhases("turn");
+        }
+        else if (speedup > SPEED_WARP2) {
+            phases = (*m_active)->countAnimPhases("swam") / 6;
+        }
+        else if (speedup > SPEED_WARP1) {
+            phases = (*m_active)->countAnimPhases("swam") / 3;
+        }
+        else {
+            phases = (*m_active)->countAnimPhases("swam") / 2;
+        }
     }
     return phases;
 }
@@ -216,20 +218,22 @@ Controls::checkActive()
 void
 Controls::switchActive()
 {
-    t_units::iterator start = m_active;
+    if (!m_units.empty()) {
+        t_units::iterator start = m_active;
 
-    do {
-        if (m_active == m_units.end() || m_active + 1 == m_units.end()) {
-            m_active = m_units.begin();
-        }
-        else {
-            ++m_active;
-        }
-    } while (!(*m_active)->canDrive() && m_active != start);
+        do {
+            if (m_active == m_units.end() || m_active + 1 == m_units.end()) {
+                m_active = m_units.begin();
+            }
+            else {
+                ++m_active;
+            }
+        } while (m_active != start && !(*m_active)->canDrive());
 
-    if (start != m_active) {
-        m_speedup = 0;
-        m_switch = true;
+        if (start != m_active) {
+            m_speedup = 0;
+            m_switch = true;
+        }
     }
 }
 //-----------------------------------------------------------------
