@@ -26,11 +26,15 @@ Library Boost - http://www.boost.org/
 //-----------------------------------------------------------------
 How to run
 ----------
-1. Compile ./configure && make
-2. Download fillets-ng-data from http://sf.net/projects/fillets
-3. cp src/game/fillets path_to_data
-4. cd path_to_data
-5. ./fillets
+1. $ ./configure && make
+2. Download fillets-ng-data from http://fillets.sourceforge.net/download.php
+a) with install
+    3. # make install
+    4. Extract data to $(datadir)/games/fillets-ng
+    5. $ fillets
+b) without install
+    4. Extract data
+    5. $ ./src/game/fillets systemdir=path/to/data
 
 //-----------------------------------------------------------------
 Controls
