@@ -23,6 +23,7 @@ const std::string Name::RESMUSIC_NAME = "54resmusic";
 
 const std::string Name::INPUT_NAME = "60input";
 const std::string Name::DIALOG_NAME = "70input";
+const std::string Name::SUBTITLE_NAME = "75input";
 
 const std::string Name::GAME_NAME = "80game";
 const std::string Name::TIMER_NAME = "90timer";

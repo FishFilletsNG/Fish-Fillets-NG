@@ -24,6 +24,7 @@
 #include "ResSoundAgent.h"
 #include "ResImageAgent.h"
 #include "DialogAgent.h"
+#include "SubTitleAgent.h"
 
 #include "SimpleMsg.h"
 #include "StringMsg.h"
@@ -43,13 +44,16 @@ Application::Application()
     m_agents->addAgent(new ScriptAgent());
     m_agents->addAgent(new OptionAgent());
     m_agents->addAgent(new VideoAgent());
-    m_agents->addAgent(new InputAgent());
-    m_agents->addAgent(new DialogAgent());
-    m_agents->addAgent(new TimerAgent());
-    m_agents->addAgent(new GameAgent());
 
     m_agents->addAgent(new ResSoundAgent());
     m_agents->addAgent(new ResImageAgent());
+    m_agents->addAgent(new InputAgent());
+
+    m_agents->addAgent(new DialogAgent());
+    m_agents->addAgent(new SubTitleAgent());
+    m_agents->addAgent(new GameAgent());
+
+    m_agents->addAgent(new TimerAgent());
 }
 //-----------------------------------------------------------------
 Application::~Application()

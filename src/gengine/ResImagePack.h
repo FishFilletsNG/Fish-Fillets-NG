@@ -2,7 +2,6 @@
 #define HEADER_RESIMAGEPACK_H
 
 #include "ResourcePack.h"
-#include "Name.h"
 #include "Path.h"
 
 #include "SDL.h"

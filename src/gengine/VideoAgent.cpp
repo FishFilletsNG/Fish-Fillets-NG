@@ -120,7 +120,6 @@ VideoAgent::getVideoFlags()
     int videoFlags;
     const SDL_VideoInfo *videoInfo;
 
-    LOG_DEBUG(ExInfo("checking Video informations"));
     videoInfo = SDL_GetVideoInfo();
     if (NULL == videoInfo) {
         throw SDLException(ExInfo("GetVideoInfo"));

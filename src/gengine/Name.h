@@ -19,6 +19,7 @@ class Name {
 
         static const std::string INPUT_NAME;
         static const std::string DIALOG_NAME;
+        static const std::string SUBTITLE_NAME;
 
         static const std::string GAME_NAME;
         static const std::string TIMER_NAME;

@@ -21,6 +21,7 @@ extern int script_model_getLoc(lua_State *L) throw();
 extern int script_model_getAction(lua_State *L) throw();
 extern int script_model_isAlive(lua_State *L) throw();
 
+extern int script_dialog_addFont(lua_State *L) throw();
 extern int script_dialog_addDialog(lua_State *L) throw();
 extern int script_model_isTalking(lua_State *L) throw();
 extern int script_model_planDialog(lua_State *L) throw();

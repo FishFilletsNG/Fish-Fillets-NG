@@ -17,8 +17,9 @@
 #include "Anim.h"
 #include "Cube.h"
 #include "Rules.h"
-#include "Dialog.h"
+#include "FishDialog.h"
 #include "DialogAgent.h"
+#include "SubTitleAgent.h"
 
 extern "C" {
 #include "lualib.h"
@@ -258,7 +259,24 @@ script_model_isAlive(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void dialog_addDialog(name, lang, soundfile, subtitle)
+ * void dialog_addFont(fontname, file)
+ */
+    int
+script_dialog_addFont(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    const char *file = luaL_checkstring(L, 2);
+
+    SubTitleAgent::agent()->addFont(name, Path::dataReadPath(file));
+
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void dialog_addDialog(name, lang, fontname, soundfile, subtitle)
  */
     int
 script_dialog_addDialog(lua_State *L) throw()
@@ -266,10 +284,12 @@ script_dialog_addDialog(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     const char *name = luaL_checkstring(L, 1);
     const char *lang = luaL_checkstring(L, 2);
-    const char *soundfile = luaL_checkstring(L, 3);
-    const char *subtitle = luaL_checkstring(L, 4);
+    const char *fontname = luaL_checkstring(L, 3);
+    const char *soundfile = luaL_checkstring(L, 4);
+    const char *subtitle = luaL_checkstring(L, 5);
 
-    Dialog *dialog = new Dialog(lang, Path::dataReadPath(soundfile), subtitle);
+    FishDialog *dialog =
+        new FishDialog(lang, Path::dataReadPath(soundfile), subtitle, fontname);
     DialogAgent::agent()->addDialog(name, dialog);
 
     END_NOEXCEPTION;
@@ -304,6 +324,7 @@ script_model_planDialog(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 2);
     int delay = luaL_checkint(L, 3);
 
+    //TODO: set dialog font (or color)
     DialogAgent::agent()->planDialog(name, delay, model_index);
 
     END_NOEXCEPTION;

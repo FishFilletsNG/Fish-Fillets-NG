@@ -2,9 +2,9 @@
 #define HEADER_RESIMAGEAGENT_H
 
 #include "BaseAgent.h"
-#include "ResImagePack.h"
 #include "Name.h"
 #include "Path.h"
+#include "ResImagePack.h"
 
 #include "SDL.h"
 

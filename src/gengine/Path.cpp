@@ -16,9 +16,10 @@
 #include <stdio.h>
 
 //-----------------------------------------------------------------
-Path::Path(const boost::filesystem::path &file)
+    Path::Path(const boost::filesystem::path &file)
+: m_path(file)
 {
-    m_path = file;
+    /* empty */
 }
 //-----------------------------------------------------------------
 /**
@@ -30,7 +31,7 @@ Path::Path(const boost::filesystem::path &file)
  * @param writeable whether we want write to the file
  * @return path to user or system file
  */
-Path
+    Path
 Path::dataPath(const std::string &file, bool writeable)
 {
     Path datapath = dataUserPath(file);
@@ -38,7 +39,7 @@ Path::dataPath(const std::string &file, bool writeable)
     const char *mode = "rb";
     if (writeable) {
         mode = "wb";
-        LOG_DEBUG(ExInfo("creating path")
+        LOG_INFO(ExInfo("creating path")
                 .addInfo("path", datapath.getNative()));
         boost::filesystem::create_directories(
                 datapath.m_path.branch_path());
@@ -46,8 +47,10 @@ Path::dataPath(const std::string &file, bool writeable)
 
     FILE *try_open = fopen(datapath.getNative().c_str(), mode);
     if (NULL == try_open) {
-        LOG_DEBUG(ExInfo("no user file")
-                .addInfo("file", datapath.getNative()));
+        /*
+           LOG_DEBUG(ExInfo("no user file")
+           .addInfo("file", datapath.getNative()));
+         */
         datapath = dataSystemPath(file);
     }
     else {
@@ -57,13 +60,13 @@ Path::dataPath(const std::string &file, bool writeable)
     return datapath;
 }
 //-----------------------------------------------------------------
-Path
+    Path
 Path::dataReadPath(const std::string &file)
 {
     return dataPath(file, false);
 }
 //-----------------------------------------------------------------
-Path
+    Path
 Path::dataWritePath(const std::string &file)
 {
     return dataPath(file, true);
@@ -73,7 +76,7 @@ Path::dataWritePath(const std::string &file)
  * Return path to system file.
  * Path does not need to exist.
  */
-Path
+    Path
 Path::dataSystemPath(const std::string &file)
 {
     boost::filesystem::path datafile =
@@ -86,7 +89,7 @@ Path::dataSystemPath(const std::string &file)
  * Return path to user file.
  * Path does not need to exist.
  */
-Path
+    Path
 Path::dataUserPath(const std::string &file)
 {
     boost::filesystem::path datafile =

@@ -64,8 +64,6 @@ class ResourcePack {
     {
         m_reses.insert(
                 std::pair<std::string,T>(name, res));
-        LOG_DEBUG(ExInfo("added resource")
-                .addInfo("name", name));
     }
     //-----------------------------------------------------------------
     /**
