@@ -69,8 +69,6 @@ OptionAgent::own_init()
     catch (ScriptException &e) {
         LOG_WARNING(e.info());
     }
-
-    ScriptAgent::agent()->doFile(Path::dataReadPath("script/init.lua"));
 }
 //-----------------------------------------------------------------
 /**

@@ -23,6 +23,7 @@
 #include "OptionAgent.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
+#include "ResourceException.h"
 
 #include "SimpleMsg.h"
 #include "StringMsg.h"
@@ -64,6 +65,7 @@ Application::init(int argc, char *argv[])
     m_agents->init(Name::VIDEO_NAME);
     OptionAgent::agent()->parseCmdOpt(argc, argv);
     prepareLogLevel();
+    customizeGame();
 
     m_agents->init(Name::INPUT_NAME);
     addSoundAgent();
@@ -97,6 +99,29 @@ Application::prepareLogLevel()
     options->addWatcher("loglevel", event);
     options->setParam("loglevel",
             options->getAsInt("loglevel", Log::getLogLevel()));
+}
+//-----------------------------------------------------------------
+/**
+ * Run init script.
+ * @throws ResourceException when data are not available
+ */
+void
+Application::customizeGame()
+{
+    Path initfile = Path::dataReadPath("script/init.lua");
+    if (initfile.exists()) {
+        ScriptAgent::agent()->doFile(initfile);
+    }
+    else {
+        throw ResourceException(ExInfo("init file not found")
+                .addInfo("path", initfile.getNative())
+                .addInfo("systemdir",
+                    OptionAgent::agent()->getParam("systemdir"))
+                .addInfo("userdir",
+                    OptionAgent::agent()->getParam("userdir"))
+                .addInfo("hint",
+                    "try command line option \"systemdir=path/to/data\""));
+    }
 }
 //-----------------------------------------------------------------
 /**
