@@ -17,6 +17,7 @@
 #include "ResSoundAgent.h"
 #include "SoundAgent.h"
 #include "LayoutException.h"
+#include "DialogAgent.h"
 
 #include <assert.h>
 
@@ -35,6 +36,7 @@ Cube::Cube(const V2 &location,
     m_alive = alive;
     //TODO: set look side according a level
     m_lookLeft = true;
+    m_index = -1;
 
     m_shape = shape;
     m_driver = driver;
@@ -76,6 +78,7 @@ Cube::change_die()
     LOG_INFO(ExInfo("dead")
             .addInfo("fish", toString()));
     m_alive = false;
+    DialogAgent::agent()->killSound(m_index);
     SoundAgent::agent()->playRandomSound("xplo");
 }
 //-----------------------------------------------------------------

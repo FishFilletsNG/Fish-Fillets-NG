@@ -87,7 +87,7 @@ DialogAgent::isTalking(int actor)
 /**
  * Remove first not talking dialog from m_running.
  */
-void
+    void
 DialogAgent::removeFirstNotTalking()
 {
     t_running::iterator end = m_running.end();
@@ -99,6 +99,50 @@ DialogAgent::removeFirstNotTalking()
         }
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Delete all planned and running dialogs from this actor.
+ */
+    void
+DialogAgent::killSound(int actor)
+{
+    //NOTE: erase on list invalidates only the erased iterator
+    t_running::iterator run_end = m_running.end();
+    for (t_running::iterator i = m_running.begin(); i != run_end; /* empty */) {
+        t_running::iterator toKill = i;
+        ++i;
+
+        if ((*toKill)->getActor() == actor) {
+            (*toKill)->killTalk();
+            delete *toKill;
+            m_running.erase(toKill);
+        }
+    }
+
+    while (killOnePlanned(actor)) {
+        /* empty */
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Kill one planned dialog with this actor.
+ * @return true when some dialog was killed
+ */
+    bool
+DialogAgent::killOnePlanned(int actor)
+{
+    //NOTE: erase on deque invalidates all iterators
+    t_planned::iterator end = m_planned.end();
+    for (t_planned::iterator i = m_planned.begin(); i != end; ++i) {
+        if ((*i)->getActor() == actor) {
+            delete *i;
+            m_planned.erase(i);
+            return true;
+        }
+    }
+    return false;
+}
+
 //-----------------------------------------------------------------
 /**
  * Delete all dialogs, including planned dialogs.

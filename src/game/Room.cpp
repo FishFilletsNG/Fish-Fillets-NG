@@ -44,7 +44,10 @@ Room::addModel(Cube *model)
 {
     model->rules()->takeField(m_field);
     m_models.push_back(model);
-    return m_models.size() - 1;
+
+    int model_index = m_models.size() - 1;
+    model->setIndex(model_index);
+    return model_index;
 }
 //-----------------------------------------------------------------
 /**

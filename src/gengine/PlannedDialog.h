@@ -19,6 +19,7 @@ class PlannedDialog: public NoCopy {
         PlannedDialog(int actor, int delay, const Dialog *dialog);
 
         void talk();
+        void killTalk();
 
         bool isTalking();
         int getActor() const { return m_actor; }

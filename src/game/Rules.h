@@ -61,7 +61,6 @@ class Rules : public NoCopy {
         bool canFall();
         bool canDir(eDir dir, Cube::eWeight power);
 
-
         eDir getDir() const { return m_dir; }
         std::string getAction() const;
 

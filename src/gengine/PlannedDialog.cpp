@@ -21,6 +21,17 @@ PlannedDialog::talk()
 }
 //-----------------------------------------------------------------
 /**
+ * Stop talking.
+ */
+void
+PlannedDialog::killTalk()
+{
+    if (isTalking()) {
+        Mix_HaltChannel(m_channel);
+    }
+}
+//-----------------------------------------------------------------
+/**
  * Return true when our channel is playing and
  * our chunk is the last one on this channel.
  */

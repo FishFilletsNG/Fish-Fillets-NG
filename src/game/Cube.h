@@ -29,6 +29,7 @@ class Cube : public NoCopy {
         eWeight m_weight;
         eWeight m_power;
         bool m_lookLeft;
+        int m_index;
 
         Shape *m_shape;
         Driver *m_driver;
@@ -56,6 +57,7 @@ class Cube : public NoCopy {
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };
 
+        void setIndex(int model_index) { m_index = model_index; }
         eWeight getWeight() const { return m_weight; }
         eWeight getPower() const { return m_power; }
 

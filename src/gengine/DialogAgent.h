@@ -28,6 +28,7 @@ class DialogAgent : public BaseAgent {
     t_running m_running;
     private:
     void removeFirstNotTalking();
+    bool killOnePlanned(int actor);
     protected:
     virtual void own_init();
     virtual void own_update();
@@ -37,6 +38,7 @@ class DialogAgent : public BaseAgent {
     void planDialog(const std::string &name, int delay, int actor);
     bool isTalking(int actor);
 
+    void killSound(int actor);
     void removeAll();
 };
 
