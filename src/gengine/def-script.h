@@ -10,6 +10,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+
 //NOTE: no one exception can be passed to "C" lua code
 #define BEGIN_NOEXCEPTION try {
 #define END_NOEXCEPTION \
@@ -26,5 +27,6 @@ catch (...) { \
 
 inline const char *script_getLeaderName() { return "script_leader"; }
 extern void *script_getLeader(lua_State *L);
+extern void script_debugStack(lua_State *L);
 
 #endif

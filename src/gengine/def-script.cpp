@@ -24,4 +24,21 @@ script_getLeader(lua_State *L)
 
     return result;
 }
+//-----------------------------------------------------------------
+void
+script_debugStack(lua_State *L)
+{
+    lua_Debug ar;
+    if (lua_getstack(L, 0, &ar) && lua_getinfo(L, "Snl", &ar)) {
+        LOG_INFO(ExInfo("script stack")
+                .addInfo("source", ar.short_src)
+                .addInfo("linedefined", ar.linedefined)
+                .addInfo("line", ar.currentline)
+                .addInfo("name", ar.name)
+                .addInfo("namewhat", ar.namewhat));
+    }
+    else {
+        LOG_WARNING(ExInfo("cannot get script stack"));
+    }
+}
 

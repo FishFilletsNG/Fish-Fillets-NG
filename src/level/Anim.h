@@ -16,8 +16,8 @@ class ResImagePack;
 class Anim : public NoCopy {
     public:
         enum eSide {
-            SIDE_LEFT,
-            SIDE_RIGHT
+            SIDE_LEFT = 0,
+            SIDE_RIGHT = 1
         };
     private:
         ViewEffect *m_effect;
@@ -37,9 +37,8 @@ class Anim : public NoCopy {
 
         void drawAt(SDL_Surface *screen, int x, int y, eSide side);
 
-        void addAnim(const std::string &name, const Path &picture);
-        void addDuplexAnim(const std::string &name,
-                const Path &left_picture, const Path &right_picture);
+        void addAnim(const std::string &name, const Path &picture,
+                eSide side=SIDE_LEFT);
         void runAnim(const std::string &name, int start_phase=0);
         void setAnim(const std::string &name, int phase);
         void useSpecialAnim(const std::string &name, int phase);

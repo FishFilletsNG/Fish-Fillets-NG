@@ -125,7 +125,6 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("game_checkActive", script_game_checkActive);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
-    m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
     m_script->registerFunc("model_runAnim", script_model_runAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
     m_script->registerFunc("model_useSpecialAnim", script_model_useSpecialAnim);

@@ -75,19 +75,10 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
  * default side is left side.
  */
     void
-Anim::addAnim(const std::string &name, const Path &picture)
+Anim::addAnim(const std::string &name, const Path &picture, eSide side)
 {
     m_usedPath = picture.getPosixName();
-    m_animPack[SIDE_LEFT]->addImage(name, picture);
-}
-//-----------------------------------------------------------------
-    void
-Anim::addDuplexAnim(const std::string &name,
-        const Path &left_picture, const Path &right_picture)
-{
-    m_usedPath = left_picture.getPosixName();
-    m_animPack[SIDE_LEFT]->addImage(name, left_picture);
-    m_animPack[SIDE_RIGHT]->addImage(name, right_picture);
+    m_animPack[side]->addImage(name, picture);
 }
 //-----------------------------------------------------------------
 /**
@@ -115,7 +106,12 @@ Anim::setAnim(const std::string &name, int phase)
 
     int count = m_animPack[SIDE_LEFT]->countRes(name);
     if (m_animPhase >= count) {
-        m_animPhase %= count;
+        if (count == 0) {
+            m_animPhase = 0;
+        }
+        else {
+            m_animPhase %= count;
+        }
         LOG_WARNING(ExInfo("anim phase over-flow")
                 .addInfo("anim", name)
                 .addInfo("phase", phase)

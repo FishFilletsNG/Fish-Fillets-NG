@@ -179,7 +179,10 @@ script_game_checkActive(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
- * void model_addAnim(model_index, anim_name, picture)
+ * void model_addAnim(model_index, anim_name, picture, lookDir)
+ * Sides:
+ * LOOK_LEFT = 0
+ * LOOK_RIGHT = 1
  */
     int
 script_model_addAnim(lua_State *L) throw()
@@ -188,29 +191,11 @@ script_model_addAnim(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     const char *anim_name = luaL_checkstring(L, 2);
     const char *picture = luaL_checkstring(L, 3);
+    Anim::eSide lookDir = static_cast<Anim::eSide>(
+            luaL_optint(L, 4, Anim::SIDE_LEFT));
 
     Cube *model = getModel(L, model_index);
-    model->anim()->addAnim(anim_name, Path::dataReadPath(picture));
-    END_NOEXCEPTION;
-    return 0;
-}
-//-----------------------------------------------------------------
-/**
- * void model_addDuplexAnim(model_index, anim_name, left_picture, right_picture)
- */
-    int
-script_model_addDuplexAnim(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int model_index = luaL_checkint(L, 1);
-    const char *anim_name = luaL_checkstring(L, 2);
-    const char *left_picture = luaL_checkstring(L, 3);
-    const char *right_picture = luaL_checkstring(L, 4);
-
-    Cube *model = getModel(L, model_index);
-    model->anim()->addDuplexAnim(anim_name,
-            Path::dataReadPath(left_picture),
-            Path::dataReadPath(right_picture));
+    model->anim()->addAnim(anim_name, Path::dataReadPath(picture), lookDir);
     END_NOEXCEPTION;
     return 0;
 }

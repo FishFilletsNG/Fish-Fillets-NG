@@ -14,7 +14,6 @@ extern int script_game_changeBg(lua_State *L) throw();
 extern int script_game_checkActive(lua_State *L) throw();
 
 extern int script_model_addAnim(lua_State *L) throw();
-extern int script_model_addDuplexAnim(lua_State *L) throw();
 extern int script_model_runAnim(lua_State *L) throw();
 extern int script_model_setAnim(lua_State *L) throw();
 extern int script_model_useSpecialAnim(lua_State *L) throw();
