@@ -9,9 +9,9 @@
 #include "SysVideo.h"
 
 #include "SDL.h"
-#include "SDL_syswm.h"
 
 #ifdef HAVE_X11
+#include "SDL_syswm.h"
 #include <X11/Xutil.h>
 #endif
 
