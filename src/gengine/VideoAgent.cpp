@@ -9,6 +9,7 @@
 #include "VideoAgent.h"
 
 #include "Log.h"
+#include "ImgException.h"
 #include "SDLException.h"
 #include "LogicException.h"
 #include "AgentPack.h"
@@ -18,6 +19,7 @@
 #include "IDrawer.h"
 #include "OptionAgent.h"
 
+#include "SDL_image.h"
 #include <stdlib.h>
 #include <algorithm>
 #include <functional>
@@ -44,6 +46,7 @@ VideoAgent::own_init()
     SDL_WM_SetCaption(
             OptionAgent::agent()->getParam("program", "A game").c_str(),
             NULL);
+    setIcon(Path::dataReadPath("images/icon.png"));
 
     initVideoMode();
 }
@@ -71,12 +74,33 @@ VideoAgent::own_shutdown()
 }
 
 //-----------------------------------------------------------------
+/**
+ * Register self as watcher for param
+ */
 void
 VideoAgent::registerWatcher(const std::string &param)
 {
     StringMsg *event = new StringMsg(this, "param_changed", param);
     OptionAgent::agent()->addWatcher(param, event);
 }
+//-----------------------------------------------------------------
+/**
+ * Load and set icon.
+ * @throws ImgException
+ */
+    void
+VideoAgent::setIcon(const Path &file)
+{
+    SDL_Surface *icon = IMG_Load(file.getNative().c_str());
+    if (NULL == icon) {
+        throw ImgException(ExInfo("Load")
+                .addInfo("file", file.getNative()));
+    }
+
+    SDL_WM_SetIcon(icon, NULL);
+    SDL_FreeSurface(icon);
+}
+
 //-----------------------------------------------------------------
 /**
  * Init video mode along options.
