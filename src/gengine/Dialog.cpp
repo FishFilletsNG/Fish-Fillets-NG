@@ -47,9 +47,7 @@ Dialog::talk(int volume, int loops)
 {
     if (NULL == m_sound && !m_soundfile.empty()) {
         Path soundPath = Path::dataReadPath(m_soundfile);
-        if (m_lang == DEFAULT_LANG || soundPath.exists()) {
-            m_sound = ResSoundPack::loadSound(soundPath);
-        }
+        m_sound = ResSoundPack::loadSound(soundPath);
     }
 
     int channel = SoundAgent::agent()->playSound(m_sound, volume, loops);
