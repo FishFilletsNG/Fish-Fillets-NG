@@ -14,6 +14,7 @@
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/convenience.hpp"
 #include "boost/filesystem/exception.hpp"
+#include "boost/version.hpp"
 #include <stdio.h>
 
 //-----------------------------------------------------------------
@@ -48,10 +49,6 @@ Path::dataPath(const std::string &file, bool writeable)
 
     FILE *try_open = fopen(datapath.getNative().c_str(), mode);
     if (NULL == try_open) {
-        /*
-           LOG_DEBUG(ExInfo("no user file")
-           .addInfo("file", datapath.getNative()));
-         */
         datapath = dataSystemPath(file);
     }
     else {
@@ -80,9 +77,13 @@ Path::dataWritePath(const std::string &file)
     Path
 Path::dataSystemPath(const std::string &file)
 {
-    boost::filesystem::path datafile(
-            OptionAgent::agent()->getParam("systemdir"),
+    std::string systemdir = OptionAgent::agent()->getParam("systemdir");
+#if BOOST_VERSION < 103100
+    boost::filesystem::path datafile(systemdir);
+#else
+    boost::filesystem::path datafile(systemdir,
             boost::filesystem::portable_posix_name);
+#endif
     datafile /= file;
     return Path(datafile);
 }
@@ -94,9 +95,13 @@ Path::dataSystemPath(const std::string &file)
     Path
 Path::dataUserPath(const std::string &file)
 {
-    boost::filesystem::path datafile(
-            OptionAgent::agent()->getParam("userdir"),
+    std::string userdir = OptionAgent::agent()->getParam("userdir");
+#if BOOST_VERSION < 103100
+    boost::filesystem::path datafile(userdir);
+#else
+    boost::filesystem::path datafile(userdir,
             boost::filesystem::portable_posix_name);
+#endif
     datafile /= file;
     return Path(datafile);
 }
@@ -107,6 +112,9 @@ Path::dataUserPath(const std::string &file)
     bool
 Path::isValid(const std::string &file)
 {
+#if BOOST_VERSION < 103100
+    return true;
+#else
     bool result = false;
     try {
         boost::filesystem::path ignore(file,
@@ -119,6 +127,7 @@ Path::isValid(const std::string &file)
         result = false;
     }
     return result;
+#endif
 }
 
 //-----------------------------------------------------------------
