@@ -228,8 +228,7 @@ Cube::prepareRound()
                 .addInfo("fish", toString()));
         m_readyToDie = false;
         m_alive = false;
-        //anim()->setAnim("skeleton");
-        SoundAgent::agent()->playSound("xplo");
+        SoundAgent::agent()->playRandomSound("xplo");
     }
 }
 //-----------------------------------------------------------------
@@ -470,7 +469,7 @@ Cube::moveDir(eDir dir)
     else {
         //TODO: proper sounds
         if (m_alive) {
-            SoundAgent::agent()->playSound("xplo");
+            SoundAgent::agent()->playRandomSound("xplo");
         }
     }
 

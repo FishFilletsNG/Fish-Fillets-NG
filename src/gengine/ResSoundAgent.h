@@ -17,6 +17,7 @@ class ResSoundAgent : public BaseAgent, public ResourcePack<Mix_Chunk*> {
     virtual void unloadRes(Mix_Chunk *res);
     virtual void own_shutdown();
     public:
+    Mix_Chunk *loadSound(const Path &file);
     void addSound(const std::string &name, const Path &file);
 };
 

@@ -16,6 +16,8 @@
 #include "Path.h"
 #include "Anim.h"
 #include "Cube.h"
+#include "Dialog.h"
+#include "DialogAgent.h"
 
 extern "C" {
 #include "lualib.h"
@@ -38,12 +40,12 @@ catch (...) { \
 
 //-----------------------------------------------------------------
 /**
- * void createRoom(width, height, picture)
+ * void game_createRoom(width, height, picture)
  * Example:
  *  createRoom(40, 50, "kitchen-bg.png")
  */
     int
-script_createRoom(lua_State *L) throw()
+script_game_createRoom(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int w = luaL_checkint(L, 1);
@@ -58,7 +60,7 @@ script_createRoom(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * int addModel(kind, x, y, picture, shape)
+ * int game_addModel(kind, x, y, picture, shape)
  * Return model index.
  *
  *  table = addModel("light", 10, 30, "table.bmp",
@@ -69,7 +71,7 @@ script_createRoom(lua_State *L) throw()
  *  ]])
  */
     int
-script_addModel(lua_State *L) throw()
+script_game_addModel(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *kind = luaL_checkstring(L, 1);
@@ -127,10 +129,10 @@ script_model_addDuplexAnim(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_setAnim(model_index, anim_name, phase=0)
+ * void model_runAnim(model_index, anim_name, phase=0)
  */
     int
-script_model_setAnim(lua_State *L) throw()
+script_model_runAnim(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
@@ -138,7 +140,43 @@ script_model_setAnim(lua_State *L) throw()
     int phase = luaL_optint(L, 3, 0);
 
     Cube *model = GameAgent::agent()->getModel(model_index);
+    model->anim()->runAnim(anim_name, phase);
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_setAnim(model_index, anim_name, phase)
+ */
+    int
+script_model_setAnim(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+    int phase = luaL_checkint(L, 3);
+
+    Cube *model = GameAgent::agent()->getModel(model_index);
     model->anim()->setAnim(anim_name, phase);
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_setSpecialAnim(model_index, anim_name, phase)
+ */
+    int
+script_model_setSpecialAnim(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+    int phase = luaL_checkint(L, 3);
+
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    model->anim()->setSpecialAnim(anim_name, phase);
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
@@ -196,4 +234,58 @@ script_model_isAlive(lua_State *L) throw()
     END_NOEXCEPTION;
     //NOTE: return alive
     return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void dialog_addDialog(name, lang, soundfile, subtitle)
+ */
+    int
+script_dialog_addDialog(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    const char *lang = luaL_checkstring(L, 2);
+    const char *soundfile = luaL_checkstring(L, 3);
+    const char *subtitle = luaL_checkstring(L, 4);
+
+    Dialog *dialog = new Dialog(lang, Path::dataReadPath(soundfile), subtitle);
+    DialogAgent::agent()->addDialog(name, dialog);
+
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * bool model_isTalking(model_index)
+ */
+    int
+script_model_isTalking(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    bool talking = DialogAgent::agent()->isTalking(model_index);
+
+    lua_pushboolean(L, talking);
+    END_NOEXCEPTION;
+    //NOTE: return talking
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_planDialog(model_index, name, delay)
+ */
+    int
+script_model_planDialog(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *name = luaL_checkstring(L, 2);
+    int delay = luaL_checkint(L, 3);
+
+    DialogAgent::agent()->planDialog(name, delay, model_index);
+
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
 }

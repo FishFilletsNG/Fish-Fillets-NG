@@ -22,7 +22,7 @@ View::View(const Path &picture)
         m_anim = NULL;
         m_anim = new Anim();
         m_anim->addAnim("default", picture);
-        m_anim->setAnim("default");
+        m_anim->setAnim("default", 0);
 
         m_model = NULL;
         m_animShift = 0;

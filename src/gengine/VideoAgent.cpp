@@ -85,10 +85,10 @@ VideoAgent::initVideoMode()
     int videoFlags = getVideoFlags();
 
     OptionAgent *options = OptionAgent::agent();
-    int screen_width = options->getAsInt("screen_width");
-    int screen_height = options->getAsInt("screen_height");
-    int screen_bpp = options->getAsInt("screen_bpp");
-    int fullscreen = options->getAsInt("fullscreen");
+    int screen_width = options->getAsInt("screen_width", 640);
+    int screen_height = options->getAsInt("screen_height", 480);
+    int screen_bpp = options->getAsInt("screen_bpp", 32);
+    int fullscreen = options->getAsInt("fullscreen", 0);
     if (fullscreen) {
         m_fullscreen = true;
         videoFlags |= SDL_FULLSCREEN;

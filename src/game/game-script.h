@@ -8,13 +8,21 @@ extern "C" {
 /**
  * Fuctions for ScriptAgent.
  */
-extern int script_createRoom(lua_State *L) throw();
-extern int script_addModel(lua_State *L) throw();
+extern int script_game_createRoom(lua_State *L) throw();
+extern int script_game_addModel(lua_State *L) throw();
+
 extern int script_model_addAnim(lua_State *L) throw();
 extern int script_model_addDuplexAnim(lua_State *L) throw();
+extern int script_model_runAnim(lua_State *L) throw();
 extern int script_model_setAnim(lua_State *L) throw();
+extern int script_model_setSpecialAnim(lua_State *L) throw();
 extern int script_model_getLoc(lua_State *L) throw();
 extern int script_model_getAction(lua_State *L) throw();
 extern int script_model_isAlive(lua_State *L) throw();
+
+extern int script_dialog_addDialog(lua_State *L) throw();
+extern int script_model_isTalking(lua_State *L) throw();
+extern int script_model_planDialog(lua_State *L) throw();
+
 
 #endif

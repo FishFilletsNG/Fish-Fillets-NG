@@ -6,6 +6,7 @@
 #include "ResourceException.h"
 
 #include <string>
+#include <vector>
 #include <map>
 
 /**
@@ -13,14 +14,17 @@
  */
 template <class T>
 class ResourcePack {
-    private:
+    public:
+    typedef std::vector<T> t_range;
+    protected:
     typedef std::multimap<std::string,T> t_reses;
     typedef typename t_reses::iterator t_resIterator;
     t_reses m_reses;
-    protected:
     virtual void unloadRes(T res) = 0;
 
     public:
+    //NOTE: we cannot call virtual functions from desctructor,
+    // call removeAll before delete
     virtual ~ResourcePack() {}
     //-----------------------------------------------------------------
     /**
@@ -33,6 +37,7 @@ class ResourcePack {
             for (t_resIterator i = m_reses.begin(); i != end; ++i) {
                 unloadRes(i->second);
             }
+            m_reses.clear();
         }
     //-----------------------------------------------------------------
     /**
@@ -79,6 +84,23 @@ class ResourcePack {
                     .addInfo("index", rank));
         }
         return range.first->second;
+    }
+    //-----------------------------------------------------------------
+    /**
+     * Get all resources with this name.
+     * NOTE: range can be empty.
+     */
+    t_range getRange(const std::string &name)
+    {
+        t_range result;
+        std::pair<t_resIterator, t_resIterator> range =
+            m_reses.equal_range(name);
+        while (range.first != range.second) {
+            result.push_back(range.first->second);
+            range.first++;
+        }
+
+        return result;
     }
     //-----------------------------------------------------------------
     /**

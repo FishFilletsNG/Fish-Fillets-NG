@@ -8,8 +8,6 @@
  */
 #include "ResSoundAgent.h"
 
-#include "MixException.h"
-
 //-----------------------------------------------------------------
 /**
  * Free all resources.
@@ -21,23 +19,35 @@ ResSoundAgent::own_shutdown()
 }
 //-----------------------------------------------------------------
 /**
- * @throws MixException when sound cannot be loaded.
+ * Load unshared sound from file.
+ * @return sound or NULL
  */
-void
-ResSoundAgent::addSound(const std::string &name, const Path &file)
+    Mix_Chunk *
+ResSoundAgent::loadSound(const Path &file)
 {
     Mix_Chunk *chunk = Mix_LoadWAV(file.getNative().c_str());
     if (NULL == chunk) {
         LOG_WARNING(ExInfo("cannot load wav")
-                .addInfo("path", file.getNative())
-                .addInfo("MixError", Mix_GetError()));
+            .addInfo("path", file.getNative())
+            .addInfo("MixError", Mix_GetError()));
     }
-    else {
+    return chunk;
+}
+//-----------------------------------------------------------------
+/**
+ * Store sound under this name.
+ * Nothing is stored when sound cannot be loaded.
+ */
+    void
+ResSoundAgent::addSound(const std::string &name, const Path &file)
+{
+    Mix_Chunk *chunk = loadSound(file);
+    if (chunk) {
         addRes(name, chunk);
     }
 }
 //-----------------------------------------------------------------
-void
+    void
 ResSoundAgent::unloadRes(Mix_Chunk *res)
 {
     Mix_FreeChunk(res);

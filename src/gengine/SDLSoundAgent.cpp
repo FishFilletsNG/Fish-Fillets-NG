@@ -47,24 +47,38 @@ SDLSoundAgent::own_shutdown()
 }
 //-----------------------------------------------------------------
 /**
+ * Play this sound.
+ *
+ * @return channel number where the sound is played,
+ * return -1 on error or when sound is NULL
+ */
+    int
+SDLSoundAgent::playSound(Mix_Chunk *sound)
+{
+    int channel = -1;
+    if (sound) {
+        channel = Mix_PlayChannel(-1, sound, 0);
+        if (-1 == channel) {
+            //NOTE: maybe there are too few open channels
+            LOG_WARNING(ExInfo("cannot play sound")
+                    .addInfo("Mix", Mix_GetError()));
+        }
+    }
+
+    return channel;
+}
+
+//-----------------------------------------------------------------
+/**
  * Play sound once.
  * Take random sound with this name.
  * @param name sound name
  */
     void
-SDLSoundAgent::playSound(const std::string &name)
+SDLSoundAgent::playRandomSound(const std::string &name)
 {
     Mix_Chunk *chunk = ResSoundAgent::agent()->getRandomRes(name);
-    if (chunk) {
-        if (Mix_PlayChannel(-1, chunk, 0) == -1) {
-            //NOTE: maybe there are too few open channels
-            /*
-            LOG_WARNING(ExInfo("cannot play sound")
-                    .addInfo("sound", name)
-                    .addInfo("Mix", Mix_GetError()));
-            */
-        }
-    }
+    playSound(chunk);
 }
 //-----------------------------------------------------------------
 /**

@@ -23,6 +23,7 @@
 #include "OptionAgent.h"
 #include "ResSoundAgent.h"
 #include "ResImageAgent.h"
+#include "DialogAgent.h"
 
 #include "SimpleMsg.h"
 #include "StringMsg.h"
@@ -43,6 +44,7 @@ Application::Application()
     m_agents->addAgent(new OptionAgent());
     m_agents->addAgent(new VideoAgent());
     m_agents->addAgent(new InputAgent());
+    m_agents->addAgent(new DialogAgent());
     m_agents->addAgent(new TimerAgent());
     m_agents->addAgent(new GameAgent());
 
@@ -62,7 +64,7 @@ Application::init(int argc, char *argv[])
     m_agents->init(Name::VIDEO_NAME);
     OptionAgent::agent()->parseCmdOpt(argc, argv);
     //TODO: better setting sound on/off
-    if (OptionAgent::agent()->getAsInt("sound")) {
+    if (OptionAgent::agent()->getAsInt("sound", 1)) {
         m_agents->addAgent(new SDLSoundAgent());
     }
     else {

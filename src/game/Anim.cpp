@@ -22,6 +22,9 @@ Anim::Anim()
 
     m_animName = "";
     m_animPhase = 0;
+    m_run = false;
+    m_specialAnimName = "";
+    m_specialAnimPhase = 0;
 }
 //-----------------------------------------------------------------
 Anim::~Anim()
@@ -33,7 +36,8 @@ Anim::~Anim()
 }
 //-----------------------------------------------------------------
 /**
- * Draw one anim phase at screen position.
+ * Draw anim phase at screen position.
+ * Increase phase when anim is running.
  */
     void
 Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
@@ -44,11 +48,18 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
 
     SDL_Surface *surface =
         m_animPack[side]->getRes(m_animName, m_animPhase);
-
     SDL_BlitSurface(surface, NULL, screen, &rect);
-    m_animPhase++;
-    if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
-        m_animPhase = 0;
+    if (m_run) {
+        m_animPhase++;
+        if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
+            m_animPhase = 0;
+        }
+    }
+
+    if (false == m_specialAnimName.empty()) {
+        surface =
+            m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
+        SDL_BlitSurface(surface, NULL, screen, &rect);
     }
 }
 //-----------------------------------------------------------------
@@ -71,15 +82,39 @@ Anim::addDuplexAnim(const std::string &name,
 }
 //-----------------------------------------------------------------
 /**
- * Set visage.
- * Set actual animation.
+ * Run this animation.
+ * Nothing is changed when animation is already running.
+ */
+    void
+Anim::runAnim(const std::string &name, int start_phase)
+{
+    if (m_animName != name) {
+        m_animPhase = start_phase;
+        m_animName = name;
+    }
+    m_run = true;
+}
+//-----------------------------------------------------------------
+/**
+ * Set static visage.
  */
     void
 Anim::setAnim(const std::string &name, int phase)
 {
-    if (m_animName != name) {
-        m_animPhase = phase;
-    }
+    m_run = false;
     m_animName = name;
+    m_animPhase = phase;
+}
+//-----------------------------------------------------------------
+/**
+ * Set special efect in second layer.
+ * @param name anim name, empty is no anim
+ * @param phase anim phase
+ */
+    void
+Anim::setSpecialAnim(const std::string &name, int phase)
+{
+    m_specialAnimName = name;
+    m_specialAnimPhase = phase;
 }
 

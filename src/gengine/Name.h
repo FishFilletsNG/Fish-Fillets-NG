@@ -18,6 +18,7 @@ class Name {
         static const std::string RESMUSIC_NAME;
 
         static const std::string INPUT_NAME;
+        static const std::string DIALOG_NAME;
 
         static const std::string GAME_NAME;
         static const std::string TIMER_NAME;

@@ -8,7 +8,8 @@
  */
 class DummySoundAgent : public SoundAgent {
     public:
-        virtual void playSound(const std::string &) {}
+        virtual int playSound(Mix_Chunk *) { return -1; }
+        virtual void playRandomSound(const std::string &) {}
         virtual void setSoundVolume(int ) {}
         virtual int getSoundVolume() { return 0; }
 

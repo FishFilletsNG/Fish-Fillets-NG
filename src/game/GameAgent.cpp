@@ -115,14 +115,21 @@ GameAgent::newLevel()
     void
 GameAgent::registerGameFuncs()
 {
-    m_script->registerFunc("createRoom", script_createRoom);
-    m_script->registerFunc("addModel", script_addModel);
+    m_script->registerFunc("game_createRoom", script_game_createRoom);
+    m_script->registerFunc("game_addModel", script_game_addModel);
+
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
+    m_script->registerFunc("model_runAnim", script_model_runAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
+    m_script->registerFunc("model_setSpecialAnim", script_model_setSpecialAnim);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
     m_script->registerFunc("model_getAction", script_model_getAction);
     m_script->registerFunc("model_isAlive", script_model_isAlive);
+
+    m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
+    m_script->registerFunc("model_isTalking", script_model_isTalking);
+    m_script->registerFunc("model_planDialog", script_model_planDialog);
 }
 //-----------------------------------------------------------------
 /**
