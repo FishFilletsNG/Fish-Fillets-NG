@@ -1,9 +1,9 @@
 Fish Fillets - Next Generation
 http://fillets.sf.net
-------------------------------
 
-Compile requirements:
-
+//-----------------------------------------------------------------
+Compile requirements
+--------------------
 Library SDL = Simple DirectMedia Layer (video, input, sound)
 - libSDL >= 1.2, www.libsdl.org
 
@@ -21,17 +21,24 @@ Library Boost - http://www.boost.org/
 - libboost_filesystem (portable filesystem paths)
 
 //-----------------------------------------------------------------
-How to run:
+How to run
+----------
 1. Compile ./configure && make
-2. Download data from http://sf.net/projects/fillets
+2. Download fillets-ng-data from http://sf.net/projects/fillets
 3. cp src/game/fillets path_to_data
 4. cd path_to_data
 5. ./fillets
-(e.g. ./fillets level=script/cellar/init.lua )
 
-Alternative you can copy all game data to $HOME/.fillets-ng
+//-----------------------------------------------------------------
+Controls
+--------
+Up, down, left and right arrow keys control the current fish.
+Use space bar to switch between the fish.
 
-Controls:
-small fish ... ijkl
-big fish   ... wasd
+See also "How to Play" data/doc/html/manual.html
+
+restart level - Backspace
+fullscreen - F11
+save game - F2
+load game - F3
 
