@@ -132,6 +132,8 @@ PixelTool::unpackPixel(Uint8 bpp, Uint8 *p)
     void
 PixelTool::packPixel(Uint8 bpp, Uint8 *p, Uint32 pixel)
 {
+    assert(p != NULL);
+
     switch(bpp) {
         case 1:
             *p = pixel;
