@@ -3,7 +3,7 @@ Game:
 - dialogs
 - game menu
 - load and save
-- player statistic
+- player statistics
 - intro
 ...
 
@@ -18,13 +18,4 @@ Engine:
 
 - make the engine independent on Name, app developer should not
   need to edit Name.h
-
-//-----------------------------------------------------------------
-DONE:
-- add a font library
-- register watchers for params (screen, ...)
-- prepare user and system config files,
-  the system one will be processed first and the user's config
-  will overwrite a configs
-
 
