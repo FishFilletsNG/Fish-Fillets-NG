@@ -9,6 +9,7 @@ class PlannedDialog;
 #include "NoCopy.h"
 
 #include <list>
+#include <string>
 
 /**
  * Stack of running dialogs.
