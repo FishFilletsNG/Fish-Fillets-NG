@@ -98,7 +98,7 @@ Font::renderText(const std::string &text, const SDL_Color &color) const
     }
 
     //NOTE: at index 0 is bg color
-    if (SDL_SetColorKey(raw_surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, 0) < 0) {
+    if (SDL_SetColorKey(raw_surface, SDL_SRCCOLORKEY, 0) < 0) {
         throw SDLException(ExInfo("SetColorKey"));
     }
 

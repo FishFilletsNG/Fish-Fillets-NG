@@ -175,6 +175,10 @@ LevelNode::addChild(LevelNode *new_node)
     }
 }
 //-----------------------------------------------------------------
+/**
+ * Draws self and path to all children.
+ * Children are drawed recursive.
+ */
 void
 LevelNode::drawPath(const NodeDrawer *drawer) const
 {
