@@ -142,6 +142,7 @@ AC_OUTPUT([
            src/Makefile
            src/gengine/Makefile
            src/SFont/Makefile
+           src/SDL_gfx/Makefile
            src/game/Makefile
            ])
 
