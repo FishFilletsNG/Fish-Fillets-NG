@@ -8,17 +8,14 @@
  */
 #include "Path.h"
 
-#include "OptionAgent.h"
 #include "Log.h"
+#include "OptionAgent.h"
+#include "FsPath.h"
 
-#include "boost/filesystem/operations.hpp"
-#include "boost/filesystem/convenience.hpp"
-#include "boost/filesystem/exception.hpp"
-#include "boost/version.hpp"
 #include <stdio.h>
 
 //-----------------------------------------------------------------
-    Path::Path(const boost::filesystem::path &file)
+    Path::Path(const std::string &file)
 : m_path(file)
 {
     /* empty */
@@ -43,8 +40,7 @@ Path::dataPath(const std::string &file, bool writeable)
         mode = "wb";
         LOG_INFO(ExInfo("creating path")
                 .addInfo("path", datapath.getNative()));
-        boost::filesystem::create_directories(
-                datapath.m_path.branch_path());
+        FsPath::createPath(datapath.getPosixName());
     }
 
     FILE *try_open = fopen(datapath.getNative().c_str(), mode);
@@ -78,14 +74,7 @@ Path::dataWritePath(const std::string &file)
 Path::dataSystemPath(const std::string &file)
 {
     std::string systemdir = OptionAgent::agent()->getParam("systemdir");
-#if BOOST_VERSION < 103100
-    boost::filesystem::path datafile(systemdir);
-#else
-    boost::filesystem::path datafile(systemdir,
-            boost::filesystem::portable_posix_name);
-#endif
-    datafile /= file;
-    return Path(datafile);
+    return Path(FsPath::join(systemdir, file));
 }
 //-----------------------------------------------------------------
 /**
@@ -96,55 +85,18 @@ Path::dataSystemPath(const std::string &file)
 Path::dataUserPath(const std::string &file)
 {
     std::string userdir = OptionAgent::agent()->getParam("userdir");
-#if BOOST_VERSION < 103100
-    boost::filesystem::path datafile(userdir);
-#else
-    boost::filesystem::path datafile(userdir,
-            boost::filesystem::portable_posix_name);
-#endif
-    datafile /= file;
-    return Path(datafile);
-}
-//-----------------------------------------------------------------
-/**
- * Return true for valid path on POSIX and native filesystem.
- */
-    bool
-Path::isValid(const std::string &file)
-{
-#if BOOST_VERSION < 103100
-    return true;
-#else
-    bool result = false;
-    try {
-        boost::filesystem::path ignore(file,
-                boost::filesystem::portable_posix_name);
-        ignore = boost::filesystem::path(ignore.native_file_string(),
-                boost::filesystem::native);
-        result = true;
-    }
-    catch (boost::filesystem::filesystem_error &e) {
-        result = false;
-    }
-    return result;
-#endif
+    return Path(FsPath::join(userdir, file));
 }
 
 //-----------------------------------------------------------------
 std::string
 Path::getNative() const
 {
-    return m_path.native_file_string();
-}
-//-----------------------------------------------------------------
-std::string
-Path::getBasename() const
-{
-    return m_path.leaf();
+    return FsPath::getNative(m_path);
 }
 //-----------------------------------------------------------------
 bool
 Path::exists() const
 {
-    return boost::filesystem::exists(m_path);
+    return FsPath::exists(m_path);
 }

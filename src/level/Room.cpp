@@ -27,6 +27,8 @@
 #include "SoundAgent.h"
 #include "ModelList.h"
 
+#include <assert.h>
+
 //-----------------------------------------------------------------
 /**
  * Create room holder.

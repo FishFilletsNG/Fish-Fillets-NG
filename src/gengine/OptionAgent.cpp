@@ -12,6 +12,7 @@
 
 #include "Log.h"
 #include "Path.h"
+#include "FsPath.h"
 #include "ScriptAgent.h"
 #include "StringTool.h"
 #include "LogicException.h"
@@ -32,10 +33,7 @@
 
 //NOTE: userdir = $HOME + USER_DATA_DIR
 #ifndef USER_DATA_DIR
-#define USER_DATA_DIR "/.fillets-ng"
-#endif
-#ifndef USER_DATA_DIR_ALTERNATIVE
-#define USER_DATA_DIR_ALTERNATIVE "/fillets-ng"
+#define USER_DATA_DIR ".fillets-ng"
 #endif
 
 const char *OptionAgent::CONFIG_FILE = "script/options.lua";
@@ -93,18 +91,7 @@ OptionAgent::prepareDataPaths()
     std::string userdir = "";
     const char *home = getenv("HOME");
     if (home) {
-        userdir = home;
-        userdir += USER_DATA_DIR;
-        if (!Path::isValid(userdir)) {
-            userdir = home;
-            userdir += USER_DATA_DIR_ALTERNATIVE;
-            if (!Path::isValid(userdir)) {
-                userdir = "";
-            }
-            LOG_INFO(ExInfo("using alternative userdir path")
-                    .addInfo("userdir", userdir)
-                    .addInfo("origdir", std::string(home) + USER_DATA_DIR));
-        }
+        userdir = FsPath::join(home, USER_DATA_DIR);
     }
     OptionAgent::agent()->setParam("userdir", userdir);
 }

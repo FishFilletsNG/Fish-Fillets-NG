@@ -96,33 +96,15 @@ AC_ARG_WITH(boost,
     AC_HELP_STRING([--with-boost=PFX], [Prefix where boost is installed]),
     BOOSTPFX="$withval", BOOSTPFX="")
 if test x$BOOSTPFX != x ; then
-    BOOST_CFLAGS="-I$BOOSTPFX"
-    BOOST_LIBS="-L$BOOSTPFX"
+    BOOST_LIBS="-lboost_filesystem"
+    if test x$BOOSTPFX != xyes ; then
+        BOOST_CFLAGS="-I$BOOSTPFX"
+        BOOST_LIBS="-L$BOOSTPFX $BOOST_LIBS"
+    fi
 fi
-OLD_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $BOOST_CFLAGS"
-AC_CHECK_HEADER(boost/filesystem/path.hpp, [],
-    [AC_MSG_ERROR([*** boost_filesystem-devel library not found!
-                   Try --with-boost=PREFIX
-                   You can download boost from http://www.boost.org])], []
-)
-CPPFLAGS="$OLD_CPPFLAGS"
-AC_CHECK_LIB(boost_filesystem, main,
-            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem"],
-AC_CHECK_LIB(boost_filesystem-gcc, main,
-            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-gcc"],
-AC_CHECK_LIB(boost_filesystem-mgw, main,
-            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-mgw"],
-AC_CHECK_LIB(boost_filesystem-vc, main,
-            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-vc"],
-AC_CHECK_LIB(boost_filesystem-osx, main,
-            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-osx"],
-    [AC_MSG_ERROR([*** boost_filesystem-devel library not found!
-                   You can download boost from http://www.boost.org])],
-    $BOOST_LIBS), $BOOST_LIBS) $BOOST_LIBS), $BOOST_LIBS), $BOOST_LIBS)
+AM_CONDITIONAL(WITH_BOOST, test x$BOOSTPFX != x)
 AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
-
 
 ###################################################
 # Debug on/off
