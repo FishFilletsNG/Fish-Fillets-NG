@@ -16,6 +16,7 @@
 #include "LogicException.h"
 #include "Cube.h"
 #include "Unit.h"
+#include "NewPtr.h"
 
 #include "game-script.h"
 #include "level-script.h"
@@ -70,17 +71,14 @@ LevelScript::interruptPlan()
     int
 LevelScript::addModel(Cube *new_model, Unit *new_unit)
 {
-    try {
-        new_model->takeDialogs(dialogs());
-        return room()->addModel(new_model, new_unit);
-    }
-    catch (...) {
-        delete new_model;
-        if (new_unit) {
-            delete new_unit;
-        }
-        throw;
-    }
+    NewPtr ptrModel(new_model);
+    NewPtr ptrUnit(new_unit);
+    room();
+    ptrModel.ok();
+    ptrUnit.ok();
+
+    new_model->takeDialogs(dialogs());
+    return room()->addModel(new_model, new_unit);
 }
 //-----------------------------------------------------------------
     Cube *

@@ -6,6 +6,7 @@ class InputProvider;
 
 #include "KeyControl.h"
 #include "ControlSym.h"
+#include "Object.h"
 
 #include "SDL.h"
 #include <string>
@@ -13,7 +14,7 @@ class InputProvider;
 /**
  * Unit to drive.
  */
-class Unit {
+class Unit : public Object {
     private:
         KeyControl m_buttons;
         ControlSym m_symbols;

@@ -86,8 +86,8 @@ StateManager::changeState(GameState *who, GameState *new_state)
 void
 StateManager::pushState(GameState *who, GameState *new_state)
 {
-    new_state->initState(this);
     insertAfter(who, new_state);
+    new_state->initState(this);
     checkStack();
 }
 

@@ -9,6 +9,7 @@ class DialogStack;
 #include "V2.h"
 #include "Goal.h"
 #include "NoCopy.h"
+#include "Object.h"
 #include "Dir.h"
 
 #include <vector>
@@ -16,7 +17,7 @@ class DialogStack;
 /**
  * A object in game.
  */
-class Cube : public NoCopy {
+class Cube : public NoCopy, public Object {
     public:
         typedef std::vector<Cube*> t_models;
         enum eWeight {

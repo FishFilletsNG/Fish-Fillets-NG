@@ -141,23 +141,25 @@ Pedometer::runSelected()
     void
 Pedometer::runLevel()
 {
+    Level *levelState = m_level;
+    m_level = NULL;
     DemoMode *poster = m_status->createPoster();
     if (poster) {
-        poster->setNextState(m_level);
+        poster->setNextState(levelState);
         changeState(poster);
     }
     else {
-        changeState(m_level);
+        changeState(levelState);
     }
-    m_level = NULL;
 }
 //-----------------------------------------------------------------
     void
 Pedometer::runReplay()
 {
-    changeState(m_level);
-    m_level->loadReplay(m_solution);
+    Level *levelState = m_level;
     m_level = NULL;
+    changeState(levelState);
+    levelState->loadReplay(m_solution);
 }
 //-----------------------------------------------------------------
     void
