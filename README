@@ -22,7 +22,7 @@ Library LUA (script language, used for debug console, configuration, levels,...)
 - liblualib50
 
 
-(To compile on non Unix machine, use src/gengine/FsPath_boost.cpp
+(To compile on NON-Unix machine, use src/gengine/FsPath_boost.cpp
  instead of src/gengine/FsPath.cpp
 
     Library Boost - http://www.boost.org/
@@ -62,13 +62,6 @@ III. Install czech dialogs
 - extract fillets-ng-data-cs.tar.gz to $(datadir)/games/fillets-ng/
   default: /usr/local/share/games/fillets-ng/
 
-To run the game with specific language change locales (you must have
-generated that locales) or use parameter "lang".
-For example to use czech dialogs run
-$ LANG=cs_CZ fillets
-or
-$ fillets lang=cs
-
 
 Controls
 ========
@@ -79,9 +72,11 @@ Use space bar to switch between the fish.
 See also "How to Play" data/doc/html/manual.html
 
 restart level - Backspace
-toggle fullscreen - F11
 save game - F2
 load game - F3
 show/hide level move counter - F5
+show/hide subtitles - F6
+game menu - F10
+toggle fullscreen - F11
 hold down to increase game speed - Shift
 

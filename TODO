@@ -4,9 +4,9 @@ priority - 1-High, 2-Medium, 3-Low
 
 
 GAME SPECIFIC
-1 - game menu - select language for subtitles, sound on/off
-3 - video playback
+2 - video playback
 3 - level editor
+3 - add support for extra levels
 
 
 INPUT
@@ -21,11 +21,12 @@ STATISTICS
 LEVEL SPECIFIC
 1 - convert all animation of objects in levels to lua
 1 - convert all triggered dialogs to lua
-1 - in final levels you have to get some object out of screen to win
+1 - prepare translated version of final posters
 
 
 GRAPHICS
 3 - waves in text dialogs
+3 - draw nice curves at worldmap
 
 
 SOUND
