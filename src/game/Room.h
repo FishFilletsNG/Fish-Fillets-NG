@@ -18,7 +18,7 @@ class Room : public NoCopy {
         Field *m_field;
         Cube::t_models m_models;
     private:
-        void placement();
+        void prepareRound();
         bool falldown();
         void driving();
     public:

@@ -72,25 +72,35 @@ Room::getModel(int model_index)
     void
 Room::nextRound()
 {
-    //NOTE: we must this functions sequential for all objects
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->prepareRound();
-    }
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->checkDead();
-    }
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->setNoDir();
-    }
-
+    prepareRound();
 
     if (false == falldown()) {
         driving();
     }
 
+    Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->finishRound();
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Move all models to new position
+ * and check dead fihes.
+ */
+void
+Room::prepareRound()
+{
+    //NOTE: we must call this functions sequential for all objects
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->occupyNewPos();
+    }
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->checkDead();
+    }
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->applyDead();
     }
 }
 //-----------------------------------------------------------------

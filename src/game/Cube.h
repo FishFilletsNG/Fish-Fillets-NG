@@ -30,6 +30,7 @@ class Cube : public NoCopy {
     private:
         V2 m_loc;
         bool m_alive;
+        bool m_readyToDie;
         eWeight m_weight;
         eWeight m_power;
         eDir m_dir;
@@ -58,9 +59,9 @@ class Cube : public NoCopy {
         ~Cube();
         void takeField(Field *field);
 
-        void prepareRound();
+        void occupyNewPos();
         void checkDead();
-        void setNoDir();
+        void applyDead();
         bool fall();
         bool drive();
         void finishRound();

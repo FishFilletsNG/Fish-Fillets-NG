@@ -32,6 +32,7 @@ Cube::Cube(const V2 &location,
     m_weight = weight;
     m_power = power;
     m_alive = alive;
+    m_readyToDie = false;
     m_dir = DIR_NO;
 
     m_shape = shape;
@@ -91,10 +92,9 @@ Cube::takeField(Field *field)
 /**
  * Accomplish last move in m_dir direction.
  * Mask to a new position.
- * Set m_dir to DIR_NO.
  */
     void
-Cube::prepareRound()
+Cube::occupyNewPos()
 {
     if (m_dir != DIR_NO) {
         int x;
@@ -109,7 +109,7 @@ Cube::prepareRound()
 }
 //-----------------------------------------------------------------
 /**
- * Check deadly states.
+ * Check dead fishes.
  * Fish is dead:
  * - when any model moves in dir != DIR_UP
  *   and new position is SOLELY on a fish
@@ -123,7 +123,6 @@ Cube::prepareRound()
 Cube::checkDead()
 {
     //TODO: after falling phase is sufficient to check only DeadFall
-    //FIXME: kill all fishes when object fall on them
     //FIXME: can one dead fish kill another fish in the same round?
     if (m_alive) {
         bool dead = false;
@@ -140,12 +139,7 @@ Cube::checkDead()
         }
 
         if (dead) {
-            //TODO: nice dead
-            LOG_INFO(ExInfo("dead")
-                    .addInfo("fish", toString()));
-            m_alive = false;
-            m_view->setAnim("skeleton");
-            SoundAgent::agent()->playSound("xplo");
+            m_readyToDie = true;
         }
     }
 }
@@ -213,12 +207,22 @@ Cube::checkDeadStress(eWeight power)
 
 //-----------------------------------------------------------------
 /**
- * Reset direction.
+ * Make skeletons.
  */
     void
-Cube::setNoDir()
+Cube::applyDead()
 {
     m_dir = DIR_NO;
+
+    if (m_readyToDie) {
+        //TODO: nice dead
+        LOG_INFO(ExInfo("dead")
+                .addInfo("fish", toString()));
+        m_readyToDie = false;
+        m_alive = false;
+        m_view->setAnim("skeleton");
+        SoundAgent::agent()->playSound("xplo");
+    }
 }
 //-----------------------------------------------------------------
 /**

@@ -251,15 +251,6 @@ GameAgent::keyBinding()
     KeyStroke log_minus(SDLK_KP_MINUS, KMOD_RALT);
     msg = new SimpleMsg(Name::APP_NAME, "dec_loglevel");
     keyBinder->addStroke(log_minus, msg);
-
-    //TEST: rectBinding
-    SDL_Rect rect;
-    rect.x = 20;
-    rect.y = 50;
-    rect.w = 100;
-    rect.h = 300;
-    msg = new StringMsg(Name::SCRIPT_NAME, "dofile", "script/test.lua");
-    InputAgent::agent()->rectBinder()->addRect(rect, msg);
 }
 
 //-----------------------------------------------------------------
