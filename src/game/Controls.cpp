@@ -106,7 +106,7 @@ Controls::driveUnit()
 Controls::lockPhases()
 {
     //NOTE: original limits were {6, 10}
-    static const int SPEED_WARP1 = 3;
+    static const int SPEED_WARP1 = 6;
     static const int SPEED_WARP2 = 10;
 
     if (m_active != m_units.end() && (*m_active)->isMoving()) {
