@@ -25,6 +25,7 @@
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
 #include "ResourceException.h"
+#include "OptionParams.h"
 #include "Font.h"
 
 #include "SimpleMsg.h"
@@ -68,7 +69,7 @@ Application::init(int argc, char *argv[])
     MessagerAgent::agent()->addListener(this);
     m_agents->init(Name::VIDEO_NAME);
     prepareLogLevel();
-    OptionAgent::agent()->parseCmdOpt(argc, argv);
+    prepareOptions(argc, argv);
     customizeGame();
 
     m_agents->init(Name::INPUT_NAME);
@@ -95,7 +96,7 @@ Application::shutdown()
  * Set loglevel according option.
  * Prepare to change.
  */
-void
+    void
 Application::prepareLogLevel()
 {
     OptionAgent *options = OptionAgent::agent();
@@ -104,11 +105,36 @@ Application::prepareLogLevel()
     options->setDefault("loglevel", Log::getLogLevel());
 }
 //-----------------------------------------------------------------
+    void
+Application::prepareOptions(int argc, char *argv[])
+{
+    OptionParams params;
+    params.addParam("loglevel", OptionParams::TYPE_NUMBER,
+            "Loglevel uses same numbers as syslog");
+    params.addParam("systemdir", OptionParams::TYPE_PATH,
+            "Path to game data");
+    params.addParam("userdir", OptionParams::TYPE_PATH,
+            "Path to game data");
+    params.addParam("lang", OptionParams::TYPE_STRING,
+            "2‐letter code (en, cs, fr, de)");
+    params.addParam("fullscreen", OptionParams::TYPE_BOOLEAN,
+            "Turn fullscreen on/off");
+    params.addParam("show_steps", OptionParams::TYPE_BOOLEAN,
+            "Show step counter in level");
+    params.addParam("sound", OptionParams::TYPE_BOOLEAN,
+            "Turn sound on/off");
+    params.addParam("volume_sound", OptionParams::TYPE_NUMBER,
+            "Sound volume in percentage");
+    params.addParam("volume_music", OptionParams::TYPE_NUMBER,
+            "Music volume in percentage");
+    OptionAgent::agent()->parseCmdOpt(argc, argv, params);
+}
+//-----------------------------------------------------------------
 /**
  * Run init script.
  * @throws ResourceException when data are not available
  */
-void
+    void
 Application::customizeGame()
 {
     Path initfile = Path::dataReadPath("script/init.lua");

@@ -18,6 +18,7 @@
 #include "HelpException.h"
 #include "LogicException.h"
 #include "ScriptException.h"
+#include "OptionParams.h"
 #include "minmax.h"
 
 #include <string.h>
@@ -143,7 +144,7 @@ OptionAgent::prepareLang()
  * @throws LogicException when format is wrong
  */
     void
-OptionAgent::parseCmdOpt(int argc, char *argv[])
+OptionAgent::parseCmdOpt(int argc, char *argv[], const OptionParams &params)
 {
     if (argc >= 1) {
         setParam("program", argv[0]);
@@ -151,10 +152,10 @@ OptionAgent::parseCmdOpt(int argc, char *argv[])
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
-            parseDashOpt(argv[i]);
+            parseDashOpt(argv[i], params);
         }
         else {
-            parseParamOpt(argv[i]);
+            parseParamOpt(argv[i], params);
         }
     }
 }
@@ -165,16 +166,17 @@ OptionAgent::parseCmdOpt(int argc, char *argv[])
  * @throws LogicException when used option is unknown
  */
     void
-OptionAgent::parseDashOpt(const std::string &arg)
+OptionAgent::parseDashOpt(const std::string &arg,
+        const OptionParams &params)
 {
     if ("-h" == arg || "--help" == arg) {
-        throw HelpException(ExInfo(getHelpInfo()));
+        throw HelpException(ExInfo(getHelpInfo(params)));
     }
     else if ("-v" == arg || "--version" == arg) {
         throw HelpException(ExInfo(getVersionInfo()));
     }
     else if ("-c" == arg || "--config" == arg) {
-        throw HelpException(ExInfo(m_environ->getHelpInfo()));
+        throw HelpException(ExInfo(params.getConfig(m_environ)));
     }
     else {
         throw LogicException(ExInfo("unknown option")
@@ -185,8 +187,10 @@ OptionAgent::parseDashOpt(const std::string &arg)
 }
 //-----------------------------------------------------------------
     void
-OptionAgent::parseParamOpt(const std::string &arg)
+OptionAgent::parseParamOpt(const std::string &arg,
+                const OptionParams &/*params*/)
 {
+    //TODO: check params type
     std::string name;
     std::string value;
     if (splitOpt(arg, &name, &value)) {
@@ -330,8 +334,12 @@ OptionAgent::addWatcher(const std::string &name, BaseMsg *msg)
     m_environ->addWatcher(name, msg);
 }
 //-----------------------------------------------------------------
+/**
+ * Get help text.
+ * NOTE: game specific.
+ */
 std::string
-OptionAgent::getHelpInfo() const
+OptionAgent::getHelpInfo(const OptionParams &params) const
 {
     std::string help = "Usage: "
         + getParam("program") + " [options] [name=value ...]\n";
@@ -340,15 +348,7 @@ OptionAgent::getHelpInfo() const
     help += "  -c, --config             Show config\n";
     help += "\n";
     help += "Config variables:\n";
-    help += "  loglevel=<number>        Loglevel uses same numbers as syslog\n";
-    help += "  systemdir=<path>         Path to game data\n";
-    help += "  userdir=<path>           Path to game data\n";
-    help += "  lang=<code>              2‐letter code (en, cs, fr, de)\n";
-    help += "  fullscreen=<boolean>     Turn fullscreen on/off\n";
-    help += "  show_steps=<boolean>     Show step counter in level\n";
-    help += "  sound=<boolean>          Turn sound on/off\n";
-    help += "  volume_sound=<number>    Sound volume in percentage\n";
-    help += "  volume_music=<number>    Music volume in percentage\n";
+    help += params.getHelp(m_environ);
     return help;
 }
 //-----------------------------------------------------------------
