@@ -52,7 +52,9 @@ LevelNode::setState(eState state)
             for (t_children::iterator i = m_children.begin();
                     i != end; ++i)
             {
-                (*i)->setState(STATE_OPEN);
+                if ((*i)->getState() < STATE_OPEN) {
+                    (*i)->setState(STATE_OPEN);
+                }
             }
             break;
         default:

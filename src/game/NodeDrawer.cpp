@@ -85,8 +85,10 @@ NodeDrawer::drawEdge(const LevelNode *start, const LevelNode *end) const
     Sint16 y1 = start->getLoc().getY();
     Sint16 x2 = end->getLoc().getX();
     Sint16 y2 = end->getLoc().getY();
-    lineRGBA(m_screen, x1, y1, x2, y2, 255, 255, 0, 255);
-    lineRGBA(m_screen, x1 - 1, y1 - 1 , x2 - 1, y2 - 1, 255, 255, 0, 255);
-    lineRGBA(m_screen, x1 + 1, y1 + 1 , x2 + 1, y2 + 1, 255, 255, 0, 255);
+    aalineRGBA(m_screen, x1, y1, x2, y2, 255, 255, 0, 255);
+    aalineRGBA(m_screen, x1 - 1, y1 - 1 , x2 - 1, y2 - 1, 255, 255, 0, 255);
+    aalineRGBA(m_screen, x1 + 1, y1 + 1 , x2 + 1, y2 + 1, 255, 255, 0, 255);
+    aalineRGBA(m_screen, x1 - 1, y1 + 1 , x2 - 1, y2 + 1, 255, 255, 0, 255);
+    aalineRGBA(m_screen, x1 + 1, y1 - 1 , x2 + 1, y2 - 1, 255, 255, 0, 255);
 }
 

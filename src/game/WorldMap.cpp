@@ -158,7 +158,7 @@ WorldMap::findLevelName(const std::string &codename) const
         result = desc->getLevelName();
     }
     else {
-        result = "???";
+        result = codename;
     }
     return result;
 }
