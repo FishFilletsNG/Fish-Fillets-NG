@@ -7,8 +7,3 @@ EXTRA_DIST = ChangeLog $(man_MANS)
 ChangeLog:
 	touch ChangeLog
 
-doxygen:
-	doxygen
-
-
-.PHONY: ChangeLog
