@@ -276,6 +276,44 @@ script_model_isAlive(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool model_isLeft(model_index)
+ *
+ * Returns true when model is looking to the left.
+ */
+    int
+script_model_isLeft(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    bool left = model->isLeft();
+
+    lua_pushboolean(L, left);
+    END_NOEXCEPTION;
+    //NOTE: return left
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_change_turnSide(model_index)
+ *
+ * Change look side.
+ */
+    int
+script_model_change_turnSide(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    model->change_turnSide();
+
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+
+//-----------------------------------------------------------------
+/**
  * void dialog_addFont(fontname, file)
  */
     int
@@ -331,15 +369,15 @@ script_model_isTalking(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_planDialog(model_index, name, delay)
+ * void model_planDialog(model_index, delay, name)
  */
     int
 script_model_planDialog(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    const char *name = luaL_checkstring(L, 2);
-    int delay = luaL_checkint(L, 3);
+    int delay = luaL_checkint(L, 2);
+    const char *name = luaL_checkstring(L, 3);
 
     //TODO: set dialog font (or color)
     DialogAgent::agent()->planDialog(name, delay, model_index);

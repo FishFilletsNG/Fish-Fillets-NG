@@ -24,7 +24,7 @@
 <li>
      MessagerAgent - allows sending messages to agent and other listeners.
 </li><li>
-     ScriptAgent - makes scripting posible.
+     ScriptAgent - makes scripting possible.
 </li><li>
      OptionAgent - contains global game options.
 </li><li>
@@ -84,9 +84,9 @@
 <li>
     Agent must not call other agents in his constructor.
 </li><li>
-    Agent can call only agents with lower names and onself in his init().
+    Agent can call only agents with lower names and oneself in his init().
 </li><li>
-    Agent can call only agents with higher names and onself in his shutdown().
+    Agent can call only agents with higher names and oneself in his shutdown().
 </li>
 </ol>
  * 
@@ -99,7 +99,7 @@
  * for agent instance.
  * 
  * agent() method is made by AGENT(TYPE, NAME) macro. This allows us
- * to obtain agent of prefered type and is not need
+ * to obtain agent of preferred type and is not need
  * to write agent() method for every agent.
  * 
  * \subsection comm-example How to get screen_width

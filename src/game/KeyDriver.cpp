@@ -33,7 +33,7 @@ KeyDriver::drive(Cube *model)
     bool result = false;
     if (model->isAlive()) {
         if (false == result && m_keys[m_control.getLeft()]) {
-            if (model->isLookLeft()) {
+            if (model->isLeft()) {
                 result = model->rules()->actionMoveDir(Rules::DIR_LEFT);
             }
             else {
@@ -42,7 +42,7 @@ KeyDriver::drive(Cube *model)
             }
         }
         if (false == result && m_keys[m_control.getRight()]) {
-            if (false == model->isLookLeft()) {
+            if (false == model->isLeft()) {
                 result = model->rules()->actionMoveDir(Rules::DIR_RIGHT);
             }
             else {

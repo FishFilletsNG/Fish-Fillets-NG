@@ -72,7 +72,7 @@ View::draw()
         V2 shift_loc = shift.composition(loc.scale(SCALE));
 
         Anim::eSide side = Anim::SIDE_LEFT;
-        if (false == m_model->isLookLeft()) {
+        if (false == m_model->isLeft()) {
             side = Anim::SIDE_RIGHT;
         }
         m_anim->drawAt(m_screen, shift_loc.getX(), shift_loc.getY(), side);

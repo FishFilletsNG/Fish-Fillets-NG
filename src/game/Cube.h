@@ -52,7 +52,7 @@ class Cube : public NoCopy {
         bool isAlive() const { return m_alive; }
         const Shape *getShape() const { return m_shape; }
 
-        bool isLookLeft() const { return m_lookLeft; }
+        bool isLeft() const { return m_lookLeft; }
         Anim *anim();
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };
