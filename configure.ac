@@ -30,8 +30,8 @@ dnl Debian, and possibly other systems, include this script...
         LUA_CFLAGS="`[$LUACONFIG --include]`"
         LUA_LIBS="`[$LUACONFIG --libs]`"
     else dnl ...otherwise, attempt to guess
-        LUA_CFLAGS="-I/usr/include -I/usr/local/include"
-        LUA_LIBS="-L/usr/lib -L/usr/local/lib"
+        LUA_CFLAGS=""
+        LUA_LIBS="-L/usr/local/lib"
         AC_CHECK_LIB(lua, lua_getfenv, LUA_LIBS="$LUA_LIBS -llua",
         AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
         AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
