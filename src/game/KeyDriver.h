@@ -13,6 +13,7 @@ class KeyDriver : public Driver {
     private:
         KeyControl m_control;
         Uint8 *m_keys;
+        bool m_lastResult;
     public:
         KeyDriver(const KeyControl &control);
 

@@ -80,7 +80,7 @@ Room::nextRound()
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->freeOldPos();
+        (*i)->finishRound();
     }
 }
 //-----------------------------------------------------------------

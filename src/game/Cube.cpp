@@ -104,8 +104,6 @@ Cube::occupyNewPos()
 
         m_mask->mask();
     }
-
-    m_view->prepareRound();
 }
 //-----------------------------------------------------------------
 /**
@@ -252,13 +250,16 @@ Cube::drive()
 //-----------------------------------------------------------------
 /**
  * Unmask from old position.
+ * And prepare do draw.
  */
     void
-Cube::freeOldPos()
+Cube::finishRound()
 {
     if (m_dir != DIR_NO) {
         m_mask->unmask();
     }
+
+    m_view->prepareRound();
 }
 
 //-----------------------------------------------------------------

@@ -18,6 +18,7 @@ KeyDriver::KeyDriver(const KeyControl &control)
     : m_control(control)
 {
     m_keys = InputAgent::agent()->getKeys();
+    m_lastResult = false;
 }
 //-----------------------------------------------------------------
 /**
@@ -46,10 +47,15 @@ KeyDriver::drive(Cube *model)
         //TODO: speed up when still the same driver and direction
         //TEST: animation
         if (result) {
-            GameAgent::agent()->ensurePhases(5);
+            int phases = 3;
+            if (m_lastResult) {
+                phases = 2;
+            }
+            GameAgent::agent()->ensurePhases(phases);
         }
     }
 
+    m_lastResult = result;
     return result;
 }
 

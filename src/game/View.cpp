@@ -49,6 +49,7 @@ View::~View()
 View::prepareRound()
 {
     m_animShift = 0;
+    computeShiftSize();
 }
 //-----------------------------------------------------------------
 /**
@@ -65,9 +66,6 @@ View::draw()
         int shiftY = 0;
         Cube::eDir dir = m_model->getDir();
         if (dir != Cube::DIR_NO) {
-            if (0 == m_animShift) {
-                computeShiftSize();
-            }
             ++m_animShift;
 
             m_model->dir2xy(dir, &shiftX, &shiftY);
