@@ -36,6 +36,7 @@ dnl Debian, and possibly other systems, include this script...
         AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
         AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
         [AC_MSG_ERROR([*** Lua5 is required.
+         Try --with-lua=PREFIX
          You can download lua from http://www.lua.org])],
          -lm), -lm), -lm)
           AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
@@ -96,6 +97,7 @@ OLD_CPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $BOOST_CFLAGS"
 AC_CHECK_HEADER(boost/filesystem/path.hpp, [],
     [AC_MSG_ERROR([*** boost_filesystem-devel library not found!
+                   Try --with-boost=PREFIX
                    You can download boost from http://www.boost.org])], []
 )
 CPPFLAGS=$OLD_CPPFLAGS
