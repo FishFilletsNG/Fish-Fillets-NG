@@ -37,10 +37,10 @@ PlannedDialog::talk(int volume, int loops)
 {
     m_channel = m_dialog->talk(volume, loops);
     if (loops == -1) {
-        m_endtime = (unsigned int)-1;
+        m_endtime = 1 << 30;
     }
     else {
-        m_endtime = m_minTime * loops + TimerAgent::agent()->getCycles();
+        m_endtime = m_minTime * (loops + 1) + TimerAgent::agent()->getCycles();
     }
 }
 
