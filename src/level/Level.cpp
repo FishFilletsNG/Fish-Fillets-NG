@@ -99,6 +99,8 @@ Level::own_initState()
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
+    //TODO: escape "codename"
+    m_levelScript->scriptDo("CODENAME = [[" + m_codename + "]]");
     m_levelScript->scriptInclude(m_datafile);
 }
 //-----------------------------------------------------------------
