@@ -44,7 +44,7 @@ GameState::takeHandler(InputHandler *new_handler)
 void
 GameState::initState(StateManager *manager)
 {
-    LOG_INFO(ExInfo("initState").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("initState").addInfo("name", getName()));
     m_manager = manager;
     m_active = true;
     InputAgent::agent()->installHandler(m_handler);
@@ -71,7 +71,7 @@ GameState::updateState()
 void
 GameState::pauseState()
 {
-    LOG_INFO(ExInfo("pauseState").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("pauseState").addInfo("name", getName()));
     if (!m_active) {
         throw LogicException(ExInfo("pause - state is not active")
             .addInfo("name", getName()));
@@ -88,7 +88,7 @@ GameState::pauseState()
 void
 GameState::resumeState()
 {
-    LOG_INFO(ExInfo("resumeState").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("resumeState").addInfo("name", getName()));
     m_active = true;
     InputAgent::agent()->installHandler(m_handler);
     own_resumeState();

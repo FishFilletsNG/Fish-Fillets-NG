@@ -65,6 +65,11 @@ ViewEffect::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
         case EFFECT_MIRROR:
             blitMirror(screen, surface, x, y);
             break;
+        case EFFECT_INVISIBLE:
+            break;
+        case EFFECT_REVERSE:
+            blitReverse(screen, surface, x, y);
+            break;
         default:
             assert(!"unknown effect");
             break;
@@ -131,6 +136,26 @@ ViewEffect::blitMirror(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
         }
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Reverse left and right.
+ */
+void
+ViewEffect::blitReverse(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
+{
+    SurfaceLock lock1(screen);
+    SurfaceLock lock2(surface);
+
+    for (int py = 0; py < surface->h; ++py) {
+        for (int px = 0; px < surface->w; ++px) {
+            SDL_Color pixel = getColor(surface, px, py);
+            if (pixel.unused == 255) {
+                putColor(screen,
+                        x + surface->w - 1 - px, y + py, pixel);
+            }
+        }
+    }
+}
 
 //-----------------------------------------------------------------
 bool
@@ -159,6 +184,7 @@ ViewEffect::getColor(SDL_Surface *surface, int x, int y)
 /**
  * Put color at x, y.
  * Surface must be locked.
+ * TODO: support alpha values
  */
 void
 ViewEffect::putColor(SDL_Surface *surface, int x, int y,

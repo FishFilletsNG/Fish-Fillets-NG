@@ -174,7 +174,7 @@ script_model_useSpecialAnim(lua_State *L) throw()
  * void model_setEffect(model_index, effect_name)
  *
  * Set special view effect.
- * available effects: "none", "mirror"
+ * available effects: "none", "mirror", "invisible"
  */
     int
 script_model_setEffect(lua_State *L) throw()
@@ -189,6 +189,12 @@ script_model_setEffect(lua_State *L) throw()
     }
     else if ("mirror" == effect_name) {
         model->anim()->setEffect(ViewEffect::EFFECT_MIRROR);
+    }
+    else if ("invisible" == effect_name) {
+        model->anim()->setEffect(ViewEffect::EFFECT_INVISIBLE);
+    }
+    else if ("reverse" == effect_name) {
+        model->anim()->setEffect(ViewEffect::EFFECT_REVERSE);
     }
     else {
         ExInfo error = ExInfo("unknown view effect")

@@ -11,7 +11,9 @@ class ViewEffect {
         enum eEffect {
             EFFECT_NONE,
             EFFECT_DISINTEGRATE,
-            EFFECT_MIRROR
+            EFFECT_MIRROR,
+            EFFECT_INVISIBLE,
+            EFFECT_REVERSE
         };
     private:
         static const int DISINT_START = 400;
@@ -24,6 +26,8 @@ class ViewEffect {
         void blitDisInt(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
         void blitMirror(SDL_Surface *screen, SDL_Surface *surface,
+                int x, int y);
+        void blitReverse(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
 
         bool colorEquals(const SDL_Color &color1, const SDL_Color &color2);
