@@ -4,6 +4,7 @@
 class Field;
 class Picture;
 class Controls;
+class KeyStroke;
 class Unit;
 class ResSoundPack;
 class PhaseLocker;
@@ -51,6 +52,7 @@ class Room : public NoCopy {
 
 
         void switchFish();
+        void controlEvent(const KeyStroke &stroke);
         std::string getMoves() const;
         bool loadMove(char move);
         bool makeMove(char move);

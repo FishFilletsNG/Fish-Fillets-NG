@@ -47,7 +47,7 @@ Unit::willMove()
 //-----------------------------------------------------------------
 /**
  * Test keys and try move.
- * @return true when unit has moved
+ * @return a symbol when unit has moved
  */
 char
 Unit::drive(Uint8 *pressed)
@@ -57,7 +57,7 @@ Unit::drive(Uint8 *pressed)
 //-----------------------------------------------------------------
 /**
  * Test keys and try move, use borrowed controls.
- * @return non zero symbol when unit has moved
+ * @return a symbol when unit has moved or SYM_NONE
  */
 char
 Unit::driveBorrowed(Uint8 *pressed, const KeyControl &buttons)
@@ -76,7 +76,7 @@ Unit::driveBorrowed(Uint8 *pressed, const KeyControl &buttons)
             return goDown();
         }
     }
-    return 0;
+    return ControlSym::SYM_NONE;
 }
 //-----------------------------------------------------------------
 /**
@@ -89,8 +89,40 @@ Unit::activate()
 }
 //-----------------------------------------------------------------
 /**
+ * Translate this key to symbol.
+ * @return symbol or SYM_NONE for unknown key
+ */
+char
+Unit::mySymbol(SDLKey key)
+{
+    return mySymbolBorrowed(key, m_buttons);
+}
+//-----------------------------------------------------------------
+/**
+ * Translate this key to symbol, compare with borrowed buttons.
+ * @return symbol or SYM_NONE for unknown key
+ */
+char
+Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons)
+{
+    if (key == buttons.getLeft()) {
+        return m_symbols.getLeft();
+    }
+    if (key == buttons.getRight()) {
+        return m_symbols.getRight();
+    }
+    if (key == buttons.getUp()) {
+        return m_symbols.getUp();
+    }
+    if (key == buttons.getDown()) {
+        return m_symbols.getDown();
+    }
+    return ControlSym::SYM_NONE;
+}
+//-----------------------------------------------------------------
+/**
  * Make move.
- * @return move symobol or zero for bad move
+ * @return move symbol or SYM_NONE for bad move
  */
 char
 Unit::driveOrder(char move)
@@ -107,13 +139,13 @@ Unit::driveOrder(char move)
     if (m_symbols.getDown() == move) {
         return goDown();
     }
-    return 0;
+    return ControlSym::SYM_NONE;
 }
 //-----------------------------------------------------------------
 char
 Unit::goLeft()
 {
-    char symbol = 0;
+    char symbol = ControlSym::SYM_NONE;
     if (m_model->isLeft()) {
         if (m_model->rules()->actionMoveDir(Rules::DIR_LEFT)) {
             symbol = m_symbols.getLeft();
@@ -129,7 +161,7 @@ Unit::goLeft()
 char
 Unit::goRight()
 {
-    char symbol = 0;
+    char symbol = ControlSym::SYM_NONE;
     if (!m_model->isLeft()) {
         if (m_model->rules()->actionMoveDir(Rules::DIR_RIGHT)) {
             symbol = m_symbols.getRight();
@@ -145,7 +177,7 @@ Unit::goRight()
 char
 Unit::goUp()
 {
-    char symbol = 0;
+    char symbol = ControlSym::SYM_NONE;
     if (m_model->rules()->actionMoveDir(Rules::DIR_UP)) {
         symbol = m_symbols.getUp();
     }
@@ -155,7 +187,7 @@ Unit::goUp()
 char
 Unit::goDown()
 {
-    char symbol = 0;
+    char symbol = ControlSym::SYM_NONE;
     if (m_model->rules()->actionMoveDir(Rules::DIR_DOWN)) {
         symbol = m_symbols.getDown();
     }

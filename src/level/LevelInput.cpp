@@ -64,6 +64,9 @@ LevelInput::keyEvent(const KeyStroke &stroke)
             m_level->action_restart();
             break;
         case -1:
+            if (!m_level->isPlanning()) {
+                m_level->controlEvent(stroke);
+            }
             break;
         default:
             LOG_WARNING(ExInfo("unknown key")

@@ -34,6 +34,8 @@ class Unit {
         char driveBorrowed(Uint8 *pressed, const KeyControl &buttons);
         void activate();
 
+        char mySymbol(SDLKey key);
+        char mySymbolBorrowed(SDLKey key, const KeyControl &buttons);
         char driveOrder(char move);
 
         bool isMoving();

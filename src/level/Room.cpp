@@ -300,6 +300,13 @@ Room::switchFish()
     m_controls->switchActive();
 }
 //-----------------------------------------------------------------
+void
+Room::controlEvent(const KeyStroke &stroke)
+{
+    m_controls->controlEvent(stroke);
+}
+
+//-----------------------------------------------------------------
 std::string
 Room::getMoves() const
 {

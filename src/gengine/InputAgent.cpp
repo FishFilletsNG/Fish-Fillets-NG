@@ -38,10 +38,12 @@ InputAgent::own_init()
     m_rectBinder = new RectBinder();
     m_console = new KeyConsole();
     m_handler = NULL;
+    m_keys = SDL_GetKeyState(NULL);
 
     SDL_EnableUNICODE(1);
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-    m_keys = SDL_GetKeyState(NULL);
+    //TODO: simulate repeat only in console
+    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
+    //        SDL_DEFAULT_REPEAT_INTERVAL);
 
     //TODO: print lua output to window, it is now printed to the text console
     m_console->setHandler(Name::SCRIPT_NAME);

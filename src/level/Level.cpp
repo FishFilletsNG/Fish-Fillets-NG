@@ -502,6 +502,14 @@ Level::switchFish()
     }
 }
 //-----------------------------------------------------------------
+    void
+Level::controlEvent(const KeyStroke &stroke)
+{
+    if (m_room) {
+        m_room->controlEvent(stroke);
+    }
+}
+//-----------------------------------------------------------------
     int
 Level::getCycles()
 {

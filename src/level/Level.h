@@ -9,6 +9,7 @@ class PhaseLocker;
 class Picture;
 class DemoMode;
 class LevelStatus;
+class KeyStroke;
 
 #include "V2.h"
 #include "Path.h"
@@ -81,6 +82,8 @@ class Level : public Planner, public GameState {
         bool action_load();
 
         void switchFish();
+        void controlEvent(const KeyStroke &stroke);
+
         int getCycles();
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }

@@ -3,6 +3,7 @@
 
 class Unit;
 class PhaseLocker;
+class KeyStroke;
 
 #include "NoCopy.h"
 #include "KeyControl.h"
@@ -25,8 +26,10 @@ class Controls : public NoCopy {
         bool m_switch;
         std::string m_moves;
         PhaseLocker *m_locker;
+        char m_strokeSymbol;
     private:
-        bool finishSwitch();
+        bool useSwitch();
+        bool useStroke();
         void driveUnit();
         void setActive(t_units::iterator active);
     public:
@@ -39,9 +42,10 @@ class Controls : public NoCopy {
 
         void checkActive();
         void switchActive();
-        std::string getMoves() const { return m_moves; }
+        void controlEvent(const KeyStroke &stroke);
         bool makeMove(char move);
         bool cannotMove();
+        std::string getMoves() const { return m_moves; }
 };
 
 #endif

@@ -11,8 +11,8 @@
 #include "Unit.h"
 #include "PhaseLocker.h"
 
-#include "Log.h"
 #include "InputAgent.h"
+#include "KeyStroke.h"
 
 //-----------------------------------------------------------------
 /**
@@ -27,6 +27,7 @@ Controls::Controls(PhaseLocker *locker)
     m_speedup = 0;
     m_pressed = InputAgent::agent()->getKeys();
     m_switch = true;
+    m_strokeSymbol = ControlSym::SYM_NONE;
 }
 //-----------------------------------------------------------------
 /**
@@ -66,8 +67,10 @@ Controls::addUnit(Unit *unit)
     void
 Controls::driving()
 {
-    if (!finishSwitch()) {
-        driveUnit();
+    if (!useSwitch()) {
+        if (!useStroke()) {
+            driveUnit();
+        }
     }
 }
 //-----------------------------------------------------------------
@@ -75,7 +78,7 @@ Controls::driving()
  * Returns true when a switch was done.
  */
 bool
-Controls::finishSwitch()
+Controls::useSwitch()
 {
     bool result = false;
     if (m_switch && m_active != m_units.end()) {
@@ -87,26 +90,43 @@ Controls::finishSwitch()
     return result;
 }
 //-----------------------------------------------------------------
+/**
+ * Use gathered stroke.
+ * NOTE: returns true even for bad move (not used)
+ * @return true for used stroke
+ */
+bool
+Controls::useStroke()
+{
+    bool result = false;
+    if (m_strokeSymbol != ControlSym::SYM_NONE) {
+       makeMove(m_strokeSymbol);
+       m_strokeSymbol = ControlSym::SYM_NONE;
+       result = true;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
 void
 Controls::driveUnit()
 {
-    char moved = 0;
+    char moved = ControlSym::SYM_NONE;
     if (m_active != m_units.end()) {
         moved = (*m_active)->driveBorrowed(m_pressed, m_arrows);
     }
 
-    if (0 == moved) {
+    if (ControlSym::SYM_NONE == moved) {
         t_units::iterator end = m_units.end();
         for (t_units::iterator i = m_units.begin(); i != end; ++i) {
             moved = (*i)->drive(m_pressed);
-            if (moved > 0) {
+            if (moved != ControlSym::SYM_NONE) {
                 setActive(i);
                 break;
             }
         }
     }
 
-    if (moved > 0) {
+    if (moved != ControlSym::SYM_NONE) {
         m_moves.push_back(moved);
     }
 }
@@ -177,6 +197,29 @@ Controls::switchActive()
         m_switch = true;
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Obtain first control symbol from keyboard events.
+ */
+void
+Controls::controlEvent(const KeyStroke &stroke)
+{
+    SDLKey key = stroke.getKey();
+
+    if (m_strokeSymbol == ControlSym::SYM_NONE) {
+        m_strokeSymbol = (*m_active)->mySymbolBorrowed(key, m_arrows);
+        if (m_strokeSymbol == ControlSym::SYM_NONE) {
+            t_units::iterator end = m_units.end();
+            for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+                m_strokeSymbol = (*i)->mySymbol(key);
+                if (m_strokeSymbol != ControlSym::SYM_NONE) {
+                    return;
+                }
+            }
+        }
+    }
+}
+
 //-----------------------------------------------------------------
 /**
  * Change active unit.

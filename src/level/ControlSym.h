@@ -7,6 +7,8 @@
  * (are stored in saved_moves as plain text).
  */
 class ControlSym {
+    public:
+        static const char SYM_NONE = 0;
     private:
         char m_up;
         char m_down;

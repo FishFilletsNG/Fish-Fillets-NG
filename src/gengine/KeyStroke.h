@@ -18,6 +18,7 @@ class KeyStroke {
         KeyStroke(const SDL_keysym &keysym);
         KeyStroke(SDLKey sym, int mod);
 
+        SDLKey getKey() const { return m_sym; }
         bool less(const KeyStroke &other) const;
         bool equals(const KeyStroke &other) const;
         std::string toString() const;
