@@ -46,6 +46,7 @@ GameAgent::own_init()
     m_room = NULL;
     m_script = NULL;
     m_lockPhases = 0;
+    m_restartCounter = 0;
 
     keyBinding();
     newLevel();
@@ -137,12 +138,14 @@ GameAgent::clearRoom()
 std::string
 GameAgent::getNextLevel(bool restart)
 {
+    m_restartCounter++;
     if (false == restart) {
         //TODO: make game menu with level list
         StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
                     "dostring", "nextLevel()");
         try {
             MessagerAgent::agent()->forwardNewMsg(msg);
+            m_restartCounter = 0;
         }
         catch (ScriptException &e) {
             LOG_WARNING(e.info());
@@ -163,6 +166,8 @@ GameAgent::registerGameFuncs()
 
     m_script->registerFunc("game_createRoom", script_game_createRoom);
     m_script->registerFunc("game_addModel", script_game_addModel);
+    m_script->registerFunc("game_getRestartCounter",
+            script_game_getRestartCounter);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);

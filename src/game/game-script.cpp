@@ -131,6 +131,22 @@ script_game_addModel(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * int game_getRestartCounter()
+ * 
+ */
+    int
+script_game_getRestartCounter(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int counter = GameAgent::agent()->getRestartCounter();
+    lua_pushnumber(L, counter);
+    END_NOEXCEPTION;
+
+    //NOTE: return counter
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * void model_addAnim(model_index, anim_name, picture)
  */
     int

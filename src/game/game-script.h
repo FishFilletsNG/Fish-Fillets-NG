@@ -13,6 +13,7 @@ extern int script_file_exists(lua_State *L) throw();
 
 extern int script_game_createRoom(lua_State *L) throw();
 extern int script_game_addModel(lua_State *L) throw();
+extern int script_game_getRestartCounter(lua_State *L) throw();
 
 extern int script_model_addAnim(lua_State *L) throw();
 extern int script_model_addDuplexAnim(lua_State *L) throw();

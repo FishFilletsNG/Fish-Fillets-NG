@@ -22,6 +22,7 @@ class GameAgent : public BaseAgent {
         Room *m_room;
         ScriptState *m_script;
         int m_lockPhases;
+        int m_restartCounter;
     private:
         void newLevel(bool restart=false);
         void clearRoom();
@@ -45,7 +46,8 @@ class GameAgent : public BaseAgent {
         Cube *getModel(int model_index);
 
         void ensurePhases(int count);
-        int getEnsuredPhases() { return m_lockPhases; }
+        int getEnsuredPhases() const { return m_lockPhases; }
+        int getRestartCounter() const { return m_restartCounter; }
 
         virtual void receiveSimple(const SimpleMsg *msg);
 };
