@@ -92,7 +92,6 @@ Rules::occupyNewPos()
 Rules::checkDead()
 {
     //TODO: after falling phase is sufficient to check only DeadFall
-    //FIXME: can one dead fish kill another fish in the same round?
     if (m_model->isAlive()) {
         bool dead = false;
         if (checkDeadMove()) {

@@ -51,6 +51,8 @@ GameAgent::own_init()
 //-----------------------------------------------------------------
 /**
  * Update room.
+ * Call script_update() every cycle.
+ * Call script_nextRound() every round.
  */
     void
 GameAgent::own_update()
@@ -63,7 +65,6 @@ GameAgent::own_update()
         if (m_room) {
             m_room->nextRound();
             if (m_script) {
-                //TODO: prepare data for new level format
                 m_script->doString("nextRound()");
             }
         }
