@@ -147,6 +147,20 @@ script_game_getRestartCounter(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * void game_save(serialized)
+ */
+    int
+script_game_save(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *serialized = luaL_checkstring(L, 1);
+    GameAgent::agent()->saveGame(serialized);
+    END_NOEXCEPTION;
+    return 0;
+}
+
+//-----------------------------------------------------------------
+/**
  * void model_addAnim(model_index, anim_name, picture)
  */
     int

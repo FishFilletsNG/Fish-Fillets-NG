@@ -23,6 +23,7 @@ class GameAgent : public BaseAgent {
         ScriptState *m_script;
         int m_lockPhases;
         int m_restartCounter;
+        std::string m_codename;
     private:
         void newLevel(bool restart=false);
         void clearRoom();
@@ -34,6 +35,8 @@ class GameAgent : public BaseAgent {
             Cube::eWeight *out_weight, Cube::eWeight *out_power,
             bool *out_alive);
         void keyBinding();
+        void saveLevel();
+        void loadLevel();
     protected:
         virtual void own_init();
         virtual void own_update();
@@ -49,6 +52,8 @@ class GameAgent : public BaseAgent {
         void ensurePhases(int count);
         int getEnsuredPhases() const { return m_lockPhases; }
         int getRestartCounter() const { return m_restartCounter; }
+
+        void saveGame(const std::string &models);
 
         virtual void receiveSimple(const SimpleMsg *msg);
 };

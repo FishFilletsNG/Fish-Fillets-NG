@@ -19,7 +19,6 @@ class Room : public NoCopy {
         Cube::t_models m_models;
         Cube::eWeight m_impact;
     private:
-        void killDialogs();
         void prepareRound();
         bool falldown();
         void playImpact();

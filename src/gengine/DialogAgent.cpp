@@ -91,7 +91,8 @@ DialogAgent::planDialog(const std::string &name, int delay, Actor *actor,
     else {
         LOG_WARNING(ExInfo("cannot find dialog")
                 .addInfo("name", name)
-                .addInfo("lang", lang));
+                .addInfo("lang", lang)
+                .addInfo("pack", m_dialogs->toString()));
     }
 }
 //-----------------------------------------------------------------
@@ -168,10 +169,10 @@ DialogAgent::killOnePlanned(const Actor *actor)
 
 //-----------------------------------------------------------------
 /**
- * Delete all dialogs, including planned dialogs.
+ * Delete all planned and running dialogs from all actors.
  */
     void
-DialogAgent::removeAll()
+DialogAgent::killDialogs()
 {
     t_planned::iterator plan_end = m_planned.end();
     for (t_planned::iterator i = m_planned.begin(); i != plan_end; ++i) {
@@ -185,7 +186,15 @@ DialogAgent::removeAll()
         delete *j;
     }
     m_running.clear();
-
+}
+//-----------------------------------------------------------------
+/**
+ * Delete all dialogs, including planned dialogs.
+ */
+    void
+DialogAgent::removeAll()
+{
+    killDialogs();
     m_dialogs->removeAll();
 }
 //-----------------------------------------------------------------

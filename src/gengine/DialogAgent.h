@@ -45,6 +45,7 @@ class DialogAgent : public BaseAgent {
     bool empty();
 
     void killSound(const Actor *actor);
+    void killDialogs();
     void removeAll();
 };
 

@@ -16,7 +16,6 @@
 #include "SoundAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
-#include "Dialog.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -24,8 +23,6 @@ Room::Room(int w, int h, const Path &picture)
     m_bg = new Picture(picture, 0, 0);
     m_field = new Field(w, h);
     m_impact = Cube::NONE;
-
-    killDialogs();
 }
 //-----------------------------------------------------------------
 /**
@@ -33,7 +30,9 @@ Room::Room(int w, int h, const Path &picture)
  */
 Room::~Room()
 {
-    killDialogs();
+    //NOTE: dialogs must be killed because pointer to the actors
+    SubTitleAgent::agent()->removeAll();
+    DialogAgent::agent()->removeAll();
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
@@ -42,17 +41,6 @@ Room::~Room()
 
     delete m_field;
     delete m_bg;
-}
-//-----------------------------------------------------------------
-void
-Room::killDialogs()
-{
-    SubTitleAgent::agent()->removeAll();
-    DialogAgent::agent()->removeAll();
-
-    //NOTE: "pause" dialog is used to delay dialogs
-    DialogAgent::agent()->addDialog("pause",
-            new Dialog(DialogAgent::DEFAULT_LANG, "", ""));
 }
 //-----------------------------------------------------------------
 /**
@@ -165,7 +153,7 @@ Room::prepareRound()
     }
 
     if (interrupt) {
-        killDialogs();
+        DialogAgent::agent()->killDialogs();
     }
 }
 //-----------------------------------------------------------------

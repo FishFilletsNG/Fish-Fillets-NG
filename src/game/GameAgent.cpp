@@ -46,6 +46,8 @@ GameAgent::own_init()
     m_script = NULL;
     m_lockPhases = 0;
     m_restartCounter = 0;
+    //TODO: set codename in game menu
+    m_codename = "test_save";
 
     keyBinding();
     newLevel();
@@ -167,6 +169,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("game_addModel", script_game_addModel);
     m_script->registerFunc("game_getRestartCounter",
             script_game_getRestartCounter);
+    m_script->registerFunc("game_save", script_game_save);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
@@ -348,6 +351,12 @@ GameAgent::keyBinding()
     KeyStroke restart(SDLK_BACKSPACE, KMOD_NONE);
     msg = new SimpleMsg(this, "restart");
     keyBinder->addStroke(restart, msg);
+    // save
+    msg = new SimpleMsg(this, "save");
+    keyBinder->addStroke(KeyStroke(SDLK_F2, KMOD_NONE), msg);
+    // load
+    msg = new SimpleMsg(this, "load");
+    keyBinder->addStroke(KeyStroke(SDLK_F3, KMOD_NONE), msg);
 
     // volume
     KeyStroke key_plus(SDLK_KP_PLUS, KMOD_NONE);
@@ -379,6 +388,61 @@ GameAgent::askField(const V2 &loc)
     checkRoom();
     return m_room->askField(loc);
 }
+
+//-----------------------------------------------------------------
+/**
+ * Save position.
+ */
+void
+GameAgent::saveLevel()
+{
+    if (m_script) {
+        m_script->doString("save()");
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Write save to the file.
+ * Save moves and models state.
+ */
+void
+GameAgent::saveGame(const std::string &models)
+{
+    Path file = Path::dataWritePath("saves/" + m_codename + ".lua");
+    FILE *saveFile = fopen(file.getNative().c_str(), "w");
+    if (saveFile) {
+        //TODO: save moves
+        //fputs("saved_moves = ", saveFile);
+        //fputs(moves.c_str(), saveFile);
+
+        fputs("saved_models = ", saveFile);
+        fputs(models.c_str(), saveFile);
+        fclose(saveFile);
+    }
+    else {
+        LOG_WARNING(ExInfo("cannot save game")
+                .addInfo("file", file.getNative()));
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Load game from file.
+ */
+    void
+GameAgent::loadLevel()
+{
+    if (m_script) {
+        Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
+        if (file.exists()) {
+            m_script->doFile(file);
+            m_script->doString("load()");
+        }
+        else {
+            LOG_INFO(ExInfo("there is no file to load")
+                .addInfo("file", file.getNative()));
+        }
+    }
+}
 //-----------------------------------------------------------------
 /**
  * Handle incoming message.
@@ -392,6 +456,12 @@ GameAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("restart")) {
         newLevel(true);
+    }
+    else if (msg->equalsName("save")) {
+        saveLevel();
+    }
+    else if (msg->equalsName("load")) {
+        loadLevel();
     }
     else {
         throw UnknownMsgException(msg);
