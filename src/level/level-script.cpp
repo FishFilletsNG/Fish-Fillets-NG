@@ -155,7 +155,7 @@ script_level_setRoomWaves(lua_State *L) throw()
     double periode = luaL_checknumber(L, 2);
     double speed = luaL_checknumber(L, 3);
 
-    getLevel(L)->setRoomWaves(amp/2.0, periode, speed);
+    getLevel(L)->setRoomWaves(amp, periode, speed);
     END_NOEXCEPTION;
     return 0;
 }
