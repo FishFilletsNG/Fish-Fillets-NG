@@ -30,6 +30,8 @@
 #include "SubTitleAgent.h"
 #include "StepDecor.h"
 #include "PosterState.h"
+#include "StatusDisplay.h"
+#include "Picture.h"
 #include "minmax.h"
 
 #include <stdio.h>
@@ -56,9 +58,11 @@
     m_levelScript = new LevelScript(this);
     m_show = new CommandQueue();
     m_background = new MultiDrawer();
+    m_statusDisplay = new StatusDisplay();
     takeHandler(new LevelInput(this));
-    addDrawable(m_background);
-    addDrawable(SubTitleAgent::agent());
+    registerDrawable(m_background);
+    registerDrawable(SubTitleAgent::agent());
+    registerDrawable(m_statusDisplay);
 }
 //-----------------------------------------------------------------
 Level::~Level()
@@ -69,6 +73,7 @@ Level::~Level()
     delete m_show;
     delete m_levelScript;
     delete m_background;
+    delete m_statusDisplay;
 }
 
 //-----------------------------------------------------------------
@@ -314,14 +319,24 @@ Level::saveGame(const std::string &models)
             fputs("\nsaved_models = ", saveFile);
             fputs(models.c_str(), saveFile);
             fclose(saveFile);
-            LOG_INFO(ExInfo("game is saved")
-                    .addInfo("codename", m_codename));
+            displaySaveStatus();
         }
         else {
             LOG_WARNING(ExInfo("cannot save game")
                     .addInfo("file", file.getNative()));
         }
     }
+}
+//-----------------------------------------------------------------
+    void
+Level::displaySaveStatus()
+{
+    static const int TIME = 3;
+    LOG_INFO(ExInfo("game is saved")
+            .addInfo("codename", m_codename));
+    m_statusDisplay->displayStatus(
+            new Picture(Path::dataReadPath("images/menu/status/saved.png"),
+                V2(0, 0)), TIME);
 }
 //-----------------------------------------------------------------
 /**

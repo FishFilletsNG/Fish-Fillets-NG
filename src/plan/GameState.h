@@ -59,7 +59,7 @@ class GameState : public BaseListener, public NoCopy {
         void noteFg();
         void installHandlers();
         void unHandlers();
-        void addDrawable(Drawable *drawable);
+        void registerDrawable(Drawable *drawable);
 
         void receiveSimple(const SimpleMsg *msg);
 };

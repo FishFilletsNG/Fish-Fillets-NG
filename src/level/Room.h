@@ -14,7 +14,6 @@ class View;
 class Decor;
 class InputProvider;
 
-#include "NoCopy.h"
 #include "Drawable.h"
 #include "Cube.h"
 #include "StepCounter.h"
@@ -24,7 +23,7 @@ class InputProvider;
 /**
  * Room with level.
  */
-class Room : public StepCounter, public NoCopy, public Drawable {
+class Room : public StepCounter, public Drawable {
     private:
         WavyPicture *m_bg;
         Field *m_field;

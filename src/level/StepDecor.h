@@ -7,8 +7,6 @@ class StepCounter;
 #include "Decor.h"
 #include "Font.h"
 
-#include "SDL.h"
-
 /**
  * Draw number of steps.
  */

@@ -35,9 +35,9 @@ Pedometer::Pedometer(LevelStatus *status, Level *new_level)
             Path::dataReadPath("images/menu/numbers.png"));
 
     takeHandler(new PedoInput(this));
-    addDrawable(m_bg);
-    addDrawable(m_rack);
-    addDrawable(this);
+    registerDrawable(m_bg);
+    registerDrawable(m_rack);
+    registerDrawable(this);
 }
 //-----------------------------------------------------------------
 Pedometer::~Pedometer()

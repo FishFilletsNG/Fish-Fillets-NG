@@ -27,7 +27,7 @@
 {
     m_font = new Font(Path::dataReadPath("font/font_console.ttf"), 16);
     takeHandler(new ConsoleInput(this));
-    addDrawable(this);
+    registerDrawable(this);
 }
 //-----------------------------------------------------------------
 KeyConsole::~KeyConsole()

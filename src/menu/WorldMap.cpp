@@ -43,8 +43,8 @@ WorldMap::WorldMap()
     m_descPack = new ResDialogPack();
     m_levelStatus = new LevelStatus();
     takeHandler(new WorldInput(this));
-    addDrawable(m_bg);
-    addDrawable(this);
+    registerDrawable(m_bg);
+    registerDrawable(this);
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()

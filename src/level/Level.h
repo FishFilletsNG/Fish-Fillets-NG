@@ -14,6 +14,7 @@ class LevelScript;
 class CommandQueue;
 class Command;
 class MultiDrawer;
+class StatusDisplay;
 
 #include "Path.h"
 #include "GameState.h"
@@ -49,6 +50,7 @@ class Level : public GameState {
         eRoomState m_roomState;
         LevelStatus *m_levelStatus;
         MultiDrawer *m_background;
+        StatusDisplay *m_statusDisplay;
     private:
         void initScreen();
         bool nextAction();
@@ -60,6 +62,7 @@ class Level : public GameState {
         bool nextShowAction();
         bool nextLoadAction();
         void saveSolution();
+        void displaySaveStatus();
     protected:
         virtual void own_initState();
         virtual void own_updateState();

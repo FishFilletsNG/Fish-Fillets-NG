@@ -27,8 +27,8 @@ DemoMode::DemoMode(const Path &demoscript)
     m_surfaceBuffer = NULL;
     m_script->registerFunc("demo_display", script_demo_display);
     takeHandler(new DemoInput(this));
-    addDrawable(this);
-    addDrawable(SubTitleAgent::agent());
+    registerDrawable(this);
+    registerDrawable(SubTitleAgent::agent());
 }
 //-----------------------------------------------------------------
 DemoMode::~DemoMode()

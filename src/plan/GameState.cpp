@@ -185,7 +185,7 @@ GameState::installHandlers()
 }
 //-----------------------------------------------------------------
     void
-GameState::addDrawable(Drawable *drawable)
+GameState::registerDrawable(Drawable *drawable)
 {
     m_drawer->acceptDrawer(drawable);
 }

@@ -21,7 +21,7 @@ PosterState::PosterState(const Path &picture)
     m_nextState = NULL;
     m_bg = new Picture(picture, V2(0, 0));
     takeHandler(new DemoInput(this));
-    addDrawable(m_bg);
+    registerDrawable(m_bg);
 }
 //-----------------------------------------------------------------
 PosterState::~PosterState()

@@ -48,8 +48,8 @@ MenuOptions::MenuOptions()
     m_container = vbox;
 
     takeHandler(new OptionsInput(this));
-    addDrawable(this);
-    addDrawable(m_container);
+    registerDrawable(this);
+    registerDrawable(m_container);
 }
 //-----------------------------------------------------------------
 MenuOptions::~MenuOptions()
