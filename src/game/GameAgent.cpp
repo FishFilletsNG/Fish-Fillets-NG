@@ -57,7 +57,7 @@ GameAgent::own_update()
 {
     if (m_script) {
         //TODO: prepare data for new level format
-        //m_script->doString("update()");
+        m_script->doString("update()");
     }
 
     if (0 == m_lockPhases) {

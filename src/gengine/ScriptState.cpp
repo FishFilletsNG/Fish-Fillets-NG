@@ -24,6 +24,7 @@ ScriptState::ScriptState()
     m_state = lua_open();
     luaopen_base(m_state);
     luaopen_string(m_state);
+    luaopen_math(m_state);
     //TODO: are need others lua libs?
 }
 //-----------------------------------------------------------------

@@ -13,9 +13,9 @@
 //-----------------------------------------------------------------
 /**
  * Read shape in format:
- * "XXX   \n"
- * " XXXXX\n"
- * "XX   X\n"
+ * "XXX...\n"
+ * ".XXXXX\n"
+ * "XX...X\n"
  *
  * NOTE: rows does not need to have the same length
  *
@@ -37,6 +37,8 @@ Shape::Shape(const std::string &shape)
                 ++x;
                 break;
             case ' ':
+            case '.':
+                //NOTE: ' ' is for compatibility
                 ++x;
                 break;
             default:
