@@ -7,12 +7,12 @@ class DescFinder;
 class PhaseLocker;
 class Picture;
 class DemoMode;
-class LevelStatus;
 class KeyStroke;
 class MouseStroke;
-class LevelStatus;
 class LevelScript;
 class LevelLoading;
+class LevelStatus;
+class LevelCountDown;
 class CommandQueue;
 class Command;
 class MultiDrawer;
@@ -29,11 +29,6 @@ class StatusDisplay;
 class Level : public GameState {
     private:
         static const int SPEED_REPLAY = 1;
-        enum eRoomState {
-            ROOM_RUNNING,
-            ROOM_SOLVED,
-            ROOM_WRONG
-        };
 
         int m_depth;
         const DescFinder *m_desc;
@@ -43,22 +38,16 @@ class Level : public GameState {
         bool m_newRound;
         LevelScript *m_levelScript;
         LevelLoading *m_loading;
+        LevelCountDown *m_countdown;
         CommandQueue *m_show;
         int m_restartCounter;
-        int m_countdown;
-        //TODO: move eRoomState, satisfyRoom(), countDown() to the LevelStatus
-        eRoomState m_roomState;
-        LevelStatus *m_levelStatus;
         MultiDrawer *m_background;
         StatusDisplay *m_statusDisplay;
     private:
         void initScreen();
-        bool nextAction();
+        void nextAction();
         void updateLevel();
         void finishLevel();
-        bool satisfyRoom();
-        void setCountDown();
-        bool countDown();
         void nextLoadAction();
         void nextShowAction();
         void nextPlayerAction();
@@ -77,7 +66,7 @@ class Level : public GameState {
         virtual ~Level();
         virtual const char *getName() const { return "state_level"; };
         void fillDesc(const DescFinder *desc) { m_desc = desc; }
-        void fillStatus(LevelStatus *status) { m_levelStatus = status; }
+        void fillStatus(LevelStatus *status);
 
         void saveGame(const std::string &models);
         void loadGame(const std::string &moves);
@@ -96,7 +85,6 @@ class Level : public GameState {
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
         bool isNewRound() const { return m_newRound; }
-        bool isSolved() const { return m_roomState == ROOM_SOLVED; }
 
         void createRoom(int w, int h, const Path &picture);
         void newDemo(const Path &demofile);

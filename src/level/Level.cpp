@@ -12,9 +12,9 @@
 #include "DescFinder.h"
 #include "PhaseLocker.h"
 #include "LevelInput.h"
-#include "LevelStatus.h"
 #include "LevelScript.h"
 #include "LevelLoading.h"
+#include "LevelCountDown.h"
 #include "CommandQueue.h"
 #include "MultiDrawer.h"
 
@@ -43,15 +43,13 @@
 : m_codename(codename), m_datafile(datafile)
 {
     m_desc = NULL;
-    m_levelStatus = NULL;
     m_restartCounter = 1;
-    m_countdown = -1;
-    m_roomState = ROOM_RUNNING;
     m_depth = depth;
     m_newRound = false;
     m_locker = new PhaseLocker();
     m_levelScript = new LevelScript(this);
     m_loading = new LevelLoading(m_levelScript);
+    m_countdown = new LevelCountDown(m_levelScript);
     m_show = new CommandQueue();
     m_background = new MultiDrawer();
     m_statusDisplay = new StatusDisplay();
@@ -68,12 +66,18 @@ Level::~Level()
     //NOTE: m_show must be removed before levelScript
     // because uses the same script
     delete m_show;
+    delete m_countdown;
     delete m_loading;
     delete m_levelScript;
     delete m_background;
     delete m_statusDisplay;
 }
-
+//-----------------------------------------------------------------
+void
+Level::fillStatus(LevelStatus *status)
+{
+    m_countdown->fillStatus(status);
+}
 //-----------------------------------------------------------------
 /**
  * Start gameplay.
@@ -86,18 +90,12 @@ Level::own_initState()
         throw LogicException(ExInfo("level description is NULL")
                 .addInfo("codename", m_codename));
     }
-    if (NULL == m_levelStatus) {
-        throw LogicException(ExInfo("level status is NULL")
-                .addInfo("codename", m_codename));
-    }
-    m_levelStatus->setRunning(true);
-    SoundAgent::agent()->stopMusic();
-    m_countdown = -1;
-    m_roomState = ROOM_RUNNING;
+    m_countdown->reset();
     m_loading->reset();
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
+    SoundAgent::agent()->stopMusic();
     //TODO: escape "codename"
     m_levelScript->scriptDo("CODENAME = [[" + m_codename + "]]");
     m_levelScript->scriptInclude(m_datafile);
@@ -109,16 +107,15 @@ Level::own_initState()
     void
 Level::own_updateState()
 {
-    bool finished = false;
     m_newRound = false;
     if (m_locker->getLocked() == 0) {
         m_newRound = true;
-        finished = nextAction();
+        nextAction();
     }
     updateLevel();
     m_locker->decLock();
 
-    if (finished) {
+    if (m_countdown->countDown(isLoading())) {
         finishLevel();
     }
 }
@@ -181,9 +178,8 @@ Level::togglePause()
 //-----------------------------------------------------------------
 /**
  * Process next action.
- * @return true for finished level
  */
-    bool
+    void
 Level::nextAction()
 {
     if (isLoading()) {
@@ -197,81 +193,6 @@ Level::nextAction()
             nextPlayerAction();
         }
     }
-
-    return satisfyRoom();
-}
-//-----------------------------------------------------------------
-/**
- * Update room goal state.
- * @return true for finished room (solved or wrong)
- */
-    bool
-Level::satisfyRoom()
-{
-    if (m_levelScript->room()->isSolved()) {
-        m_roomState = ROOM_SOLVED;
-    }
-    else if (m_levelScript->room()->cannotMove()) {
-        m_roomState = ROOM_WRONG;
-    }
-    else {
-        m_roomState = ROOM_RUNNING;
-    }
-
-    setCountDown();
-    return countDown();
-}
-//-----------------------------------------------------------------
-    void
-Level::setCountDown()
-{
-    if (m_countdown == -1) {
-        switch (m_roomState) {
-            case ROOM_SOLVED:
-                if (isLoading()) {
-                    m_countdown = 0;
-                }
-                else {
-                    m_countdown = 30;
-                }
-                break;
-            case ROOM_WRONG:
-                //NOTE: don't forget to change briefcase_help_demo too
-                m_countdown = 70;
-                break;
-            default:
-                m_countdown = -1;
-                break;
-        }
-    }
-}
-//-----------------------------------------------------------------
-/**
- * Count for restart or end of level.
- * NOTE: will do restart when it time come
- * @return true for finished level
- */
-    bool
-Level::countDown()
-{
-    bool result = false;
-    if (m_countdown > 0) {
-        m_countdown--;
-    }
-    else {
-        switch (m_roomState) {
-            case ROOM_SOLVED:
-                result = true;
-                break;
-            case ROOM_WRONG:
-                action_restart();
-                break;
-            default:
-                //NOTE: running
-                break;
-        }
-    }
-    return result;
 }
 //-----------------------------------------------------------------
 /**
@@ -292,15 +213,18 @@ Level::updateLevel()
     void
 Level::finishLevel()
 {
-    m_levelStatus->setComplete();
-    saveSolution();
-
-    DemoMode *poster = m_levelStatus->createPoster();
-    if (poster) {
-        changeState(poster);
+    if (m_countdown->isFinishedEnough()) {
+        m_countdown->saveSolution();
+        GameState *nextState = m_countdown->createNextState();
+        if (nextState) {
+            changeState(nextState);
+        }
+        else {
+            quitState();
+        }
     }
-    else {
-        quitState();
+    else if (m_countdown->isWrongEnough()) {
+        action_restart();
     }
 }
 //-----------------------------------------------------------------
@@ -316,17 +240,6 @@ Level::nextPlayerAction()
     }
 }
 
-//-----------------------------------------------------------------
-/**
- * Write best solution to the file.
- * Save moves and models state.
- */
-    void
-Level::saveSolution()
-{
-    std::string current_moves = m_levelScript->room()->getMoves();
-    m_levelStatus->writeSolvedMoves(current_moves);
-}
 //-----------------------------------------------------------------
 /**
  * Write save to the file.

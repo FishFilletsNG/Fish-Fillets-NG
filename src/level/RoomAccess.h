@@ -21,6 +21,7 @@ class RoomAccess : public NoCopy {
         void cleanRoom();
         bool isRoom() const { return !!m_room; }
         Room *room();
+        const Room *const_room() const;
 };
 
 #endif

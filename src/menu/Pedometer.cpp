@@ -17,7 +17,6 @@
 #include "StateManager.h"
 #include "NodeDrawer.h"
 #include "Level.h"
-#include "DemoMode.h"
 #include "minmax.h"
 
 //-----------------------------------------------------------------
@@ -143,7 +142,7 @@ Pedometer::runLevel()
 {
     Level *levelState = m_level;
     m_level = NULL;
-    DemoMode *poster = m_status->createPoster();
+    GameState *poster = m_status->createPoster();
     if (poster) {
         poster->setNextState(levelState);
         changeState(poster);

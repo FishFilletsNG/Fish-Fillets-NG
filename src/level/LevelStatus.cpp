@@ -133,7 +133,7 @@ LevelStatus::writeSolvedMoves(const std::string &moves)
 /**
  * Returns DemoMode or NULL.
  */
-DemoMode *
+GameState *
 LevelStatus::createPoster() const
 {
     DemoMode *result = NULL;

@@ -65,4 +65,14 @@ RoomAccess::room()
     checkRoom();
     return m_room;
 }
+//-----------------------------------------------------------------
+/**
+ * Returns room or throws exception.
+ */
+    const Room *
+RoomAccess::const_room() const
+{
+    checkRoom();
+    return m_room;
+}
 

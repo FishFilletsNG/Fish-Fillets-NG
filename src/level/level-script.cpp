@@ -13,6 +13,7 @@
 #include "V2.h"
 #include "Level.h"
 #include "LevelScript.h"
+#include "Room.h"
 #include "Picture.h"
 
 #include "def-script.h"
@@ -198,7 +199,7 @@ script_level_isNewRound(lua_State *L) throw()
 script_level_isSolved(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    bool solved = getLevel(L)->isSolved();
+    bool solved = getLevelScript(L)->room()->isSolved();
     lua_pushboolean(L, solved);
     END_NOEXCEPTION;
     //NOTE: return solved
