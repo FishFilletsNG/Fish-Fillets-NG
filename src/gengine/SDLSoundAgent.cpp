@@ -27,6 +27,7 @@ BaseMsg *SDLSoundAgent::ms_finished = NULL;
 SDLSoundAgent::own_init()
 {
     m_music = NULL;
+    m_soundVolume = MIX_MAX_VOLUME;
     //TODO: load volume option
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
         throw SDLException(ExInfo("SDL_InitSubSystem"));
@@ -37,11 +38,9 @@ SDLSoundAgent::own_init()
     if(Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
         throw MixException(ExInfo("Mix_OpenAudio"));
     }
-
     Mix_AllocateChannels(16);
 
-    m_soundVolume = MIX_MAX_VOLUME;
-    setMusicVolume(50);
+    SoundAgent::own_init();
 }
 //-----------------------------------------------------------------
     void
@@ -95,12 +94,6 @@ SDLSoundAgent::setSoundVolume(int volume)
         m_soundVolume = 0;
     }
 }
-//-----------------------------------------------------------------
-    int
-SDLSoundAgent::getSoundVolume()
-{
-    return m_soundVolume * 100 / MIX_MAX_VOLUME;
-}
 
 //---------------------------------------------------------------------------
 // Music part
@@ -142,12 +135,6 @@ SDLSoundAgent::playMusic(const Path &file,
 SDLSoundAgent::setMusicVolume(int volume)
 {
     Mix_VolumeMusic(static_cast<int>(MIX_MAX_VOLUME * volume / 100.0));
-}
-//-----------------------------------------------------------------
-    int
-SDLSoundAgent::getMusicVolume()
-{
-    return Mix_VolumeMusic(-1) * 100 / MIX_MAX_VOLUME;
 }
 //-----------------------------------------------------------------
     void

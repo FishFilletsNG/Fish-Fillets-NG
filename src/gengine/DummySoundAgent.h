@@ -7,11 +7,12 @@
  * NO sound and music.
  */
 class DummySoundAgent : public SoundAgent {
+    protected:
+        virtual void setSoundVolume(int ) {}
+        virtual void setMusicVolume(int ) {}
     public:
         virtual int playSound(Mix_Chunk *, int /*volume*/, int /*loops*/)
         { return -1; }
-        virtual void setSoundVolume(int ) {}
-        virtual int getSoundVolume() { return 0; }
 
         virtual void playMusic(const Path &,
                 BaseMsg *finished)
@@ -20,8 +21,6 @@ class DummySoundAgent : public SoundAgent {
                 delete finished;
             }
         }
-        virtual void setMusicVolume(int ) {}
-        virtual int getMusicVolume() { return 0; }
         virtual void stopMusic() {}
 };
 

@@ -8,30 +8,51 @@
  */
 #include "SoundAgent.h"
 
+#include "OptionAgent.h"
+#include "StringMsg.h"
 #include "UnknownMsgException.h"
 
 //-----------------------------------------------------------------
 /**
- * Inc and Dec volume.
+ * Set sound and music volume.
+ */
+    void
+SoundAgent::own_init()
+{
+    registerWatcher("volume_sound");
+    registerWatcher("volume_music");
+
+    OptionAgent *options = OptionAgent::agent();
+    setSoundVolume(options->getAsInt("volume_sound", 90));
+    setMusicVolume(options->getAsInt("volume_music", 50));
+}
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
  * Messages:
- * - inc_volume(num) ... inc volume by num (max 100)
- * - dec_volume(num) ... dec volume by num (min 0)
+ * - param_changed(volume_sound) ... set sound volume
+ * - param_changed(volume_music) ... set music volume
+ *
  * @throws UnknownMsgException
  */
-void
-SoundAgent::receiveInt(const IntMsg *msg)
+    void
+SoundAgent::receiveString(const StringMsg *msg)
 {
-    if (msg->equalsName("inc_volume")) {
-        setSoundVolume(getSoundVolume() + msg->getValue());
-        setMusicVolume(getMusicVolume() + msg->getValue());
-    }
-    else if (msg->equalsName("dec_volume")) {
-        int volume = getSoundVolume() - msg->getValue();
-        setSoundVolume(volume > 0 ? volume : 0);
-        volume = getMusicVolume() - msg->getValue();
-        setMusicVolume(volume > 0 ? volume : 0);
+    if (msg->equalsName("param_changed")) {
+        std::string param = msg->getValue();
+        if ("volume_sound" == param) {
+            int volume = OptionAgent::agent()->getAsInt("volume_sound");
+            setSoundVolume(volume);
+        }
+        else if ("volume_music" == param) {
+            int volume = OptionAgent::agent()->getAsInt("volume_music");
+            setMusicVolume(volume);
+        }
     }
     else {
         throw UnknownMsgException(msg);
     }
 }
+
+
+

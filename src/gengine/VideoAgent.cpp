@@ -73,16 +73,6 @@ VideoAgent::own_shutdown()
 
 //-----------------------------------------------------------------
 /**
- * Register self as watcher for param
- */
-    void
-VideoAgent::registerWatcher(const std::string &param)
-{
-    StringMsg *event = new StringMsg(this, "param_changed", param);
-    OptionAgent::agent()->addWatcher(param, event);
-}
-//-----------------------------------------------------------------
-/**
  * Load and set icon.
  * @throws ImgException
  */

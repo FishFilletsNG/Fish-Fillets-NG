@@ -82,13 +82,6 @@ GameAgent::keyBinding()
     msg = new SimpleMsg(Name::VIDEO_NAME, "fullscreen");
     keyBinder->addStroke(fs, msg);
 
-    // volume
-    KeyStroke key_plus(SDLK_KP_PLUS, KMOD_NONE);
-    msg = new IntMsg(Name::SOUND_NAME, "inc_volume", 10);
-    keyBinder->addStroke(key_plus, msg);
-    KeyStroke key_minus(SDLK_KP_MINUS, KMOD_NONE);
-    msg = new IntMsg(Name::SOUND_NAME, "dec_volume", 10);
-    keyBinder->addStroke(key_minus, msg);
     // log
     KeyStroke log_plus(SDLK_KP_PLUS, KMOD_RALT);
     msg = new SimpleMsg(Name::APP_NAME, "inc_loglevel");

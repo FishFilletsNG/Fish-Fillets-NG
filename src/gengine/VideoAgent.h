@@ -27,7 +27,6 @@ class VideoAgent : public BaseAgent {
         bool m_fullscreen;
 
     private:
-        void registerWatcher(const std::string &param);
         void setIcon(const Path &file);
         void changeVideoMode(int screen_width, int screen_height);
         int getVideoFlags();

@@ -24,15 +24,14 @@ class SDLSoundAgent : public SoundAgent {
     protected:
         virtual void own_init();
         virtual void own_shutdown();
+
+        virtual void setSoundVolume(int volume);
+        virtual void setMusicVolume(int volume);
     public:
         virtual int playSound(Mix_Chunk *sound, int volume, int loops=0);
-        virtual void setSoundVolume(int volume);
-        virtual int getSoundVolume();
 
         virtual void playMusic(const Path &file,
                 BaseMsg *finished);
-        virtual void setMusicVolume(int volume);
-        virtual int getMusicVolume();
         virtual void stopMusic();
 };
 

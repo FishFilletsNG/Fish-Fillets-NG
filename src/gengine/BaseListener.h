@@ -8,10 +8,14 @@ class StringMsg;
 
 #include "INamed.h"
 
+#include <string>
+
 /**
  * Listen messages.
  */
 class BaseListener : public INamed {
+    protected:
+        void registerWatcher(const std::string &param);
     public:
         virtual ~BaseListener() {}
         virtual void receiveSimple(const SimpleMsg *msg);

@@ -17,19 +17,18 @@ class BaseMsg;
  */
 class SoundAgent : public BaseAgent {
     AGENT(SoundAgent, Name::SOUND_NAME);
+    protected:
+        void own_init();
+        virtual void setSoundVolume(int volume) = 0;
+        virtual void setMusicVolume(int volume) = 0;
     public:
         virtual int playSound(Mix_Chunk *sound, int volume,
                 int loops=0) = 0;
-        virtual void setSoundVolume(int volume) = 0;
-        virtual int getSoundVolume() = 0;
 
         virtual void playMusic(const Path &file,
                 BaseMsg *finished) = 0;
-        virtual void setMusicVolume(int volume) = 0;
-        virtual int getMusicVolume() = 0;
         virtual void stopMusic() = 0;
-
-        virtual void receiveInt(const IntMsg *msg);
+        void receiveString(const StringMsg *msg);
 };
 
 #endif

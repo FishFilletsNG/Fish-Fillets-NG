@@ -40,6 +40,7 @@ MenuOptions::MenuOptions()
     musicBox->addWidget(new WiSpace(10, 0));
     musicBox->addWidget(new Slider("volume_music", 0, 100));
 
+    //TODO: add "Back" button
     VBox *vbox = new VBox();
     vbox->addWidget(soundBox);
     vbox->addWidget(new WiSpace(0, 10));
@@ -115,7 +116,5 @@ MenuOptions::own_resumeState()
 MenuOptions::mouseButton(const MouseStroke &stroke)
 {
     m_container->mouseButton(stroke);
-    //TEST: don't quit
-    //quitState();
 }
 

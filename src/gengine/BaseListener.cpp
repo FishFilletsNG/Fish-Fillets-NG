@@ -8,11 +8,22 @@
  */
 #include "BaseListener.h"
 
+#include "OptionAgent.h"
 #include "UnknownMsgException.h"
 #include "SimpleMsg.h"
 #include "IntMsg.h"
 #include "StringMsg.h"
 
+//-----------------------------------------------------------------
+/**
+ * Register self as watcher for param
+ */
+    void
+BaseListener::registerWatcher(const std::string &param)
+{
+    StringMsg *event = new StringMsg(this, "param_changed", param);
+    OptionAgent::agent()->addWatcher(param, event);
+}
 //-----------------------------------------------------------------
 /**
  * @throws UnknownMsgException
