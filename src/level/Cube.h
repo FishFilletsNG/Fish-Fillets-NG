@@ -63,6 +63,7 @@ class Cube : public NoCopy {
         bool isLost() const { return m_lost; }
         bool isSatisfy() const { return m_goal.isSatisfy(this); }
         bool isWrong() const { return m_goal.isWrong(this); }
+        bool isWall() const { return m_weight >= Cube::FIXED; }
         bool shouldGoOut() const { return m_goal.shouldGoOut(); }
 
         eWeight getWeight() const { return m_weight; }
@@ -70,6 +71,7 @@ class Cube : public NoCopy {
         const Shape *shape() const { return m_shape; }
 
         bool isDisintegrated();
+        bool isInvisible();
         Anim *anim();
         Rules *rules() { return m_rules; }
 

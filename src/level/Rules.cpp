@@ -8,11 +8,15 @@
  */
 #include "Rules.h"
 
-#include "Log.h"
 #include "Cube.h"
 #include "MarkMask.h"
+
+#include "Log.h"
 #include "LayoutException.h"
 #include "DialogAgent.h"
+#include "OnStack.h"
+#include "OnWall.h"
+#include "OnStrongPad.h"
 
 #include <assert.h>
 
@@ -59,9 +63,11 @@ Rules::takeField(Field *field)
     }
 
     m_mask = new MarkMask(m_model, field);
-    if (!m_mask->getResist(DIR_NO).empty()) {
+    Cube::t_models resist = m_mask->getResist(DIR_NO);
+    if (!resist.empty()) {
         throw LayoutException(ExInfo("position is occupied")
-                .addInfo("loc", m_model->getLocation().toString()));
+                .addInfo("model", m_model->toString())
+                .addInfo("resist", resist.front()->toString()));
     }
 
     m_mask->mask();
@@ -134,7 +140,7 @@ bool
 Rules::checkOut()
 {
     bool result = false;
-    if (!isWall() && !m_model->isLost()
+    if (!m_model->isWall() && !m_model->isLost()
             && !m_model->isBusy())
     {
         //NOTE: normal objects are not allowed to go out of screen
@@ -206,10 +212,8 @@ Rules::checkDeadStress()
 
     Cube::t_models::iterator end = killers.end();
     for (Cube::t_models::iterator i = killers.begin(); i != end; ++i) {
-        if (!(*i)->rules()->isOnWall()) {
-            if (!(*i)->rules()->isOnStrongFish((*i)->getWeight())) {
-                return true;
-            }
+        if (!(*i)->rules()->isOnStrongPad((*i)->getWeight())) {
+            return true;
         }
     }
 
@@ -310,27 +314,51 @@ Rules::canFall()
 }
 
 //-----------------------------------------------------------------
-bool
-Rules::isWall() const
+/**
+ * Whether object is direct or undirect on something specific.
+ * @param cond condition which will be satify when object is on.
+ */
+    bool
+Rules::isOnCond(const OnCondition &cond)
 {
-    return m_model->getWeight() >= Cube::FIXED;
+    bool result = false;
+    if (cond.isSatisfy(m_model)) {
+        result = true;
+    }
+    else if (cond.isWrong(m_model)) {
+        result = false;
+    }
+    else {
+        m_mask->unmask();
+
+        result = false;
+        Cube::t_models resist = m_mask->getResist(DIR_DOWN);
+        Cube::t_models::iterator end = resist.end();
+        for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
+            if ((*i)->rules()->isOnCond(cond)) {
+                //NOTE: don't forget to mask()
+                result = true;
+                break;
+            }
+        }
+
+        m_mask->mask();
+    }
+
+    return result;
 }
 //-----------------------------------------------------------------
 /**
- * Whether object is on others unalive objects.
+ * Whether object is on another unalive object.
+ * And this another object must be on something fixed
+ * (except on original object).
+ *
+ * Such object can be moved over fish.
  */
     bool
 Rules::isOnStack()
 {
-    Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-    Cube::t_models::iterator end = resist.end();
-    for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (!(*i)->isAlive()) {
-            return true;
-        }
-    }
-
-    return false;
+    return isOnCond(OnStack());
 }
 //-----------------------------------------------------------------
 /**
@@ -339,64 +367,19 @@ Rules::isOnStack()
     bool
 Rules::isOnWall()
 {
-    bool result = false;
-    if (isWall()) {
-        result = true;
-    }
-    else if (m_model->isAlive()) {
-        result = false;
-    }
-    else {
-        m_mask->unmask();
-
-        result = false;
-        Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-        Cube::t_models::iterator end = resist.end();
-        for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-            if ((*i)->rules()->isOnWall()) {
-                //NOTE: don't forget to mask()
-                result = true;
-                break;
-            }
-        }
-
-        m_mask->mask();
-    }
-
-    return result;
+    return isOnCond(OnWall());
 }
 //-----------------------------------------------------------------
 /**
- * Whether object is direct or undirect on a strong fish.
+ * Whether object is direct or undirect on Wall or on powerful fish.
  *
  * @param weight stress weight which must fish carry
- * @return whether a strong fish carry this object
+ * @return whether Wall or a strong fish carry this object
  */
     bool
-Rules::isOnStrongFish(Cube::eWeight weight)
+Rules::isOnStrongPad(Cube::eWeight weight)
 {
-    bool result = false;
-    if (m_model->isAlive()) {
-        result = (m_model->getPower() >= weight);
-    }
-    else {
-        m_mask->unmask();
-
-        result = false;
-        Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-        Cube::t_models::iterator end = resist.end();
-        for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-            if ((*i)->rules()->isOnStrongFish(weight)) {
-                //NOTE: don't forget to mask()
-                result = true;
-                break;
-            }
-        }
-
-        m_mask->mask();
-    }
-
-    return result;
+    return isOnCond(OnStrongPad(weight));
 }
 
 //-----------------------------------------------------------------
@@ -427,7 +410,7 @@ Rules::whoIsFalling()
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
         //NOTE: falling is propagated over fish
-        if (!(*i)->rules()->isWall()) {
+        if (!(*i)->isWall()) {
             if ((*i)->rules()->isFalling()) {
                 result.push_back(*i);
             }
@@ -452,7 +435,7 @@ bool
 Rules::isHeavier(Cube::eWeight power) const
 {
     bool result = false;
-    if (!isWall() && !m_model->isAlive()) {
+    if (!m_model->isWall() && !m_model->isAlive()) {
         if (m_model->getWeight() > power) {
             result = true;
         }
@@ -475,7 +458,7 @@ Rules::whoIsHeavier(Cube::eWeight power)
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (!(*i)->rules()->isWall()) {
+        if (!(*i)->isWall()) {
             if ((*i)->rules()->isHeavier(power)) {
                 result.push_back(*i);
             }

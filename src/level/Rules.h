@@ -3,6 +3,7 @@
 
 class MarkMask;
 class Field;
+class OnCondition;
 
 #include "NoCopy.h"
 #include "Cube.h"
@@ -41,10 +42,9 @@ class Rules : public NoCopy {
         bool checkDeadFall();
         bool checkDeadStress();
 
-        bool isWall() const;
         bool isOnStack();
+        bool isOnCond(const OnCondition &cond);
         bool isOnWall();
-        bool isOnStrongFish(Cube::eWeight weight);
 
         bool isFalling() const;
         Cube::t_models whoIsFalling();
@@ -77,6 +77,7 @@ class Rules : public NoCopy {
         eDir getDir() const { return m_dir; }
         std::string getAction() const;
         std::string getState() const;
+        bool isOnStrongPad(Cube::eWeight weight);
 
         static V2 dir2xy(eDir dir);
 };

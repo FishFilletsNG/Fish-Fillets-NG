@@ -44,6 +44,7 @@ class Anim : public NoCopy {
         void setEffect(ViewEffect::eEffect effect)
         { m_effect.setEffect(effect); }
         bool isDisintegrated() const { return m_effect.isDisintegrated(); }
+        bool isInvisible() const { return m_effect.isInvisible(); }
 };
 
 #endif

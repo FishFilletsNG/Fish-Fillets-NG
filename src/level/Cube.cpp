@@ -83,7 +83,7 @@ Cube::change_goOut()
 }
 //-----------------------------------------------------------------
 /**
- * Go out of room.
+ * Go out of game, e.g. disintegrated skeleton.
  */
     void
 Cube::change_remove()
@@ -105,6 +105,12 @@ bool
 Cube::isDisintegrated()
 {
     return m_anim->isDisintegrated();
+}
+//-----------------------------------------------------------------
+bool
+Cube::isInvisible()
+{
+    return m_anim->isInvisible();
 }
 //-----------------------------------------------------------------
     Anim *
