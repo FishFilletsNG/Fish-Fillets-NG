@@ -135,7 +135,7 @@ Cube::checkDead()
                 dead = true;
             }
             else {
-                dead = checkDeadStress(m_power);
+                dead = checkDeadStress();
             }
         }
 
@@ -151,8 +151,8 @@ Cube::checkDead()
     bool
 Cube::checkDeadMove()
 {
-    Cube::t_models resist = m_mask->getResist(DIR_UP);
-    Cube::t_models::iterator end = resist.end();
+    t_models resist = m_mask->getResist(DIR_UP);
+    t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
         if (false == (*i)->isAlive()) {
             eDir resist_dir = (*i)->m_dir;
@@ -175,10 +175,11 @@ Cube::checkDeadMove()
     bool
 Cube::checkDeadFall()
 {
-    Cube::t_models resist = m_mask->getResist(DIR_UP);
-    Cube::t_models::iterator end = resist.end();
-    for (t_models::iterator i = resist.begin(); i != end; ++i) {
-        if ((*i)->isFallingOnFish()) {
+    t_models killers = whoIsFalling();
+
+    t_models::iterator end = killers.end();
+    for (t_models::iterator i = killers.begin(); i != end; ++i) {
+        if (false == (*i)->isOnWall()) {
             return true;
         }
     }
@@ -189,17 +190,19 @@ Cube::checkDeadFall()
 /**
  * Whether object is under hight stress.
  *
- * @param power our max power
  * @return true when dead
  */
     bool
-Cube::checkDeadStress(eWeight power)
+Cube::checkDeadStress()
 {
-    Cube::t_models resist = m_mask->getResist(DIR_UP);
-    Cube::t_models::iterator end = resist.end();
-    for (t_models::iterator i = resist.begin(); i != end; ++i) {
-        if ((*i)->isHeavier(power)) {
-            return true;
+    t_models killers = whoIsHeavier(m_power);
+
+    t_models::iterator end = killers.end();
+    for (t_models::iterator i = killers.begin(); i != end; ++i) {
+        if (false == (*i)->isOnWall()) {
+            if (false == (*i)->isOnStrongFish((*i)->m_weight)) {
+                return true;
+            }
         }
     }
 
@@ -282,6 +285,7 @@ Cube::canFall()
     //NOTE: hack with heavy power
     return canDir(DIR_DOWN, HEAVY);
 }
+
 //-----------------------------------------------------------------
 /**
  * Whether object is on others unalive objects.
@@ -289,17 +293,15 @@ Cube::canFall()
     bool
 Cube::isOnStack()
 {
-    bool result = false;
-    Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-    Cube::t_models::iterator end = resist.end();
+    t_models resist = m_mask->getResist(DIR_DOWN);
+    t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
         if (false == (*i)->isAlive()) {
-            result = true;
-            break;
+            return true;
         }
     }
 
-    return result;
+    return false;
 }
 //-----------------------------------------------------------------
 /**
@@ -313,95 +315,144 @@ Cube::isOnWall()
         result = true;
     }
     else {
+        m_mask->unmask();
+
         result = false;
-        Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-        Cube::t_models::iterator end = resist.end();
+        t_models resist = m_mask->getResist(DIR_DOWN);
+        t_models::iterator end = resist.end();
         for (t_models::iterator i = resist.begin(); i != end; ++i) {
             if ((*i)->isOnWall()) {
+                //NOTE: don't forget to mask()
                 result = true;
                 break;
             }
         }
+
+        m_mask->mask();
     }
 
     return result;
 }
 //-----------------------------------------------------------------
 /**
- * Whether object is direct or undirect on a wall or strong fish.
+ * Whether object is direct or undirect on a strong fish.
  *
- * @param weight stress weight which must wall or fish carry
+ * @param weight stress weight which must fish carry
+ * @return whether a strong fish carry this object
  */
     bool
-Cube::isOnStrong(eWeight weight)
+Cube::isOnStrongFish(eWeight weight)
 {
     bool result = false;
     if (m_alive) {
         result = (m_power >= weight);
     }
     else {
-        if (isWall()) {
-            result = true;
-        }
-        else {
-            result = false;
-            Cube::t_models resist = m_mask->getResist(DIR_DOWN);
-            Cube::t_models::iterator end = resist.end();
-            for (t_models::iterator i = resist.begin(); i != end; ++i) {
-                if ((*i)->isOnStrong(weight)) {
-                    result = true;
-                    break;
-                }
+        m_mask->unmask();
+
+        result = false;
+        t_models resist = m_mask->getResist(DIR_DOWN);
+        t_models::iterator end = resist.end();
+        for (t_models::iterator i = resist.begin(); i != end; ++i) {
+            if ((*i)->isOnStrongFish(weight)) {
+                //NOTE: don't forget to mask()
+                result = true;
+                break;
             }
         }
+
+        m_mask->mask();
     }
 
     return result;
 }
+
 //-----------------------------------------------------------------
 /**
- * Whether object is falling
- * or something is falling on it
- * and is SOLELY on objects SOLELY on a fish.
+ * Whether object is falling.
  */
     bool
-Cube::isFallingOnFish()
+Cube::isFalling() const
 {
     bool result = false;
-    if (false == isWall() && false == m_alive) {
-        if (m_dir == DIR_DOWN) {
-            result = (false == isOnWall());
+    if (false == m_alive) {
+        result = m_dir == DIR_DOWN;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Who is falling on us.
+ * @return array of killers, they can fall undirect on us
+ */
+Cube::t_models 
+Cube::whoIsFalling() 
+{
+    t_models result;
+    m_mask->unmask();
+
+    t_models resist = m_mask->getResist(DIR_UP);
+    t_models::iterator end = resist.end();
+    for (t_models::iterator i = resist.begin(); i != end; ++i) {
+        //TODO: wall is not need to test
+        if ((*i)->isFalling()) {
+            result.push_back(*i);
         }
         else {
-            //TODO: can we check only objects with DIR_NO?
-            result = checkDeadFall();
+            t_models distance_killers = (*i)->whoIsFalling();
+            result.insert(result.end(), distance_killers.begin(),
+                    distance_killers.end());
         }
     }
 
+    m_mask->mask();
     return result;
 }
 //-----------------------------------------------------------------
 /**
- * Whether object is heavier than our power
- * or there is heavier object above it
- * and there is no holder under it except a weak fish.
- *
+ * Whether object is heavier than our power.
  * @param power our max power
+ * @return whether object is heavier
  */
     bool
-Cube::isHeavier(eWeight power)
+Cube::isHeavier(eWeight power) const
 {
     bool result = false;
     if (false == isWall() && false == m_alive) {
-        //NOTE: there can be heavier model which even strong fish cannot carry
-        if (m_weight > power && false == isOnStrong(m_weight)) {
+        if (m_weight > power) {
             result = true;
         }
+    }
+
+    return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Who is heavier than our power.
+ * @param power our max power
+ * @return array of killers, they can lie undirect on us
+ */
+Cube::t_models
+Cube::whoIsHeavier(eWeight power)
+{
+    t_models result;
+    m_mask->unmask();
+
+    t_models resist = m_mask->getResist(DIR_UP);
+    t_models::iterator end = resist.end();
+    for (t_models::iterator i = resist.begin(); i != end; ++i) {
+        //TODO: wall is not need to test
+        if ((*i)->isHeavier(power)) {
+            result.push_back(*i);
+        }
         else {
-            result = checkDeadStress(power);
+            t_models distance_killers = (*i)->whoIsHeavier(power);
+            result.insert(result.end(), distance_killers.begin(),
+                    distance_killers.end());
         }
     }
 
+    m_mask->mask();
     return result;
 }
 
@@ -418,8 +469,8 @@ Cube::canMoveOthers(eDir dir, eWeight power)
     //NOTE: make place after oneself, e.g. fish in U
     m_mask->unmask();
 
-    Cube::t_models resist = m_mask->getResist(dir);
-    Cube::t_models::iterator end = resist.end();
+    t_models resist = m_mask->getResist(dir);
+    t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
         if (false == (*i)->canDir(dir, power)) {
             result = false;
@@ -487,8 +538,8 @@ Cube::moveDirBrute(eDir dir)
     //NOTE: make place after oneself, e.g. object in U
     m_mask->unmask();
 
-    Cube::t_models resist = m_mask->getResist(dir);
-    Cube::t_models::iterator end = resist.end();
+    t_models resist = m_mask->getResist(dir);
+    t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
         (*i)->moveDirBrute(dir);
     }

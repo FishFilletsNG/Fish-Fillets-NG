@@ -48,13 +48,17 @@ class Cube : public NoCopy {
     private:
         bool checkDeadMove();
         bool checkDeadFall();
-        bool checkDeadStress(eWeight power);
+        bool checkDeadStress();
 
         bool isOnStack();
         bool isOnWall();
-        bool isOnStrong(eWeight weight);
-        bool isFallingOnFish();
-        bool isHeavier(eWeight power);
+        bool isOnStrongFish(eWeight weight);
+
+        bool isFalling() const;
+        t_models whoIsFalling();
+
+        bool isHeavier(eWeight power) const;
+        t_models whoIsHeavier(eWeight power);
 
         bool canMoveOthers(eDir dir, eWeight weight);
         void moveDirBrute(eDir dir);
