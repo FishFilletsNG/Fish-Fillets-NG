@@ -4,7 +4,7 @@ SUBDIRS = src
 EXTRA_DIST = Makefile.cvs ChangeLog main.aap
 
 ChangeLog:
-	cvs2cl
+	touch ChangeLog
 
 doxygen:
 	doxygen
