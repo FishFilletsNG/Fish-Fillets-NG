@@ -119,6 +119,8 @@ void
 OptionAgent::prepareLang()
 {
     setlocale(LC_ALL, "");
+    //NOTE: '.' will be decimal point for Lua
+    setlocale(LC_NUMERIC, "C");
     if (getParam("lang").empty()) {
         char *form = setlocale(LC_MESSAGES, NULL);
         if (form && strlen(form) >= 2) {

@@ -363,23 +363,19 @@ script_model_getH(lua_State *L) throw()
 script_model_setGoal(lua_State *L) throw()
 {
     //NOTE: (const char*)== does not compare string equality
-    static const std::string GOAL_NO = "goal_no";
-    static const std::string GOAL_OUT = "goal_out";
-    static const std::string GOAL_ESCAPE = "goal_escape";
-
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    const char *goalname = luaL_checkstring(L, 2);
+    std::string goalname = luaL_checkstring(L, 2);
 
     Cube *model = getModel(L, model_index);
     Goal goal = Goal::noGoal();
-    if (GOAL_NO == goalname) {
+    if ("goal_no" == goalname) {
         goal = Goal::noGoal();
     }
-    else if (GOAL_OUT == goalname) {
+    else if ("goal_out" == goalname) {
         goal = Goal::outGoal();
     }
-    else if (GOAL_ESCAPE == goalname) {
+    else if ("goal_escape" == goalname) {
         goal = Goal::escapeGoal();
     }
     else {
