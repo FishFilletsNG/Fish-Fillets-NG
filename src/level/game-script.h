@@ -23,6 +23,7 @@ extern int script_model_getLoc(lua_State *L) throw();
 extern int script_model_getAction(lua_State *L) throw();
 extern int script_model_getState(lua_State *L) throw();
 extern int script_model_getDir(lua_State *L) throw();
+extern int script_model_getTouchDir(lua_State *L) throw();
 extern int script_model_isAlive(lua_State *L) throw();
 extern int script_model_isOut(lua_State *L) throw();
 extern int script_model_isLeft(lua_State *L) throw();

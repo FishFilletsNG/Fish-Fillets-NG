@@ -20,9 +20,9 @@ class Rules : public NoCopy {
         bool m_readyToTurn;
         bool m_readyToActive;
         bool m_pushing;
-        bool m_touched;
         bool m_lastFall;
         int m_outDepth;
+        Dir::eDir m_touchDir;
 
         Cube *m_model;
         MarkMask *m_mask;
@@ -66,6 +66,7 @@ class Rules : public NoCopy {
         void actionActivate() { m_readyToActive = true; }
 
         Dir::eDir getDir() const { return m_dir; }
+        Dir::eDir getTouchDir() const { return m_touchDir; }
         std::string getAction() const;
         std::string getState() const;
         bool isOnStrongPad(Cube::eWeight weight);

@@ -382,6 +382,23 @@ script_model_getDir(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * Dir::eDir model_getTouchDir(model_index)
+ */
+    int
+script_model_getTouchDir(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = getModel(L, model_index);
+    Dir::eDir dir = model->rules()->getTouchDir();
+
+    lua_pushnumber(L, dir);
+    END_NOEXCEPTION;
+    //NOTE: return dir
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * bool model_isAlive(model_index)
  */
     int

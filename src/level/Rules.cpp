@@ -30,8 +30,8 @@ Rules::Rules(Cube *model)
     m_readyToActive = false;
     m_dir = Dir::DIR_NO;
     m_pushing = false;
-    m_touched = false;
     m_outDepth = 0;
+    m_touchDir = Dir::DIR_NO;
 
     m_model = model;
     m_mask = NULL;
@@ -82,7 +82,7 @@ Rules::takeField(Field *field)
     void
 Rules::occupyNewPos()
 {
-    m_touched = false;
+    m_touchDir = Dir::DIR_NO;
     if (m_dir != Dir::DIR_NO) {
         m_pushing = false;
 
@@ -536,7 +536,7 @@ Rules::touchSpec(Dir::eDir dir)
 void
 Rules::setTouched(Dir::eDir dir)
 {
-    m_touched = true;
+    m_touchDir = dir;
     if (!m_model->isWall()) {
         m_mask->unmask();
         Cube::t_models resist = m_mask->getResist(dir);
@@ -637,7 +637,6 @@ Rules::getAction() const
  * Useful for script functions.
  *
  * States:
- * "touched" ... the object is not pushed but there was a try
  * "goout" ... go out of room
  * "dead" ... is dead
  * "talking" ... is talking
@@ -647,10 +646,7 @@ Rules::getAction() const
 std::string
 Rules::getState() const
 {
-    if (m_touched) {
-        return "touched";
-    }
-    else if (m_outDepth == 1) {
+    if (m_outDepth == 1) {
         return "goout";
     }
     else if (!m_model->isAlive()) {
