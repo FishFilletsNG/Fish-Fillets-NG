@@ -1,6 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT
-AC_CONFIG_SRCDIR([AUTHORS])
+AC_INIT(AUTHORS)
 AC_CANONICAL_TARGET
 
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
@@ -21,8 +20,7 @@ LIBS="-L/usr/local/lib -lm $LIBS"
 # Check for lua and define LUA_CFLAGS and LUA_LIBS
 
 dnl ---- lua check ------------- (stolen from Stratagus)
-AC_ARG_WITH(lua, 
-    AS_HELP_STRING(--with-lua=PFX,Prefix where Lua is installed),
+AC_ARG_WITH(lua,   [  --with-lua=PFX          Prefix where Lua is installed],
     LUAPFX="$withval", LUAPFX="")
 if test x$LUAPFX != x ; then
     LUA_CFLAGS="-I$LUAPFX"
@@ -89,8 +87,8 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 # Test X11
 OLD_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <X11/Xutil.h>]], [[]])],
-    [AC_DEFINE(HAVE_X11)],[])
+AC_TRY_COMPILE([#include <X11/Xutil.h>], ,
+        AC_DEFINE(HAVE_X11))
 CPPFLAGS="$OLD_CPPFLAGS"
 
 ###################################################
@@ -101,8 +99,7 @@ AC_LANG(C++)
 # Checks for C++ libraries.
 # boost_filesystem, only need for nonPOSIX systems
 
-AC_ARG_WITH(boost, 
-    AS_HELP_STRING(--with-boost=PFX,Prefix where boost is installed),
+AC_ARG_WITH(boost, [  --with-boost=PFX        Prefix where boost is installed],
     BOOSTPFX="$withval", BOOSTPFX="")
 if test x$BOOSTPFX != x ; then
     BOOST_LIBS="-lboost_filesystem"
@@ -134,7 +131,7 @@ if test "x$debug" = "xtrue"; then
 fi
 
 ###################################################
-AC_CONFIG_FILES([
+AC_OUTPUT([
            Makefile
            src/Makefile
            src/SDL_gfx/Makefile
@@ -145,5 +142,4 @@ AC_CONFIG_FILES([
            src/menu/Makefile
            src/game/Makefile
            ])
-AC_OUTPUT
 
