@@ -30,20 +30,17 @@ dnl Debian, and possibly other systems, include this script...
         LUA_CFLAGS="`[$LUACONFIG --include]`"
         LUA_LIBS="`[$LUACONFIG --libs]`"
     else dnl ...otherwise, attempt to guess
-        LUA_CFLAGS="$CFLAGS -I/usr/include -I/usr/local/include"
-        LUA_LIBS="$LIBS -L/usr/lib -L/usr/local/lib"
+        LUA_CFLAGS="-I/usr/include -I/usr/local/include"
+        LUA_LIBS="-L/usr/lib -L/usr/local/lib"
         AC_CHECK_LIB(lua, lua_getfenv, LUA_LIBS="$LUA_LIBS -llua",
         AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
         AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
         [AC_MSG_ERROR(Lua5 is required)], -lm), -lm), -lm)
            AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
-           AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS 
--llualib50",
-           AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS 
--llualib5.0",
-           [AC_MSG_ERROR(Lualib5 is required)], $LUA_LIBS -lm), $LUA_LIBS 
--lm),$LUA_LIBS -lm)
-       fi
+           AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib50",
+           AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib5.0",
+           [AC_MSG_ERROR(Lualib5 is required)], $LUA_LIBS -lm), $LUA_LIBS -lm),$LUA_LIBS -lm)
+   fi
 fi
 AC_SUBST(LUA_CFLAGS)
 AC_SUBST(LUA_LIBS)
