@@ -8,7 +8,6 @@
  */
 #include "PlannedDialog.h"
 
-#include "Log.h"
 #include "Dialog.h"
 #include "Actor.h"
 #include "TimerAgent.h"

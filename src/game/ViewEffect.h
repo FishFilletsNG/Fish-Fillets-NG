@@ -14,6 +14,8 @@ class ViewEffect {
             EFFECT_MIRROR
         };
     private:
+        static const int DISINT_START = 400;
+        static const int DISINT_SPEED = 30;
         eEffect m_effect;
         int m_disint;
     private:
@@ -28,11 +30,10 @@ class ViewEffect {
                     Uint32 pixel);
     public:
         ViewEffect();
+        void setEffect(eEffect effect);
+        void updateEffect();
+        bool isInvisible() const;
         void blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
-
-        void setEffect(eEffect effect) { m_effect = effect; }
-        void setDisInt(int disint) { m_disint = disint; }
-        int getDisInt() { return m_disint; }
 };
 
 #endif

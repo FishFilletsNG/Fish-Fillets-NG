@@ -18,7 +18,6 @@ class Unit {
         Cube *m_model;
         bool m_startActive;
     private:
-        bool canMove();
         char goLeft();
         char goRight();
         char goUp();

@@ -123,7 +123,6 @@ VideoAgent::initVideoMode()
     }
 
     //TODO: check VideoModeOK and available ListModes
-    LOG_DEBUG(ExInfo("initializing Video mode"));
     SDL_Surface *newScreen =
         SDL_SetVideoMode(screen_width, screen_height, screen_bpp, videoFlags);
     if (newScreen) {

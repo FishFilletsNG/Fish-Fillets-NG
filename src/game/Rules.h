@@ -25,8 +25,6 @@ class Rules : public NoCopy {
             FALL_LAST
         };
     private:
-        static const int DISINT_START = 400;
-        static const int DISINT_SPEED = 30;
         eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
@@ -34,7 +32,6 @@ class Rules : public NoCopy {
         bool m_readyToActive;
         bool m_readyToRemove;
         bool m_pushing;
-        bool m_skeleton;
         bool m_lastFall;
 
         Cube *m_model;

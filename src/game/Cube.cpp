@@ -13,6 +13,7 @@
 #include "Shape.h"
 #include "Rules.h"
 #include "LayoutException.h"
+#include "Anim.h"
 
 //-----------------------------------------------------------------
 /**
@@ -28,6 +29,7 @@ Cube::Cube(const V2 &location,
     m_alive = alive;
     m_out = false;
     m_lookLeft = true;
+    m_lost = false;
 
     m_shape = ashape;
     m_view = a_view;
@@ -69,6 +71,7 @@ Cube::change_die()
     LOG_INFO(ExInfo("dead")
             .addInfo("fish", toString()));
     m_alive = false;
+    anim()->setEffect(ViewEffect::EFFECT_DISINTEGRATE);
 }
 //-----------------------------------------------------------------
 /**
@@ -81,6 +84,16 @@ Cube::change_goOut()
     LOG_INFO(ExInfo("out of room")
             .addInfo("object", toString()));
     m_out = true;
+    change_remove();
+}
+//-----------------------------------------------------------------
+/**
+ * Go out of room.
+ */
+    void
+Cube::change_remove()
+{
+    m_lost = true;
     //NOTE: hack, object is moved out
     m_loc = V2(-1000, -1000);
     m_view->takeModel(NULL);
@@ -92,6 +105,12 @@ Cube::change_turnSide()
     m_lookLeft = !m_lookLeft;
 }
 
+//-----------------------------------------------------------------
+bool
+Cube::isInvisible()
+{
+    return anim()->isInvisible();
+}
 //-----------------------------------------------------------------
 void
 Cube::refreshView()

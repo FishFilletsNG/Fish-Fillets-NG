@@ -31,6 +31,7 @@ class Cube : public Actor {
         eWeight m_weight;
         eWeight m_power;
         bool m_lookLeft;
+        bool m_lost;
 
         Shape *m_shape;
         View *m_view;
@@ -46,6 +47,7 @@ class Cube : public Actor {
 
         void change_die();
         void change_goOut();
+        void change_remove();
         void change_turnSide();
         void change_setLocation(V2 loc) { m_loc = loc; }
 
@@ -53,6 +55,7 @@ class Cube : public Actor {
         bool isAlive() const { return m_alive; }
         bool isLeft() const { return m_lookLeft; }
         bool isOut() const { return m_out; }
+        bool isLost() const { return m_lost; }
         bool isSatisfy() const { return m_goal.isSatisfy(this); }
         bool shouldGoOut() const { return m_goal.shouldGoOut(); }
 
@@ -60,6 +63,7 @@ class Cube : public Actor {
         eWeight getPower() const { return m_power; }
         const Shape *shape() const { return m_shape; }
 
+        bool isInvisible();
         void refreshView();
         Anim *anim();
         Rules *rules() { return m_rules; }

@@ -31,14 +31,7 @@ bool
 Unit::canDrive()
 {
     return m_model->isAlive()
-        && false == m_model->isOut()
-        && false == m_model->isBusy();
-}
-//-----------------------------------------------------------------
-bool
-Unit::canMove()
-{
-    return canDrive()
+        && false == m_model->isLost()
         && false == m_model->isBusy();
 }
 //-----------------------------------------------------------------
@@ -59,7 +52,7 @@ Unit::drive(Uint8 *pressed)
 char
 Unit::driveBorrowed(Uint8 *pressed, const KeyControl &buttons)
 {
-    if (canMove()) {
+    if (canDrive()) {
         if (pressed[buttons.getLeft()]) {
             return goLeft();
         }
@@ -167,7 +160,7 @@ Unit::isMoving()
     if (canDrive()) {
         std::string action = m_model->rules()->getAction();
         result = action == "move_left" || action == "move_right"
-            || action == "move_up" || action == "move_down" 
+            || action == "move_up" || action == "move_down"
             || action == "turn";
     }
     return result;

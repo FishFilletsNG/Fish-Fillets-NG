@@ -42,7 +42,6 @@ Anim::~Anim()
     void
 Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
 {
-
     SDL_Surface *surface =
         m_animPack[side]->getRes(m_animName, m_animPhase);
     m_effect.blit(screen, surface, x, y);
@@ -59,6 +58,8 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
         m_effect.blit(screen, surface, x, y);
         m_specialAnimName = "";
     }
+
+    m_effect.updateEffect();
 }
 //-----------------------------------------------------------------
 /**

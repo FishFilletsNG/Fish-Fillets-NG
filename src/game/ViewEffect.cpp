@@ -20,7 +20,36 @@
 ViewEffect::ViewEffect()
 {
     m_effect = EFFECT_NONE;
-    m_disint = 255;
+    m_disint = 0;
+}
+//-----------------------------------------------------------------
+void
+ViewEffect::setEffect(eEffect effect)
+{
+    m_effect = effect;
+    if (m_effect == EFFECT_DISINTEGRATE) {
+        m_disint = DISINT_START;
+    }
+}
+//-----------------------------------------------------------------
+void
+ViewEffect::updateEffect()
+{
+    if (m_disint > 0) {
+        m_disint -= 30;
+        if (m_disint < 0) {
+            m_disint = 0;
+        }
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true for invisible object.
+ */
+bool
+ViewEffect::isInvisible() const
+{
+    return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint);
 }
 //-----------------------------------------------------------------
 void
