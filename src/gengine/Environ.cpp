@@ -172,7 +172,7 @@ Environ::getHelpInfo() const
     std::string help;
     t_values::const_iterator end = m_values.end();
     for (t_values::const_iterator i = m_values.begin(); i != end; ++i) {
-        help += "  " + i->first + "='" + i->second + "'\n";
+        help += i->first + "='" + i->second + "'\n";
     }
     return help;
 }

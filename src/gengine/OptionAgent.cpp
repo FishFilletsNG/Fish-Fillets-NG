@@ -173,10 +173,13 @@ OptionAgent::parseDashOpt(const std::string &arg)
     else if ("-v" == arg || "--version" == arg) {
         throw HelpException(ExInfo(getVersionInfo()));
     }
+    else if ("-c" == arg || "--config" == arg) {
+        throw HelpException(ExInfo(m_environ->getHelpInfo()));
+    }
     else {
         throw LogicException(ExInfo("unknown option")
                 .addInfo("arg", arg)
-                .addInfo("usage", "$0 [-hv] [name=value ...]"));
+                .addInfo("usage", "$0 [-hvc] [name=value ...]"));
     }
 }
 //-----------------------------------------------------------------
@@ -191,7 +194,7 @@ OptionAgent::parseParamOpt(const std::string &arg)
     else {
         throw LogicException(ExInfo("wrong options format")
                 .addInfo("arg", arg)
-                .addInfo("usage", "$0 [-hv] [name=value ...]"));
+                .addInfo("usage", "$0 [-hvc] [name=value ...]"));
     }
 }
 //-----------------------------------------------------------------
@@ -329,12 +332,21 @@ std::string
 OptionAgent::getHelpInfo() const
 {
     std::string help = "Usage: "
-        + getParam("program") + "[-hv] [name=value ...]\n";
+        + getParam("program") + " [-hvc] [name=value ...]\n";
     help += "  -h, --help               Show this help\n";
     help += "  -v, --version            Show version\n";
+    help += "  -c, --config             Show config\n";
     help += "\n";
     help += "Options:\n";
-    help += m_environ->getHelpInfo();
+    help += "  loglevel=<number>        Loglevel uses same numbers as syslog\n";
+    help += "  systemdir=<path>         Path to game data\n";
+    help += "  userdir=<path>           Path to game data\n";
+    help += "  lang=<code>              2‐letter code (en, cs, fr, de)\n";
+    help += "  fullscreen=<boolean>     Turn fullscreen on/off\n";
+    help += "  show_steps=<boolean>     Show step counter in level\n";
+    help += "  sound=<boolean>          Turn sound on/off\n";
+    help += "  volume_sound=<number>    Sound volume in percentage\n";
+    help += "  volume_music=<number>    Music volume in percentage\n";
     return help;
 }
 //-----------------------------------------------------------------
