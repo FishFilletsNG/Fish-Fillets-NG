@@ -48,6 +48,7 @@ Room::Room(int w, int h, const Path &picture,
 {
     m_locker = locker;
     m_levelScript = levelScript;
+    m_fastFalling = false;
     m_bg = new WavyPicture(picture, V2(0, 0));
     m_field = new Field(w, h);
     m_finder = new FinderAlg(w, h);
@@ -156,7 +157,15 @@ Room::askField(const V2 &loc)
     void
 Room::nextRound(const InputProvider *input)
 {
-    beginFall();
+    if (m_fastFalling) {
+        while (beginFall()) {
+            finishRound();
+        }
+    }
+    else {
+        beginFall();
+    }
+
     if (isFresh()) {
         if (m_controls->driving(input)) {
             m_lastAction = Cube::ACTION_MOVE;
@@ -168,7 +177,6 @@ Room::nextRound(const InputProvider *input)
             }
         }
     }
-
     finishRound();
 }
 //-----------------------------------------------------------------

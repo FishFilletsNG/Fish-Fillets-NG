@@ -38,6 +38,7 @@ class Room : public StepCounter, public Drawable {
         Cube::t_models m_models;
         Cube::eAction m_lastAction;
         int m_startTime;
+        bool m_fastFalling;
     private:
         void prepareRound();
         bool fallout(bool interactive=true);
@@ -51,6 +52,7 @@ class Room : public StepCounter, public Drawable {
         ~Room();
         void setWaves(float amplitude, float periode, float speed);
         void addDecor(Decor *new_decor);
+        void setFastFalling(bool value) { m_fastFalling = value; }
 
         int addModel(Cube *new_model, Unit *new_unit);
         Cube *getModel(int model_index);

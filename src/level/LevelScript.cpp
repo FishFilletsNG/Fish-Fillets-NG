@@ -58,6 +58,9 @@ void
 LevelScript::interruptPlan()
 {
     Planner::interruptPlan();
+    //NOTE: checkActive is before unBusyUnits to allow script
+    // make busy unwanted fishes
+    room()->checkActive();
     room()->unBusyUnits();
 }
 //-----------------------------------------------------------------
@@ -122,6 +125,7 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("game_setScreenShift", script_game_setScreenShift);
     m_script->registerFunc("game_changeBg", script_game_changeBg);
     m_script->registerFunc("game_checkActive", script_game_checkActive);
+    m_script->registerFunc("game_setFastFalling", script_game_setFastFalling);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_runAnim", script_model_runAnim);

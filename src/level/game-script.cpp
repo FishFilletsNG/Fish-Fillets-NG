@@ -176,6 +176,20 @@ script_game_checkActive(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void game_setFastFalling(value)
+ * Value==true sets fast falling for all objets.
+ */
+    int
+script_game_setFastFalling(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    bool value = lua_toboolean(L, 1);
+    getLevelScript(L)->room()->setFastFalling(value);
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**
