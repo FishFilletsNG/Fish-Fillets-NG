@@ -20,11 +20,13 @@ class DialogStack : public NoCopy {
         typedef std::list<PlannedDialog*> t_running;
         t_running m_running;
         t_running m_cycling;
+        PlannedDialog *m_activeDialog;
     private:
         void removeFirstNotTalking();
         bool isTalkingIn(int actor, const t_running &fifo) const;
         void killSoundIn(int actor, t_running &fifo);
         void killTalksIn(t_running &fifo);
+        void releaseDialog(PlannedDialog *dialog);
     public:
         DialogStack();
         virtual ~DialogStack();
@@ -32,11 +34,11 @@ class DialogStack : public NoCopy {
 
         void addDialog(const std::string &name, Dialog *dialog);
         void actorTalk(int actor, const std::string &name,
-                int volume, int loops=0);
+                int volume, int loops=0, bool dialogFlag=false);
         bool isTalking(int actor) const;
         void killSound(int actor);
 
-        bool empty() const;
+        bool isDialog() const;
         void killTalks();
         void removeAll();
 };

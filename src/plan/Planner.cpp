@@ -37,7 +37,7 @@ Planner::registerScriptFuncs()
     m_script->registerFunc("game_isPlanning", script_game_isPlanning);
     m_script->registerFunc("game_killPlan", script_game_killPlan);
 
-    m_script->registerFunc("dialog_empty", script_dialog_empty);
+    m_script->registerFunc("dialog_isDialog", script_dialog_isDialog);
     m_script->registerFunc("dialog_addFont", script_dialog_addFont);
     m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
     m_script->registerFunc("model_isTalking", script_model_isTalking);

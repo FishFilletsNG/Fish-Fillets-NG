@@ -116,16 +116,16 @@ script_game_killPlan(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
- * bool dialog_empty()
+ * bool dialog_isDialog()
  */
     int
-script_dialog_empty(lua_State *L) throw()
+script_dialog_isDialog(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    bool empty = getDialogs(L)->empty();
-    lua_pushboolean(L, empty);
+    bool isDialog = getDialogs(L)->isDialog();
+    lua_pushboolean(L, isDialog);
     END_NOEXCEPTION;
-    //NOTE: return empty
+    //NOTE: return isDialog
     return 1;
 }
 //-----------------------------------------------------------------
@@ -185,7 +185,7 @@ script_model_isTalking(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_talk(model_index, name, volume, loops)
+ * void model_talk(model_index, name, volume, loops=0, dialogFlag=false)
  */
     int
 script_model_talk(lua_State *L) throw()
@@ -195,8 +195,9 @@ script_model_talk(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 2);
     int volume = luaL_optint(L, 3, 75);
     int loops = luaL_optint(L, 4, 0);
+    bool dialogFlag = lua_toboolean(L, 5);
 
-    getDialogs(L)->actorTalk(model_index, name, volume, loops);
+    getDialogs(L)->actorTalk(model_index, name, volume, loops, dialogFlag);
     END_NOEXCEPTION;
     return 0;
 }

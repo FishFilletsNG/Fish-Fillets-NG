@@ -17,6 +17,7 @@
 DialogStack::DialogStack()
 {
     m_dialogs = new ResDialogPack();
+    m_activeDialog = NULL;
 }
 //-----------------------------------------------------------------
 /**
@@ -55,10 +56,11 @@ DialogStack::addDialog(const std::string &name, Dialog *dialog)
  * @param name dialog name
  * @param volume dialog volume
  * @param loops number of loops, 0=play once, 1=play twice, -1=play infinite
+ * @param dialogFlag whether it is blocking dialog
  */
     void
 DialogStack::actorTalk(int actor, const std::string &name,
-        int volume, int loops)
+        int volume, int loops, bool dialogFlag)
 {
     StringTool::t_args args = StringTool::split(name, '@');
 
@@ -76,6 +78,10 @@ DialogStack::actorTalk(int actor, const std::string &name,
         }
         else {
             m_running.push_back(talker);
+        }
+
+        if (dialogFlag) {
+            m_activeDialog = talker;
         }
     }
 }
@@ -108,7 +114,7 @@ DialogStack::removeFirstNotTalking()
     t_running::iterator end = m_running.end();
     for (t_running::iterator i = m_running.begin(); i != end; ++i) {
         if (!(*i)->isTalking()) {
-            delete *i;
+            releaseDialog(*i);
             m_running.erase(i);
             return;
         }
@@ -135,8 +141,7 @@ DialogStack::killSoundIn(int actor, t_running &fifo)
         ++i;
 
         if ((*toKill)->equalsActor(actor)) {
-            (*toKill)->killTalk();
-            delete *toKill;
+            releaseDialog(*toKill);
             fifo.erase(toKill);
         }
     }
@@ -158,10 +163,19 @@ DialogStack::killTalksIn(t_running &fifo)
 {
     t_running::iterator end = fifo.end();
     for (t_running::iterator i = fifo.begin(); i != end; ++i) {
-        (*i)->killTalk();
-        delete *i;
+        releaseDialog(*i);
     }
     fifo.clear();
+}
+//-----------------------------------------------------------------
+void
+DialogStack::releaseDialog(PlannedDialog *dialog)
+{
+    if (dialog == m_activeDialog) {
+        m_activeDialog = NULL;
+    }
+    dialog->killTalk();
+    delete dialog;
 }
 //-----------------------------------------------------------------
 /**
@@ -175,12 +189,11 @@ DialogStack::removeAll()
 }
 //-----------------------------------------------------------------
 /**
- * Returns true when there is no running dialog.
- * NOTE: cycling sounds are ignored
+ * Returns true when there is active dialog.
  */
 bool
-DialogStack::empty() const
+DialogStack::isDialog() const
 {
-    return m_running.empty();
+    return m_activeDialog && m_activeDialog->isTalking();
 }
 
