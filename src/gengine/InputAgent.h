@@ -19,16 +19,16 @@ class InputAgent : public BaseAgent {
         Uint8 *m_keys;
         KeyBinder *m_keyBinder;
         InputHandler *m_handler;
+    private:
+        V2 getMouseLoc();
     protected:
         virtual void own_init();
         virtual void own_update();
         virtual void own_shutdown();
     public:
-        void installHandler(InputHandler *handler) { m_handler = handler; }
+        void installHandler(InputHandler *handler);
 
         KeyBinder *keyBinder() { return m_keyBinder; }
-        Uint8 *getKeys() { return m_keys; }
-        V2 getMouseLoc();
 };
 
 #endif

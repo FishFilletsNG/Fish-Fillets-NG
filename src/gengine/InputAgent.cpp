@@ -66,6 +66,10 @@ InputAgent::own_update()
                 break;
         }
     }
+
+    if (m_handler) {
+        m_handler->mouseLoc(getMouseLoc());
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -77,11 +81,25 @@ InputAgent::own_shutdown()
     delete m_keyBinder;
 }
 //-----------------------------------------------------------------
+void
+InputAgent::installHandler(InputHandler *handler)
+{
+    if (m_handler) {
+        m_handler->takePressed(NULL);
+        m_handler->mouseLoc(V2(-1, -1));
+    }
+    m_handler = handler;
+    if (m_handler) {
+        m_handler->takePressed(m_keys);
+        m_handler->mouseLoc(getMouseLoc());
+    }
+}
+//-----------------------------------------------------------------
 /**
  * Return mouse location.
  * @return (mouseX, mouseY) or (-1, -1) when mouse is outside window
  */
-V2
+    V2
 InputAgent::getMouseLoc()
 {
     V2 result(-1, -1);

@@ -49,6 +49,15 @@ GameState::takeHandler(InputHandler *new_handler)
     m_handler = new_handler;
 }
 //-----------------------------------------------------------------
+/**
+ * Returns wrapped input.
+ */
+    const InputProvider *
+GameState::getInput()
+{
+    return m_handler;
+}
+//-----------------------------------------------------------------
     void
 GameState::initState(StateManager *manager)
 {
@@ -132,19 +141,19 @@ GameState::quitState()
     m_manager->popState(this);
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::pushState(GameState *new_state)
 {
     m_manager->pushState(this, new_state);
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::changeState(GameState *new_state)
 {
     m_manager->changeState(this, new_state);
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::noteBg()
 {
     LOG_DEBUG(ExInfo("noteBg").addInfo("name", getName()));
@@ -152,7 +161,7 @@ GameState::noteBg()
     m_onBg = true;
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::noteFg()
 {
     LOG_DEBUG(ExInfo("noteFg").addInfo("name", getName()));
@@ -160,14 +169,14 @@ GameState::noteFg()
     own_noteFg();
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::unHandlers()
 {
     InputAgent::agent()->installHandler(NULL);
     VideoAgent::agent()->removeDrawer(m_drawer);
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::installHandlers()
 {
     LOG_DEBUG(ExInfo("installHandlers").addInfo("state", getName()));
@@ -175,7 +184,7 @@ GameState::installHandlers()
     VideoAgent::agent()->acceptDrawer(m_drawer);
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::addDrawable(Drawable *drawable)
 {
     m_drawer->acceptDrawer(drawable);

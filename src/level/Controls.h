@@ -4,12 +4,12 @@
 class Unit;
 class PhaseLocker;
 class KeyStroke;
+class InputProvider;
 
 #include "NoCopy.h"
 #include "KeyControl.h"
 #include "StepCounter.h"
 
-#include "SDL.h"
 #include <vector>
 #include <string>
 
@@ -23,7 +23,6 @@ class Controls : public StepCounter, public NoCopy {
         t_units::iterator m_active;
         int m_speedup;
         KeyControl m_arrows;
-        Uint8 *m_pressed;
         bool m_switch;
         std::string m_moves;
         PhaseLocker *m_locker;
@@ -31,14 +30,14 @@ class Controls : public StepCounter, public NoCopy {
     private:
         bool useSwitch();
         bool useStroke();
-        void driveUnit();
+        void driveUnit(const InputProvider *input);
         void setActive(t_units::iterator active);
     public:
         Controls(PhaseLocker *locker);
         ~Controls();
         void addUnit(Unit *unit);
 
-        void driving();
+        void driving(const InputProvider *input);
         void lockPhases();
 
         void checkActive();

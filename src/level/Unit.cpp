@@ -8,9 +8,9 @@
  */
 #include "Unit.h"
 
-#include "Log.h"
 #include "Cube.h"
 #include "Rules.h"
+#include "InputProvider.h"
 
 //-----------------------------------------------------------------
 /**
@@ -50,9 +50,9 @@ Unit::willMove()
  * @return a symbol when unit has moved
  */
 char
-Unit::drive(Uint8 *pressed)
+Unit::drive(const InputProvider *input)
 {
-    return driveBorrowed(pressed, m_buttons);
+    return driveBorrowed(input, m_buttons);
 }
 //-----------------------------------------------------------------
 /**
@@ -60,19 +60,19 @@ Unit::drive(Uint8 *pressed)
  * @return a symbol when unit has moved or SYM_NONE
  */
 char
-Unit::driveBorrowed(Uint8 *pressed, const KeyControl &buttons)
+Unit::driveBorrowed(const InputProvider *input, const KeyControl &buttons)
 {
     if (canDrive()) {
-        if (pressed[buttons.getLeft()]) {
+        if (input->isPressed(buttons.getLeft())) {
             return goLeft();
         }
-        if (pressed[buttons.getRight()]) {
+        if (input->isPressed(buttons.getRight())) {
             return goRight();
         }
-        if (pressed[buttons.getUp()]) {
+        if (input->isPressed(buttons.getUp())) {
             return goUp();
         }
-        if (pressed[buttons.getDown()]) {
+        if (input->isPressed(buttons.getDown())) {
             return goDown();
         }
     }

@@ -157,11 +157,11 @@ Room::askField(const V2 &loc)
  * @return true when room is finished
  */
     bool
-Room::nextRound()
+Room::nextRound(const InputProvider *input)
 {
     bool falling = beginFall();
     if (!falling) {
-        m_controls->driving();
+        m_controls->driving(input);
     }
 
     return finishRound();

@@ -11,7 +11,6 @@
 #include "Unit.h"
 #include "PhaseLocker.h"
 
-#include "InputAgent.h"
 #include "KeyStroke.h"
 
 //-----------------------------------------------------------------
@@ -25,7 +24,6 @@ Controls::Controls(PhaseLocker *locker)
     m_locker = locker;
     m_active = m_units.begin();
     m_speedup = 0;
-    m_pressed = InputAgent::agent()->getKeys();
     m_switch = true;
     m_strokeSymbol = ControlSym::SYM_NONE;
 }
@@ -63,13 +61,14 @@ Controls::addUnit(Unit *unit)
 /**
  * Let drivers to drive.
  * Only one driver can drive at the same time.
+ * @param pressed array of pressed keys
  */
     void
-Controls::driving()
+Controls::driving(const InputProvider *input)
 {
     if (!useSwitch()) {
         if (!useStroke()) {
-            driveUnit();
+            driveUnit(input);
         }
     }
 }
@@ -108,17 +107,17 @@ Controls::useStroke()
 }
 //-----------------------------------------------------------------
 void
-Controls::driveUnit()
+Controls::driveUnit(const InputProvider *input)
 {
     char moved = ControlSym::SYM_NONE;
     if (m_active != m_units.end()) {
-        moved = (*m_active)->driveBorrowed(m_pressed, m_arrows);
+        moved = (*m_active)->driveBorrowed(input, m_arrows);
     }
 
     if (ControlSym::SYM_NONE == moved) {
         t_units::iterator end = m_units.end();
         for (t_units::iterator i = m_units.begin(); i != end; ++i) {
-            moved = (*i)->drive(m_pressed);
+            moved = (*i)->drive(input);
             if (moved != ControlSym::SYM_NONE) {
                 setActive(i);
                 break;

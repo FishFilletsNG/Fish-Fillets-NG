@@ -13,7 +13,6 @@
 #include "PedoInput.h"
 #include "LayeredPicture.h"
 
-#include "InputAgent.h"
 #include "ResImagePack.h"
 #include "StateManager.h"
 #include "NodeDrawer.h"
@@ -108,7 +107,7 @@ Pedometer::own_updateState()
     void
 Pedometer::watchCursor()
 {
-    V2 mouseLoc = InputAgent::agent()->getMouseLoc();
+    V2 mouseLoc = getInput()->getMouseLoc();
     m_activeMask = m_rack->getMaskAtWorld(mouseLoc);
     if (m_activeMask == m_maskRun
             || m_activeMask == m_maskReplay

@@ -12,6 +12,7 @@ class PhaseLocker;
 class Planner;
 class View;
 class Decor;
+class InputProvider;
 
 #include "NoCopy.h"
 #include "Drawable.h"
@@ -55,7 +56,7 @@ class Room : public StepCounter, public NoCopy, public Drawable {
         Cube *askField(const V2 &loc);
 
         bool beginFall(bool interactive=true);
-        bool nextRound();
+        bool nextRound(const InputProvider *input);
         bool finishRound(bool interactive=true);
 
 

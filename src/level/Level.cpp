@@ -268,7 +268,7 @@ Level::nextPlayerAction()
 {
     bool room_complete = false;
     if (m_levelScript->isRoom()) {
-        room_complete = m_levelScript->room()->nextRound();
+        room_complete = m_levelScript->room()->nextRound(getInput());
     }
 
     return room_complete;

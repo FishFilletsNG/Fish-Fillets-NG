@@ -2,6 +2,7 @@
 #define HEADER_UNIT_H
 
 class Cube;
+class InputProvider;
 
 #include "KeyControl.h"
 #include "ControlSym.h"
@@ -30,8 +31,9 @@ class Unit {
 
         bool canDrive();
         bool willMove();
-        char drive(Uint8 *pressed);
-        char driveBorrowed(Uint8 *pressed, const KeyControl &buttons);
+        char drive(const InputProvider *input);
+        char driveBorrowed(const InputProvider *input,
+                const KeyControl &buttons);
         void activate();
 
         char mySymbol(SDLKey key);

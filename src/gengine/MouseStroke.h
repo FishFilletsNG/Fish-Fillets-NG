@@ -15,7 +15,7 @@ class MouseStroke {
         V2 m_loc;
     public:
         MouseStroke(const SDL_MouseButtonEvent &event);
-        MouseStroke(Uint8 button, int x=0, int y=0);
+        MouseStroke(Uint8 button, int x=-1, int y=-1);
 
         bool isLeft() const { return m_button & SDL_BUTTON_LEFT; }
         bool isMiddle() const { return m_button & SDL_BUTTON_MIDDLE; }

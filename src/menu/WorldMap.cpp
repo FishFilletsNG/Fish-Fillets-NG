@@ -22,7 +22,6 @@
 #include "OptionAgent.h"
 #include "VideoAgent.h"
 #include "SoundAgent.h"
-#include "InputAgent.h"
 #include "LogicException.h"
 #include "ResDialogPack.h"
 #include "LevelDesc.h"
@@ -159,7 +158,7 @@ WorldMap::own_cleanState()
     void
 WorldMap::watchCursor()
 {
-    V2 mouseLoc = InputAgent::agent()->getMouseLoc();
+    V2 mouseLoc = getInput()->getMouseLoc();
     m_selected = m_startNode->findSelected(mouseLoc);
 
     m_activeMask = m_bg->getMaskAtWorld(mouseLoc);

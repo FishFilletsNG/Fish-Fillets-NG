@@ -3,6 +3,7 @@
 
 class StateManager;
 class InputHandler;
+class InputProvider;
 class MultiDrawer;
 class Drawable;
 
@@ -26,6 +27,7 @@ class GameState : public BaseListener, public NoCopy {
         StateManager *m_manager;
     protected:
         void takeHandler(InputHandler *new_handler);
+        const InputProvider *getInput();
 
         virtual void own_initState() = 0;
         virtual void own_updateState() = 0;
