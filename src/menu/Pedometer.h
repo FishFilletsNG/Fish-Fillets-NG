@@ -27,6 +27,7 @@ class Pedometer : public GameState, public IDrawer {
         Uint32 m_maskReplay;
         Uint32 m_maskCancel;
         std::string m_solution;
+        int m_meterPhase;
     private:
         void prepareBg();
         void prepareRack();

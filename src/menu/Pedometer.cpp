@@ -17,6 +17,7 @@
 #include "StateManager.h"
 #include "NodeDrawer.h"
 #include "Level.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
 Pedometer::Pedometer(LevelStatus *status, Level *level)
@@ -25,6 +26,7 @@ Pedometer::Pedometer(LevelStatus *status, Level *level)
     m_level = level;
     m_status = status;
     m_solution = m_status->readSolvedMoves();
+    m_meterPhase = 0;
 
     prepareBg();
     prepareRack();
@@ -177,12 +179,17 @@ Pedometer::draw()
     drawNumbers(m_solution.size());
 }
 //-----------------------------------------------------------------
+/**
+ * Draw number of steps.
+ * Draw nice rotating numbers.
+ */
     void
 Pedometer::drawNumbers(int value)
 {
     static const int CIPHERS = 5;
     static const int POS_X = 275;
     static const int POS_Y = 177;
+    static const int SHIFT_SPEED = 8;
 
     int numberWidth = m_numbers->w;
     int numberHeight = m_numbers->h / 10;
@@ -190,8 +197,10 @@ Pedometer::drawNumbers(int value)
     for (int i = CIPHERS - 1; i >= 0; --i) {
         int cipher = value % 10;
         value /= 10;
-        int shiftY = numberHeight * (9 - cipher);
         int x = POS_X + numberWidth * i;
+        int shiftY = max(numberHeight * (9 - cipher),
+                numberHeight * 9 - SHIFT_SPEED * m_meterPhase);
+        m_meterPhase++;
 
         drawNumber(x, POS_Y, shiftY);
     }
