@@ -81,18 +81,21 @@ SDLSoundAgent::playSound(Mix_Chunk *sound, int volume, int loops)
 
 //-----------------------------------------------------------------
 /**
+ * Set sound volume.
+ * NOTE: all already running sound will get equals volume
  * @param volume percentage volume, e.g. 30%=30
  */
     void
 SDLSoundAgent::setSoundVolume(int volume)
 {
-    m_soundVolume = static_cast<int>(MIX_MAX_VOLUME * volume / 100.0);
+    m_soundVolume = MIX_MAX_VOLUME * volume / 100;
     if (m_soundVolume > MIX_MAX_VOLUME) {
         m_soundVolume = MIX_MAX_VOLUME;
     }
     else if (m_soundVolume < 0) {
         m_soundVolume = 0;
     }
+    Mix_Volume(-1, m_soundVolume);
 }
 
 //---------------------------------------------------------------------------
@@ -134,7 +137,7 @@ SDLSoundAgent::playMusic(const Path &file,
     void
 SDLSoundAgent::setMusicVolume(int volume)
 {
-    Mix_VolumeMusic(static_cast<int>(MIX_MAX_VOLUME * volume / 100.0));
+    Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
 }
 //-----------------------------------------------------------------
     void
