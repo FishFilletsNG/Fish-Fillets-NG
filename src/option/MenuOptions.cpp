@@ -20,7 +20,7 @@
 #include "SimpleMsg.h"
 #include "OptionsInput.h"
 #include "OptionAgent.h"
-#include "VideoAgent.h"
+#include "SurfaceTool.h"
 
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
@@ -56,6 +56,7 @@ MenuOptions::MenuOptions()
     m_container = vbox;
 
     takeHandler(new OptionsInput(this));
+    addDrawable(this);
     addDrawable(m_container);
 }
 //-----------------------------------------------------------------
@@ -104,5 +105,12 @@ MenuOptions::own_resumeState()
 MenuOptions::mouseButton(const MouseStroke &stroke)
 {
     m_container->mouseButton(stroke);
+}
+//-----------------------------------------------------------------
+void
+MenuOptions::drawOn(SDL_Surface *screen)
+{
+    SDL_Color gray = {0xf0, 0xf0, 0xf0, 128};
+    SurfaceTool::alphaFill(screen, NULL, gray);
 }
 

@@ -6,11 +6,12 @@ class MouseStroke;
 class IWidget;
 
 #include "GameState.h"
+#include "Drawable.h"
 
 /**
  * Options menu which allow to set lang and tune volume.
  */
-class MenuOptions : public GameState {
+class MenuOptions : public GameState, public Drawable {
     private:
         IWidget *m_container;
     protected:
@@ -26,6 +27,7 @@ class MenuOptions : public GameState {
         virtual bool allowBg() const { return true; }
 
         void mouseButton(const MouseStroke &stroke);
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif
