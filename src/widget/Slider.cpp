@@ -10,6 +10,7 @@
 
 #include "OptionAgent.h"
 #include "MouseStroke.h"
+#include "SurfaceTool.h"
 #include "minmax.h"
 
 //-----------------------------------------------------------------
@@ -52,7 +53,7 @@ void
 Slider::drawOn(SDL_Surface *screen)
 {
     int value = OptionAgent::agent()->getAsInt(m_param);
-    Uint32 gray = SDL_MapRGB(screen->format, 0x30, 0x30, 0x30);
+    SDL_Color gray = {0x00, 0x00, 0x00, 128};
     Uint32 green = SDL_MapRGB(screen->format, 0x00, 0xff, 0x00);
 
     SDL_Rect rect;
@@ -60,7 +61,7 @@ Slider::drawOn(SDL_Surface *screen)
     rect.y = m_shift.getY();
     rect.w = getW();
     rect.h = getH();
-    SDL_FillRect(screen, &rect, gray);
+    SurfaceTool::alphaFill(screen, &rect, gray);
 
     rect.x = m_shift.getX();
     rect.y = m_shift.getY();

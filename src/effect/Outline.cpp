@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include "PixelTool.h"
+#include "SurfaceTool.h"
 #include "SurfaceLock.h"
 
 //-----------------------------------------------------------------
@@ -52,19 +53,13 @@ Outline::precomputePixel(SDL_PixelFormat *format)
     m_pixel = SDL_MapRGB(format, m_color.r, m_color.g, m_color.b);
 }
 //-----------------------------------------------------------------
-SDL_Surface *
-Outline::cloneSurface(SDL_Surface *surface)
-{
-    return SDL_ConvertSurface(surface, surface->format, surface->flags);
-}
-//-----------------------------------------------------------------
 /**
  * Draw outline with width=1.
  */
 void
 Outline::drawOneLayer(SDL_Surface *surface, Uint32 bgKey)
 {
-    SDL_Surface *copy = cloneSurface(surface);
+    SDL_Surface *copy = SurfaceTool::createClone(surface);
     drawAlongCopy(surface, bgKey, copy);
     SDL_FreeSurface(copy);
 }
