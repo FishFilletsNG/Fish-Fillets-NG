@@ -2,7 +2,7 @@
 SUBDIRS = src
 
 man_MANS = fillets.6
-EXTRA_DIST = ChangeLog main.aap $(man_MANS)
+EXTRA_DIST = ChangeLog $(man_MANS)
 
 ChangeLog:
 	touch ChangeLog

@@ -22,7 +22,7 @@ Library LUA (script language, used for debug console, configuration, levels,...)
 - liblualib50
 
 
-(To compile on NON-Unix machine, use src/gengine/FsPath_boost.cpp
+(To compile on non-POSIX system, use src/gengine/FsPath_boost.cpp
  instead of src/gengine/FsPath.cpp
 
     Library Boost - http://www.boost.org/
