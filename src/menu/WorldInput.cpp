@@ -49,7 +49,7 @@ WorldInput::keyEvent(const KeyStroke &stroke)
 void
 WorldInput::mouseEvent(const MouseStroke &buttons)
 {
-    if (buttons.equals(MouseStroke(SDL_BUTTON_LEFT))) {
+    if (buttons.isLeft()) {
         m_world->runSelected();
     }
 }

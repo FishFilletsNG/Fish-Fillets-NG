@@ -48,7 +48,7 @@ PedoInput::keyEvent(const KeyStroke &stroke)
 void
 PedoInput::mouseEvent(const MouseStroke &buttons)
 {
-    if (buttons.equals(MouseStroke(SDL_BUTTON_LEFT))) {
+    if (buttons.isLeft()) {
         m_pedometer->runSelected();
     }
 }

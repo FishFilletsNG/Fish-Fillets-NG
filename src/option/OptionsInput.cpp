@@ -51,8 +51,6 @@ OptionsInput::keyEvent(const KeyStroke &stroke)
 void
 OptionsInput::mouseEvent(const MouseStroke &buttons)
 {
-    if (buttons.equals(MouseStroke(SDL_BUTTON_LEFT))) {
-        m_menu->mouseButton(buttons);
-    }
+    m_menu->mouseButton(buttons);
 }
 

@@ -1,4 +1,4 @@
 
-SUBDIRS = SDL_gfx gengine effect plan level menu game
+SUBDIRS = SDL_gfx gengine effect widget plan option level menu game
 
 EXTRA_DIST = main.aap

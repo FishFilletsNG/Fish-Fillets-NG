@@ -34,16 +34,6 @@ MouseStroke::MouseStroke(Uint8 button, int x, int y)
 }
 //-----------------------------------------------------------------
 /**
- * Compare pressed buttons.
- * NOTE: x, y is ignored
- */
-bool
-MouseStroke::equals(const MouseStroke &other) const
-{
-    return m_button == other.m_button;
-}
-//-----------------------------------------------------------------
-/**
  * Return text fashion.
  */
 std::string

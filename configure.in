@@ -137,7 +137,9 @@ AC_OUTPUT([
            src/SDL_gfx/Makefile
            src/gengine/Makefile
            src/effect/Makefile
+           src/widget/Makefile
            src/plan/Makefile
+           src/option/Makefile
            src/level/Makefile
            src/menu/Makefile
            src/game/Makefile

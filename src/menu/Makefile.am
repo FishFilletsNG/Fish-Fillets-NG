@@ -1,8 +1,8 @@
 SDL_GFX_CFLAGS = -I@top_srcdir@/src/SDL_gfx
 
-INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/src/plan -I@top_srcdir@/src/level $(SDL_GFX_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
+INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/src/widget -I@top_srcdir@/src/plan -I@top_srcdir@/src/option -I@top_srcdir@/src/level $(SDL_GFX_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
 
 noinst_LIBRARIES = libmenu.a
 
-libmenu_a_SOURCES = LangFlag.cpp LangFlag.h LevelDesc.cpp LevelDesc.h LevelNode.cpp LevelNode.h LuaTable.cpp LuaTable.h MenuOptions.cpp MenuOptions.h NodeDrawer.cpp NodeDrawer.h OptionsInput.cpp OptionsInput.h PedoInput.cpp PedoInput.h Pedometer.cpp Pedometer.h SelectLang.cpp SelectLang.h WorldInput.cpp WorldInput.h WorldMap.cpp WorldMap.h WorldWay.cpp WorldWay.h worldmap-script.cpp worldmap-script.h
+libmenu_a_SOURCES = LevelDesc.cpp LevelDesc.h LevelNode.cpp LevelNode.h LuaTable.cpp LuaTable.h NodeDrawer.cpp NodeDrawer.h PedoInput.cpp PedoInput.h Pedometer.cpp Pedometer.h WorldInput.cpp WorldInput.h WorldMap.cpp WorldMap.h WorldWay.cpp WorldWay.h worldmap-script.cpp worldmap-script.h
 

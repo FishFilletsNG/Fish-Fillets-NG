@@ -48,7 +48,6 @@ script_select_addFlag(lua_State *L) throw()
  * Execute script which will add flags.
  */
     SelectLang::SelectLang(const Path &datafile)
-: m_shift(0, 0)
 {
     m_flagW = 0;
     m_flagH = 0;
@@ -59,6 +58,7 @@ script_select_addFlag(lua_State *L) throw()
     script.doFile(datafile);
 
     m_rectBinder = new RectBinder();
+    initFlags();
 }
 //-----------------------------------------------------------------
 /**
@@ -158,7 +158,7 @@ SelectLang::createSetMsg(const std::string &lang)
  * Draw all flag relative to own shift.
  */
     void
-SelectLang::draw()
+SelectLang::drawOn(SDL_Surface *screen)
 {
     int perRow = flagsPerRow();
     int col = 0;
@@ -172,9 +172,9 @@ SelectLang::draw()
                 row * selectedH());
         loc = loc.plus(m_shift);
         if (selected == (*i)->getLang()) {
-            drawSelected(loc);
+            drawSelected(screen, loc);
         }
-        (*i)->drawOn(m_screen, loc.plus(margin));
+        (*i)->drawOn(screen, loc.plus(margin));
 
         col++;
         if (col > perRow) {
@@ -186,10 +186,10 @@ SelectLang::draw()
 //-----------------------------------------------------------------
 /**
  * Draw border for selected button.
- * @param loc button location
+ * @param loc world button location
  */
     void
-SelectLang::drawSelected(const V2 &loc)
+SelectLang::drawSelected(SDL_Surface *screen, const V2 &loc)
 {
     SDL_Rect rect;
     rect.x = loc.getX();
@@ -197,8 +197,8 @@ SelectLang::drawSelected(const V2 &loc)
     rect.w = selectedW();
     rect.h = selectedH();
 
-    Uint32 yellow = SDL_MapRGB(m_screen->format, 0xff, 0xff, 0x00);
-    SDL_FillRect(m_screen, &rect, yellow);
+    Uint32 yellow = SDL_MapRGB(screen->format, 0xff, 0xff, 0x00);
+    SDL_FillRect(screen, &rect, yellow);
 }
 //-----------------------------------------------------------------
 /**
@@ -207,11 +207,12 @@ SelectLang::drawSelected(const V2 &loc)
  * rectBinder will need to known shift relative to world
  */
     void
-SelectLang::mouseButton(const MouseStroke &stroke)
+SelectLang::own_mouseButton(const MouseStroke &stroke)
 {
-    V2 loc = stroke.getLoc();
-    loc = loc.minus(m_shift);
-    m_rectBinder->mouseDown(loc);
+    if (stroke.isLeft()) {
+        V2 inside = stroke.getLoc().minus(m_shift);
+        m_rectBinder->mouseDown(inside);
+    }
 }
 //-----------------------------------------------------------------
 /**

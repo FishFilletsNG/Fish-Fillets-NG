@@ -1,7 +1,8 @@
 #ifndef HEADER_MENUOPTIONS_H
 #define HEADER_MENUOPTIONS_H
 
-class SelectLang;
+class Picture;
+class WidgetContainer;
 class MouseStroke;
 
 #include "GameState.h"
@@ -11,7 +12,8 @@ class MouseStroke;
  */
 class MenuOptions : public GameState {
     private:
-        SelectLang *m_selectLang;
+        Picture *m_bg;
+        WidgetContainer *m_container;
     protected:
         virtual void own_initState();
         virtual void own_updateState();
