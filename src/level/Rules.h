@@ -52,7 +52,6 @@ class Rules : public NoCopy {
         Cube::t_models whoIsHeavier(Cube::eWeight power);
 
         bool isFreeDir(eDir dir);
-        bool canFall();
         bool canDir(eDir dir, Cube::eWeight power);
         bool canMoveOthers(eDir dir, Cube::eWeight weight);
         void moveDirBrute(eDir dir);
@@ -69,7 +68,8 @@ class Rules : public NoCopy {
         void finishRound();
 
         int actionOut();
-        eFall actionFall();
+        void actionFall();
+        bool clearLastFall();
         bool actionMoveDir(eDir dir);
         void actionTurnSide() { m_readyToTurn = true; }
         void actionActivate() { m_readyToActive = true; }
@@ -79,6 +79,7 @@ class Rules : public NoCopy {
         std::string getState() const;
         bool isOnStrongPad(Cube::eWeight weight);
         bool isAtBorder() const;
+        const Cube::t_models getResist(eDir dir) const;
 
         static V2 dir2xy(eDir dir);
 };

@@ -99,10 +99,15 @@ Level::own_initState()
     m_loadedMoves = "";
     m_loadSpeed = 1;
     m_replayMode = false;
+    //NOTE: let level first to draw and then play
     m_locker->reset();
+    m_locker->ensurePhases(1);
     m_levelScript->scriptInclude(m_datafile);
 }
 //-----------------------------------------------------------------
+/**
+ * Update level.
+ */
     void
 Level::own_updateState()
 {

@@ -26,6 +26,7 @@
 #include "DialogAgent.h"
 #include "SoundAgent.h"
 #include "ModelList.h"
+#include "Landslip.h"
 
 #include <assert.h>
 
@@ -277,22 +278,12 @@ Room::fallout(bool interactive)
     bool
 Room::falldown()
 {
-    bool result = false;
-    m_impact = Cube::NONE;
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        Rules::eFall fall = (*i)->rules()->actionFall();
-        if (Rules::FALL_NOW == fall) {
-            result = true;
-        }
-        else if (Rules::FALL_LAST == fall) {
-            if (m_impact < (*i)->getWeight()) {
-                m_impact = (*i)->getWeight();
-            }
-        }
-    }
+    ModelList models(&m_models);
+    Landslip slip(models);
 
-    return result;
+    bool falling = slip.computeFall();
+    m_impact = slip.getImpact();
+    return falling;
 }
 //-----------------------------------------------------------------
 /**

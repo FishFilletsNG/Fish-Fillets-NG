@@ -1,8 +1,10 @@
 #ifndef HEADER_MODELLIST_H
 #define HEADER_MODELLIST_H
 
-class Cube;
 class View;
+class Landslip;
+
+#include "Cube.h"
 
 #include <vector>
 
@@ -11,11 +13,14 @@ class View;
  */
 class ModelList {
     private:
-        typedef std::vector<Cube*> t_models;
-        const t_models *m_models;
+        const Cube::t_models *m_models;
     public:
-        ModelList(const t_models *models);
+        ModelList(const Cube::t_models *models);
+        int size() const { return m_models->size(); }
+
         void drawOn(View *view) const;
+        bool stoneOn(Landslip *slip) const;
+        bool fallOn(Landslip *slip) const;
 };
 
 #endif

@@ -259,26 +259,24 @@ Rules::actionOut()
 //-----------------------------------------------------------------
 /**
  * Let model fall.
- * Return whether we have fall now or in last round.
  */
-    Rules::eFall
+    void
 Rules::actionFall()
 {
-    eFall result = FALL_NO;
-
-    if (canFall()) {
-        m_dir = DIR_DOWN;
-        result = FALL_NOW;
-        m_lastFall = true;
-    }
-    else {
-        if (m_lastFall) {
-            result = FALL_LAST;
-        }
-        m_lastFall = false;
-    }
-
-    return result;
+    m_dir = DIR_DOWN;
+    m_lastFall = true;
+}
+//-----------------------------------------------------------------
+/**
+ * Unset falling flag.
+ * @return last value of the flag
+ */
+    bool
+Rules::clearLastFall()
+{
+    bool last = m_lastFall;
+    m_lastFall = false;
+    return last;
 }
 //-----------------------------------------------------------------
 /**
@@ -313,22 +311,6 @@ Rules::isFreeDir(eDir dir)
     m_mask->mask();
     return resist.empty();
 }
-//-----------------------------------------------------------------
-/**
- * Whether object can fall.
- * Not alive model and not FIXED object falls down.
- */
-    bool
-Rules::canFall()
-{
-    bool result = false;
-    if (!m_model->isLost()) {
-        //NOTE: hack, apply heavy power on self
-        result = canDir(DIR_DOWN, Cube::HEAVY);
-    }
-    return result;
-}
-
 //-----------------------------------------------------------------
 /**
  * Whether object is direct or undirect on something specific.
@@ -668,5 +650,11 @@ bool
 Rules::isAtBorder() const
 {
     return m_mask->getBorderDir() != DIR_NO;
+}
+//-----------------------------------------------------------------
+const Cube::t_models
+Rules::getResist(eDir dir) const
+{
+    return m_mask->getResist(dir);
 }
 
