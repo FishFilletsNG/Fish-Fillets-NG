@@ -13,6 +13,7 @@
 
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/convenience.hpp"
+#include <stdio.h>
 
 //-----------------------------------------------------------------
 Path::Path(const boost::filesystem::path &file)

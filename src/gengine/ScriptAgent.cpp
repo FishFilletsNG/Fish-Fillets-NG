@@ -18,6 +18,7 @@
 #include "ScriptException.h"
 #include "Path.h"
 #include "OptionAgent.h"
+#include "ScriptState.h"
 
 extern "C" {
 #include "lualib.h"
@@ -121,20 +122,6 @@ script_getParam(lua_State *L) throw()
     return result_count;
 }
 
-//-----------------------------------------------------------------
-/**
- * Available lua extension functions.
- * {name, function}
- * ...
- * {NULL, NULL}.
- */
-static const luaL_reg LUA_FUNCS[] =
-{
-    {"sendMsg", script_sendMsg},
-    {"setParam", script_setParam},
-    {"getParam", script_getParam},
-    {NULL, NULL} // last item
-};
 
 //-----------------------------------------------------------------
 // ScriptAgent
@@ -142,74 +129,22 @@ static const luaL_reg LUA_FUNCS[] =
     void
 ScriptAgent::own_init()
 {
-    m_state = lua_open();
-    lua_baselibopen(m_state);
-    lua_strlibopen(m_state);
-
-    for (int i = 0; LUA_FUNCS[i].func; ++i) {
-        registerFunc(LUA_FUNCS[i].name, LUA_FUNCS[i].func);
-    }
+    m_state = new ScriptState();
+    m_state->registerFunc("sendMsg", script_sendMsg);
+    m_state->registerFunc("setParam", script_setParam);
+    m_state->registerFunc("getParam", script_getParam);
 }
 //-----------------------------------------------------------------
     void
 ScriptAgent::own_shutdown()
 {
-    lua_close(m_state);
-}
-//-----------------------------------------------------------------
-/**
- * Process script on stack.
- * @param error script load status
- *
- * @throws ScriptException when script is bad
- */
-    void
-ScriptAgent::callStack(int error)
-{
-    if (0 == error) {
-        error = lua_pcall(m_state, 0, 0, 0);
-    }
-
-    if (error) {
-        const char *msg = lua_tostring(m_state, -1);
-        if (NULL == msg) {
-            msg = "(error with no message)";
-        }
-        lua_pop(m_state, 1);
-        throw ScriptException(ExInfo("script failure")
-                .addInfo("error", msg));
-    }
-}
-//-----------------------------------------------------------------
-/**
- * Process script file.
- * @param file script
- */
-    void
-ScriptAgent::doFile(const Path &file)
-{
-    int error = luaL_loadfile(m_state, file.getNative().c_str());
-    callStack(error);
-}
-//-----------------------------------------------------------------
-/**
- * Process string.
- * @param input script
- */
-    void
-ScriptAgent::doString(const std::string &input)
-{
-    int error = luaL_loadbuffer(m_state, input.c_str(), input.size(),
-            input.c_str());
-    callStack(error);
+    delete m_state;
 }
 //-----------------------------------------------------------------
     void
 ScriptAgent::registerFunc(const char *name, lua_CFunction func)
 {
-    LOG_INFO(ExInfo("register script func")
-            .addInfo("name", name));
-    lua_register(m_state, name, func);
+    m_state->registerFunc(name, func);
 }
 //-----------------------------------------------------------------
 /**
@@ -224,19 +159,19 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
 ScriptAgent::receiveString(const StringMsg *msg)
 {
     if ("dofile" == msg->getName()) {
-        doFile(Path::dataReadPath(msg->getValue()));
+        m_state->doFile(Path::dataReadPath(msg->getValue()));
     }
     else if ("doall" == msg->getName()) {
         try {
-            doFile(Path::dataSystemPath(msg->getValue()));
-            doFile(Path::dataUserPath(msg->getValue()));
+            m_state->doFile(Path::dataSystemPath(msg->getValue()));
+            m_state->doFile(Path::dataUserPath(msg->getValue()));
         }
         catch (BaseException &e) {
             LOG_INFO(e.info());
         }
     }
     else if ("console" == msg->getName()) {
-        doString(msg->getValue());
+        m_state->doString(msg->getValue());
     }
     else {
         throw UnknownMsgException(msg);

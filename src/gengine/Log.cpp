@@ -11,6 +11,7 @@
 #include "ExInfo.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 int Log::ms_logLevel = LEVEL_INFO;
 //int Log::ms_logLevel = LEVEL_DEBUG;

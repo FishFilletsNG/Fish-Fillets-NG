@@ -68,17 +68,17 @@ class ResourcePack {
     /**
      * Get resource with this name.
      */
-    T getRes(const std::string &name, int index=0)
+    T getRes(const std::string &name, int rank=0)
     {
         std::pair<t_resIterator, t_resIterator> range =
             m_reses.equal_range(name);
-        for (int i = 0; i < index && range.first != range.second; ++i) {
+        for (int i = 0; i < rank && range.first != range.second; ++i) {
             ++(range.first);
         }
         if (m_reses.end() == range.first) {
             throw ResourceException(ExInfo("no such resource at index")
                     .addInfo("name", name)
-                    .addInfo("index", index));
+                    .addInfo("index", rank));
         }
         return range.first->second;
     }

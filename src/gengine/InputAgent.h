@@ -25,8 +25,6 @@ class InputAgent : public BaseAgent {
         virtual void own_update();
         virtual void own_shutdown();
     public:
-        InputAgent();
-        virtual ~InputAgent();
         virtual void receiveSimple(const SimpleMsg *msg);
 
         KeyBinder *keyBinder() { return m_keyBinder; }

@@ -1,6 +1,8 @@
 #ifndef HEADER_SCRIPTAGENT_H
 #define HEADER_SCRIPTAGENT_H
 
+class ScriptState;
+
 #include "BaseAgent.h"
 #include "Name.h"
 #include "Path.h"
@@ -17,18 +19,14 @@ extern "C" {
 class ScriptAgent : public BaseAgent {
     AGENT(ScriptAgent, Name::SCRIPT_NAME);
     private:
-        lua_State *m_state;
-    private:
-        void callStack(int error);
-        void doFile(const Path &file);
-        void doString(const std::string &input);
+        ScriptState *m_state;
     protected:
         virtual void own_init();
         virtual void own_shutdown();
-
-        virtual void receiveString(const StringMsg *msg);
     public:
         void registerFunc(const char *name, lua_CFunction func);
+
+        virtual void receiveString(const StringMsg *msg);
 };
 
 #endif

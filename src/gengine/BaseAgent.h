@@ -10,7 +10,7 @@
 #include <string>
 
 /**
- * Agent some functionality.
+ * Ancestor for all agents.
  */
 class BaseAgent : public NoCopy, public BaseListener {
     private:

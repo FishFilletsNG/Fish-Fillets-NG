@@ -13,10 +13,7 @@
 
 #include "SoundAgent.h"
 #include "InputAgent.h"
-#include "VideoAgent.h"
 #include "OptionAgent.h"
-#include "ScriptAgent.h"
-#include "MessagerAgent.h"
 
 #include "KeyStroke.h"
 #include "KeyBinder.h"
@@ -26,6 +23,7 @@
 #include "StringMsg.h"
 #include "Name.h"
 #include "Path.h"
+#include "ScriptState.h"
 
 #include "Room.h"
 #include "Shape.h"
@@ -41,22 +39,14 @@
 GameAgent::own_init()
 {
     m_room = NULL;
+    m_script = NULL;
     m_lockPhases = 0;
 
     //TODO: select music for room
     SoundAgent::agent()->playMusic(
             Path::dataReadPath("music/tuxi.ogg"), NULL);
     keyBinding();
-
-    registerGameFuncs();
-
-    //TODO: make levels selection menu
-    //TODO: make separate lua state for every level
-    std::string level = OptionAgent::agent()->getParam("level",
-            "script/level.lua");
-    BaseMsg *msg = new StringMsg(Name::SCRIPT_NAME,
-            "dofile", level);
-    MessagerAgent::agent()->forwardNewMsg(msg);
+    newLevel();
 }
 //-----------------------------------------------------------------
 /**
@@ -65,6 +55,11 @@ GameAgent::own_init()
     void
 GameAgent::own_update()
 {
+    if (m_script) {
+        //TODO: prepare data for new level format
+        //m_script->doString("update()");
+    }
+
     if (0 == m_lockPhases) {
         if (m_room) {
             m_room->nextRound();
@@ -85,8 +80,44 @@ GameAgent::own_shutdown()
     if (m_room) {
         delete m_room;
     }
+    if (m_script) {
+        delete m_script;
+    }
 }
 
+
+//-----------------------------------------------------------------
+/**
+ * Create new level.
+ * TODO: make levels selection menu
+ */
+void
+GameAgent::newLevel()
+{
+    if (m_script) {
+        delete m_script;
+        m_script = NULL;
+    }
+    m_script = new ScriptState();
+    registerGameFuncs();
+
+    std::string level = OptionAgent::agent()->getParam("level",
+            "script/level.lua");
+    m_script->doFile(Path::dataReadPath(level));
+}
+//-----------------------------------------------------------------
+/**
+ * Register functions usable from script.
+ */
+    void
+GameAgent::registerGameFuncs()
+{
+    m_script->registerFunc("createRoom", script_createRoom);
+    m_script->registerFunc("addModel", script_addModel);
+    m_script->registerFunc("model_addAnim", script_model_addAnim);
+    m_script->registerFunc("model_setAnim", script_model_setAnim);
+    m_script->registerFunc("model_getLoc", script_model_getLoc);
+}
 //-----------------------------------------------------------------
 /**
  * Check whether room is ready.
@@ -208,19 +239,6 @@ GameAgent::ensurePhases(int count)
     //TODO: offer MAX macro
     m_lockPhases = m_lockPhases > count ? m_lockPhases : count;
 }
-//-----------------------------------------------------------------
-/**
- * Register functions usable from script.
- */
-    void
-GameAgent::registerGameFuncs()
-{
-    ScriptAgent *script = ScriptAgent::agent();
-    script->registerFunc("createRoom", script_createRoom);
-    script->registerFunc("addModel", script_addModel);
-    script->registerFunc("model_addAnim", script_model_addAnim);
-    script->registerFunc("model_setAnim", script_model_setAnim);
-}
 
 //-----------------------------------------------------------------
     void
@@ -238,12 +256,12 @@ GameAgent::keyBinding()
     keyBinder->addStroke(fs, msg);
 
     // volume
-    KeyStroke plus(SDLK_KP_PLUS, KMOD_NONE);
+    KeyStroke key_plus(SDLK_KP_PLUS, KMOD_NONE);
     msg = new IntMsg(Name::SOUND_NAME, "inc_volume", 10);
-    keyBinder->addStroke(plus, msg);
-    KeyStroke minus(SDLK_KP_MINUS, KMOD_NONE);
+    keyBinder->addStroke(key_plus, msg);
+    KeyStroke key_minus(SDLK_KP_MINUS, KMOD_NONE);
     msg = new IntMsg(Name::SOUND_NAME, "dec_volume", 10);
-    keyBinder->addStroke(minus, msg);
+    keyBinder->addStroke(key_minus, msg);
     // log
     KeyStroke log_plus(SDLK_KP_PLUS, KMOD_RALT);
     msg = new SimpleMsg(Name::APP_NAME, "inc_loglevel");
@@ -254,25 +272,10 @@ GameAgent::keyBinding()
 }
 
 //-----------------------------------------------------------------
-void
-GameAgent::model_addAnim(int model_index,
-        const std::string &name, const std::string &picture)
-{
-    LOG_DEBUG(ExInfo("model_addAnim")
-            .addInfo("model_index", model_index)
-            .addInfo("name", name)
-            .addInfo("picture", picture));
-    checkRoom();
-    Cube *model = m_room->getModel(model_index);
-    model->view()->addAnim(name, Path::dataReadPath(picture));
-}
-//-----------------------------------------------------------------
-void
-GameAgent::model_setAnim(int model_index,
-        const std::string &name, int phase)
+Cube *
+GameAgent::getModel(int model_index)
 {
     checkRoom();
-    Cube *model = m_room->getModel(model_index);
-    model->view()->setAnim(name, phase);
+    return m_room->getModel(model_index);
 }
 

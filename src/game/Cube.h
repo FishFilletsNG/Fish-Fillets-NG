@@ -64,7 +64,7 @@ class Cube : public NoCopy {
         void applyDead();
         bool fall();
         bool drive();
-        void finishRound();
+        void freeOldPos();
 
         bool canFall();
         bool canDir(eDir dir, eWeight power);

@@ -254,7 +254,7 @@ Cube::drive()
  * Unmask from old position.
  */
     void
-Cube::finishRound()
+Cube::freeOldPos()
 {
     if (m_dir != DIR_NO) {
         m_mask->unmask();

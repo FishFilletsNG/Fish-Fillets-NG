@@ -28,10 +28,13 @@ ResSoundAgent::addSound(const std::string &name, const Path &file)
 {
     Mix_Chunk *chunk = Mix_LoadWAV(file.getNative().c_str());
     if (NULL == chunk) {
-        throw MixException(ExInfo("cannot load wav")
-                .addInfo("path", file.getNative()));
+        LOG_WARNING(ExInfo("cannot load wav")
+                .addInfo("path", file.getNative())
+                .addInfo("MixError", Mix_GetError()));
     }
-    addRes(name, chunk);
+    else {
+        addRes(name, chunk);
+    }
 }
 //-----------------------------------------------------------------
 void

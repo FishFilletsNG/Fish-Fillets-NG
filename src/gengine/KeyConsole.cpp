@@ -55,7 +55,7 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
             break;
         case SDLK_BACKSPACE:
             if (false == m_input.empty()) {
-                m_input.erase(--(m_input.end()));
+                m_input.erase(m_input.end() - 1);
             }
             break;
         case SDLK_RETURN:
@@ -66,7 +66,8 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
                                 m_input);
                         MessagerAgent::agent()->forwardNewMsg(msg);
                         m_history = m_input;
-                        m_input.clear();
+                        //NOTE: clear() is not on FreeBSD
+                        m_input = "";
                     }
                     catch (BaseException &e) {
                         //NOTE: debug script fail is not critical

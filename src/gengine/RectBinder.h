@@ -8,6 +8,7 @@ class BaseMsg;
 
 
 #include <list>
+#include <string>
 
 /**
  * Rect binder.

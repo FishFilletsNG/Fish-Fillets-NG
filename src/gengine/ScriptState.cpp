@@ -22,8 +22,8 @@ extern "C" {
 ScriptState::ScriptState()
 {
     m_state = lua_open();
-    lua_baselibopen(m_state);
-    lua_strlibopen(m_state);
+    luaopen_base(m_state);
+    luaopen_string(m_state);
     //TODO: are need others lua libs?
 }
 //-----------------------------------------------------------------

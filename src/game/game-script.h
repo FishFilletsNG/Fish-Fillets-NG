@@ -12,5 +12,6 @@ extern int script_createRoom(lua_State *L) throw();
 extern int script_addModel(lua_State *L) throw();
 extern int script_model_addAnim(lua_State *L) throw();
 extern int script_model_setAnim(lua_State *L) throw();
+extern int script_model_getLoc(lua_State *L) throw();
 
 #endif

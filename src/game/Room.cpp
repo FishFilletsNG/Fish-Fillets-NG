@@ -80,7 +80,7 @@ Room::nextRound()
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->finishRound();
+        (*i)->freeOldPos();
     }
 }
 //-----------------------------------------------------------------
@@ -96,11 +96,11 @@ Room::prepareRound()
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->occupyNewPos();
     }
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->checkDead();
+    for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
+        (*j)->checkDead();
     }
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->applyDead();
+    for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
+        (*k)->applyDead();
     }
 }
 //-----------------------------------------------------------------

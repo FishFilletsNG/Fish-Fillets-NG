@@ -19,22 +19,6 @@
 #include "SDL.h"
 
 //-----------------------------------------------------------------
-InputAgent::InputAgent()
-{
-    m_keyBinder = new KeyBinder();
-    m_rectBinder = new RectBinder();
-    m_console = NULL;
-}
-//-----------------------------------------------------------------
-InputAgent::~InputAgent()
-{
-    delete m_rectBinder;
-    delete m_keyBinder;
-    if (m_console) {
-        delete m_console;
-    }
-}
-//-----------------------------------------------------------------
 /**
  * Enable SDL_UNICODE.
  * Enable key repeat.
@@ -42,11 +26,13 @@ InputAgent::~InputAgent()
  *
  * NOTE: every SDL_InitSubSystem will disable UNICODE
  * hence InputAgent init must be after VideoAgent.
+ * NOTE: KeyConsole() use Path which asks OptionAgent
  */
     void
 InputAgent::own_init()
 {
-    //NOTE: KeyConsole() use Path which asks OptionAgent
+    m_keyBinder = new KeyBinder();
+    m_rectBinder = new RectBinder();
     m_console = new KeyConsole();
 
     SDL_EnableUNICODE(1);
@@ -100,7 +86,8 @@ InputAgent::own_update()
 InputAgent::own_shutdown()
 {
     delete m_console;
-    m_console = NULL;
+    delete m_rectBinder;
+    delete m_keyBinder;
 }
 //-----------------------------------------------------------------
 /**
