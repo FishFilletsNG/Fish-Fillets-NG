@@ -26,8 +26,9 @@
 #endif
 
 //NOTE: userdir = $HOME + USER_DATA_DIR
+//NOTE: ".fillets-ng" is not portable
 #ifndef USER_DATA_DIR
-#define USER_DATA_DIR "/.fillets-ng"
+#define USER_DATA_DIR "/fillets-ng"
 #endif
 
 //-----------------------------------------------------------------
