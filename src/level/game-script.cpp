@@ -272,7 +272,7 @@ script_model_useSpecialAnim(lua_State *L) throw()
  * void model_setEffect(model_index, effect_name)
  *
  * Set special view effect.
- * available effects: "none", "mirror", "invisible"
+ * available effects: "none", "mirror", "invisible", "reverse", "zx"
  */
     int
 script_model_setEffect(lua_State *L) throw()

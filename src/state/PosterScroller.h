@@ -19,6 +19,7 @@ class PosterScroller : public PosterState {
         virtual void own_updateState();
     public:
         PosterScroller(const Path &picture);
+        virtual bool allowBg() const { return true; }
 };
 
 #endif

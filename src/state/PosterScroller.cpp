@@ -30,7 +30,7 @@ PosterScroller::own_initState()
 void
 PosterScroller::own_updateState()
 {
-    int maxShift = min(m_shift, m_bg->getH() - m_screenH * 3/4);
+    int maxShift = min(m_shift, m_bg->getH() - m_screenH/3);
 
     m_bg->setLoc(V2(0, -maxShift));
     m_shift += SHIFT_SPEED;
