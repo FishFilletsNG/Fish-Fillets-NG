@@ -30,7 +30,7 @@
 #define LC_MESSAGES LC_CTYPE
 #endif
 
-//TODO: set system datadir
+//NOTE: SYSTEM_DATA_DIR is set to "$(datadir)/games/@PACKAGE@"
 #ifndef SYSTEM_DATA_DIR
 #define SYSTEM_DATA_DIR ""
 #endif

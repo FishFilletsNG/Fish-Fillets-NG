@@ -66,7 +66,6 @@ Cube::change_die()
     void
 Cube::change_goOut()
 {
-    //TODO: nice anim for alive object
     m_out = true;
     change_remove();
 }

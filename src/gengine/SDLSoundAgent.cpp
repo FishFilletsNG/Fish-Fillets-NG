@@ -29,7 +29,6 @@ SDLSoundAgent::own_init()
 {
     m_music = NULL;
     m_soundVolume = MIX_MAX_VOLUME;
-    //TODO: load volume option
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
         throw SDLException(ExInfo("SDL_InitSubSystem"));
     }

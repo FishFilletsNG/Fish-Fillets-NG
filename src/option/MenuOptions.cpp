@@ -66,12 +66,6 @@ MenuOptions::own_initState()
     own_resumeState();
 }
 //-----------------------------------------------------------------
-    void
-MenuOptions::own_updateState()
-{
-    //TODO: implement volume controls
-}
-//-----------------------------------------------------------------
 /**
  * Display options menu.
  * Menu will be centred on screen.
