@@ -40,6 +40,8 @@ class GameState : public BaseListener, public NoCopy {
         virtual void own_noteFg() {}
 
         void changeState(GameState *new_state);
+        void registerDrawable(Drawable *drawable);
+        void deregisterDrawable(const Drawable *drawable);
     public:
         GameState();
         virtual ~GameState();
@@ -61,7 +63,6 @@ class GameState : public BaseListener, public NoCopy {
         void noteFg();
         void installHandlers();
         void unHandlers();
-        void registerDrawable(Drawable *drawable);
 
         void receiveSimple(const SimpleMsg *msg);
 };

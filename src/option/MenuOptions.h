@@ -17,7 +17,9 @@ class MenuOptions : public GameState, public Drawable {
     private:
         IWidget *m_container;
         WiStatusBar *m_statusBar;
+        bool m_needRefresh;
     private:
+        void prepareMenu();
         IWidget *createSoundPanel(const Labels &labels);
         IWidget *createMusicPanel(const Labels &labels);
         IWidget *createLangPanel(const Labels &labels);
@@ -39,6 +41,8 @@ class MenuOptions : public GameState, public Drawable {
 
         void mouseButton(const MouseStroke &stroke);
         virtual void drawOn(SDL_Surface *screen);
+
+        void receiveString(const StringMsg *msg);
 };
 
 #endif

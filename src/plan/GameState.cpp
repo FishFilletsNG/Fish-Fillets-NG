@@ -175,13 +175,9 @@ GameState::noteFg()
     own_noteFg();
 }
 //-----------------------------------------------------------------
-    void
-GameState::unHandlers()
-{
-    InputAgent::agent()->installHandler(NULL);
-    VideoAgent::agent()->removeDrawer(m_drawer);
-}
-//-----------------------------------------------------------------
+/**
+ * Install own video and input handler.
+ */
     void
 GameState::installHandlers()
 {
@@ -190,10 +186,32 @@ GameState::installHandlers()
     VideoAgent::agent()->acceptDrawer(m_drawer);
 }
 //-----------------------------------------------------------------
+/**
+ * Uninstall own video and input handler.
+ */
+    void
+GameState::unHandlers()
+{
+    InputAgent::agent()->installHandler(NULL);
+    VideoAgent::agent()->removeDrawer(m_drawer);
+}
+
+//-----------------------------------------------------------------
+/**
+ * Add new drawable to drawers fifo.
+ * NOTE: order is important,
+ * the first inserted drawer will be on background
+ */
     void
 GameState::registerDrawable(Drawable *drawable)
 {
     m_drawer->acceptDrawer(drawable);
+}
+//-----------------------------------------------------------------
+    void
+GameState::deregisterDrawable(const Drawable *drawable)
+{
+    m_drawer->removeDrawer(drawable);
 }
 //-----------------------------------------------------------------
 /**

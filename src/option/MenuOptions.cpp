@@ -25,37 +25,20 @@
 #include "OptionsInput.h"
 #include "OptionAgent.h"
 #include "SurfaceTool.h"
+#include "StringMsg.h"
+#include "UnknownMsgException.h"
 
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
 {
-    Labels labels(Path::dataReadPath("script/labels.lua"));
-    IWidget *soundBox = createSoundPanel(labels);
-    IWidget *musicBox = createMusicPanel(labels);
-
-    VBox *vbox = new VBox();
-    vbox->addWidget(soundBox);
-    vbox->addWidget(new WiSpace(0, 10));
-    vbox->addWidget(musicBox);
-    vbox->addWidget(new WiSpace(0, 10));
-    vbox->addWidget(createLangPanel(labels));
-    vbox->addWidget(new WiSpace(0, 5));
-    vbox->addWidget(createSpeechPanel(labels));
-    vbox->addWidget(new WiSpace(0, 5));
-    vbox->addWidget(createSubtitlesPanel(labels));
-
-    IWidget *backButton = createBackButton(labels);
-    m_statusBar = createStatusBar(musicBox->getW() - backButton->getW());
-    HBox *backBox = new HBox();
-    backBox->addWidget(m_statusBar);
-    backBox->addWidget(backButton);
-
-    vbox->addWidget(backBox);
-    m_container = vbox;
-
-    takeHandler(new OptionsInput(this));
+    m_container = NULL;
+    m_statusBar = NULL;
+    m_needRefresh = false;
     registerDrawable(this);
-    registerDrawable(m_container);
+    prepareMenu();
+
+    registerWatcher("lang");
+    takeHandler(new OptionsInput(this));
 }
 //-----------------------------------------------------------------
 MenuOptions::~MenuOptions()
@@ -95,10 +78,50 @@ MenuOptions::own_resumeState()
     void
 MenuOptions::own_updateState()
 {
+    if (m_needRefresh) {
+        m_needRefresh = false;
+        prepareMenu();
+        own_resumeState();
+    }
     std::string tooltip = m_container->getTip(getInput()->getMouseLoc());
     m_statusBar->setLabel(tooltip);
 }
 
+//-----------------------------------------------------------------
+void
+MenuOptions::prepareMenu()
+{
+    if (m_container) {
+        deregisterDrawable(m_container);
+        delete m_container;
+        m_container = NULL;
+    }
+
+    Labels labels(Path::dataReadPath("script/labels.lua"));
+    IWidget *soundBox = createSoundPanel(labels);
+    IWidget *musicBox = createMusicPanel(labels);
+
+    VBox *vbox = new VBox();
+    vbox->addWidget(soundBox);
+    vbox->addWidget(new WiSpace(0, 10));
+    vbox->addWidget(musicBox);
+    vbox->addWidget(new WiSpace(0, 10));
+    vbox->addWidget(createLangPanel(labels));
+    vbox->addWidget(new WiSpace(0, 5));
+    vbox->addWidget(createSpeechPanel(labels));
+    vbox->addWidget(new WiSpace(0, 5));
+    vbox->addWidget(createSubtitlesPanel(labels));
+
+    IWidget *backButton = createBackButton(labels);
+    m_statusBar = createStatusBar(musicBox->getW() - backButton->getW());
+    HBox *backBox = new HBox();
+    backBox->addWidget(m_statusBar);
+    backBox->addWidget(backButton);
+
+    vbox->addWidget(backBox);
+    m_container = vbox;
+    registerDrawable(m_container);
+}
 //-----------------------------------------------------------------
 IWidget *
 MenuOptions::createSoundPanel(const Labels &labels)
@@ -192,5 +215,28 @@ MenuOptions::drawOn(SDL_Surface *screen)
 {
     SDL_Color gray = {0xf0, 0xf0, 0xf0, 128};
     SurfaceTool::alphaFill(screen, NULL, gray);
+}//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - param_changed(lang) ... refresh menu
+ *
+ * @throws UnknownMsgException
+ */
+    void
+MenuOptions::receiveString(const StringMsg *msg)
+{
+    if (msg->equalsName("param_changed")) {
+        std::string param = msg->getValue();
+        if ("lang" == param) {
+            m_needRefresh = true;
+        }
+        else {
+            throw UnknownMsgException(msg);
+        }
+    }
+    else {
+        throw UnknownMsgException(msg);
+    }
 }
 
