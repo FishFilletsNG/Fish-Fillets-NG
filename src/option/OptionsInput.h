@@ -2,24 +2,20 @@
 #define HEADER_OPTIONSINPUT_H
 
 class MenuOptions;
-class Keymap;
 
-#include "InputHandler.h"
+#include "StateInput.h"
 
 /**
  * Handle input for options menu.
  */
-class OptionsInput : public InputHandler {
+class OptionsInput : public StateInput {
     private:
-        static const int KEY_QUIT = 1;
-
-        MenuOptions *m_menu;
-        Keymap *m_keymap;
+        MenuOptions *getMenu();
+    protected:
+        virtual void enableMenu();
     public:
         OptionsInput(MenuOptions *menu);
-        ~OptionsInput();
 
-        virtual void keyEvent(const KeyStroke &stroke);
         virtual void mouseEvent(const MouseStroke &buttons);
 };
 

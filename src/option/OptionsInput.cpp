@@ -9,50 +9,31 @@
 #include "OptionsInput.h"
 
 #include "MenuOptions.h"
-#include "Keymap.h"
 
-#include "Log.h"
-#include "KeyStroke.h"
-#include "MouseStroke.h"
-
+//-----------------------------------------------------------------
+OptionsInput::OptionsInput(MenuOptions *menu)
+    : StateInput(menu)
+{
+}
+//-----------------------------------------------------------------
+MenuOptions *
+OptionsInput::getMenu()
+{
+    return dynamic_cast<MenuOptions*>(m_state);
+}
 //-----------------------------------------------------------------
 /**
- * Only function key is Escape->quit.
+ * Toggle menu.
  */
-OptionsInput::OptionsInput(MenuOptions *menu)
+void
+OptionsInput::enableMenu()
 {
-    m_menu = menu;
-    m_keymap = new Keymap();
-    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
-            KeyDesc(KEY_QUIT, "quit"));
-    m_keymap->registerKey(KeyStroke(SDLK_F10, KMOD_NONE),
-            KeyDesc(KEY_QUIT, "quit"));
-}
-//-----------------------------------------------------------------
-OptionsInput::~OptionsInput()
-{
-    delete m_keymap;
-}
-//-----------------------------------------------------------------
-    void
-OptionsInput::keyEvent(const KeyStroke &stroke)
-{
-    switch (m_keymap->indexPressed(stroke)) {
-        case KEY_QUIT:
-            m_menu->quitState();
-            break;
-        case -1:
-            break;
-        default:
-            LOG_WARNING(ExInfo("unknown key")
-                    .addInfo("index", m_keymap->indexPressed(stroke))
-                    .addInfo("stroke", stroke.toString()));
-    }
+    quitState();
 }
 //-----------------------------------------------------------------
 void
 OptionsInput::mouseEvent(const MouseStroke &buttons)
 {
-    m_menu->mouseButton(buttons);
+    getMenu()->mouseButton(buttons);
 }
 

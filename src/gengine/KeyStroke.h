@@ -12,6 +12,7 @@ class KeyStroke {
         static const int STROKE_IGNORE = ~(KMOD_SHIFT|KMOD_CTRL|KMOD_ALT);
         SDLKey m_sym;
         int m_mod;
+        Uint16 m_unicode;
     private:
         static int modStrip(int mod);
     public:
@@ -19,6 +20,7 @@ class KeyStroke {
         KeyStroke(SDLKey sym, int mod);
 
         SDLKey getKey() const { return m_sym; }
+        Uint16 getUnicode() const { return m_unicode; }
         bool less(const KeyStroke &other) const;
         bool equals(const KeyStroke &other) const;
         std::string toString() const;

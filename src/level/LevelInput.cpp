@@ -18,13 +18,9 @@
 
 //-----------------------------------------------------------------
 LevelInput::LevelInput(Level *level)
+    : GameInput(level)
 {
-    m_level = level;
-
     //TODO: help on F1
-    m_keymap = new Keymap();
-    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
-            KeyDesc(KEY_QUIT, "quit"));
     m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE),
             KeyDesc(KEY_SWITCH, "switch"));
     m_keymap->registerKey(KeyStroke(SDLK_F2, KMOD_NONE),
@@ -33,57 +29,51 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_LOAD, "load"));
     m_keymap->registerKey(KeyStroke(SDLK_BACKSPACE, KMOD_NONE),
             KeyDesc(KEY_RESTART, "restart"));
-    m_keymap->registerKey(KeyStroke(SDLK_F10, KMOD_NONE),
-            KeyDesc(KEY_OPTIONS, "options menu"));
     m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
             KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
 }
 //-----------------------------------------------------------------
-LevelInput::~LevelInput()
+Level *
+LevelInput::getLevel()
 {
-    delete m_keymap;
+    return dynamic_cast<Level*>(m_state);
 }
 //-----------------------------------------------------------------
-    void
-LevelInput::keyEvent(const KeyStroke &stroke)
+void
+LevelInput::specKey(int keyIndex)
 {
-    switch (m_keymap->indexPressed(stroke)) {
-        case KEY_QUIT:
-            m_level->quitState();
-            break;
+    switch (keyIndex) {
         case KEY_SWITCH:
-            if (!m_level->isShowing() && !m_level->isLoading()) {
-                m_level->switchFish();
+            if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+                getLevel()->switchFish();
             }
             break;
         case KEY_SAVE:
-            if (!m_level->isShowing() && !m_level->isLoading()) {
-                m_level->action_save();
+            if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+                getLevel()->action_save();
             }
             break;
         case KEY_LOAD:
-            m_level->interruptShow();
-            m_level->action_load();
+            getLevel()->interruptShow();
+            getLevel()->action_load();
             break;
         case KEY_RESTART:
-            m_level->interruptShow();
-            m_level->action_restart();
-            break;
-        case KEY_OPTIONS:
-            m_level->pushState(new MenuOptions());
+            getLevel()->interruptShow();
+            getLevel()->action_restart();
             break;
         case KEY_SHOW_STEPS:
             toggleShowSteps();
             break;
-        case -1:
-            if (!m_level->isShowing() && !m_level->isLoading()) {
-                m_level->controlEvent(stroke);
-            }
-            break;
         default:
-            LOG_WARNING(ExInfo("unknown key")
-                    .addInfo("index", m_keymap->indexPressed(stroke))
-                    .addInfo("stroke", stroke.toString()));
+            GameInput::specKey(keyIndex);
+    }
+}
+//-----------------------------------------------------------------
+void
+LevelInput::specStroke(const KeyStroke &stroke)
+{
+    if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+        getLevel()->controlEvent(stroke);
     }
 }
 //-----------------------------------------------------------------

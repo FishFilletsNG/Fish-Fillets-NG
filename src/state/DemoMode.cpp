@@ -97,6 +97,7 @@ DemoMode::action_display(Picture *picture)
 void
 DemoMode::drawOn(SDL_Surface *screen)
 {
+    //FIXME: redraw full screen to clear drawing after fg states
     if (m_bg) {
         m_bg->drawOn(screen);
     }

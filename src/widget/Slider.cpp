@@ -73,6 +73,7 @@ void
 Slider::own_mouseButton(const MouseStroke &stroke)
 {
     if (stroke.isLeft()) {
+        //TODO: play click
         V2 inside = stroke.getLoc().minus(m_shift);
         int value = slide2value(inside.getX());
         OptionAgent::agent()->setPersistent(m_param, value);

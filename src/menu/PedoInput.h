@@ -4,22 +4,17 @@
 class Keymap;
 class Pedometer;
 
-#include "InputHandler.h"
+#include "GameInput.h"
 
 /**
  * Handle input for pedometer.
  */
-class PedoInput : public InputHandler {
+class PedoInput : public GameInput {
     private:
-        static const int KEY_QUIT = 1;
-
-        Pedometer *m_pedometer;
-        Keymap *m_keymap;
+        Pedometer *getPedo();
     public:
         PedoInput(Pedometer *pedometer);
-        ~PedoInput();
 
-        virtual void keyEvent(const KeyStroke &stroke);
         virtual void mouseEvent(const MouseStroke &buttons);
 };
 

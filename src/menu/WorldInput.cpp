@@ -17,40 +17,22 @@
 
 //-----------------------------------------------------------------
 WorldInput::WorldInput(WorldMap *world)
-{
-    m_world = world;
-    m_keymap = new Keymap();
-    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
-            KeyDesc(KEY_QUIT, "quit"));
-}
-//-----------------------------------------------------------------
-WorldInput::~WorldInput()
-{
-    delete m_keymap;
-}
-//-----------------------------------------------------------------
-    void
-WorldInput::keyEvent(const KeyStroke &stroke)
+    : GameInput(world)
 {
     //TODO: 'O' ... options, 'I' ... intro, 'E' ... exit, 'C' ... credits
-    switch (m_keymap->indexPressed(stroke)) {
-        case KEY_QUIT:
-            m_world->quitState();
-            break;
-        case -1:
-            break;
-        default:
-            LOG_WARNING(ExInfo("unknown key")
-                    .addInfo("index", m_keymap->indexPressed(stroke))
-                    .addInfo("stroke", stroke.toString()));
-    }
+}
+//-----------------------------------------------------------------
+WorldMap *
+WorldInput::getWorld()
+{
+    return dynamic_cast<WorldMap*>(m_state);
 }
 //-----------------------------------------------------------------
 void
 WorldInput::mouseEvent(const MouseStroke &buttons)
 {
     if (buttons.isLeft()) {
-        m_world->runSelected();
+        getWorld()->runSelected();
     }
 }
 

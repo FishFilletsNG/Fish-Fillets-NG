@@ -4,22 +4,17 @@
 class Keymap;
 class WorldMap;
 
-#include "InputHandler.h"
+#include "GameInput.h"
 
 /**
  * Handle input for worldmap.
  */
-class WorldInput : public InputHandler {
+class WorldInput : public GameInput {
     private:
-        static const int KEY_QUIT = 1;
-
-        WorldMap *m_world;
-        Keymap *m_keymap;
+        WorldMap *getWorld();
     public:
         WorldInput(WorldMap *world);
-        ~WorldInput();
 
-        virtual void keyEvent(const KeyStroke &stroke);
         virtual void mouseEvent(const MouseStroke &buttons);
 };
 

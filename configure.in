@@ -140,6 +140,7 @@ AC_OUTPUT([
            src/widget/Makefile
            src/plan/Makefile
            src/option/Makefile
+           src/state/Makefile
            src/level/Makefile
            src/menu/Makefile
            src/game/Makefile

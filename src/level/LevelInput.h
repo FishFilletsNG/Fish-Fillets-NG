@@ -5,30 +5,26 @@ class Level;
 class Keymap;
 class KeyStroke;
 
-#include "InputHandler.h"
+#include "GameInput.h"
 
 /**
  * Handle input for level.
  */
-class LevelInput : public InputHandler {
+class LevelInput : public GameInput {
     private:
-        static const int KEY_QUIT = 1;
-        static const int KEY_SWITCH = 2;
-        static const int KEY_SAVE = 3;
-        static const int KEY_LOAD = 4;
-        static const int KEY_RESTART = 5;
-        static const int KEY_OPTIONS = 6;
-        static const int KEY_SHOW_STEPS = 7;
-
-        Level *m_level;
-        Keymap *m_keymap;
+        static const int KEY_SWITCH = 101;
+        static const int KEY_SAVE = 102;
+        static const int KEY_LOAD = 103;
+        static const int KEY_RESTART = 104;
+        static const int KEY_SHOW_STEPS = 105;
     private:
+        Level *getLevel();
         void toggleShowSteps();
+    protected:
+        virtual void specKey(int keyIndex);
+        virtual void specStroke(const KeyStroke &stroke);
     public:
         LevelInput(Level *level);
-        ~LevelInput();
-
-        virtual void keyEvent(const KeyStroke &stroke);
 };
 
 #endif

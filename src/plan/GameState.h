@@ -40,9 +40,9 @@ class GameState : public INamed, public NoCopy {
     public:
         GameState();
         virtual ~GameState();
+        virtual bool allowBg() const { return false; }
         bool isRunning() const { return m_active; }
         bool isOnBg() const { return m_onBg; }
-        virtual bool allowBg() const { return false; }
 
         void initState(StateManager *manager);
         void updateState();

@@ -17,39 +17,21 @@
 
 //-----------------------------------------------------------------
 PedoInput::PedoInput(Pedometer *pedometer)
+    : GameInput(pedometer)
 {
-    m_pedometer = pedometer;
-    m_keymap = new Keymap();
-    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
-            KeyDesc(KEY_QUIT, "quit"));
 }
 //-----------------------------------------------------------------
-PedoInput::~PedoInput()
+Pedometer *
+PedoInput::getPedo()
 {
-    delete m_keymap;
-}
-//-----------------------------------------------------------------
-    void
-PedoInput::keyEvent(const KeyStroke &stroke)
-{
-    switch (m_keymap->indexPressed(stroke)) {
-        case KEY_QUIT:
-            m_pedometer->quitState();
-            break;
-        case -1:
-            break;
-        default:
-            LOG_WARNING(ExInfo("unknown key")
-                    .addInfo("index", m_keymap->indexPressed(stroke))
-                    .addInfo("stroke", stroke.toString()));
-    }
+    return dynamic_cast<Pedometer*>(m_state);
 }
 //-----------------------------------------------------------------
 void
 PedoInput::mouseEvent(const MouseStroke &buttons)
 {
     if (buttons.isLeft()) {
-        m_pedometer->runSelected();
+        getPedo()->runSelected();
     }
 }
 

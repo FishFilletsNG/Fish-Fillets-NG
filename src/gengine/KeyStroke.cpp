@@ -18,6 +18,7 @@ KeyStroke::KeyStroke(const SDL_keysym &keysym)
 {
     m_sym = keysym.sym;
     m_mod = modStrip(keysym.mod);
+    m_unicode = keysym.unicode;
 }
 //-----------------------------------------------------------------
 /**
@@ -32,6 +33,7 @@ KeyStroke::KeyStroke(SDLKey sym, int mod)
 {
     m_sym = sym;
     m_mod = modStrip(mod);
+    m_unicode = 0;
 }
 //-----------------------------------------------------------------
 /**

@@ -9,7 +9,6 @@
 #include "InputAgent.h"
 
 #include "KeyBinder.h"
-#include "IKeyConsole.h"
 #include "InputHandler.h"
 
 #include "MessagerAgent.h"
