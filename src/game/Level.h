@@ -48,6 +48,7 @@ class Level : public NoCopy {
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
 
+        void saveSolution();
         void saveGame(const std::string &models);
         void loadGame(const std::string &moves);
 

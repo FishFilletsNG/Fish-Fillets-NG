@@ -13,9 +13,7 @@
 
 #include "Log.h"
 #include "InputAgent.h"
-#include "OptionAgent.h"
 #include "MessagerAgent.h"
-#include "SoundAgent.h"
 #include "KeyStroke.h"
 #include "KeyBinder.h"
 #include "SimpleMsg.h"
@@ -37,19 +35,9 @@ GameAgent::own_init()
     m_level = NULL;
     m_lockPhases = 0;
 
-    //TEST: worldmap
-    LevelNode *startNode = new LevelNode("start",
-            Path::dataReadPath("script/start/init.lua"), V2(300, 80));
-    LevelNode *nextNode = new LevelNode("briefcase",
-            Path::dataReadPath("script/briefcase/init.lua"), V2(300, 120));
-    startNode->addAdjacent(nextNode);
-    nextNode->addAdjacent(new LevelNode("cellar",
-            Path::dataReadPath("script/cellar/init.lua"), V2(270, 180)));
-
-
-    startNode->setState(LevelNode::STATE_OPEN);
-    //FIXME: set resolution for world map
-    m_world = new WorldMap(startNode,
+    m_world = NULL;
+    m_world = new WorldMap(
+            Path::dataReadPath("script/worldmap.lua"),
             Path::dataReadPath("images/menu/mapa-0.png"));
 
     keyBinding();
@@ -74,9 +62,7 @@ GameAgent::own_update()
             m_lockPhases--;
         }
         if (room_complete) {
-            m_world->markSolved();
-            LOG_INFO(ExInfo("gratulation, room is complete"));
-            cleanLevel();
+            finishLevel();
         }
     }
     else {
@@ -90,8 +76,11 @@ GameAgent::own_update()
     void
 GameAgent::own_shutdown()
 {
+    if (m_world) {
+        delete m_world;
+        m_world = NULL;
+    }
     cleanLevel();
-    delete m_world;
 }
 
 //-----------------------------------------------------------------
@@ -108,24 +97,24 @@ GameAgent::level()
     return m_level;
 }
 //-----------------------------------------------------------------
+/**
+ * Leave level and activate menu.
+ */
 void
 GameAgent::cleanLevel()
 {
-    //TODO: play menu music
     m_lockPhases = 0;
     if (m_level) {
         delete m_level;
         m_level = NULL;
     }
-
-    //TODO: set with and height in one step
-    OptionAgent *options = OptionAgent::agent();
-    options->setParam("screen_width", m_world->getW());
-    options->setParam("screen_height", m_world->getH());
+    if (m_world) {
+        m_world->activate();
+    }
 }
 //-----------------------------------------------------------------
 /**
- * Start new selected level.
+ * Start newly selected level.
  */
     void
 GameAgent::newLevel()
@@ -133,10 +122,22 @@ GameAgent::newLevel()
     if (NULL == m_level) {
         m_level = m_world->createSelected();
         if (m_level) {
-            SoundAgent::agent()->stopMusic();
+            m_world->deactivate();
             m_level->action_restart();
         }
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Remember best solution and show game menu.
+ */
+void
+GameAgent::finishLevel()
+{
+    m_world->markSolved();
+    m_level->saveSolution();
+    LOG_INFO(ExInfo("gratulation, room is complete"));
+    cleanLevel();
 }
 //-----------------------------------------------------------------
 /**

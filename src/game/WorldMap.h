@@ -21,7 +21,7 @@ class WorldMap : public IDrawer, public NoCopy {
         bool m_active;
         SDL_Surface *m_bg;
     public:
-        WorldMap(LevelNode *startNode, const Path &bg);
+        WorldMap(const Path &way, const Path &bg);
         virtual ~WorldMap();
         int getW() const { return m_bg->w; }
         int getH() const { return m_bg->h; }

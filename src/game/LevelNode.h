@@ -28,8 +28,8 @@ class LevelNode : public NoCopy {
         Path m_datafile;
         V2 m_loc;
         eState m_state;
-        typedef std::vector<class LevelNode*> t_adjacents;
-        t_adjacents m_adjacents;
+        typedef std::vector<class LevelNode*> t_children;
+        t_children m_children;
     private:
         bool isUnder(const V2 &cursor) const;
     public:
@@ -43,7 +43,7 @@ class LevelNode : public NoCopy {
         eState getState() const { return m_state; }
         Level *createLevel() const;
 
-        void addAdjacent(LevelNode *node);
+        void addChild(LevelNode *node);
 
         LevelNode *findSelected(const V2 &cursor);
         void drawPath(const NodeDrawer *drawer) const;

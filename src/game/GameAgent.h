@@ -21,6 +21,7 @@ class GameAgent : public BaseAgent {
     private:
         void cleanLevel();
         void newLevel();
+        void finishLevel();
 
         void keyBinding();
     protected:

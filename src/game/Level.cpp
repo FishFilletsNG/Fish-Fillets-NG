@@ -17,6 +17,7 @@
 #include "OptionAgent.h"
 #include "LogicException.h"
 #include "LoadException.h"
+#include "ScriptException.h"
 #include "View.h"
 #include "minmax.h"
 
@@ -185,6 +186,48 @@ Level::askField(const V2 &loc)
     return m_room->askField(loc);
 }
 
+//-----------------------------------------------------------------
+/**
+ * Write best solution to the file.
+ * Save moves and models state.
+ */
+    void
+Level::saveSolution()
+{
+    checkRoom();
+    std::string current_moves = m_room->getMoves();
+
+    m_loadedMoves = "";
+    Path oldSolution = Path::dataReadPath("solved/" + m_codename + ".lua");
+    if (oldSolution.exists()) {
+        try {
+            //NOTE: hack, load old solution to the m_loadedMoves
+            m_script->doString("saved_moves=nil");
+            m_script->doFile(oldSolution);
+            m_script->doString("script_load()");
+        }
+        catch (ScriptException &e) {
+            LOG_INFO(e.info());
+        }
+    }
+
+    if (m_loadedMoves.empty() || current_moves.size() < m_loadedMoves.size()) {
+        Path file = Path::dataWritePath("solved/" + m_codename + ".lua");
+        FILE *saveFile = fopen(file.getNative().c_str(), "w");
+        if (saveFile) {
+            fputs("\nsaved_moves = '", saveFile);
+            fputs(current_moves.c_str(), saveFile);
+            fputs("'\n", saveFile);
+            fclose(saveFile);
+        }
+        else {
+            LOG_WARNING(ExInfo("cannot save solution")
+                    .addInfo("file", file.getNative()));
+        }
+    }
+
+    m_loadedMoves = "";
+}
 //-----------------------------------------------------------------
 /**
  * Write save to the file.

@@ -13,6 +13,10 @@
 #include "ResImageAgent.h"
 #include "Path.h"
 
+//TEST: SDL_gfx
+//#include "SDL_gfxPrimitives.h"
+
+
 //-----------------------------------------------------------------
 NodeDrawer::NodeDrawer()
 {
@@ -77,11 +81,22 @@ NodeDrawer::drawSelected(const LevelNode *node) const
 void
 NodeDrawer::drawEdge(const LevelNode *start, const LevelNode *end) const
 {
+    //TEST: SDL_gfx
+    /*
+    Sint16 x1 = start->getLoc().getX();
+    Sint16 y1 = start->getLoc().getY();
+    Sint16 x2 = end->getLoc().getX();
+    Sint16 y2 = end->getLoc().getY();
+    lineRGBA(m_screen, x1, y1, x2, y2, 255, 255, 0, 255);
+    lineRGBA(m_screen, x1 - 1, y1 - 1 , x2 - 1, y2 - 1, 255, 255, 0, 255);
+    lineRGBA(m_screen, x1 + 1, y1 + 1 , x2 + 1, y2 + 1, 255, 255, 0, 255);
+    */
+
     //TODO: implement drawEdge
     /*
     LOG_DEBUG(ExInfo("draw edge")
             .addInfo("start", start->getLoc().toString())
-            .addInfo("end", start->getLoc().toString()));
+            .addInfo("end", end->getLoc().toString()));
             */
 }
 

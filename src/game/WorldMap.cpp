@@ -11,41 +11,69 @@
 #include "LevelNode.h"
 #include "NodeDrawer.h"
 
+#include "Log.h"
+#include "WorldWay.h"
 #include "ResImageAgent.h"
 #include "VideoAgent.h"
+#include "OptionAgent.h"
+#include "SoundAgent.h"
+#include "LogicException.h"
 
 //-----------------------------------------------------------------
-WorldMap::WorldMap(LevelNode *startNode, const Path &bg)
+/**
+ * Read world map.
+ * @throws LogicException when cannot parse data file
+ */
+WorldMap::WorldMap(const Path &way, const Path &bg)
 {
-    m_bg = ResImageAgent::agent()->loadImage(bg);
+    VideoAgent::agent()->removeDrawer(this);
+    m_active = false;
     m_selected = NULL;
-    m_startNode = startNode;
+    m_startNode = NULL;
+
+    m_bg = ResImageAgent::agent()->loadImage(bg);
+    m_startNode = WorldWay::createWay(way);
+    if (NULL == m_startNode) {
+        SDL_FreeSurface(m_bg);
+        throw LogicException(ExInfo("cannot create world way")
+                .addInfo("file", way.getNative()));
+    }
+
     m_drawer = new NodeDrawer();
-    m_active = true;
+    //TODO: prepare localized room descriptions
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
 {
     SDL_FreeSurface(m_bg);
-    delete m_startNode;
     delete m_drawer;
+    delete m_startNode;
 }
 //-----------------------------------------------------------------
 void
 WorldMap::activate()
 {
     if (!m_active) {
-        VideoAgent::agent()->acceptDrawer(this);
         m_active = true;
+        VideoAgent::agent()->acceptDrawer(this);
+
+        SoundAgent::agent()->playMusic(
+                Path::dataReadPath("music/menu.ogg"), NULL);
+        //TODO: set with and height in one step
+        OptionAgent *options = OptionAgent::agent();
+        options->setParam("screen_width", getW());
+        options->setParam("screen_height", getH());
     }
 }
 //-----------------------------------------------------------------
 void
 WorldMap::deactivate()
 {
-    m_selected = NULL;
-    VideoAgent::agent()->removeDrawer(this);
-    m_active = false;
+    if (m_active) {
+        m_active = false;
+        VideoAgent::agent()->removeDrawer(this);
+        SoundAgent::agent()->stopMusic();
+    }
 }
 //-----------------------------------------------------------------
 /**

@@ -26,37 +26,30 @@ LevelNode::LevelNode(const std::string &codename, const Path &datafile,
 }
 //-----------------------------------------------------------------
 /**
- * Free self and all adjacents.
+ * Free self and all children.
  */
 LevelNode::~LevelNode()
 {
-    t_adjacents::iterator end = m_adjacents.end();
-    for (t_adjacents::iterator i = m_adjacents.begin(); i != end; ++i) {
+    t_children::iterator end = m_children.end();
+    for (t_children::iterator i = m_children.begin(); i != end; ++i) {
         delete *i;
     }
 }
 //-----------------------------------------------------------------
 /**
- * Set state for this node and open/hide his followers.
+ * Set state for this node and open his followers.
  */
 void
 LevelNode::setState(eState state)
 {
-    t_adjacents::iterator end = m_adjacents.end();
+    t_children::iterator end = m_children.end();
     switch (state) {
         case STATE_HIDDEN:
-            for (t_adjacents::iterator i = m_adjacents.begin();
-                    i != end; ++i)
-            {
-                (*i)->setState(STATE_HIDDEN);
-            }
-            break;
         case STATE_FAR:
-            break;
         case STATE_OPEN:
             break;
         case STATE_SOLVED:
-            for (t_adjacents::iterator i = m_adjacents.begin();
+            for (t_children::iterator i = m_children.begin();
                     i != end; ++i)
             {
                 (*i)->setState(STATE_OPEN);
@@ -93,8 +86,8 @@ LevelNode::findSelected(const V2 &cursor)
             return this;
         }
         else {
-            t_adjacents::const_iterator end = m_adjacents.end();
-            for (t_adjacents::const_iterator i = m_adjacents.begin();
+            t_children::const_iterator end = m_children.end();
+            for (t_children::const_iterator i = m_children.begin();
                     i != end; ++i)
             {
                 LevelNode *selected = (*i)->findSelected(cursor);
@@ -114,21 +107,21 @@ LevelNode::createLevel() const
 }
 //-----------------------------------------------------------------
 /**
- * Add adjecent.
+ * Add child node.
  * NOTE: cycles in graph are not supported.
  */
 void
-LevelNode::addAdjacent(LevelNode *node)
+LevelNode::addChild(LevelNode *node)
 {
-    m_adjacents.push_back(node);
+    m_children.push_back(node);
 }
 //-----------------------------------------------------------------
 void
 LevelNode::drawPath(const NodeDrawer *drawer) const
 {
     if (m_state > STATE_HIDDEN) {
-        t_adjacents::const_iterator end = m_adjacents.end();
-        for (t_adjacents::const_iterator i = m_adjacents.begin();
+        t_children::const_iterator end = m_children.end();
+        for (t_children::const_iterator i = m_children.begin();
                 i != end; ++i)
         {
             if ((*i)->getState() > STATE_HIDDEN) {
