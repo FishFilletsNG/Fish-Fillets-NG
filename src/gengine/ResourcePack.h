@@ -104,18 +104,16 @@ class ResourcePack : public INamed {
     }
     //-----------------------------------------------------------------
     /**
-     * Get resource at random index.
+     * Get resource at random index or return NULL.
      */
     T getRandomRes(const std::string &name)
     {
+        T result = NULL;
         typename t_reses::size_type count = m_reses.count(name);
-        if (count == 0) {
-            throw ResourceException(ExInfo("no such resource")
-                    .addInfo("name", name)
-                    .addInfo("pack", toString()));
+        if (count > 0) {
+            result = getRes(name, Random::randomInt(count));
         }
-
-        return getRes(name, Random::randomInt(count));
+        return result;
     }
     //-----------------------------------------------------------------
     /**
