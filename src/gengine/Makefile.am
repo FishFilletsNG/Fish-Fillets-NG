@@ -1,6 +1,6 @@
 SFONT_CFLAGS = -I@top_srcdir@/src/SFont
 
-INCLUDES = $(SFONT_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS)
+INCLUDES = $(SFONT_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
 
 noinst_LIBRARIES = libgengine.a
 
