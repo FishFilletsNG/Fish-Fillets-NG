@@ -29,6 +29,8 @@ How to run:
 4. cd path_to_data
 5. ./game
 
+Alternative you can copy all game data to $HOME/.fillets-ng
+
 
 //-----------------------------------------------------------------
 Homepage:

@@ -18,6 +18,7 @@ class OptionAgent : public BaseAgent {
         t_values m_values;
         t_watchers m_watchers;
     private:
+        void prepareDataPaths();
         bool splitOpt(const std::string &option,
                 std::string *out_name, std::string *out_value);
     protected:

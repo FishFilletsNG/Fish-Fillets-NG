@@ -11,6 +11,9 @@
 #include "OptionAgent.h"
 #include "Log.h"
 
+#include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/convenience.hpp"
+
 //-----------------------------------------------------------------
 Path::Path(const boost::filesystem::path &file)
 {
@@ -21,13 +24,26 @@ Path::Path(const boost::filesystem::path &file)
  * Try return user data path,
  * otherwise return system data path.
  * NOTE: OptionAgent must be initialized before this
+ *
+ * @param file path to file
+ * @param writeable whether we want write to the file
+ * @return path to user or system file
  */
 Path
-Path::dataPath(const std::string &file, const char *mode)
+Path::dataPath(const std::string &file, bool writeable)
 {
     std::string userdir = OptionAgent::agent()->getParam("userdir");
     boost::filesystem::path datafile(userdir);
     datafile /= file;
+
+    const char *mode = "rb";
+    if (writeable) {
+        mode = "wb";
+        LOG_DEBUG(ExInfo("creating path")
+                .addInfo("path", datafile.native_file_string()));
+        boost::filesystem::create_directories(datafile.branch_path());
+    }
+
     FILE *try_open = fopen(datafile.native_file_string().c_str(), mode);
     if (NULL == try_open) {
         LOG_DEBUG(ExInfo("no user file")
@@ -46,14 +62,15 @@ Path::dataPath(const std::string &file, const char *mode)
 Path
 Path::dataReadPath(const std::string &file)
 {
-    return dataPath(file, "rb");
+    return dataPath(file, false);
 }
 //-----------------------------------------------------------------
 Path
 Path::dataWritePath(const std::string &file)
 {
-    return dataPath(file, "wb");
+    return dataPath(file, true);
 }
+
 //-----------------------------------------------------------------
 std::string
 Path::getNative() const

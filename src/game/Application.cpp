@@ -25,6 +25,7 @@
 #include "ResImageAgent.h"
 
 #include "SimpleMsg.h"
+#include "StringMsg.h"
 
 #include "SDL.h"
 
@@ -58,17 +59,11 @@ Application::~Application()
     void
 Application::init(int argc, char *argv[])
 {
-    //TEST: args
-    ExInfo exinfo = ExInfo("application init");
-    exinfo.addInfo("argc", argc);
-    for (int i = 0; i < argc; i++) {
-        exinfo.addInfo("arg", argv[i]);
-    }
-    LOG_DEBUG(exinfo);
-
     MessagerAgent::agent()->addListener(this);
     m_agents->init(Name::VIDEO_NAME);
     OptionAgent::agent()->parseCmdOpt(argc, argv);
+
+    prepareLogLevel();
 
     m_agents->init();
     //TODO: allow no sound
@@ -95,6 +90,20 @@ Application::shutdown()
 }
 //-----------------------------------------------------------------
 /**
+ * Set loglevel according option.
+ * Prepare to change.
+ */
+void
+Application::prepareLogLevel()
+{
+    OptionAgent *options = OptionAgent::agent();
+    StringMsg *event = new StringMsg(this, "param_changed", "loglevel");
+    options->addWatcher("loglevel", event);
+    options->setParam("loglevel",
+            options->getAsInt("loglevel", Log::getLogLevel()));
+}
+//-----------------------------------------------------------------
+/**
  * Handle incoming message.
  * Messages:
  * - quit ... application quit
@@ -110,13 +119,13 @@ Application::receiveSimple(const SimpleMsg *msg)
     else if ("inc_loglevel" == msg->getName()) {
         int level = Log::getLogLevel() + 1;
         if (level <= Log::LEVEL_DEBUG) {
-            Log::setLogLevel(level);
+            OptionAgent::agent()->setParam("loglevel", level);
         }
     }
     else if ("dec_loglevel" == msg->getName()) {
         int level = Log::getLogLevel() - 1;
         if (level >= Log::LEVEL_ERROR) {
-            Log::setLogLevel(Log::getLogLevel() - 1);
+            OptionAgent::agent()->setParam("loglevel", level);
         }
     }
     else {
@@ -124,5 +133,24 @@ Application::receiveSimple(const SimpleMsg *msg)
                 .addInfo("msg", msg->toString()));
     }
 }
-
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - param_changed(loglevel) ... set loglevel
+ */
+    void
+Application::receiveString(const StringMsg *msg)
+{
+    if ("param_changed" == msg->getName()) {
+        std::string param = msg->getValue();
+        if ("loglevel" == param) {
+            Log::setLogLevel(OptionAgent::agent()->getAsInt("loglevel"));
+        }
+    }
+    else {
+        LOG_WARNING(ExInfo("unknown msg")
+                .addInfo("msg", msg->toString()));
+    }
+}
 

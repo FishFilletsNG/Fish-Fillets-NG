@@ -22,12 +22,12 @@
 
 //TODO: set system datadir
 #ifndef SYSTEM_DATA_DIR
-#define SYSTEM_DATA_DIR "."
+#define SYSTEM_DATA_DIR ""
 #endif
 
 //NOTE: userdir = $HOME + USER_DATA_DIR
 #ifndef USER_DATA_DIR
-#define USER_DATA_DIR "/.gengine"
+#define USER_DATA_DIR "/.fillets-ng"
 #endif
 
 //-----------------------------------------------------------------
@@ -43,16 +43,14 @@ OptionAgent::~OptionAgent()
 }
 //-----------------------------------------------------------------
 /**
- * Process "init.lua" and "options.lua".
+ * Set user and sytem dir
+ * and process "init.lua" and "options.lua".
  * NOTE: these scripts are read before setting paths from "options.lua"
  */
     void
 OptionAgent::own_init()
 {
-    OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
-    std::string userdir = getenv("HOME");
-    userdir += USER_DATA_DIR;
-    OptionAgent::agent()->setParam("userdir", userdir);
+    prepareDataPaths();
 
     BaseMsg *msg = new StringMsg(Name::SCRIPT_NAME,
             "dofile", "script/init.lua");
@@ -62,6 +60,19 @@ OptionAgent::own_init()
     msg = new StringMsg(Name::SCRIPT_NAME,
             "dofile", "script/options.lua");
     MessagerAgent::agent()->forwardNewMsg(msg);
+}
+//-----------------------------------------------------------------
+/**
+ * Set user and sytem dir.
+ */
+void
+OptionAgent::prepareDataPaths()
+{
+    OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
+
+    std::string userdir = getenv("HOME");
+    userdir += USER_DATA_DIR;
+    OptionAgent::agent()->setParam("userdir", userdir);
 }
 //-----------------------------------------------------------------
 /**

@@ -15,6 +15,8 @@ class Application : public NoCopy, public BaseListener {
         AgentPack *m_agents;
         bool m_quit;
 
+    private:
+        void prepareLogLevel();
     public:
         Application();
         virtual ~Application();
@@ -25,6 +27,7 @@ class Application : public NoCopy, public BaseListener {
         void shutdown();
 
         virtual void receiveSimple(const SimpleMsg *msg);
+        virtual void receiveString(const StringMsg *msg);
 };
 
 #endif

@@ -11,11 +11,10 @@ class Path {
     private:
         boost::filesystem::path m_path;
     private:
-        static Path dataPath(const std::string &file, const char *mode);
+        static Path dataPath(const std::string &file, bool writeable);
     protected:
         Path(const boost::filesystem::path &file);
     public:
-        //TODO: move to the ResourceAgent
         static Path dataReadPath(const std::string &file);
         static Path dataWritePath(const std::string &file);
 
