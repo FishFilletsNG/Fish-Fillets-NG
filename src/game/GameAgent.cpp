@@ -139,6 +139,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_getLoc", script_model_getLoc);
     m_script->registerFunc("model_getAction", script_model_getAction);
     m_script->registerFunc("model_isAlive", script_model_isAlive);
+    m_script->registerFunc("model_isOut", script_model_isOut);
     m_script->registerFunc("model_isLeft", script_model_isLeft);
     m_script->registerFunc("model_setGoal", script_model_setGoal);
     m_script->registerFunc("model_change_turnSide",

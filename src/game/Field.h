@@ -11,6 +11,7 @@ class Field : public NoCopy {
         int m_w;
         int m_h;
         Cube ***m_marks;
+        Cube *m_border;
     public:
         Field(int w, int h);
         ~Field();

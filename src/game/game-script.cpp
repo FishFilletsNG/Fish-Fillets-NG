@@ -276,6 +276,25 @@ script_model_isAlive(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool model_isOut(model_index)
+ *
+ * Returns true when model is out of room.
+ */
+    int
+script_model_isOut(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    bool out = model->isOut();
+
+    lua_pushboolean(L, out);
+    END_NOEXCEPTION;
+    //NOTE: return out
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * bool model_isLeft(model_index)
  *
  * Returns true when model is looking to the left.

@@ -55,4 +55,11 @@ Goal::isSatisfy(const Cube *model) const
 
     return result;
 }
+//-----------------------------------------------------------------
+bool
+Goal::shouldGoOut() const
+{
+    return SATISFY_TRUE == m_out;
+}
+
 

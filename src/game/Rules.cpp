@@ -8,6 +8,7 @@
  */
 #include "Rules.h"
 
+#include "Log.h"
 #include "Cube.h"
 #include "MarkMask.h"
 #include "LayoutException.h"
@@ -130,9 +131,12 @@ Rules::checkOut()
 {
     bool result = false;
     if (false == isWall() && false == m_model->isOut()) {
-        if (m_mask->isAtBorder()) {
-            m_readyToGoout = true;
-            result = true;
+        //NOTE: normal objects must not go out of screen
+        if (m_model->shouldGoOut()) {
+            if (m_mask->isAtBorder()) {
+                m_readyToGoout = true;
+                result = true;
+            }
         }
     }
 

@@ -8,7 +8,7 @@
  */
 #include "Field.h"
 
-#include "Log.h"
+#include "Cube.h"
 
 #include <string.h> // memset()
 
@@ -21,6 +21,8 @@ Field::Field(int w, int h)
 {
     m_w = w;
     m_h = h;
+
+    m_border = Cube::createBorder();
 
     //NOTE: [y][x] indexes
     m_marks = new Cube**[m_h];
@@ -36,6 +38,7 @@ Field::~Field()
         delete [] m_marks[y];
     }
     delete [] m_marks;
+    delete m_border;
 }
 //-----------------------------------------------------------------
 /**
@@ -48,7 +51,8 @@ Field::getModel(const V2 &loc)
     int x = loc.getX();
     int y = loc.getY();
 
-    Cube *result = NULL;
+    //NOTE: hack border everywhere in outher space
+    Cube *result = m_border;
     if ((0 <= x && x < m_w) && (0 <= y && y < m_h)) {
         result = m_marks[y][x];
     }

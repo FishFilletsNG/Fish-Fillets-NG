@@ -24,6 +24,7 @@ class Goal {
         static Goal escapeGoal();
 
         bool isSatisfy(const Cube *model) const;
+        bool shouldGoOut() const;
 };
 
 #endif

@@ -39,6 +39,7 @@ class Cube : public NoCopy {
         Rules *m_rules;
         Goal m_goal;
     public:
+        static Cube *createBorder();
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
                 Driver *driver, View *view, Shape *shape);
@@ -59,6 +60,7 @@ class Cube : public NoCopy {
         bool isLeft() const { return m_lookLeft; }
         bool isOut() const { return m_out; }
         bool isSatisfy() const { return m_goal.isSatisfy(this); }
+        bool shouldGoOut() const { return m_goal.shouldGoOut(); }
 
         eWeight getWeight() const { return m_weight; }
         eWeight getPower() const { return m_power; }

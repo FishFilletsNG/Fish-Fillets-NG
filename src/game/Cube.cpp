@@ -64,7 +64,19 @@ Cube::~Cube()
     delete m_view;
     delete m_shape;
 }
-
+//-----------------------------------------------------------------
+/**
+ * Create special model, which will be used for outher space.
+ * NOTE: hack border around field
+ */
+    Cube *
+Cube::createBorder()
+{
+    Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::LIGHT, false,
+            new Driver(), new View(), new Shape("X\n"));
+    border->m_view->takeModel(NULL);
+    return border;
+}
 //-----------------------------------------------------------------
 /**
  * Make skeleton.
@@ -89,7 +101,7 @@ Cube::change_goOut()
     //TODO: nice anim
     LOG_INFO(ExInfo("out of room")
             .addInfo("object", toString()));
-    //FIXME: where to move outher object
+    //NOTE: hack, moved out
     m_loc = V2(-1000, -1000);
     m_out = true;
 }
