@@ -9,6 +9,8 @@ class GameState;
  * Handle input for demo.
  */
 class DemoInput : public GameInput {
+    protected:
+        virtual void enableSubtitles() { toggleSubtitles(); }
     public:
         DemoInput(GameState *demo);
 

@@ -30,6 +30,8 @@ StateInput::StateInput(GameState *state)
     m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE), key_quit);
     m_keymap->registerKey(KeyStroke(SDLK_BACKQUOTE, KMOD_NONE), key_console);
     m_keymap->registerKey(KeyStroke(SDLK_F10, KMOD_NONE), key_menu);
+    m_keymap->registerKey(KeyStroke(SDLK_F6, KMOD_NONE),
+            KeyDesc(KEY_SUBTITLES, "enable subtitles"));
 }
 //-----------------------------------------------------------------
 StateInput::~StateInput()
@@ -50,6 +52,8 @@ StateInput::keyEvent(const KeyStroke &stroke)
             break;
         case KEY_MENU:
             enableMenu();
+        case KEY_SUBTITLES:
+            enableSubtitles();
         case -1:
             specStroke(stroke);
             break;

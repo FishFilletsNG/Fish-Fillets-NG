@@ -119,6 +119,8 @@ Application::prepareOptions(int argc, char *argv[])
             "2‐letter code (en, cs, fr, de)");
     params.addParam("speech", OptionParams::TYPE_STRING,
             "Lang for speech");
+    params.addParam("subtitles", OptionParams::TYPE_BOOLEAN,
+            "Enable subtitles");
     params.addParam("fullscreen", OptionParams::TYPE_BOOLEAN,
             "Turn fullscreen on/off");
     params.addParam("show_steps", OptionParams::TYPE_BOOLEAN,

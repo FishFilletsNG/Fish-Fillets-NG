@@ -14,12 +14,14 @@ class StateInput : public InputHandler {
         static const int KEY_QUIT = 1;
         static const int KEY_CONSOLE = 2;
         static const int KEY_MENU = 3;
+        static const int KEY_SUBTITLES = 4;
         Keymap *m_keymap;
         GameState *m_state;
     protected:
         virtual void quitState();
         virtual void enableConsole();
         virtual void enableMenu() {};
+        virtual void enableSubtitles() {};
         virtual void specStroke(const KeyStroke &/*stroke*/) {}
         virtual void specKey(int keyIndex);
     public:

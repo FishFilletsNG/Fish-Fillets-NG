@@ -11,7 +11,6 @@
 #include "Level.h"
 #include "Keymap.h"
 
-#include "Log.h"
 #include "KeyStroke.h"
 #include "OptionAgent.h"
 #include "MenuOptions.h"
@@ -85,4 +84,3 @@ LevelInput::toggleShowSteps()
 
     option->setPersistent("show_steps", !show);
 }
-

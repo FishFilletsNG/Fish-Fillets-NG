@@ -55,7 +55,6 @@ Title::~Title()
 //-----------------------------------------------------------------
 /**
  * Draw model.
- * Decrease m_mintime.
  */
     void
 Title::drawOn(SDL_Surface *screen)
@@ -66,12 +65,16 @@ Title::drawOn(SDL_Surface *screen)
     rect.y = m_y;
 
     SDL_BlitSurface(m_surface, NULL, screen, &rect);
-    m_mintime--;
 }
 //-----------------------------------------------------------------
+/**
+ * Shift up until title is on limit.
+ * Decrease m_mintime.
+ */
     void
 Title::shiftUp(int rate)
 {
+    m_mintime--;
     m_y -= rate;
     if (m_y < m_finalY) {
         m_y = m_finalY;

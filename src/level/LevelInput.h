@@ -21,6 +21,7 @@ class LevelInput : public GameInput {
         Level *getLevel();
         void toggleShowSteps();
     protected:
+        virtual void enableSubtitles() { toggleSubtitles(); }
         virtual void specKey(int keyIndex);
         virtual void specStroke(const KeyStroke &stroke);
     public:

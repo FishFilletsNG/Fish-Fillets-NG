@@ -215,8 +215,10 @@ SubTitleAgent::removeAll()
 void
 SubTitleAgent::drawOn(SDL_Surface *screen)
 {
-    t_titles::iterator end = m_titles.end();
-    for (t_titles::iterator i = m_titles.begin(); i != end; ++i) {
-        (*i)->drawOn(screen);
+    if (OptionAgent::agent()->getAsInt("subtitles", 1)) {
+        t_titles::iterator end = m_titles.end();
+        for (t_titles::iterator i = m_titles.begin(); i != end; ++i) {
+            (*i)->drawOn(screen);
+        }
     }
 }

@@ -336,7 +336,6 @@ OptionAgent::addWatcher(const std::string &name, BaseMsg *msg)
 //-----------------------------------------------------------------
 /**
  * Get help text.
- * NOTE: game specific.
  */
 std::string
 OptionAgent::getHelpInfo(const OptionParams &params) const
