@@ -15,6 +15,7 @@
 #include "InputAgent.h"
 #include "OptionAgent.h"
 #include "MessagerAgent.h"
+#include "SoundAgent.h"
 #include "KeyStroke.h"
 #include "KeyBinder.h"
 #include "SimpleMsg.h"
@@ -132,7 +133,7 @@ GameAgent::newLevel()
     if (NULL == m_level) {
         m_level = m_world->createSelected();
         if (m_level) {
-            SoundAgent::agent()->stopMusic()
+            SoundAgent::agent()->stopMusic();
             m_level->action_restart();
         }
     }
