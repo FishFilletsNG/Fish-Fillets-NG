@@ -43,18 +43,26 @@ WavyPicture::drawOn(SDL_Surface *screen)
     SDL_Rect line_rect;
     line_rect.w = m_surface->w;
     line_rect.h = 1;
+    SDL_Rect pad;
+    pad.h = 1;
 
     double shift = TimerAgent::agent()->getCycles() * m_speed;
 
     for (int py = 0; py < m_surface->h; ++py) {
+        double wave = m_amp * sin(py / m_periode + shift);
+        Sint16 shiftX = static_cast<int>(0.5 + wave);
+        line_rect.x = shiftX;
+        line_rect.y = py;
         dest_rect.x = m_loc.getX();
         dest_rect.y = m_loc.getY() + py;
-
-        double wave = m_amp * sin(py / m_periode + shift);
-        line_rect.x = static_cast<int>(0.5 + wave);
-        line_rect.y = py;
-
         SDL_BlitSurface(m_surface, &line_rect, screen, &dest_rect);
+
+        pad.x = (shiftX < 0) ? 0 : m_surface->w - shiftX;
+        pad.y = py;
+        pad.w = abs(shiftX);
+        dest_rect.x = m_loc.getX() + pad.x;
+        dest_rect.y = m_loc.getY() + py;
+        SDL_BlitSurface(m_surface, &pad, screen, &dest_rect);
     }
 }
 
