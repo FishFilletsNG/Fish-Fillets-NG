@@ -23,16 +23,16 @@ getSelect(lua_State *L)
 }
 //-----------------------------------------------------------------
 /**
- * void select_addFlag(lang, picture)
+ * void select_addFlag(value, picture)
  */
     int
 script_select_addFlag(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    const char *lang = luaL_checkstring(L, 1);
+    const char *value = luaL_checkstring(L, 1);
     const char *picture = luaL_checkstring(L, 2);
 
-    getSelect(L)->addFlag(lang, Path::dataReadPath(picture));
+    getSelect(L)->addFlag(value, Path::dataReadPath(picture));
     END_NOEXCEPTION;
     return 0;
 }
@@ -41,8 +41,9 @@ script_select_addFlag(lua_State *L) throw()
 /**
  * Execute script which will add flags.
  */
-SelectLang::SelectLang(const Path &datafile)
+SelectLang::SelectLang(const std::string &option, const Path &datafile)
 {
+    m_option = option;
     m_activeRow = new HBox();
 
     m_script->registerFunc("select_addFlag", script_select_addFlag);
@@ -55,9 +56,9 @@ SelectLang::SelectLang(const Path &datafile)
  * Stack flags in table.
  */
     void
-SelectLang::addFlag(const std::string &lang, const Path &picture)
+SelectLang::addFlag(const std::string &value, const Path &picture)
 {
-    m_activeRow->addWidget(new RadioBox("lang", lang, picture));
+    m_activeRow->addWidget(new RadioBox(m_option, value, picture));
     if (m_activeRow->getW() > MAX_WIDTH) {
         addWidget(m_activeRow);
         m_activeRow = new HBox();

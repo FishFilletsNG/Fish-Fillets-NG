@@ -24,6 +24,7 @@ class Dialog: public NoCopy {
                 const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
+        bool isSpeechless() const { return m_soundfile.empty(); }
         int talk(int volume, int loops=0) const;
         virtual void runSubtitle(const StringTool::t_args &args) const;
         std::string getLang() const { return m_lang; }

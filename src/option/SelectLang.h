@@ -12,11 +12,12 @@ class Path;
 class SelectLang : public VBox, public Scripter {
     private:
         static const int MAX_WIDTH = 260;
+        std::string m_option;
         WiBox *m_activeRow;
     public:
-        SelectLang(const Path &datafile);
+        SelectLang(const std::string &option, const Path &datafile);
 
-        void addFlag(const std::string &lang, const Path &picture);
+        void addFlag(const std::string &value, const Path &picture);
 };
 
 #endif

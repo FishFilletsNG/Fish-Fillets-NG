@@ -74,11 +74,9 @@ ResDialogPack::findDialog(const std::string &name,
  * @return dialog or NULL
  */
     const Dialog *
-ResDialogPack::findDialogHard(const std::string &name,
-        const std::string &select)
+ResDialogPack::findDialogHard(const std::string &name)
 {
-    std::string lang = OptionAgent::agent()->getParam(select,
-            OptionAgent::agent()->getParam("lang"));
+    std::string lang = OptionAgent::agent()->getParam("lang");
     const Dialog *dialog = findDialog(name, lang);
     if (NULL == dialog) {
         dialog = findDialog(name, Dialog::DEFAULT_LANG);
@@ -86,6 +84,29 @@ ResDialogPack::findDialogHard(const std::string &name,
             LOG_WARNING(ExInfo("cannot find dialog")
                     .addInfo("name", name)
                     .addInfo("lang", lang)
+                    .addInfo("pack", toString()));
+        }
+    }
+
+    return dialog;
+}
+//-----------------------------------------------------------------
+/**
+ * Try find dialog for this or default lang.
+ * @return dialog or NULL
+ */
+    const Dialog *
+ResDialogPack::findDialogSpeech(const std::string &name)
+{
+    std::string speech = OptionAgent::agent()->getParam("speech",
+            OptionAgent::agent()->getParam("lang"));
+    const Dialog *dialog = findDialog(name, speech);
+    if (NULL == dialog || dialog->isSpeechless()) {
+        dialog = findDialog(name, Dialog::DEFAULT_LANG);
+        if (NULL == dialog) {
+            LOG_WARNING(ExInfo("cannot find speech")
+                    .addInfo("name", name)
+                    .addInfo("speech", speech)
                     .addInfo("pack", toString()));
         }
     }

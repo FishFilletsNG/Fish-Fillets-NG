@@ -39,7 +39,9 @@ MenuOptions::MenuOptions()
     vbox->addWidget(musicBox);
     vbox->addWidget(new WiSpace(0, 10));
     vbox->addWidget(createLangPanel(labels));
-    vbox->addWidget(new WiSpace(0, 10));
+    vbox->addWidget(new WiSpace(0, 5));
+    vbox->addWidget(createSpeechPanel(labels));
+    vbox->addWidget(new WiSpace(0, 5));
     vbox->addWidget(createSubtitlesPanel(labels));
 
     IWidget *backButton = createBackButton(labels);
@@ -125,9 +127,19 @@ MenuOptions::createMusicPanel(const Labels &labels)
 IWidget *
 MenuOptions::createLangPanel(const Labels &labels)
 {
-    IWidget *panel = new SelectLang(
+    IWidget *panel = new SelectLang("lang", 
             Path::dataReadPath("script/select_lang.lua"));
     panel->setTip(labels.getLabel("menu_lang"));
+    return panel;
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createSpeechPanel(const Labels &labels)
+{
+    OptionAgent::agent()->setDefault("speech", "cs");
+    IWidget *panel = new SelectLang("speech",
+            Path::dataReadPath("script/select_speech.lua"));
+    panel->setTip(labels.getLabel("menu_speech"));
     return panel;
 }
 //-----------------------------------------------------------------

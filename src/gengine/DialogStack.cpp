@@ -68,20 +68,22 @@ DialogStack::actorTalk(int actor, const std::string &name,
     if (subtitle) {
         subtitle->runSubtitle(args);
 
-        const Dialog *dialog = m_dialogs->findDialogHard(args[0], "speech");
-        PlannedDialog *talker = new PlannedDialog(actor, dialog,
-            subtitle->getMinTime());
-        talker->talk(volume, loops);
+        const Dialog *dialog = m_dialogs->findDialogSpeech(args[0]);
+        if (dialog) {
+            PlannedDialog *talker = new PlannedDialog(actor, dialog,
+                subtitle->getMinTime());
+            talker->talk(volume, loops);
 
-        if (loops == -1) {
-            m_cycling.push_back(talker);
-        }
-        else {
-            m_running.push_back(talker);
-        }
+            if (loops == -1) {
+                m_cycling.push_back(talker);
+            }
+            else {
+                m_running.push_back(talker);
+            }
 
-        if (dialogFlag) {
-            m_activeDialog = talker;
+            if (dialogFlag) {
+                m_activeDialog = talker;
+            }
         }
     }
 }

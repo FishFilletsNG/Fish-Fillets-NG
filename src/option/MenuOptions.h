@@ -21,6 +21,7 @@ class MenuOptions : public GameState, public Drawable {
         IWidget *createSoundPanel(const Labels &labels);
         IWidget *createMusicPanel(const Labels &labels);
         IWidget *createLangPanel(const Labels &labels);
+        IWidget *createSpeechPanel(const Labels &labels);
         IWidget *createSubtitlesPanel(const Labels &labels);
         IWidget *createBackButton(const Labels &labels);
         WiStatusBar *createStatusBar(int width);
