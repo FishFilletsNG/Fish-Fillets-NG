@@ -16,6 +16,7 @@
 #include "Path.h"
 #include "Anim.h"
 #include "Cube.h"
+#include "Rules.h"
 #include "Dialog.h"
 #include "DialogAgent.h"
 
@@ -38,6 +39,24 @@ catch (...) { \
         luaL_error(L, "unknown exception"); \
 }
 
+//-----------------------------------------------------------------
+/**
+ * void path_include(filename)
+ *
+ * Do file in usedir or systemdir.
+ */
+    int
+script_path_include(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *filename = luaL_checkstring(L, 1);
+
+    GameAgent::agent()->scriptInclude(Path::dataReadPath(filename));
+    END_NOEXCEPTION;
+
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
 //-----------------------------------------------------------------
 /**
  * void game_createRoom(width, height, picture)
@@ -165,10 +184,12 @@ script_model_setAnim(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_setSpecialAnim(model_index, anim_name, phase)
+ * void model_useSpecialAnim(model_index, anim_name, phase)
+ *
+ * Set special anim for one phase.
  */
     int
-script_model_setSpecialAnim(lua_State *L) throw()
+script_model_useSpecialAnim(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
@@ -176,7 +197,7 @@ script_model_setSpecialAnim(lua_State *L) throw()
     int phase = luaL_checkint(L, 3);
 
     Cube *model = GameAgent::agent()->getModel(model_index);
-    model->anim()->setSpecialAnim(anim_name, phase);
+    model->anim()->useSpecialAnim(anim_name, phase);
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
@@ -211,7 +232,7 @@ script_model_getAction(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
     Cube *model = GameAgent::agent()->getModel(model_index);
-    std::string action = model->getAction();
+    std::string action = model->rules()->getAction();
 
     lua_pushlstring(L, action.c_str(), action.size());
     END_NOEXCEPTION;

@@ -10,6 +10,7 @@
 
 #include "Anim.h"
 #include "Cube.h"
+#include "Rules.h"
 #include "GameAgent.h"
 
 //-----------------------------------------------------------------
@@ -45,7 +46,7 @@ View::~View()
  * Prepare new anim.
  */
     void
-View::prepareRound()
+View::noteNewRound()
 {
     m_animShift = 0;
     computeShiftSize();
@@ -61,25 +62,22 @@ View::draw()
     if (m_model) {
         V2 loc = m_model->getLocation();
 
-        int shiftX = 0;
-        int shiftY = 0;
-        Cube::eDir dir = m_model->getDir();
-        if (dir != Cube::DIR_NO) {
+        V2 shift(0, 0);
+        Rules::eDir dir = m_model->const_rules()->getDir();
+        if (dir != Rules::DIR_NO) {
             ++m_animShift;
 
-            m_model->dir2xy(dir, &shiftX, &shiftY);
-            shiftX *= m_animShift * m_shiftSize;
-            shiftY *= m_animShift * m_shiftSize;
+            shift = m_model->const_rules()->dir2xy(dir);
+            shift = shift.scale(m_animShift * m_shiftSize);
         }
 
-        int x = loc.getX() * SCALE + shiftX;
-        int y = loc.getY() * SCALE + shiftY;
+        V2 shift_loc = shift.composition(loc.scale(SCALE));
 
         Anim::eSide side = Anim::SIDE_LEFT;
-        if (false == m_model->lookLeft()) {
+        if (false == m_model->isLookLeft()) {
             side = Anim::SIDE_RIGHT;
         }
-        m_anim->drawAt(m_screen, x, y, side);
+        m_anim->drawAt(m_screen, shift_loc.getX(), shift_loc.getY(), side);
     }
 }
 //-----------------------------------------------------------------

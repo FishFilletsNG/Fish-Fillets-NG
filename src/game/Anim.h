@@ -35,7 +35,7 @@ class Anim : public NoCopy {
                 const Path &left_picture, const Path &right_picture);
         void runAnim(const std::string &name, int start_phase=0);
         void setAnim(const std::string &name, int phase);
-        void setSpecialAnim(const std::string &name, int phase);
+        void useSpecialAnim(const std::string &name, int phase);
 };
 
 #endif

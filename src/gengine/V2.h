@@ -7,6 +7,7 @@
 
 /**
  * Vector x,y.
+ * Constant object.
  */
 class V2 {
     private:
@@ -21,6 +22,10 @@ class V2 {
         V2 composition(const V2 &other) const
         {
             return V2(m_x + other.m_x, m_y + other.m_y);
+        }
+        V2 scale(int rate) const
+        {
+            return V2(m_x * rate, m_y * rate);
         }
 
         std::string toString() const

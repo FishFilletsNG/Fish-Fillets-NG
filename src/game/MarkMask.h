@@ -4,6 +4,7 @@
 class Field;
 
 #include "NoCopy.h"
+#include "Rules.h"
 #include "Cube.h"
 
 class MarkMask : public NoCopy {
@@ -15,7 +16,7 @@ class MarkMask : public NoCopy {
     public:
         MarkMask(Cube *model, Field *field);
 
-        Cube::t_models getResist(Cube::eDir dir) const;
+        Cube::t_models getResist(Rules::eDir dir) const;
         void mask();
         void unmask();
 

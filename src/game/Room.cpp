@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "Picture.h"
 #include "Field.h"
+#include "Rules.h"
 #include "LogicException.h"
 
 //-----------------------------------------------------------------
@@ -41,7 +42,7 @@ Room::~Room()
     int
 Room::addModel(Cube *model)
 {
-    model->takeField(m_field);
+    model->rules()->takeField(m_field);
     m_models.push_back(model);
     return m_models.size() - 1;
 }
@@ -94,13 +95,13 @@ Room::prepareRound()
     //NOTE: we must call this functions sequential for all objects
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->occupyNewPos();
+        (*i)->rules()->occupyNewPos();
     }
     for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
-        (*j)->checkDead();
+        (*j)->rules()->checkDead();
     }
     for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
-        (*k)->prepareRound();
+        (*k)->rules()->prepareRound();
     }
 }
 //-----------------------------------------------------------------
@@ -114,7 +115,7 @@ Room::falldown()
     bool result = false;
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        result |= (*i)->fall();
+        result |= (*i)->rules()->actionFall();
     }
 
     return result;

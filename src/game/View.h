@@ -26,7 +26,7 @@ class View : public IDrawer, public NoCopy {
         virtual ~View();
         void takeModel(const Cube *model) { m_model = model; }
 
-        void prepareRound();
+        void noteNewRound();
         void draw();
 
         Anim *anim() { return m_anim; }

@@ -115,6 +115,7 @@ GameAgent::newLevel()
     void
 GameAgent::registerGameFuncs()
 {
+    m_script->registerFunc("path_include", script_path_include);
     m_script->registerFunc("game_createRoom", script_game_createRoom);
     m_script->registerFunc("game_addModel", script_game_addModel);
 
@@ -122,7 +123,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
     m_script->registerFunc("model_runAnim", script_model_runAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
-    m_script->registerFunc("model_setSpecialAnim", script_model_setSpecialAnim);
+    m_script->registerFunc("model_useSpecialAnim", script_model_useSpecialAnim);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
     m_script->registerFunc("model_getAction", script_model_getAction);
     m_script->registerFunc("model_isAlive", script_model_isAlive);
@@ -142,6 +143,16 @@ GameAgent::checkRoom()
     if (NULL == m_room) {
         throw LogicException(ExInfo("room is not ready"));
     }
+}
+
+//-----------------------------------------------------------------
+/**
+ * Include this script file.
+ */
+    void
+GameAgent::scriptInclude(const Path &filename)
+{
+    m_script->doFile(filename);
 }
 //-----------------------------------------------------------------
 /**

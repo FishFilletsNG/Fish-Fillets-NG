@@ -36,6 +36,7 @@ class GameAgent : public BaseAgent {
         virtual void own_update();
         virtual void own_shutdown();
     public:
+        void scriptInclude(const Path &filename);
         void createRoom(int w, int h, const Path &picture);
         int addModel(const std::string &kind,
                 const V2 &loc, const Path &picture,

@@ -11,6 +11,7 @@
 #include "InputAgent.h"
 #include "GameAgent.h"
 #include "Cube.h"
+#include "Rules.h"
 
 //-----------------------------------------------------------------
 KeyDriver::KeyDriver(const KeyControl &control)
@@ -32,28 +33,28 @@ KeyDriver::drive(Cube *model)
     bool result = false;
     if (model->isAlive()) {
         if (false == result && m_keys[m_control.getLeft()]) {
-            if (model->lookLeft()) {
-                result = model->moveDir(Cube::DIR_LEFT);
+            if (model->isLookLeft()) {
+                result = model->rules()->actionMoveDir(Rules::DIR_LEFT);
             }
             else {
-                model->turnSide();
+                model->rules()->actionTurnSide();
                 result = true;
             }
         }
         if (false == result && m_keys[m_control.getRight()]) {
-            if (false == model->lookLeft()) {
-                result = model->moveDir(Cube::DIR_RIGHT);
+            if (false == model->isLookLeft()) {
+                result = model->rules()->actionMoveDir(Rules::DIR_RIGHT);
             }
             else {
-                model->turnSide();
+                model->rules()->actionTurnSide();
                 result = true;
             }
         }
         if (false == result && m_keys[m_control.getUp()]) {
-            result = model->moveDir(Cube::DIR_UP);
+            result = model->rules()->actionMoveDir(Rules::DIR_UP);
         }
         if (false == result && m_keys[m_control.getDown()]) {
-            result = model->moveDir(Cube::DIR_DOWN);
+            result = model->rules()->actionMoveDir(Rules::DIR_DOWN);
         }
 
         //TODO: draw nice animation

@@ -28,16 +28,11 @@ MarkMask::MarkMask(Cube *model, Field *field)
  * @return unique pointers, not NULL
  */
 Cube::t_models
-MarkMask::getResist(Cube::eDir dir) const
+MarkMask::getResist(Rules::eDir dir) const
 {
-    int shiftX;
-    int shiftY;
-    m_model->dir2xy(dir, &shiftX, &shiftY);
-
     Cube::t_models models;
-
-    V2 loc = m_model->getLocation();
-    V2 shift_loc(shiftX + loc.getX(), shiftY + loc.getY());
+    V2 shift = m_model->const_rules()->dir2xy(dir);
+    V2 shift_loc = shift.composition(m_model->getLocation());
 
     const Shape *shape = m_model->getShape();
     Shape::const_iterator end = shape->end();

@@ -60,6 +60,7 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
         surface =
             m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
         SDL_BlitSurface(surface, NULL, screen, &rect);
+        m_specialAnimName = "";
     }
 }
 //-----------------------------------------------------------------
@@ -107,12 +108,14 @@ Anim::setAnim(const std::string &name, int phase)
 }
 //-----------------------------------------------------------------
 /**
- * Set special efect in second layer.
+ * Use special efect for one phase.
+ * Efect will be blited in second layer.
+ *
  * @param name anim name, empty is no anim
  * @param phase anim phase
  */
     void
-Anim::setSpecialAnim(const std::string &name, int phase)
+Anim::useSpecialAnim(const std::string &name, int phase)
 {
     m_specialAnimName = name;
     m_specialAnimPhase = phase;
