@@ -90,6 +90,7 @@ Font::renderText(const std::string &text, const SDL_Color &color)
  * @param text utf-8 encoded text
  * @param color text color
  * @param outlineWidth outline width
+ * @return new rendered surface
  */
 SDL_Surface *
 Font::renderTextOutlined(const std::string &text,

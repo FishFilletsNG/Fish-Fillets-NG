@@ -37,6 +37,7 @@ StepDecor::drawOnScreen(const View * /*view*/, SDL_Surface *screen)
         rect.x = screen->w - text_width - 10;
         rect.y = 10;
         SDL_BlitSurface(text_surface, NULL, screen, &rect);
+        SDL_FreeSurface(text_surface);
     }
 }
 

@@ -43,7 +43,7 @@ BaseAgent::update()
     void
 BaseAgent::shutdown()
 {
-    LOG_INFO(ExInfo("shutdown").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("shutdown").addInfo("name", getName()));
     own_shutdown();
     m_initialized = false;
 }
