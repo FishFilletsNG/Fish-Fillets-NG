@@ -1,6 +1,6 @@
 
 INCLUDES = $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
-CPPFLAGS = -DSYSTEM_DATA_DIR=\"$(datadir)/games/fillets-ng\" @CPPFLAGS@
+CPPFLAGS = -DSYSTEM_DATA_DIR=\"$(datadir)/games/@PACKAGE@\" @CPPFLAGS@
 
 
 noinst_LIBRARIES = libgengine.a
