@@ -146,11 +146,6 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     int
 VideoAgent::getVideoFlags()
 {
-    const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo();
-    if (!videoInfo) {
-        throw SDLException(ExInfo("GetVideoInfo"));
-    }
-
     int videoFlags  = 0;
     videoFlags |= SDL_HWPALETTE;
     videoFlags |= SDL_ANYFORMAT;
