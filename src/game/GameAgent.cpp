@@ -202,22 +202,28 @@ GameAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("restart")) {
         if (m_level) {
+            m_level->interruptPlan();
             m_level->action_restart();
-        }
-    }
-    else if (msg->equalsName("save")) {
-        if (m_level) {
-            m_level->action_save();
         }
     }
     else if (msg->equalsName("load")) {
         if (m_level) {
+            m_level->interruptPlan();
             m_level->action_load();
+        }
+    }
+    else if (msg->equalsName("save")) {
+        if (m_level) {
+            if (false == m_level->isPlanning()) {
+                m_level->action_save();
+            }
         }
     }
     else if (msg->equalsName("switch")) {
         if (m_level) {
-            m_level->switchFish();
+            if (false == m_level->isPlanning()) {
+                m_level->switchFish();
+            }
         }
     }
     else {

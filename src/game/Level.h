@@ -52,6 +52,8 @@ class Level : public NoCopy {
         void loadGame(const std::string &moves);
 
         void planAction(int funcRef);
+        void interruptPlan();
+        bool isPlanning() const;
         bool action_restart();
         bool action_move(char symbol);
         bool action_save();

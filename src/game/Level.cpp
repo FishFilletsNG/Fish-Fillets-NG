@@ -54,6 +54,8 @@ Level::~Level()
     void
 Level::cleanRoom()
 {
+    m_loadedMoves = "";
+    m_loadSpeed = 1;
     if (m_room) {
         delete m_room;
         m_room = NULL;
@@ -277,6 +279,21 @@ Level::planAction(int funcRef)
     m_plan->planCommand(new ScriptCmd(m_script, funcRef));
 }
 //-----------------------------------------------------------------
+void
+Level::interruptPlan()
+{
+    m_plan->removeAll();
+}
+//-----------------------------------------------------------------
+/**
+ * Return true when there is a planned command in queue.
+ */
+bool
+Level::isPlanning() const
+{
+    return !m_plan->empty();
+}
+//-----------------------------------------------------------------
 /**
  * (re)start room.
  * @return true
@@ -366,6 +383,7 @@ Level::registerGameFuncs()
     m_script->registerFunc("game_load", script_game_load);
 
     m_script->registerFunc("game_planAction", script_game_planAction);
+    m_script->registerFunc("game_isPlanning", script_game_isPlanning);
     m_script->registerFunc("game_action_move", script_game_action_move);
     m_script->registerFunc("game_action_save", script_game_action_save);
     m_script->registerFunc("game_action_load", script_game_action_load);

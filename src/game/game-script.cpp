@@ -193,6 +193,20 @@ script_game_planAction(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool game_isPlanning()
+ */
+    int
+script_game_isPlanning(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    bool planning = GameAgent::agent()->level()->isPlanning();
+    lua_pushboolean(L, planning);
+    END_NOEXCEPTION;
+    //NOTE: return planning
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * bool game_action_move(symbol)
  */
     int
