@@ -24,7 +24,7 @@ class LevelStatus {
         ScriptState *createScript();
         std::string getSolutionFilename();
     public:
-        LevelStatus() { m_complete = false; m_wasRunning = false; }
+        LevelStatus() { m_complete = false; m_wasRunning = true; }
         void prepareRun(const std::string codename,
                 const std::string levelName);
         std::string getLevelName() const { return m_levelName; }
