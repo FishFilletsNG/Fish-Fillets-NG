@@ -14,8 +14,8 @@ class EffectZx : public ViewEffect {
             ZX3 = 3,
             ZX4 = 4
         };
-        static const double STRIPE_STANDARD = 38.5;
-        static const double STRIPE_NARROW = 3.4;
+        static const double STRIPE_STANDARD;
+        static const double STRIPE_NARROW;
         int m_zx;
         int m_phase;
         double m_countHeight;

@@ -22,6 +22,8 @@ class OptionParams : public NoCopy {
         struct Param {
             eType type;
             std::string help;
+            Param(eType aType, const std::string &aHelp)
+                : type(aType), help(aHelp) {}
         };
     private:
         typedef std::map<std::string,Param> t_params;

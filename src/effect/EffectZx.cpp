@@ -13,6 +13,8 @@
 #include "PixelIterator.h"
 #include "Random.h"
 
+const double EffectZx::STRIPE_STANDARD = 38.5;
+const double EffectZx::STRIPE_NARROW = 3.4;
 //-----------------------------------------------------------------
 /**
  * Read colors from all four corners.
