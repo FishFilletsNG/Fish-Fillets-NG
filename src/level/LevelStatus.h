@@ -15,13 +15,19 @@ class LevelStatus : public Scripter {
         std::string m_codename;
         std::string m_poster;
         std::string m_savedMoves;
+        int m_bestMoves;
+        std::string m_bestAuthor;
     private:
         std::string getSolutionFilename();
     public:
         LevelStatus();
         void prepareRun(const std::string &codename,
-                const std::string &poster);
+                const std::string &poster,
+                int bestMoves, const std::string &bestAuthor);
         GameState *createPoster() const;
+        int getBestMoves() const { return m_bestMoves; }
+        std::string getBestAuthor() const { return m_bestAuthor; }
+        bool isBetter();
 
         void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }

@@ -16,6 +16,7 @@
 #include "ResImagePack.h"
 #include "StateManager.h"
 #include "NodeDrawer.h"
+#include "SolverDrawer.h"
 #include "Level.h"
 #include "minmax.h"
 
@@ -61,6 +62,12 @@ Pedometer::prepareBg()
     NodeDrawer drawer;
     drawer.setScreen(bgSurface);
     drawer.drawSelected(m_level->getLevelName());
+
+    SolverDrawer solver(m_status);
+    solver.setShift(V2((bgSurface->w - solver.getW()) / 2,
+                bgSurface->h - 150));
+    solver.drawOn(bgSurface);
+
     m_bg = new Picture(bgSurface, V2(0, 0));
 }
 //-----------------------------------------------------------------

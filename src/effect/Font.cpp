@@ -78,7 +78,7 @@ Font::calcTextWidth(const std::string &text)
  * @throws SDLException when converting fails
  */
 SDL_Surface *
-Font::renderText(const std::string &text, const SDL_Color &color)
+Font::renderText(const std::string &text, const SDL_Color &color) const
 {
     SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, text.c_str(),
             color, m_bg);
@@ -110,7 +110,7 @@ Font::renderText(const std::string &text, const SDL_Color &color)
  */
 SDL_Surface *
 Font::renderTextOutlined(const std::string &text,
-                const SDL_Color &color, int outlineWidth)
+                const SDL_Color &color, int outlineWidth) const
 {
     SDL_Surface *surface = renderText(text, color);
     SDL_Color black = {0, 0, 0, 255};

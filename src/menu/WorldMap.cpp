@@ -198,7 +198,9 @@ WorldMap::runSelected()
     Level *level = createSelected();
     if (level && m_selected) {
         m_levelStatus->prepareRun(m_selected->getCodename(),
-                m_selected->getPoster());
+                m_selected->getPoster(),
+                m_selected->getBestMoves(),
+                m_selected->getBestAuthor());
         level->fillStatus(m_levelStatus);
 
         if (m_selected->getState() == LevelNode::STATE_SOLVED) {

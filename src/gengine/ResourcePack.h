@@ -26,7 +26,13 @@ class ResourcePack : public INamed {
     public:
     //NOTE: we cannot call virtual functions from desctructor,
     // call removeAll before delete
-    virtual ~ResourcePack() {}
+    virtual ~ResourcePack()
+    {
+        if (!m_reses.empty()) {
+            LOG_WARNING(ExInfo("resources are not released")
+                .addInfo("pack", toString()));
+        }
+    }
     //-----------------------------------------------------------------
     /**
      * Free all resources.

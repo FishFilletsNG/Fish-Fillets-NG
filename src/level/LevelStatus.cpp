@@ -44,6 +44,7 @@ script_status_readMoves(lua_State *L) throw()
 //-----------------------------------------------------------------
 LevelStatus::LevelStatus()
 {
+    m_bestMoves = -1;
     m_complete = false;
     m_wasRunning = false;
     m_script->registerFunc("status_readMoves", script_status_readMoves);
@@ -56,12 +57,15 @@ LevelStatus::readMoves(const std::string &savedMoves)
 }
 //-----------------------------------------------------------------
 void
-LevelStatus::prepareRun(const std::string &codename, const std::string &poster)
+LevelStatus::prepareRun(const std::string &codename, const std::string &poster,
+        int bestMoves, const std::string &bestAuthor)
 {
     m_complete = false;
     m_wasRunning = false;
     m_codename = codename;
     m_poster = poster;
+    m_bestMoves = bestMoves;
+    m_bestAuthor = bestAuthor;
 }
 //-----------------------------------------------------------------
 std::string
@@ -88,6 +92,7 @@ LevelStatus::readSolvedMoves()
     Path oldSolution = Path::dataReadPath(getSolutionFilename());
     if (oldSolution.exists()) {
         try {
+            scriptDo("saved_moves=nil");
             scriptInclude(oldSolution);
             scriptDo("status_readMoves(saved_moves)");
         }
@@ -136,5 +141,15 @@ LevelStatus::createPoster() const
         result = new DemoMode(Path::dataReadPath(m_poster));
     }
     return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true when this player is better than previous best solver.
+ */
+bool
+LevelStatus::isBetter()
+{
+    return m_bestMoves < 0 ||
+        static_cast<int>(readSolvedMoves().size()) < m_bestMoves;
 }
 

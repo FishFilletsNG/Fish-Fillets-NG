@@ -6,7 +6,7 @@ class BaseMsg;
 #include "WiContainer.h"
 
 /**
- * Botton widget.
+ * Button widget.
  */
 class WiButton : public WiContainer {
     private:

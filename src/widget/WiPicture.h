@@ -11,6 +11,8 @@ class Path;
 class WiPicture : public IWidget {
     protected:
         SDL_Surface *m_surface;
+    protected:
+        WiPicture(SDL_Surface *new_surface) { m_surface = new_surface; }
     public:
         WiPicture(const Path &picture);
         virtual ~WiPicture();

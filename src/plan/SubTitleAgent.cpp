@@ -69,7 +69,7 @@ void
 SubTitleAgent::newSubtitle(const std::string &original,
         const std::string &fontname)
 {
-    Color *color = m_colors->getRes(fontname);
+    const Color *color = m_colors->getRes(fontname);
 
     std::string subtitle = original;
     while (!subtitle.empty()) {
@@ -83,7 +83,7 @@ SubTitleAgent::newSubtitle(const std::string &original,
  */
 std::string
 SubTitleAgent::splitAndCreate(const std::string &original,
-        Color *color)
+        const Color *color)
 {
     std::string subtitle = original;
     int screen_width = OptionAgent::agent()->getAsInt("screen_width");
@@ -141,7 +141,7 @@ SubTitleAgent::trimRest(std::string &buffer)
 //-----------------------------------------------------------------
     void
 SubTitleAgent::newShortSubtitle(const std::string &subtitle,
-        Color *color)
+        const Color *color)
 {
     int startY = lowestY();
     int finalY = TITLE_BASE + TITLE_ROW;

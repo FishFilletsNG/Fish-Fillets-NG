@@ -26,9 +26,9 @@ class Font : public NoCopy {
         int getHeight() { return TTF_FontHeight(m_ttfont); }
         int calcTextWidth(const std::string &text);
         SDL_Surface *renderText(const std::string &text,
-                const SDL_Color &color);
+                const SDL_Color &color) const;
         SDL_Surface *renderTextOutlined(const std::string &text,
-                const SDL_Color &color, int outlineWidth=1);
+                const SDL_Color &color, int outlineWidth=1) const;
 };
 
 #endif

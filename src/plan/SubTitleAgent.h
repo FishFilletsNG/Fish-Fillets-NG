@@ -31,9 +31,9 @@ class SubTitleAgent : public BaseAgent, public Drawable {
     ResColorPack *m_colors;
     int m_limitY;
     private:
-    std::string splitAndCreate(const std::string &subtitle, Color *color);
+    std::string splitAndCreate(const std::string &subtitle, const Color *color);
     void trimRest(std::string &buffer);
-    void newShortSubtitle(const std::string &subtitle, Color *color);
+    void newShortSubtitle(const std::string &subtitle, const Color *color);
 
     void shiftTitlesUp(int rate);
     void shiftFinalsUp(int rate);
