@@ -27,7 +27,7 @@ ResSoundAgent::loadSound(const Path &file)
 {
     Mix_Chunk *chunk = Mix_LoadWAV(file.getNative().c_str());
     if (NULL == chunk) {
-        LOG_WARNING(ExInfo("cannot load wav")
+        LOG_WARNING(ExInfo("cannot load sound")
             .addInfo("path", file.getNative())
             .addInfo("MixError", Mix_GetError()));
     }

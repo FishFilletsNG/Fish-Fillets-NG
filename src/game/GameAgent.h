@@ -24,7 +24,10 @@ class GameAgent : public BaseAgent {
         int m_lockPhases;
         int m_restartCounter;
         std::string m_codename;
+        std::string m_loadedMoves;
+        int m_loadSpeed;
     private:
+        bool updateRoom();
         void newLevel(bool restart=false);
         void clearRoom();
         std::string getNextLevel(bool restart=false);
@@ -37,6 +40,7 @@ class GameAgent : public BaseAgent {
         void keyBinding();
         void saveLevel();
         void loadLevel();
+        bool loadMoves();
     protected:
         virtual void own_init();
         virtual void own_update();
@@ -54,6 +58,7 @@ class GameAgent : public BaseAgent {
         int getRestartCounter() const { return m_restartCounter; }
 
         void saveGame(const std::string &models);
+        void loadGame(const std::string &moves);
 
         virtual void receiveSimple(const SimpleMsg *msg);
 };

@@ -11,6 +11,8 @@ class Unit;
 #include "Field.h"
 #include "Cube.h"
 
+#include <string>
+
 /**
  * Room with level.
  */
@@ -40,6 +42,8 @@ class Room : public NoCopy {
 
         void addUnit(Unit *unit);
         void switchFish();
+        std::string getMoves() const;
+        bool loadMove(char move);
 };
 
 #endif

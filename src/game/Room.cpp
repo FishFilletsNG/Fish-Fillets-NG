@@ -16,6 +16,7 @@
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
 #include "Controls.h"
+#include "LoadException.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -216,4 +217,44 @@ Room::switchFish()
 {
     m_controls->switchActive();
 }
+//-----------------------------------------------------------------
+std::string
+Room::getMoves() const
+{
+    return m_controls->getMoves();
+}
+//-----------------------------------------------------------------
+/**
+ * Load this move, let object to fall fast.
+ * Don't play sound.
+ * @return true for finished level
+ * @throws LoadException for bad moves
+ */
+bool
+Room::loadMove(char move)
+{
+    bool complete = false;
+    bool falling = true;
+    while (falling) {
+        prepareRound();
+        falling = falldown();
+
+        if (false == falling) {
+            if (false == m_controls->makeMove(move)) {
+                throw LoadException(ExInfo("load error - bad move")
+                        .addInfo("move", std::string(1, move)));
+            }
+        }
+
+        complete = finishRound();
+        if (complete && falling) {
+            throw LoadException(ExInfo("load error - early finished level")
+                    .addInfo("move", std::string(1, move)));
+        }
+
+    }
+    return complete;
+}
+
+
 

@@ -156,6 +156,19 @@ script_game_save(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void game_load(moves)
+ */
+    int
+script_game_load(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *moves = luaL_checkstring(L, 1);
+    GameAgent::agent()->loadGame(moves);
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**

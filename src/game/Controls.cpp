@@ -15,7 +15,7 @@
 
 //-----------------------------------------------------------------
 Controls::Controls()
-    : m_units()
+    : m_units(), m_moves()
 {
     //TODO: activate small fish at start
     m_active = m_units.begin();
@@ -66,6 +66,7 @@ Controls::finishSwitch()
 {
     bool result = false;
     if (m_switch && m_active != m_units.end()) {
+        m_speedup = 0;
         GameAgent::agent()->ensurePhases(3);
         (*m_active)->activate();
         result = true;
@@ -87,16 +88,19 @@ Controls::driveUnit()
         for (t_units::iterator i = m_units.begin(); i != end; ++i) {
             moved = (*i)->drive(m_pressed);
             if (moved > 0) {
-                m_active = i;
+                if (i != m_active) {
+                    m_speedup = 0;
+                    m_active = i;
+                }
                 break;
             }
         }
     }
 
     if (moved > 0) {
-        //TODO: write symbol of move
+        m_moves.push_back(moved);
         LOG_DEBUG(ExInfo("TEST: moved")
-                .addInfo("symbol", std::string(1, moved)));
+                .addInfo("symbols", m_moves));
     }
 }
 //-----------------------------------------------------------------
@@ -164,6 +168,23 @@ Controls::switchActive()
     if (start != m_active) {
         m_switch = true;
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Make this move.
+ * @return false for bad move
+ */
+bool
+Controls::makeMove(char move)
+{
+    t_units::iterator end = m_units.end();
+    for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+        if ((*i)->driveOrder(move) == move) {
+            m_moves.push_back(move);
+            return true;
+        }
+    }
+    return false;
 }
 
 

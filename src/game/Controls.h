@@ -8,6 +8,7 @@ class Unit;
 
 #include "SDL.h"
 #include <vector>
+#include <string>
 
 /**
  * Keyboard and mouse controls.
@@ -21,6 +22,7 @@ class Controls : public NoCopy {
         KeyControl m_arrows;
         Uint8 *m_pressed;
         bool m_switch;
+        std::string m_moves;
     private:
         bool finishSwitch();
         void driveUnit();
@@ -34,6 +36,8 @@ class Controls : public NoCopy {
 
         void checkActive();
         void switchActive();
+        std::string getMoves() const { return m_moves; }
+        bool makeMove(char move);
 };
 
 #endif

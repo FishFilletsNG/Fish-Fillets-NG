@@ -36,6 +36,9 @@
 #include "ControlSym.h"
 #include "UnknownMsgException.h"
 
+#include "minmax.h"
+#include "LoadException.h"
+
 #include "game-script.h"
 
 //-----------------------------------------------------------------
@@ -48,28 +51,25 @@ GameAgent::own_init()
     m_restartCounter = 0;
     //TODO: set codename in game menu
     m_codename = "test_save";
+    m_loadedMoves = "";
+    m_loadSpeed = 1;
 
     keyBinding();
     newLevel();
 }
 //-----------------------------------------------------------------
 /**
- * Update room.
- * Call script_update() every cycle.
- * Call script_nextRound() every round.
+ * Update game.
  */
     void
 GameAgent::own_update()
 {
     bool room_complete = false;
-    if (0 == m_lockPhases) {
-        if (m_room) {
-            room_complete = m_room->nextRound();
-        }
+    if (m_loadedMoves.empty()) {
+        room_complete = updateRoom();
     }
-
-    if (m_script) {
-        m_script->doString("update()");
+    else {
+        room_complete = loadMoves();
     }
 
     if (m_lockPhases > 0) {
@@ -92,6 +92,28 @@ GameAgent::own_shutdown()
     clearRoom();
 }
 
+//-----------------------------------------------------------------
+/*
+ * Update room.
+ * Let objects to move.
+ * Call script_update() every cycle.
+ * @return true for finished level
+ */
+    bool
+GameAgent::updateRoom()
+{
+    bool room_complete = false;
+    if (0 == m_lockPhases) {
+        if (m_room) {
+            room_complete = m_room->nextRound();
+        }
+    }
+
+    if (m_script) {
+        m_script->doString("script_update()");
+    }
+    return room_complete;
+}
 //-----------------------------------------------------------------
 /**
  * Create new level.
@@ -170,6 +192,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("game_getRestartCounter",
             script_game_getRestartCounter);
     m_script->registerFunc("game_save", script_game_save);
+    m_script->registerFunc("game_load", script_game_load);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
@@ -405,31 +428,35 @@ void
 GameAgent::saveLevel()
 {
     if (m_script) {
-        m_script->doString("save()");
+        m_script->doString("script_save()");
     }
 }
 //-----------------------------------------------------------------
 /**
  * Write save to the file.
  * Save moves and models state.
+ * @param models saved models
  */
 void
 GameAgent::saveGame(const std::string &models)
 {
-    Path file = Path::dataWritePath("saves/" + m_codename + ".lua");
-    FILE *saveFile = fopen(file.getNative().c_str(), "w");
-    if (saveFile) {
-        //TODO: save moves
-        //fputs("saved_moves = ", saveFile);
-        //fputs(moves.c_str(), saveFile);
+    if (m_room) {
+        Path file = Path::dataWritePath("saves/" + m_codename + ".lua");
+        FILE *saveFile = fopen(file.getNative().c_str(), "w");
+        if (saveFile) {
+            std::string moves = m_room->getMoves();
+            fputs("\nsaved_moves = '", saveFile);
+            fputs(moves.c_str(), saveFile);
+            fputs("'\n", saveFile);
 
-        fputs("saved_models = ", saveFile);
-        fputs(models.c_str(), saveFile);
-        fclose(saveFile);
-    }
-    else {
-        LOG_WARNING(ExInfo("cannot save game")
-                .addInfo("file", file.getNative()));
+            fputs("\nsaved_models = ", saveFile);
+            fputs(models.c_str(), saveFile);
+            fclose(saveFile);
+        }
+        else {
+            LOG_WARNING(ExInfo("cannot save game")
+                    .addInfo("file", file.getNative()));
+        }
     }
 }
 //-----------------------------------------------------------------
@@ -442,14 +469,58 @@ GameAgent::loadLevel()
     if (m_script) {
         Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
         if (file.exists()) {
+            newLevel(true);
             m_script->doFile(file);
-            m_script->doString("load()");
+            m_script->doString("script_load()");
         }
         else {
             LOG_INFO(ExInfo("there is no file to load")
                 .addInfo("file", file.getNative()));
         }
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Load game.
+ * @param moves saved moves to load
+ */
+    void
+GameAgent::loadGame(const std::string &moves)
+{
+    m_loadedMoves = moves;
+    m_loadSpeed = min(50, max(5, m_loadedMoves.size() / 150));
+}
+//-----------------------------------------------------------------
+/**
+ * Load a few moves.
+ * @return true for finished level
+ * @throw LoadException for bad load
+ */
+    bool
+GameAgent::loadMoves()
+{
+    bool room_complete = false;
+    if (0 == m_lockPhases) {
+        for (int i = 0; i < m_loadSpeed
+                && false == m_loadedMoves.empty(); ++i)
+        {
+            try {
+                char symbol = m_loadedMoves[0];
+                m_loadedMoves.erase(0, 1);
+
+                room_complete = m_room->loadMove(symbol);
+            }
+            catch (LoadException &e) {
+                throw LoadException(ExInfo(e.info())
+                        .addInfo("remain", m_loadedMoves));
+            }
+        }
+
+        if (m_loadedMoves.empty()) {
+            m_script->doString("script_loadState()");
+        }
+    }
+    return room_complete;
 }
 //-----------------------------------------------------------------
 /**

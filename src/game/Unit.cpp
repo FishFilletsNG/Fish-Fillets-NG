@@ -53,39 +53,18 @@ Unit::driveBorrowed(Uint8 *pressed, const KeyControl &buttons)
 {
     if (canMove()) {
         if (pressed[buttons.getLeft()]) {
-            if (m_model->isLeft()) {
-                if (m_model->rules()->actionMoveDir(Rules::DIR_LEFT)) {
-                    return m_symbols.getLeft();
-                }
-            }
-            else {
-                m_model->rules()->actionTurnSide();
-                return m_symbols.getLeft();
-            }
+            return goLeft();
         }
         if (pressed[buttons.getRight()]) {
-            if (false == m_model->isLeft()) {
-                if (m_model->rules()->actionMoveDir(Rules::DIR_RIGHT)) {
-                    return m_symbols.getRight();
-                }
-            }
-            else {
-                m_model->rules()->actionTurnSide();
-                return m_symbols.getRight();
-            }
+            return goRight();
         }
         if (pressed[buttons.getUp()]) {
-            if (m_model->rules()->actionMoveDir(Rules::DIR_UP)) {
-                return m_symbols.getUp();
-            }
+            return goUp();
         }
         if (pressed[buttons.getDown()]) {
-            if (m_model->rules()->actionMoveDir(Rules::DIR_DOWN)) {
-                return m_symbols.getDown();
-            }
+            return goDown();
         }
     }
-
     return 0;
 }
 //-----------------------------------------------------------------
@@ -97,6 +76,81 @@ Unit::activate()
 {
     m_model->rules()->actionActivate();
 }
+//-----------------------------------------------------------------
+/**
+ * Make move.
+ * @return move symobol or zero for bad move
+ */
+char
+Unit::driveOrder(char move)
+{
+    if (m_symbols.getLeft() == move) {
+        return goLeft();
+    }
+    if (m_symbols.getRight() == move) {
+        return goRight();
+    }
+    if (m_symbols.getUp() == move) {
+        return goUp();
+    }
+    if (m_symbols.getDown() == move) {
+        return goDown();
+    }
+    return 0;
+}
+//-----------------------------------------------------------------
+char
+Unit::goLeft()
+{
+    char symbol = 0;
+    if (m_model->isLeft()) {
+        if (m_model->rules()->actionMoveDir(Rules::DIR_LEFT)) {
+            symbol = m_symbols.getLeft();
+        }
+    }
+    else {
+        m_model->rules()->actionTurnSide();
+        symbol = m_symbols.getLeft();
+    }
+    return symbol;
+}
+//-----------------------------------------------------------------
+char
+Unit::goRight()
+{
+    char symbol = 0;
+    if (false == m_model->isLeft()) {
+        if (m_model->rules()->actionMoveDir(Rules::DIR_RIGHT)) {
+            symbol = m_symbols.getRight();
+        }
+    }
+    else {
+        m_model->rules()->actionTurnSide();
+        symbol = m_symbols.getRight();
+    }
+    return symbol;
+}
+//-----------------------------------------------------------------
+char
+Unit::goUp()
+{
+    char symbol = 0;
+    if (m_model->rules()->actionMoveDir(Rules::DIR_UP)) {
+        symbol = m_symbols.getUp();
+    }
+    return symbol;
+}
+//-----------------------------------------------------------------
+char
+Unit::goDown()
+{
+    char symbol = 0;
+    if (m_model->rules()->actionMoveDir(Rules::DIR_DOWN)) {
+        symbol = m_symbols.getDown();
+    }
+    return symbol;
+}
+
 //-----------------------------------------------------------------
 bool
 Unit::isMoving()

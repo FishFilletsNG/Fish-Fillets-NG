@@ -18,6 +18,10 @@ class Unit {
         Cube *m_model;
     private:
         bool canMove();
+        char goLeft();
+        char goRight();
+        char goUp();
+        char goDown();
     public:
         Unit(const KeyControl &buttons, const ControlSym &symbols);
         void takeModel(Cube *model) { m_model = model; }
@@ -26,6 +30,8 @@ class Unit {
         char drive(Uint8 *pressed);
         char driveBorrowed(Uint8 *pressed, const KeyControl &buttons);
         void activate();
+
+        char driveOrder(char move);
 
         bool isMoving();
         bool isTurning();
