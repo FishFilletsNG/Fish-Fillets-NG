@@ -113,12 +113,12 @@ Cube::anim()
 std::string
 Cube::toString() const
 {
-    return std::string(ExInfo("model")
+    return ExInfo("model")
             .addInfo("loc", m_loc.toString())
             .addInfo("alive", m_alive)
             .addInfo("weight", m_weight)
             .addInfo("power", m_power)
-            .addInfo("shape", m_shape->toString()).what());
+            .addInfo("shape", m_shape->toString()).info();
 }
 
 

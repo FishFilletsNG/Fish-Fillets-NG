@@ -93,7 +93,7 @@ script_setParam(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void getParam(name)
+ * string getParam(name)
  * NOTE: no one exception can be passed to "C" lua code
  */
     int
@@ -147,10 +147,14 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
     m_state->registerFunc(name, func);
 }
 //-----------------------------------------------------------------
+void
+ScriptAgent::doFile(const Path &file)
+{
+    m_state->doFile(file);
+}
+//-----------------------------------------------------------------
 /**
  * Messages:
- * - dofile("file") ... run script
- * - doall("file") ... run both system and user script, no one is required
  * - dostring("input") ... run string
  *
  * @throws UnknownMsgException
@@ -158,19 +162,7 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
     void
 ScriptAgent::receiveString(const StringMsg *msg)
 {
-    if (msg->equalsName("dofile")) {
-        m_state->doFile(Path::dataReadPath(msg->getValue()));
-    }
-    else if (msg->equalsName("doall")) {
-        try {
-            m_state->doFile(Path::dataSystemPath(msg->getValue()));
-            m_state->doFile(Path::dataUserPath(msg->getValue()));
-        }
-        catch (BaseException &e) {
-            LOG_INFO(e.info());
-        }
-    }
-    else if (msg->equalsName("dostring")) {
+    if (msg->equalsName("dostring")) {
         m_state->doString(msg->getValue());
     }
     else {

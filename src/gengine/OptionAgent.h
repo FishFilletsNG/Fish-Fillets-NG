@@ -1,6 +1,8 @@
 #ifndef HEADER_OPTIONAGENT_H
 #define HEADER_OPTIONAGENT_H
 
+class Environ;
+
 #include "BaseAgent.h"
 #include "Name.h"
 
@@ -13,10 +15,8 @@
 class OptionAgent : public BaseAgent {
     AGENT(OptionAgent, Name::OPTION_NAME);
     private:
-        typedef std::map<std::string,std::string> t_values;
-        typedef std::multimap<std::string,BaseMsg*> t_watchers;
-        t_values m_values;
-        t_watchers m_watchers;
+        static const char *CONFIG_FILE;
+        Environ *m_environ;
     private:
         void prepareDataPaths();
         void prepareLang();
@@ -29,6 +29,8 @@ class OptionAgent : public BaseAgent {
         void parseCmdOpt(int argc, char *argv[]);
         void setParam(const std::string &name, const std::string &value);
         void setParam(const std::string &name, long value);
+        void setPersistent(const std::string &name, const std::string &value);
+        void setPersistent(const std::string &name, long value);
 
         std::string getParam(const std::string &name,
                 const std::string &implicit="");

@@ -14,6 +14,7 @@ class ExInfo {
     public:
         explicit ExInfo(const std::string &problem) throw();
         const char *what() const throw();
+        std::string info() const throw() { return m_what; }
 
         ExInfo &addInfo(const std::string &name,
                 const std::string &value) throw();

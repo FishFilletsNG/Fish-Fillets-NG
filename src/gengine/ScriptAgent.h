@@ -25,6 +25,7 @@ class ScriptAgent : public BaseAgent {
         virtual void own_shutdown();
     public:
         void registerFunc(const char *name, lua_CFunction func);
+        void doFile(const Path &file);
 
         virtual void receiveString(const StringMsg *msg);
 };

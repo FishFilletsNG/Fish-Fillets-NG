@@ -30,7 +30,7 @@ std::string
 Actor::toString() const
 {
     return ExInfo("actor")
-        .addInfo("index", m_index).what();
+        .addInfo("index", m_index).info();
 }
 
 

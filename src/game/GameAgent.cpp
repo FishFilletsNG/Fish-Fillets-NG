@@ -129,7 +129,7 @@ GameAgent::getNextLevel()
     }
 
     return OptionAgent::agent()->getParam("level",
-            "script/our_level_name/init.lua");
+            "script/your_level_name/init.lua");
 }
 //-----------------------------------------------------------------
 /**

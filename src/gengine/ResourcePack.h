@@ -135,7 +135,7 @@ class ResourcePack : public INamed {
             for (t_resIterator item = m_reses.begin(); item != end; ++item) {
                 available_res.addInfo("key", item->first);
             }
-            return std::string(available_res.what());
+            return available_res.info();
     }
 
 };
