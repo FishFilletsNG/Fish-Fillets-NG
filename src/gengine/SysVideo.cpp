@@ -11,8 +11,14 @@
 #include "Log.h"
 
 #include "SDL.h"
+#if !defined(HAVE_X11) && !defined(WIN32)
+    void
+SysVideo::setCaption(const std::string &title)
+{
+    SDL_WM_SetCaption(title.c_str(), NULL);
+}
+#else
 #include "SDL_syswm.h"
-
 static bool sysSetCaption(SDL_SysWMinfo *info, const std::string &title);
 
 //-----------------------------------------------------------------
@@ -93,9 +99,12 @@ sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
     delete[] lpszW;
     return result;
 }
+#else
+bool
+sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
+{
+    return false;
+}
 #endif
-
-
-
-
+#endif // HAVE_X11 || WIN32
 
