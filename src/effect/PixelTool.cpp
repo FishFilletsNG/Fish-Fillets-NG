@@ -86,7 +86,7 @@ PixelTool::getPixel(SDL_Surface *surface, int x, int y)
         case 4: // 32 bit
             return *reinterpret_cast<Uint32*>(p);
         default:
-            assert(!"unknown color default");
+            assert(!"unknown color depth");
             return 0;
     }
 }

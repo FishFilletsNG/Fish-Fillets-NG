@@ -10,6 +10,7 @@
 
 #include "SurfaceLock.h"
 #include "PixelTool.h"
+#include "PixelIterator.h"
 #include "Random.h"
 
 //-----------------------------------------------------------------
@@ -69,6 +70,7 @@ EffectZx::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
     Uint32 colorZX4 = PixelTool::convertColor(screen->format,
             PixelTool::getColor(surface, surface->w - 1, surface->h - 1));
 
+    PixelIterator pit(surface);
     for (int py = 0; py < surface->h; ++py) {
         m_countHeight++;
         if (m_countHeight > m_stripeHeight) {
@@ -105,13 +107,12 @@ EffectZx::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
                 break;
         }
 
-        //TODO: optimize for speed
         for (int px = 0; px < surface->w; ++px) {
-            SDL_Color pixel = PixelTool::getColor(surface, px, py);
-            if (pixel.unused == 255) {
+            if (!pit.isTransparent()) {
                 PixelTool::putPixel(screen,
                         x + px, y + py, usedColor);
             }
+            pit.inc();
         }
     }
 }
