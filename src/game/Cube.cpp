@@ -13,8 +13,6 @@
 #include "Shape.h"
 #include "Driver.h"
 #include "Rules.h"
-#include "ResSoundAgent.h"
-#include "SoundAgent.h"
 #include "LayoutException.h"
 #include "DialogAgent.h"
 
@@ -40,15 +38,6 @@ Cube::Cube(const V2 &location,
     m_view = a_view;
     m_view->takeModel(this);
     m_rules = new Rules(this);
-
-    //TODO: who will remove this resouces?
-    ResSoundAgent *ressound = ResSoundAgent::agent();
-    if (0 == ressound->countRes("xplo")) {
-        ressound->addSound("xplo", Path::dataReadPath("sound/xplo_01.wav"));
-        ressound->addSound("xplo", Path::dataReadPath("sound/xplo_02.wav"));
-        ressound->addSound("xplo", Path::dataReadPath("sound/xplo_03.wav"));
-        ressound->addSound("xplo", Path::dataReadPath("sound/xplo_04.wav"));
-    }
 }
 //-----------------------------------------------------------------
 /**
@@ -88,7 +77,6 @@ Cube::change_die()
             .addInfo("fish", toString()));
     m_alive = false;
     DialogAgent::agent()->killSound(this);
-    SoundAgent::agent()->playRandomSound("xplo");
 }
 //-----------------------------------------------------------------
 /**
