@@ -21,7 +21,8 @@ ResDialogPack::unloadRes(Dialog *res)
 }
 //-----------------------------------------------------------------
 /**
- * Return number of equal characters at the start.
+ * Return match score.
+ * One string must excatly be starting substring of the other.
  */
 int
 ResDialogPack::matchScore(const std::string first,
@@ -34,7 +35,7 @@ ResDialogPack::matchScore(const std::string first,
             score++;
         }
         else {
-            return score;
+            return 0;
         }
     }
     return score;
