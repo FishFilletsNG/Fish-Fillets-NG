@@ -18,8 +18,9 @@
 #include "SimpleMsg.h"
 #include "IntMsg.h"
 #include "Path.h"
-
 #include "OptionAgent.h"
+
+#include "SDL.h"
 
 //-----------------------------------------------------------------
     void
@@ -48,11 +49,16 @@ GameAgent::own_update()
 }
 //-----------------------------------------------------------------
 /**
- * Delete room.
+ * Remember playtime.
  */
     void
 GameAgent::own_shutdown()
 {
+    OptionAgent *options = OptionAgent::agent();
+    int playtime = options->getAsInt("playtime");
+    playtime += SDL_GetTicks() / 1000;
+    options->setPersistent("playtime", playtime);
+
     delete m_manager;
 }
 
