@@ -1,7 +1,7 @@
 
 all:
-	-if which cvs2cl 2>/dev/null ; then cvs2cl ; else touch ChangeLog ; fi
-	-libtoolize --force
+	touch ChangeLog # cvs2cl
+	-libtoolize --force >/dev/null
 	aclocal
 	automake -a
 	autoconf
