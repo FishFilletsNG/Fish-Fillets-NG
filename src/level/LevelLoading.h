@@ -21,6 +21,7 @@ class LevelLoading : public NoCopy {
         RoomAccess *m_access;
     public:
         LevelLoading(RoomAccess *access);
+        void reset();
         void loadGame(const std::string &moves);
         void loadReplay(const std::string &moves);
         void togglePause() { m_paused = !m_paused; }

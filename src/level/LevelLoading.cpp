@@ -17,6 +17,12 @@
 LevelLoading::LevelLoading(RoomAccess *access)
 {
     m_access = access;
+    reset();
+}
+//-----------------------------------------------------------------
+    void
+LevelLoading::reset()
+{
     m_paused = false;
     m_replayMode = false;
     m_loadSpeed = 1;

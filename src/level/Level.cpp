@@ -94,6 +94,7 @@ Level::own_initState()
     SoundAgent::agent()->stopMusic();
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
+    m_loading->reset();
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
