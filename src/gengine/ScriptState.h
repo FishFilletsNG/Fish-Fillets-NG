@@ -27,6 +27,7 @@ class ScriptState {
         void unref(int funcRef);
 
         void registerFunc(const char *name, lua_CFunction func);
+        void registerLeader(void *leader);
 };
 
 #endif

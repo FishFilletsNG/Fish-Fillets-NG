@@ -87,6 +87,8 @@ Environ::setParam(const std::string &name, const std::string &value)
 //-----------------------------------------------------------------
 /**
  * Store this integer value like string param.
+ * @param name param name
+ * @param value param value
  */
     void
 Environ::setParam(const std::string &name, long value)

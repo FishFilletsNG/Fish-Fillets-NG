@@ -23,4 +23,7 @@ catch (...) { \
         luaL_error(L, "unknown exception"); \
 }
 
+inline const char *script_getLeaderName() { return "script_leader"; }
+extern void *script_getLeader(lua_State *L);
+
 #endif

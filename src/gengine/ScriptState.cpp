@@ -18,6 +18,8 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+#include "def-script.h"
+
 //-----------------------------------------------------------------
 ScriptState::ScriptState()
 {
@@ -120,5 +122,17 @@ void
 ScriptState::unref(int funcRef)
 {
     luaL_unref(m_state, LUA_REGISTRYINDEX, funcRef);
+}
+
+//-----------------------------------------------------------------
+/**
+ * Register light userdata for lua script.
+ */
+void
+ScriptState::registerLeader(void *leader)
+{
+    lua_pushstring(m_state, script_getLeaderName());
+    lua_pushlightuserdata(m_state, leader);
+    lua_rawset(m_state, LUA_REGISTRYINDEX);
 }
 

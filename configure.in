@@ -140,9 +140,12 @@ fi
 AC_OUTPUT([
            Makefile
            src/Makefile
-           src/gengine/Makefile
            src/SFont/Makefile
            src/SDL_gfx/Makefile
+           src/gengine/Makefile
+           src/plan/Makefile
+           src/level/Makefile
+           src/menu/Makefile
            src/game/Makefile
            ])
 

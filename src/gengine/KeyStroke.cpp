@@ -22,24 +22,57 @@
 KeyStroke::KeyStroke(SDLKey sym, int mod)
 {
     m_sym = sym;
-    m_mod = mod;
+    m_mod = modStrip(mod);
+}
+//-----------------------------------------------------------------
+/**
+ * Strip ignored modes.
+ * KMOD_NUM|KMOD_CAPS|KMOD_MODE are ignored.
+ */
+    int
+KeyStroke::modStrip(int mod)
+{
+    return mod & ~STROKE_IGNORE;
 }
 //-----------------------------------------------------------------
 /**
  * KeyStroke comparation.
- * KMOD_NUM|KMOD_CAPS|KMOD_MODE are ignored.
  *
  * @param other other keystroke
  * @return this < other
  */
-    bool
+bool
 KeyStroke::less(const KeyStroke &other) const
 {
-    static const int KMOD_IGNORE = KMOD_NUM|KMOD_CAPS|KMOD_MODE;
-
     bool result = m_sym < other.m_sym;
     if (m_sym == other.m_sym) {
-        result = (m_mod & ~KMOD_IGNORE) < (other.m_mod & ~KMOD_IGNORE);
+        result = m_mod < other.m_mod;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Test keyStroke equality.
+ * KMOD_NUM|KMOD_CAPS|KMOD_MODE are ignored.
+ *
+ * @param other other keystroke
+ * @return this == other
+ */
+bool
+KeyStroke::equals(const KeyStroke &other) const
+{
+    return m_sym == other.m_sym &&
+        m_mod == other.m_mod;
+}
+//-----------------------------------------------------------------
+bool
+KeyStroke::isPressed() const
+{
+    bool result = false;
+    Uint8 *keys = SDL_GetKeyState(NULL);
+    if (keys[m_sym]) {
+        int modes = SDL_GetModState();
+        result = (m_mod == modStrip(modes));
     }
     return result;
 }
