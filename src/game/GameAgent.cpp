@@ -25,7 +25,7 @@ GameAgent::own_init()
 {
     m_manager = new StateManager();
     WorldMap *worldmap = new WorldMap();
-    worldmap->initWay(
+    worldmap->initMap(
             Path::dataReadPath("script/worldmap.lua"),
             Path::dataReadPath("script/worlddesc.lua"));
     m_manager->pushState(NULL, worldmap);

@@ -17,6 +17,7 @@
 #include "StateManager.h"
 #include "NodeDrawer.h"
 #include "Level.h"
+#include "PosterState.h"
 #include "minmax.h"
 
 //-----------------------------------------------------------------
@@ -140,7 +141,14 @@ Pedometer::runSelected()
     void
 Pedometer::runLevel()
 {
-    changeState(m_level);
+    PosterState *poster = m_status->createPoster();
+    if (poster) {
+        poster->setNextState(m_level);
+        changeState(poster);
+    }
+    else {
+        changeState(m_level);
+    }
     m_level = NULL;
 }
 //-----------------------------------------------------------------
@@ -151,7 +159,6 @@ Pedometer::runReplay()
     m_level->loadReplay(m_solution);
     m_level = NULL;
 }
-
 //-----------------------------------------------------------------
     void
 Pedometer::drawOn(SDL_Surface *screen)

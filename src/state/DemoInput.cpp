@@ -10,14 +10,14 @@
 
 #include "Keymap.h"
 #include "KeyDesc.h"
-#include "DemoMode.h"
+#include "GameState.h"
 
 //-----------------------------------------------------------------
 /**
  * Create demo input handler.
  * @param demo pointer to the leader
  */
-DemoInput::DemoInput(DemoMode *demo)
+DemoInput::DemoInput(GameState *demo)
     : GameInput(demo)
 {
     KeyDesc key_quit(KEY_QUIT, "quit");

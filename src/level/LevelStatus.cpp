@@ -8,10 +8,11 @@
  */
 #include "LevelStatus.h"
 
+#include "def-script.h"
 #include "Path.h"
 #include "ScriptState.h"
 #include "ScriptException.h"
-#include "def-script.h"
+#include "PosterState.h"
 
 #include <stdio.h>
 
@@ -47,12 +48,13 @@ LevelStatus::readMoves(const std::string &savedMoves)
 //-----------------------------------------------------------------
 void
 LevelStatus::prepareRun(const std::string codename,
-                const std::string levelName)
+                const std::string levelName, const std::string &poster)
 {
     m_complete = false;
     m_wasRunning = false;
     m_codename = codename;
     m_levelName = levelName;
+    m_poster = poster;
 }
 //-----------------------------------------------------------------
 /**
@@ -128,5 +130,18 @@ LevelStatus::writeSolvedMoves(const std::string &moves)
                     .addInfo("moves", moves));
         }
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Returns PosterState or NULL.
+ */
+PosterState *
+LevelStatus::createPoster() const
+{
+    PosterState *result = NULL;
+    if (!m_poster.empty()) {
+        result = new PosterState(Path::dataReadPath(m_poster));
+    }
+    return result;
 }
 

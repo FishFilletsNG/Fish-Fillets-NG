@@ -52,7 +52,7 @@ class GameState : public BaseListener, public NoCopy {
         void resumeState();
         void cleanState();
 
-        void quitState();
+        virtual void quitState();
         void pushState(GameState *new_state);
 
         void noteBg();

@@ -25,6 +25,7 @@ class LevelNode : public NoCopy {
     private:
         static const int DOT_RADIUS = 13;
         std::string m_codename;
+        std::string m_poster;
         Path m_datafile;
         V2 m_loc;
         eState m_state;
@@ -35,19 +36,22 @@ class LevelNode : public NoCopy {
         bool isUnder(const V2 &cursor) const;
     public:
         LevelNode(const std::string &codename, const Path &datafile,
-                const V2 &loc, int depth);
+                const V2 &loc, const std::string &poster="");
         virtual ~LevelNode();
+        void setState(eState state);
+        eState getState() const { return m_state; }
+        void setDepth(int depth) { m_depth = depth; }
         int getDepth() const { return m_depth; }
 
         std::string getCodename() const { return m_codename; }
-        void setState(eState state);
         V2 getLoc() const { return m_loc; }
-        eState getState() const { return m_state; }
+        std::string getPoster() const { return m_poster; }
         Level *createLevel() const;
 
-        void addChild(LevelNode *node);
+        void addChild(LevelNode *new_node);
 
         LevelNode *findSelected(const V2 &cursor);
+        LevelNode *findNamed(const std::string &codename);
         void drawPath(const NodeDrawer *drawer) const;
 };
 

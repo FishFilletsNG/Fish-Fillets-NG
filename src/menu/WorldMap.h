@@ -50,7 +50,7 @@ class WorldMap : public GameState, public DescFinder, public Drawable {
         WorldMap();
         virtual ~WorldMap();
         virtual const char *getName() const { return "state_worldmap"; };
-        void initWay(const Path &way, const Path &desc);
+        void initMap(const Path &mapfile, const Path &desc);
 
         virtual void drawOn(SDL_Surface *screen);
         void runSelected();

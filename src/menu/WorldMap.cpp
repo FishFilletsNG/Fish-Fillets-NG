@@ -18,7 +18,7 @@
 #include "worldmap-script.h"
 #include "Log.h"
 #include "Path.h"
-#include "WorldWay.h"
+#include "WorldBranch.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"
 #include "SoundAgent.h"
@@ -89,12 +89,13 @@ WorldMap::addDesc(const std::string &codename, LevelDesc *desc)
  * @throws LogicException when cannot parse data file
  */
     void
-WorldMap::initWay(const Path &way, const Path &descfile)
+WorldMap::initMap(const Path &mapfile, const Path &descfile)
 {
-    m_startNode = WorldWay::createWay(way);
+    WorldBranch parser(NULL);
+    m_startNode = parser.parseMap(mapfile);
     if (NULL == m_startNode) {
-        throw LogicException(ExInfo("cannot create world way")
-                .addInfo("file", way.getNative()));
+        throw LogicException(ExInfo("cannot create world map")
+                .addInfo("file", mapfile.getNative()));
     }
 
     ScriptState script;
@@ -184,7 +185,8 @@ WorldMap::runSelected()
     Level *level = createSelected();
     if (level && m_selected) {
         m_levelStatus->prepareRun(m_selected->getCodename(),
-                findLevelName(m_selected->getCodename()));
+                findLevelName(m_selected->getCodename()),
+                m_selected->getPoster());
         level->fillStatus(m_levelStatus);
 
         if (m_selected->getState() == LevelNode::STATE_SOLVED) {

@@ -19,11 +19,11 @@
  * Default state is STATE_FAR.
  */
 LevelNode::LevelNode(const std::string &codename, const Path &datafile,
-                const V2 &loc, int depth)
-: m_codename(codename), m_datafile(datafile), m_loc(loc)
+                const V2 &loc, const std::string &poster)
+: m_codename(codename), m_poster(poster), m_datafile(datafile), m_loc(loc)
 {
     m_state = STATE_FAR;
-    m_depth = depth;
+    m_depth = 0;
 }
 //-----------------------------------------------------------------
 /**
@@ -79,6 +79,7 @@ LevelNode::isUnder(const V2 &cursor) const
 //-----------------------------------------------------------------
 /**
  * Find selected node under cursor.
+ * Only solved and open nodes are traversed.
  * @return selected node or NULL
  */
 LevelNode *
@@ -103,6 +104,30 @@ LevelNode::findSelected(const V2 &cursor)
     return NULL;
 }
 //-----------------------------------------------------------------
+/**
+ * Find named node in whole tree.
+ * @return named node or NULL
+ */
+LevelNode *
+LevelNode::findNamed(const std::string &codename)
+{
+    if (m_codename == codename) {
+        return this;
+    }
+    else {
+        t_children::const_iterator end = m_children.end();
+        for (t_children::const_iterator i = m_children.begin();
+                i != end; ++i)
+        {
+            LevelNode *named = (*i)->findNamed(codename);
+            if (named) {
+                return named;
+            }
+        }
+    }
+    return NULL;
+}
+//-----------------------------------------------------------------
 Level *
 LevelNode::createLevel() const
 {
@@ -114,9 +139,14 @@ LevelNode::createLevel() const
  * NOTE: cycles in graph are not supported.
  */
 void
-LevelNode::addChild(LevelNode *node)
+LevelNode::addChild(LevelNode *new_node)
 {
-    m_children.push_back(node);
+    m_children.push_back(new_node);
+
+    new_node->setDepth(m_depth + 1);
+    if (m_state == STATE_SOLVED && new_node->getState() < STATE_OPEN) {
+        new_node->setState(STATE_OPEN);
+    }
 }
 //-----------------------------------------------------------------
 void

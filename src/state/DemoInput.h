@@ -1,8 +1,7 @@
 #ifndef HEADER_DEMOINPUT_H
 #define HEADER_DEMOINPUT_H
 
-class Keymap;
-class DemoMode;
+class GameState;
 
 #include "GameInput.h"
 
@@ -11,7 +10,7 @@ class DemoMode;
  */
 class DemoInput : public GameInput {
     public:
-        DemoInput(DemoMode *demo);
+        DemoInput(GameState *demo);
 
         virtual void mouseEvent(const MouseStroke &buttons);
 };

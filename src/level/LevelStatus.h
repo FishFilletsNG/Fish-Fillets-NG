@@ -2,6 +2,7 @@
 #define HEADER_LEVELSTATUS_H
 
 class ScriptState;
+class PosterState;
 
 #include <string>
 
@@ -18,6 +19,7 @@ class LevelStatus {
         bool m_wasRunning;
         std::string m_codename;
         std::string m_levelName;
+        std::string m_poster;
         std::string m_savedMoves;
     private:
         static int script_status_readMoves(lua_State *L) throw();
@@ -26,8 +28,9 @@ class LevelStatus {
     public:
         LevelStatus() { m_complete = false; m_wasRunning = false; }
         void prepareRun(const std::string codename,
-                const std::string levelName);
+                const std::string levelName, const std::string &poster);
         std::string getLevelName() const { return m_levelName; }
+        PosterState *createPoster() const;
 
         void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }

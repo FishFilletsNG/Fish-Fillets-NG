@@ -11,7 +11,7 @@ class Path {
         std::string m_path;
     private:
         static Path dataPath(const std::string &file, bool writeable);
-        Path(const std::string &file);
+        explicit Path(const std::string &file);
     public:
         static Path dataReadPath(const std::string &file);
         static Path dataWritePath(const std::string &file);

@@ -29,6 +29,7 @@
 #include "SoundAgent.h"
 #include "SubTitleAgent.h"
 #include "StepDecor.h"
+#include "PosterState.h"
 #include "minmax.h"
 
 #include <stdio.h>
@@ -255,7 +256,14 @@ Level::finishLevel()
 {
     m_levelStatus->setComplete();
     saveSolution();
-    quitState();
+
+    PosterState *poster = m_levelStatus->createPoster();
+    if (poster) {
+        changeState(poster);
+    }
+    else {
+        quitState();
+    }
 }
 //-----------------------------------------------------------------
 /*
