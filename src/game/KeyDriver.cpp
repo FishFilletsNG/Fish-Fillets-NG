@@ -69,13 +69,16 @@ KeyDriver::drive(Cube *model)
  * @param moved whether fish has moved
  */
 void
-KeyDriver::speedup(const Cube *model, bool moved)
+KeyDriver::speedup(const Cube *model)
 {
     //NOTE: original limits were {6, 10}
     static const int SPEED_WARP1 = 3;
     static const int SPEED_WARP2 = 10;
 
-    if (moved) {
+    std::string action = model->rules()->getAction();
+    if (action == "move_left" || action == "move_right"
+            || action == "move_up" || action == "move_down")
+    {
         if (model->const_rules()->getState() == "pushing") {
             m_speedup = 0;
         }

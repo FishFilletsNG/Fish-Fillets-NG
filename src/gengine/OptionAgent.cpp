@@ -111,7 +111,7 @@ OptionAgent::prepareDataPaths()
 //-----------------------------------------------------------------
 /**
  * Prepare user lang option.
- * For 2-letter lang codes lang
+ * For 2-letter lang codes
  * see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
  */
 void
@@ -119,7 +119,7 @@ OptionAgent::prepareLang()
 {
     setlocale(LC_ALL, "");
     if (getParam("lang").empty()) {
-        char *form = setlocale(LC_MESSAGES, "");
+        char *form = setlocale(LC_ALL, NULL);
         if (form && strlen(form) >= 2) {
             setParam("lang", std::string(form, 2));
         }
