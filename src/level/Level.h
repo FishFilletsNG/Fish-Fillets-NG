@@ -93,6 +93,7 @@ class Level : public GameState {
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
         bool isNewRound() const { return m_newRound; }
+        bool isSolved() const { return m_roomState == ROOM_SOLVED; }
 
         void createRoom(int w, int h, const Path &picture);
         void newDemo(const Path &demofile);

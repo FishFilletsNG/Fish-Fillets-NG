@@ -191,6 +191,21 @@ script_level_isNewRound(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool level_isSolved()
+ * 
+ */
+    int
+script_level_isSolved(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    bool solved = getLevel(L)->isSolved();
+    lua_pushboolean(L, solved);
+    END_NOEXCEPTION;
+    //NOTE: return solved
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * void level_newDemo(demofile)
  */
     int
