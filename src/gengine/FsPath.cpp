@@ -35,6 +35,10 @@ FsPath::getNative(const std::string &file)
     bool
 FsPath::exists(const std::string &file)
 {
+    if (file.empty()) {
+        return true;
+    }
+
     struct stat buf;
     int error = stat(file.c_str(), &buf);
     return !error;
@@ -49,12 +53,11 @@ FsPath::exists(const std::string &file)
     std::string
 FsPath::join(const std::string &dir, const std::string &file)
 {
-    if (dir.size() == 0) {
+    if (dir.empty()) {
         return file;
     }
-    else {
-        return dir + '/' + file;
-    }
+
+    return dir + '/' + file;
 }
 
 //-----------------------------------------------------------------
@@ -86,6 +89,10 @@ dirPath(const std::string &file)
 inline void
 createDir(const std::string &dir)
 {
+    if (dir.empty()) {
+        return;
+    }
+
     int error = mkdir(dir.c_str(), 0777);
     if (error) {
         throw PathException(ExInfo("cannot create dir")
