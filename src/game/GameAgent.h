@@ -2,7 +2,7 @@
 #define HEADER_GAMEAGENT_H
 
 class Room;
-class Driver;
+class Unit;
 class ScriptState;
 
 #include "BaseAgent.h"
@@ -31,7 +31,7 @@ class GameAgent : public BaseAgent {
         void registerGameFuncs();
         void checkRoom();
 
-        Driver *createDriver(const std::string &kind,
+        Unit *createUnit(const std::string &kind,
             Cube::eWeight *out_weight, Cube::eWeight *out_power,
             bool *out_alive);
         void keyBinding();

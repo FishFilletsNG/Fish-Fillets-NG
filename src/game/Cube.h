@@ -2,7 +2,6 @@
 #define HEADER_CUBE_H
 
 class Shape;
-class Driver;
 class Rules;
 class View;
 class Anim;
@@ -34,7 +33,6 @@ class Cube : public Actor {
         bool m_lookLeft;
 
         Shape *m_shape;
-        Driver *m_driver;
         View *m_view;
         Rules *m_rules;
         Goal m_goal;
@@ -42,11 +40,10 @@ class Cube : public Actor {
         static Cube *createBorder();
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
-                Driver *driver, View *view, Shape *shape);
+                View *view, Shape *shape);
         ~Cube();
         void setGoal(const Goal &goal) { m_goal = goal; }
 
-        bool drive();
         void finishRound();
 
         void change_die();

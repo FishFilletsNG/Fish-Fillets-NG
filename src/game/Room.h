@@ -3,6 +3,8 @@
 
 class Field;
 class Picture;
+class Controls;
+class Unit;
 
 #include "NoCopy.h"
 #include "Path.h"
@@ -18,11 +20,11 @@ class Room : public NoCopy {
         Field *m_field;
         Cube::t_models m_models;
         Cube::eWeight m_impact;
+        Controls *m_controls;
     private:
         void prepareRound();
         bool falldown();
         void playImpact();
-        void driving();
         bool finishRound();
     public:
         Room(int w, int h, const Path &picture);
@@ -36,6 +38,8 @@ class Room : public NoCopy {
         int getW() const { return m_field->getW(); }
         int getH() const { return m_field->getH(); }
 
+        void addUnit(Unit *unit);
+        void switchFish();
 };
 
 #endif

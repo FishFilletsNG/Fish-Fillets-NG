@@ -8,7 +8,6 @@
  */
 #include "Room.h"
 
-#include "Log.h"
 #include "Picture.h"
 #include "Field.h"
 #include "Rules.h"
@@ -16,12 +15,14 @@
 #include "SoundAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
+#include "Controls.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
 {
     m_bg = new Picture(picture, 0, 0);
     m_field = new Field(w, h);
+    m_controls = new Controls();
     m_impact = Cube::NONE;
 }
 //-----------------------------------------------------------------
@@ -33,6 +34,7 @@ Room::~Room()
     //NOTE: dialogs must be killed because pointer to the actors
     SubTitleAgent::agent()->removeAll();
     DialogAgent::agent()->removeAll();
+    delete m_controls;
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
@@ -100,8 +102,9 @@ Room::nextRound()
     playImpact();
 
     if (false == falling) {
-        driving();
+        m_controls->driving();
     }
+    m_controls->lockPhases();
 
     return finishRound();
 }
@@ -153,7 +156,8 @@ Room::prepareRound()
     }
 
     if (interrupt) {
-        DialogAgent::agent()->killDialogs();
+        DialogAgent::agent()->killPlan();
+        m_controls->checkActive();
     }
 }
 //-----------------------------------------------------------------
@@ -182,21 +186,6 @@ Room::falldown()
 }
 //-----------------------------------------------------------------
 /**
- * Let drivers to drive.
- * Only one driver can drive at the same time.
- */
-    void
-Room::driving()
-{
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        if ((*i)->drive()) {
-            return;
-        }
-    }
-}
-//-----------------------------------------------------------------
-/**
  * Let models to release their old position.
  * Check complete room.
  * @return true when room is finished
@@ -215,5 +204,16 @@ Room::finishRound()
     return room_complete;
 }
 
-
+//-----------------------------------------------------------------
+void
+Room::addUnit(Unit *unit)
+{
+    m_controls->addUnit(unit);
+}
+//-----------------------------------------------------------------
+void
+Room::switchFish()
+{
+    m_controls->switchActive();
+}
 

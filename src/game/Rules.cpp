@@ -25,6 +25,7 @@ Rules::Rules(Cube *model)
     m_readyToDie = false;
     m_readyToTurn = false;
     m_readyToGoout = false;
+    m_readyToActive = false;
     m_dir = DIR_NO;
     m_pushing = false;
 
@@ -233,6 +234,8 @@ Rules::prepareRound()
         m_readyToTurn = false;
         m_model->change_turnSide();
     }
+
+    m_readyToActive = false;
 
     if (m_readyToDie) {
         m_readyToDie = false;
@@ -596,12 +599,6 @@ Rules::dir2xy(eDir dir) const
     return V2(x, y);
 }
 //-----------------------------------------------------------------
-    void
-Rules::actionTurnSide()
-{
-    m_readyToTurn = true;
-}
-//-----------------------------------------------------------------
 /**
  * Return what we do the last round.
  * NOTE: dead is not action
@@ -614,6 +611,9 @@ Rules::getAction() const
     }
     else if (m_readyToTurn) {
         return "turn";
+    }
+    else if (m_readyToActive) {
+        return "activate";
     }
     else if (m_model->isBusy()) {
         return "busy";

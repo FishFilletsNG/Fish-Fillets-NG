@@ -29,11 +29,11 @@
 #include "ScriptException.h"
 
 #include "Room.h"
+#include "Unit.h"
 #include "Shape.h"
 #include "View.h"
-#include "Driver.h"
-#include "KeyDriver.h"
 #include "KeyControl.h"
+#include "ControlSym.h"
 #include "UnknownMsgException.h"
 
 #include "game-script.h"
@@ -261,23 +261,29 @@ GameAgent::addModel(const std::string &kind, const V2 &loc,
     bool alive;
     Shape *newShape = new Shape(shape);
     View *newView = new View();
-    Driver *newDriver = createDriver(kind, &weight, &power, &alive);
+    Unit *newUnit = createUnit(kind, &weight, &power, &alive);
     Cube *model = new Cube(loc,
             weight, power, alive,
-            newDriver, newView, newShape);
+            newView, newShape);
+
+    if (newUnit) {
+        newUnit->takeModel(model);
+        m_room->addUnit(newUnit);
+    }
 
     return m_room->addModel(model);
 }
 //-----------------------------------------------------------------
 /**
- * Driver factory.
+ * Unit factory.
+ * @return new unit for fishes or NULL
  * @throws LogicException when kind is unkown
  */
-Driver *
-GameAgent::createDriver(const std::string &kind,
+Unit *
+GameAgent::createUnit(const std::string &kind,
         Cube::eWeight *out_weight, Cube::eWeight *out_power, bool *out_alive)
 {
-    Driver *result = NULL;
+    Unit *result = NULL;
     //TODO: better controls (spacebar will switch between fishes)
     if ("fish_small" == kind) {
         KeyControl smallfish;
@@ -285,7 +291,7 @@ GameAgent::createDriver(const std::string &kind,
         smallfish.setDown(SDLK_k);
         smallfish.setLeft(SDLK_j);
         smallfish.setRight(SDLK_l);
-        result = new KeyDriver(smallfish);
+        result = new Unit(smallfish, ControlSym('u', 'd', 'l', 'r'));
         *out_weight = Cube::LIGHT;
         *out_power = Cube::LIGHT;
         *out_alive = true;
@@ -296,13 +302,12 @@ GameAgent::createDriver(const std::string &kind,
         bigfish.setDown(SDLK_s);
         bigfish.setLeft(SDLK_a);
         bigfish.setRight(SDLK_d);
-        result = new KeyDriver(bigfish);
+        result = new Unit(bigfish, ControlSym('U', 'D', 'L', 'R'));
         *out_weight = Cube::LIGHT;
         *out_power = Cube::HEAVY;
         *out_alive = true;
     }
     else {
-        result = new Driver();
         *out_power = Cube::NONE;
         *out_alive = false;
         if ("item_light" == kind) {
@@ -357,6 +362,9 @@ GameAgent::keyBinding()
     // load
     msg = new SimpleMsg(this, "load");
     keyBinder->addStroke(KeyStroke(SDLK_F3, KMOD_NONE), msg);
+    // switch
+    msg = new SimpleMsg(this, "switch");
+    keyBinder->addStroke(KeyStroke(SDLK_SPACE, KMOD_NONE), msg);
 
     // volume
     KeyStroke key_plus(SDLK_KP_PLUS, KMOD_NONE);
@@ -448,6 +456,9 @@ GameAgent::loadLevel()
  * Handle incoming message.
  * Messages:
  * - restart ... room restart
+ * - save ... game save
+ * - load ... game load
+ * - switch ... switch active fish
  *
  * @throws UnknownMsgException
  */
@@ -462,6 +473,11 @@ GameAgent::receiveSimple(const SimpleMsg *msg)
     }
     else if (msg->equalsName("load")) {
         loadLevel();
+    }
+    else if (msg->equalsName("switch")) {
+        if (m_room) {
+            m_room->switchFish();
+        }
     }
     else {
         throw UnknownMsgException(msg);

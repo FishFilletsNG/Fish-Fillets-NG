@@ -11,7 +11,6 @@
 #include "Log.h"
 #include "View.h"
 #include "Shape.h"
-#include "Driver.h"
 #include "Rules.h"
 #include "LayoutException.h"
 #include "DialogAgent.h"
@@ -25,7 +24,7 @@
  */
 Cube::Cube(const V2 &location,
         eWeight weight, eWeight power, bool alive,
-        Driver *driver, View *a_view, Shape *ashape)
+        View *a_view, Shape *ashape)
 : m_loc(location), m_goal(Goal::noGoal())
 {
     m_weight = weight;
@@ -35,7 +34,6 @@ Cube::Cube(const V2 &location,
     m_lookLeft = true;
 
     m_shape = ashape;
-    m_driver = driver;
     m_view = a_view;
     m_view->takeModel(this);
     m_rules = new Rules(this);
@@ -49,7 +47,6 @@ Cube::~Cube()
     //NOTE: rules must be destroyed before shape
     delete m_rules;
 
-    delete m_driver;
     delete m_view;
     delete m_shape;
 }
@@ -62,7 +59,7 @@ Cube::~Cube()
 Cube::createBorder()
 {
     Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::NONE, false,
-            new Driver(), new View(), new Shape("X\n"));
+            new View(), new Shape("X\n"));
     border->m_view->takeModel(NULL);
     return border;
 }
@@ -110,16 +107,6 @@ Cube::change_turnSide()
     m_lookLeft = !m_lookLeft;
 }
 
-//-----------------------------------------------------------------
-/**
- * Let the driver drive.
- * Return true when we have moved.
- */
-    bool
-Cube::drive()
-{
-    return m_driver->drive(this);
-}
 //-----------------------------------------------------------------
 /**
  * Unmask from old position.

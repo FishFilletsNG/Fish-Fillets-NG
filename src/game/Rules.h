@@ -29,6 +29,7 @@ class Rules : public NoCopy {
         bool m_readyToDie;
         bool m_readyToTurn;
         bool m_readyToGoout;
+        bool m_readyToActive;
         bool m_pushing;
         bool m_lastFall;
 
@@ -67,7 +68,8 @@ class Rules : public NoCopy {
 
         eFall actionFall();
         bool actionMoveDir(eDir dir);
-        void actionTurnSide();
+        void actionTurnSide() { m_readyToTurn = true; }
+        void actionActivate() { m_readyToActive = true; }
 
         eDir getDir() const { return m_dir; }
         std::string getAction() const;
