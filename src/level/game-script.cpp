@@ -361,6 +361,25 @@ script_model_isLeft(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool model_isAtBorder(model_index)
+ *
+ * Returns true when model is at room border.
+ */
+    int
+script_model_isAtBorder(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = getModel(L, model_index);
+    bool atBorder = model->rules()->isAtBorder();
+
+    lua_pushboolean(L, atBorder);
+    END_NOEXCEPTION;
+    //NOTE: return atBorder
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * int model_getW(model_index)
  *
  * Returns model width.

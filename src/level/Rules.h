@@ -78,6 +78,7 @@ class Rules : public NoCopy {
         std::string getAction() const;
         std::string getState() const;
         bool isOnStrongPad(Cube::eWeight weight);
+        bool isAtBorder() const;
 
         static V2 dir2xy(eDir dir);
 };

@@ -185,6 +185,7 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("model_isAlive", script_model_isAlive);
     m_script->registerFunc("model_isOut", script_model_isOut);
     m_script->registerFunc("model_isLeft", script_model_isLeft);
+    m_script->registerFunc("model_isAtBorder", script_model_isAtBorder);
     m_script->registerFunc("model_getW", script_model_getW);
     m_script->registerFunc("model_getH", script_model_getH);
     m_script->registerFunc("model_setGoal", script_model_setGoal);

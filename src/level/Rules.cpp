@@ -663,5 +663,10 @@ Rules::getState() const
         return "normal";
     }
 }
-
+//-----------------------------------------------------------------
+bool
+Rules::isAtBorder() const
+{
+    return m_mask->getBorderDir() != DIR_NO;
+}
 

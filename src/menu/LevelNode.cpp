@@ -23,7 +23,7 @@ LevelNode::LevelNode(const std::string &codename, const Path &datafile,
 : m_codename(codename), m_poster(poster), m_datafile(datafile), m_loc(loc)
 {
     m_state = STATE_FAR;
-    m_depth = 0;
+    m_depth = 1;
 }
 //-----------------------------------------------------------------
 /**

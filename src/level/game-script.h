@@ -21,6 +21,7 @@ extern int script_model_getState(lua_State *L) throw();
 extern int script_model_isAlive(lua_State *L) throw();
 extern int script_model_isOut(lua_State *L) throw();
 extern int script_model_isLeft(lua_State *L) throw();
+extern int script_model_isAtBorder(lua_State *L) throw();
 extern int script_model_getW(lua_State *L) throw();
 extern int script_model_getH(lua_State *L) throw();
 extern int script_model_setGoal(lua_State *L) throw();
