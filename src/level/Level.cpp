@@ -518,11 +518,10 @@ Level::setRoomWaves(double amplitude, double periode, double speed)
 }
 //-----------------------------------------------------------------
     void
-Level::newDemo(Picture *new_bg, const Path &demofile)
+Level::newDemo(const Path &demofile)
 {
     m_levelScript->interruptPlan();
-    DemoMode *demo = new DemoMode();
-    demo->runDemo(new_bg, demofile);
+    DemoMode *demo = new DemoMode(demofile);
     pushState(demo);
 }
 

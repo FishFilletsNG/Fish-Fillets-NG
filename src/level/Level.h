@@ -92,7 +92,7 @@ class Level : public GameState {
 
         void createRoom(int w, int h, const Path &picture);
         void setRoomWaves(double amplitude, double periode, double speed);
-        void newDemo(Picture *new_bg, const Path &demofile);
+        void newDemo(const Path &demofile);
 
         bool isLoading() const;
         bool isShowing() const;

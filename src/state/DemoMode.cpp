@@ -15,14 +15,16 @@
 #include "ScriptState.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
+#include "SurfaceTool.h"
 
 #include "demo-script.h"
 
 //-----------------------------------------------------------------
-DemoMode::DemoMode()
+DemoMode::DemoMode(const Path &demoscript)
+    : m_demoscript(demoscript)
 {
-    m_bg = NULL;
     m_display = NULL;
+    m_surfaceBuffer = NULL;
     m_script->registerFunc("demo_display", script_demo_display);
     takeHandler(new DemoInput(this));
     addDrawable(this);
@@ -34,28 +36,18 @@ DemoMode::~DemoMode()
     own_cleanState();
 }
 //-----------------------------------------------------------------
+/**
+ * Run demo.
+ */
     void
-DemoMode::runDemo(Picture *new_bg, const Path &demoscript)
+DemoMode::own_initState()
 {
-    if (m_bg) {
-        delete m_bg;
-    }
-    m_bg = new_bg;
     killPlan();
-    m_script->doFile(demoscript);
-}
-//-----------------------------------------------------------------
-void
-DemoMode::killPlan()
-{
-    DialogAgent::agent()->killTalks();
-    SubTitleAgent::agent()->killTalks();
-    interruptPlan();
+    m_script->doFile(m_demoscript);
 }
 //-----------------------------------------------------------------
 /**
- * Run demo.
- * NOTE: activate bg at first time
+ * Execute next demo command.
  */
 void
 DemoMode::own_updateState()
@@ -69,9 +61,9 @@ void
 DemoMode::own_cleanState()
 {
     //NOTE: loaded dialogs will be keeped until room end
-    if (m_bg) {
-        delete m_bg;
-        m_bg = NULL;
+    if (m_surfaceBuffer) {
+        SDL_FreeSurface(m_surfaceBuffer);
+        m_surfaceBuffer = NULL;
     }
     if (m_display) {
         delete m_display;
@@ -79,6 +71,15 @@ DemoMode::own_cleanState()
     }
 
     killPlan();
+}
+
+//-----------------------------------------------------------------
+void
+DemoMode::killPlan()
+{
+    DialogAgent::agent()->killTalks();
+    SubTitleAgent::agent()->killTalks();
+    interruptPlan();
 }
 //-----------------------------------------------------------------
 /**
@@ -97,13 +98,14 @@ DemoMode::action_display(Picture *picture)
 void
 DemoMode::drawOn(SDL_Surface *screen)
 {
-    //FIXME: redraw full screen to clear drawing after fg states
-    if (m_bg) {
-        m_bg->drawOn(screen);
+    if (NULL == m_surfaceBuffer) {
+        m_surfaceBuffer = SurfaceTool::createEmpty(screen);
     }
+
     if (m_display) {
-        m_display->drawOn(screen);
+        m_display->drawOn(m_surfaceBuffer);
     }
+    SDL_BlitSurface(m_surfaceBuffer, NULL, screen, NULL);
 }
 
 

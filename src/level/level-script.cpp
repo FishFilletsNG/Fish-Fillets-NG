@@ -207,19 +207,15 @@ script_level_isNewRound(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void level_newDemo(demofile, bg, bg_x, bg_y)
+ * void level_newDemo(demofile)
  */
     int
 script_level_newDemo(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *demofile = luaL_checkstring(L, 1);
-    const char *bgname = luaL_checkstring(L, 2);
-    int bg_x = luaL_checkint(L, 3);
-    int bg_y = luaL_checkint(L, 4);
 
-    Picture *bg = new Picture(Path::dataReadPath(bgname), V2(bg_x, bg_y));
-    getLevel(L)->newDemo(bg, Path::dataReadPath(demofile));
+    getLevel(L)->newDemo(Path::dataReadPath(demofile));
     END_NOEXCEPTION;
     return 0;
 }
