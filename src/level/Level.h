@@ -35,6 +35,7 @@ class Level : public GameState {
         std::string m_codename;
         Path m_datafile;
         PhaseLocker *m_locker;
+        bool m_newRound;
         LevelScript *m_levelScript;
         CommandQueue *m_show;
         int m_restartCounter;
@@ -82,6 +83,7 @@ class Level : public GameState {
 
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
+        bool isNewRound() const { return m_newRound; }
 
         void createRoom(int w, int h, const Path &picture);
         void setRoomWaves(double amplitude, double periode, double speed);

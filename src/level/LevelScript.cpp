@@ -211,6 +211,7 @@ LevelScript::registerLevelFuncs()
     m_script->registerFunc("level_getRestartCounter",
             script_level_getRestartCounter);
     m_script->registerFunc("level_getDepth", script_level_getDepth);
+    m_script->registerFunc("level_isNewRound", script_level_isNewRound);
     m_script->registerFunc("level_newDemo", script_level_newDemo);
     m_script->registerFunc("level_planShow", script_level_planShow);
     m_script->registerFunc("level_isShowing", script_level_isShowing);

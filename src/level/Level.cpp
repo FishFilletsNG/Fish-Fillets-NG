@@ -46,6 +46,7 @@
     m_replayMode = false;
     m_loadSpeed = 1;
     m_depth = depth;
+    m_newRound = false;
     m_locker = new PhaseLocker();
     m_levelScript = new LevelScript(this);
     m_show = new CommandQueue();
@@ -87,7 +88,9 @@ Level::own_initState()
 Level::own_updateState()
 {
     bool finished = false;
+    m_newRound = false;
     if (m_locker->getLocked() == 0) {
+        m_newRound = true;
         finished = nextAction();
     }
     updateLevel();

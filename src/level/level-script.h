@@ -17,6 +17,7 @@ extern int script_level_createRoom(lua_State *L) throw();
 extern int script_level_setRoomWaves(lua_State *L) throw();
 extern int script_level_getRestartCounter(lua_State *L) throw();
 extern int script_level_getDepth(lua_State *L) throw();
+extern int script_level_isNewRound(lua_State *L) throw();
 
 extern int script_level_newDemo(lua_State *L) throw();
 extern int script_level_planShow(lua_State *L) throw();

@@ -192,6 +192,21 @@ script_level_getDepth(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * bool level_isNewRound()
+ * 
+ */
+    int
+script_level_isNewRound(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    bool newRound = getLevel(L)->isNewRound();
+    lua_pushboolean(L, newRound);
+    END_NOEXCEPTION;
+    //NOTE: return newRound
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * void level_newDemo(demofile, bg, bg_x, bg_y)
  */
     int
