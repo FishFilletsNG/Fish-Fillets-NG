@@ -1,31 +1,8 @@
 TODO
 
-priority - 1-High, 2-Medium, 3-Low
+- draw nice curves at worldmap
+- level editor - does anybody need this?
+- support for external levels - does anybody need this?
+- Mac OS X support - testers needed
+- BeOS support - testers needed
 
-
-GAME SPECIFIC
-2 - Mac OS X port
-2 - BeOS port
-2 - level editor
-3 - video playback
-
-
-INPUT
-- all done
-
-
-STATISTICS
-- all done
-
-
-LEVEL SPECIFIC
-- all done
-
-
-GRAPHICS
-3 - waves in text dialogs
-3 - draw nice curves at worldmap
-
-
-SOUND
-- all done
