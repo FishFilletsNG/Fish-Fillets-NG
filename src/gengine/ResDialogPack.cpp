@@ -92,7 +92,7 @@ ResDialogPack::findDialogHard(const std::string &name)
 }
 //-----------------------------------------------------------------
 /**
- * Try find dialog for current lang or lang=speech or default lang.
+ * Try find dialog for lang=speech or default lang.
  * @return dialog or NULL
  */
     const Dialog *

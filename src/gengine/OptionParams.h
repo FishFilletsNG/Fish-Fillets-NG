@@ -19,13 +19,13 @@ class OptionParams : public NoCopy {
             TYPE_STRING,
             TYPE_PATH
         };
+    private:
         struct Param {
             eType type;
             std::string help;
             Param(eType aType, const std::string &aHelp)
                 : type(aType), help(aHelp) {}
         };
-    private:
         typedef std::map<std::string,Param> t_params;
         t_params m_params;
         int m_maxSize;
