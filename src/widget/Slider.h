@@ -19,7 +19,7 @@ class Slider : public IWidget {
         virtual void own_mouseButton(const MouseStroke &stroke);
     public:
         Slider(const std::string &param, int min=0, int max=100);
-        virtual int getW() const { return m_max * PIXELS_PER_VALUE; }
+        virtual int getW() const { return (m_max - m_min) * PIXELS_PER_VALUE; }
         virtual int getH() const { return HEIGHT; }
 
         virtual void drawOn(SDL_Surface *screen);

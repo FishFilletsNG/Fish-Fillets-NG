@@ -25,7 +25,7 @@ Slider::Slider(const std::string &param, int min, int max)
 //-----------------------------------------------------------------
 /**
  * Scale value to slider rate.
- * @return value in range [min, max]
+ * @return position on slider
  */
 int
 Slider::value2slide(int value)
@@ -33,7 +33,7 @@ Slider::value2slide(int value)
     int slide = value - m_min;
     slide = max(slide, m_min);
     slide = min(slide, m_max);
-    return slide;
+    return slide * PIXELS_PER_VALUE;
 }
 //-----------------------------------------------------------------
 /**
@@ -44,7 +44,8 @@ int
 Slider::slide2value(int slide)
 {
     int value = slide + m_min;
-    return value;
+    double fraction = static_cast<double>(value) / PIXELS_PER_VALUE;
+    return static_cast<int>(fraction + 0.5);
 }
 //-----------------------------------------------------------------
 void
@@ -63,7 +64,7 @@ Slider::drawOn(SDL_Surface *screen)
 
     rect.x = m_shift.getX();
     rect.y = m_shift.getY();
-    rect.w = value2slide(value) * PIXELS_PER_VALUE;
+    rect.w = value2slide(value);
     rect.h = getH();
     SDL_FillRect(screen, &rect, green);
 }
@@ -73,7 +74,7 @@ Slider::own_mouseButton(const MouseStroke &stroke)
 {
     if (stroke.isLeft()) {
         V2 inside = stroke.getLoc().minus(m_shift);
-        int value = slide2value(inside.getX()) / PIXELS_PER_VALUE;
+        int value = slide2value(inside.getX());
         OptionAgent::agent()->setPersistent(m_param, value);
     }
 }
