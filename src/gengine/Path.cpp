@@ -12,6 +12,8 @@
 #include "OptionAgent.h"
 #include "FsPath.h"
 
+#include <stdio.h>
+
 //-----------------------------------------------------------------
     Path::Path(const std::string &file)
 : m_path(file)
@@ -33,14 +35,23 @@ Path::dataPath(const std::string &file, bool writeable)
 {
     Path datapath = dataUserPath(file);
 
-    if (writeable) {
-        LOG_INFO(ExInfo("creating path")
-                .addInfo("path", datapath.getNative()));
-        FsPath::createPath(datapath.getPosixName());
-    }
-
     if (!datapath.exists())  {
-        datapath = dataSystemPath(file);
+        if (writeable) {
+            LOG_INFO(ExInfo("creating path")
+                    .addInfo("path", datapath.getNative()));
+            FsPath::createPath(datapath.getPosixName());
+
+            FILE *try_open = fopen(datapath.getNative().c_str(), "wb");
+            if (NULL == try_open) {
+                 datapath = dataSystemPath(file);
+            }
+            else {
+                fclose(try_open);
+            }
+        }
+        else {
+            datapath = dataSystemPath(file);
+        }
     }
 
     return datapath;
