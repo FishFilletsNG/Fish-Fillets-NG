@@ -253,7 +253,7 @@ OptionAgent::getParam(const std::string &name,
 }
 //-----------------------------------------------------------------
 /**
- * Return number value.
+ * Returns number value.
  * Implicit value is zero.
  *
  * @param name param name
@@ -265,6 +265,21 @@ OptionAgent::getAsInt(const std::string &name,
         int implicit) const
 {
     return m_environ->getAsInt(name, implicit);
+}
+//-----------------------------------------------------------------
+/**
+ * Returns boolean value.
+ * Implicit value is false.
+ *
+ * @param name param name
+ * @param implicit default value = false
+ * @return stored boolean value or implicit value
+ */
+    bool
+OptionAgent::getAsBool(const std::string &name,
+        bool implicit) const
+{
+    return m_environ->getAsBool(name, implicit);
 }
 //-----------------------------------------------------------------
 /**

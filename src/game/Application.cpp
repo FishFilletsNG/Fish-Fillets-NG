@@ -130,7 +130,7 @@ Application::prepareOptions(int argc, char *argv[])
     params.addParam("volume_music", OptionParams::TYPE_NUMBER,
             "Music volume in percentage");
     params.addParam("worldmap", OptionParams::TYPE_STRING,
-            "Path to worldmap file.");
+            "Path to worldmap file");
     OptionAgent::agent()->parseCmdOpt(argc, argv, params);
 }
 //-----------------------------------------------------------------
@@ -167,7 +167,7 @@ Application::addSoundAgent()
     //TODO: better setting sound on/off
     //TODO: move to the SoundAgent
     SoundAgent *soundAgent = NULL;
-    if (OptionAgent::agent()->getAsInt("sound", 1)) {
+    if (OptionAgent::agent()->getAsBool("sound", true)) {
         soundAgent = new SDLSoundAgent();
         try {
             soundAgent->init();

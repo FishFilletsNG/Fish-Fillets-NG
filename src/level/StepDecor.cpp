@@ -30,7 +30,7 @@ StepDecor::drawOnScreen(const View * /*view*/, SDL_Surface *screen)
     static const SDL_Color COLOR_ORANGE = {255, 197, 102, 255};
     static const SDL_Color COLOR_BLUE = {162, 244, 255, 255};
 
-    if (OptionAgent::agent()->getAsInt("show_steps")) {
+    if (OptionAgent::agent()->getAsBool("show_steps")) {
         SDL_Color color;
         if (m_counter->isPowerful()) {
             color = COLOR_BLUE;

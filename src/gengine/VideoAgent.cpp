@@ -117,7 +117,7 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     OptionAgent *options = OptionAgent::agent();
     int screen_bpp = options->getAsInt("screen_bpp", 32);
     int videoFlags = getVideoFlags();
-    m_fullscreen = options->getAsInt("fullscreen", 0);
+    m_fullscreen = options->getAsBool("fullscreen", false);
     if (m_fullscreen) {
         videoFlags |= SDL_FULLSCREEN;
     }
@@ -182,7 +182,7 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("fullscreen")) {
         OptionAgent *options = OptionAgent::agent();
-        bool toggle = !(options->getAsInt("fullscreen"));
+        bool toggle = !(options->getAsBool("fullscreen"));
         options->setPersistent("fullscreen", toggle);
     }
     else {
@@ -203,7 +203,7 @@ VideoAgent::receiveString(const StringMsg *msg)
     if (msg->equalsName("param_changed")) {
         std::string param = msg->getValue();
         if ("fullscreen" == param) {
-            bool fs = OptionAgent::agent()->getAsInt("fullscreen");
+            bool fs = OptionAgent::agent()->getAsBool("fullscreen");
             if (fs != m_fullscreen) {
                 toggleFullScreen();
             }

@@ -49,6 +49,8 @@ class OptionAgent : public BaseAgent {
                 const std::string &implicit="") const;
         int getAsInt(const std::string &name,
                 int implicit=0) const;
+        bool getAsBool(const std::string &name,
+                bool implicit=false) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
         void removeWatchers(const std::string &listenerName);

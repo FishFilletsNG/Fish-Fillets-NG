@@ -121,7 +121,7 @@ Environ::getParam(const std::string &name,
 }
 //-----------------------------------------------------------------
 /**
- * Return number value.
+ * Returns number value.
  * Implicit value is zero.
  *
  * @param name param name
@@ -136,6 +136,41 @@ Environ::getAsInt(const std::string &name,
     bool ok;
     int result = StringTool::readInt(value.c_str(), &ok);
     if (!ok) {
+        result = implicit;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Returns boolean value.
+ * Recognizes 1/0, true/false, on/off, yes/no.
+ *
+ * @param name param name
+ * @param implicit default value = false
+ * @return stored value or implicit value when value is not recognized
+ */
+    bool
+Environ::getAsBool(const std::string &name,
+                bool implicit) const
+{
+    bool result = false;
+    std::string value = getParam(name);
+    if (value == "1" || value == "true" || value == "on" || value == "yes") {
+        result = true;
+    }
+    else if (value == "0" || value == "false" || value == "off" ||
+            value == "no")
+    {
+        result = false;
+    }
+    else {
+        if (value != "") {
+            //TODO: don't print this every time
+            LOG_WARNING(ExInfo("cannot recognize boolean value")
+                    .addInfo("property", name)
+                    .addInfo("value", value)
+                    .addInfo("hint", "use 1/0, true/false, on/off, yes/no"));
+        }
         result = implicit;
     }
     return result;

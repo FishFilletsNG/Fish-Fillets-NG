@@ -106,7 +106,7 @@ StateInput::enableSubtitles()
 StateInput::toggleParam(const std::string &param)
 {
     OptionAgent *option = OptionAgent::agent();
-    bool enable = option->getAsInt(param);
+    bool enable = option->getAsBool(param);
 
     option->setPersistent(param, !enable);
 }

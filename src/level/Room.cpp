@@ -497,7 +497,7 @@ Room::addSound(const std::string &name, const Path &file)
     void
 Room::playSound(const std::string &name, int volume)
 {
-    if (OptionAgent::agent()->getAsInt("sound", 1)) {
+    if (OptionAgent::agent()->getAsBool("sound", true)) {
         SoundAgent::agent()->playSound(
             m_soundPack->getRandomRes(name), volume);
     }
