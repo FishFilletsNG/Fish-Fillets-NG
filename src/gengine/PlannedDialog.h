@@ -18,6 +18,9 @@ class PlannedDialog: public NoCopy {
         int m_channel;
         bool m_busy;
         bool m_running;
+        int m_endtime;
+    private:
+        bool isPlaying();
     public:
         PlannedDialog(Actor *actor, int delay, const Dialog *dialog,
                 bool busy);

@@ -8,8 +8,10 @@
  */
 #include "PlannedDialog.h"
 
+#include "Log.h"
 #include "Dialog.h"
 #include "Actor.h"
+#include "TimerAgent.h"
 
 //-----------------------------------------------------------------
 /**
@@ -28,6 +30,7 @@ PlannedDialog::PlannedDialog(Actor *actor, int delay, const Dialog *dialog,
     m_channel = -1;
     m_busy = busy;
     m_running = false;
+    m_endtime = 0;
 }
 //-----------------------------------------------------------------
 PlannedDialog::~PlannedDialog()
@@ -44,11 +47,12 @@ void
 PlannedDialog::talk()
 {
     m_channel = m_dialog->talk();
-    if (m_channel > -1) {
-        m_running = true;
-        if (m_busy) {
-            m_actor->setBusy(true);
-        }
+
+    m_running = true;
+    m_endtime = m_dialog->getMinTime() + TimerAgent::agent()->getCycles();
+
+    if (m_busy) {
+        m_actor->setBusy(true);
     }
 }
 
@@ -65,7 +69,7 @@ PlannedDialog::equalsActor(const Actor *other) const
 void
 PlannedDialog::killTalk()
 {
-    if (isTalking()) {
+    if (isPlaying()) {
         Mix_HaltChannel(m_channel);
     }
 }
@@ -75,9 +79,8 @@ PlannedDialog::killTalk()
  * our chunk is the last one on this channel.
  */
 bool
-PlannedDialog::isTalking()
+PlannedDialog::isPlaying()
 {
-    //TODO: return true for minimal time according subtitle length
     bool result = false;
     if (m_channel > -1) {
         if (Mix_Playing(m_channel)) {
@@ -86,3 +89,22 @@ PlannedDialog::isTalking()
     }
     return result;
 }
+//-----------------------------------------------------------------
+/**
+ * Return true when is playing or 
+ * return true for minimal time according subtitle length.
+ */
+bool
+PlannedDialog::isTalking()
+{
+    bool result = false;
+    if (m_channel > -1) {
+        result = isPlaying();
+    }
+    else {
+        result = m_endtime > TimerAgent::agent()->getCycles();
+    }
+
+    return result;
+}
+

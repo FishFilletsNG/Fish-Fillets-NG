@@ -56,5 +56,15 @@ Dialog::runSubtitle() const
     LOG_INFO(ExInfo("subtitle")
             .addInfo("content", m_subtitle));
 }
+//-----------------------------------------------------------------
+/**
+ * Minimal time according subtitle length.
+ * @return minimal number of cycles for talk
+ */
+int
+Dialog::getMinTime() const
+{
+    return m_subtitle.size();
+}
 
 

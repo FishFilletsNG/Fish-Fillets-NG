@@ -270,8 +270,13 @@ GameAgent::createDriver(const std::string &kind,
         Cube::eWeight *out_weight, Cube::eWeight *out_power, bool *out_alive)
 {
     Driver *result = NULL;
+    //TODO: better controls (spacebar will switch between fishes)
     if ("fish_small" == kind) {
         KeyControl smallfish;
+        smallfish.setUp(SDLK_i);
+        smallfish.setDown(SDLK_k);
+        smallfish.setLeft(SDLK_j);
+        smallfish.setRight(SDLK_l);
         result = new KeyDriver(smallfish);
         *out_weight = Cube::LIGHT;
         *out_power = Cube::LIGHT;
@@ -279,10 +284,10 @@ GameAgent::createDriver(const std::string &kind,
     }
     else if ("fish_big" == kind) {
         KeyControl bigfish;
-        bigfish.setUp(SDLK_KP8);
-        bigfish.setDown(SDLK_KP5);
-        bigfish.setLeft(SDLK_KP4);
-        bigfish.setRight(SDLK_KP6);
+        bigfish.setUp(SDLK_w);
+        bigfish.setDown(SDLK_s);
+        bigfish.setLeft(SDLK_a);
+        bigfish.setRight(SDLK_d);
         result = new KeyDriver(bigfish);
         *out_weight = Cube::LIGHT;
         *out_power = Cube::HEAVY;

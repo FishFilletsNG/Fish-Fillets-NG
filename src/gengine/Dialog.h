@@ -24,6 +24,7 @@ class Dialog: public NoCopy {
         int talk() const;
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }
+        int getMinTime() const;
 
         bool equalSound(const Mix_Chunk *other) const
         { return m_sound == other; }
