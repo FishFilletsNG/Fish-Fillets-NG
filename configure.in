@@ -63,8 +63,7 @@ dnl ---- end of lua check ------
 # Check for SDL, and define SDL_CFLAGS and SDL_LIBS
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION,
-        :,
-        AC_MSG_ERROR([*** library SDL-devel version $SDL_VERSION not found!])
+    :, [AC_MSG_ERROR([*** library SDL-devel version $SDL_VERSION not found!])]
 )
 
 ###################################################
@@ -72,19 +71,19 @@ AM_PATH_SDL($SDL_VERSION,
 # SDL_mixer
 AC_CHECK_LIB([SDL_mixer], [Mix_OpenAudio],
              SDL_LIBS="-lSDL_mixer $SDL_LIBS",
-             AC_MSG_ERROR([*** SDL_mixer-devel library not found!]),
+             [AC_MSG_ERROR([*** SDL_mixer-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )
 # SDL_image
 AC_CHECK_LIB([SDL_image], [IMG_Load],
              SDL_LIBS="-lSDL_image $SDL_LIBS",
-             AC_MSG_ERROR([*** SDL_image-devel library not found!]),
+             [AC_MSG_ERROR([*** SDL_image-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )
 # SDL_ttf
 AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
              SDL_LIBS="-lSDL_ttf $SDL_LIBS",
-             AC_MSG_ERROR([*** SDL_ttf-devel library not found!]),
+             [AC_MSG_ERROR([*** SDL_ttf-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )
 
@@ -92,8 +91,14 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 # Test X11
 OLD_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-AC_TRY_COMPILE([#include <X11/Xutil.h>], ,
-        AC_DEFINE(HAVE_X11))
+AC_TRY_COMPILE([
+    #include "SDL.h"
+    #include "SDL_syswm.h"
+    #include <X11/Xutil.h>
+    ], [
+    SDL_SysWMinfo info;
+    info.subsystem = SDL_SYSWM_X11;
+    ], [AC_DEFINE(HAVE_X11)])
 CPPFLAGS="$OLD_CPPFLAGS"
 
 ###################################################
