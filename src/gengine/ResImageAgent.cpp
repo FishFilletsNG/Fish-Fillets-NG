@@ -14,19 +14,16 @@
 #include "SDL_image.h"
 
 //-----------------------------------------------------------------
-ResImageAgent::ResImageAgent()
+void
+ResImageAgent::own_init()
 {
     m_pack = new ResImagePack();
-}
-//-----------------------------------------------------------------
-ResImageAgent::~ResImageAgent()
-{
-    delete m_pack;
 }
 //-----------------------------------------------------------------
 void
 ResImageAgent::own_shutdown()
 {
     m_pack->removeAll();
+    delete m_pack;
 }
 

@@ -8,6 +8,14 @@
  */
 #include "ResSoundAgent.h"
 
+#include "ResSoundPack.h"
+
+//-----------------------------------------------------------------
+    void
+ResSoundAgent::own_init()
+{
+    m_pack = new ResSoundPack();
+}
 //-----------------------------------------------------------------
 /**
  * Free all resources.
@@ -15,7 +23,8 @@
     void
 ResSoundAgent::own_shutdown()
 {
-    removeAll();
+    m_pack->removeAll();
+    delete m_pack;
 }
 //-----------------------------------------------------------------
 /**
@@ -25,31 +34,6 @@ ResSoundAgent::own_shutdown()
     Mix_Chunk *
 ResSoundAgent::loadSound(const Path &file)
 {
-    Mix_Chunk *chunk = Mix_LoadWAV(file.getNative().c_str());
-    if (NULL == chunk) {
-        LOG_WARNING(ExInfo("cannot load sound")
-            .addInfo("path", file.getNative())
-            .addInfo("MixError", Mix_GetError()));
-    }
-    return chunk;
-}
-//-----------------------------------------------------------------
-/**
- * Store sound under this name.
- * Nothing is stored when sound cannot be loaded.
- */
-    void
-ResSoundAgent::addSound(const std::string &name, const Path &file)
-{
-    Mix_Chunk *chunk = loadSound(file);
-    if (chunk) {
-        addRes(name, chunk);
-    }
-}
-//-----------------------------------------------------------------
-    void
-ResSoundAgent::unloadRes(Mix_Chunk *res)
-{
-    Mix_FreeChunk(res);
+    return m_pack->loadSound(file);
 }
 

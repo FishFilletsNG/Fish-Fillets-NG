@@ -5,10 +5,10 @@ class Field;
 class Picture;
 class Controls;
 class Unit;
+class ResSoundPack;
 
 #include "NoCopy.h"
 #include "Path.h"
-#include "Field.h"
 #include "Cube.h"
 
 #include <string>
@@ -20,19 +20,21 @@ class Room : public NoCopy {
     private:
         Picture *m_bg;
         Field *m_field;
+        ResSoundPack *m_soundPack;
+        Controls *m_controls;
         Cube::t_models m_models;
         Cube::eWeight m_impact;
-        Controls *m_controls;
         bool m_fresh;
     private:
         void prepareRound();
         bool falldown();
         void playImpact();
+        void playDead(Cube *model);
     public:
         Room(int w, int h, const Path &picture);
         ~Room();
 
-        int addModel(Cube *model);
+        int addModel(Cube *model, Unit *newUnit);
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
 
@@ -40,14 +42,14 @@ class Room : public NoCopy {
         bool nextRound();
         bool finishRound();
 
-        int getW() const { return m_field->getW(); }
-        int getH() const { return m_field->getH(); }
-
-        void addUnit(Unit *unit);
         void switchFish();
         std::string getMoves() const;
         bool loadMove(char move);
         bool makeMove(char move, bool anim=true);
+
+        int getW() const;
+        int getH() const;
+        void addSound(const std::string &name, const Path &file);
 };
 
 #endif

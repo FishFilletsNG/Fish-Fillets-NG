@@ -8,16 +8,19 @@
  */
 #include "Room.h"
 
-#include "Log.h"
 #include "Picture.h"
 #include "Field.h"
+#include "ResSoundPack.h"
+#include "Controls.h"
+
+#include "Log.h"
 #include "Rules.h"
 #include "LogicException.h"
 #include "SoundAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
-#include "Controls.h"
 #include "LoadException.h"
+#include "Unit.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -27,6 +30,7 @@ Room::Room(int w, int h, const Path &picture)
     m_controls = new Controls();
     m_impact = Cube::NONE;
     m_fresh = true;
+    m_soundPack = new ResSoundPack();
 }
 //-----------------------------------------------------------------
 /**
@@ -37,8 +41,11 @@ Room::~Room()
     //NOTE: dialogs must be killed because pointer to the actors
     SubTitleAgent::agent()->removeAll();
     DialogAgent::agent()->removeAll();
+    m_soundPack->removeAll();
+    delete m_soundPack;
     delete m_controls;
 
+    //NOTE: models must be removed before field because they unmask self
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         delete (*i);
@@ -50,13 +57,20 @@ Room::~Room()
 //-----------------------------------------------------------------
 /**
  * Add model at scene.
+ * @param model new object
+ * @param newUnit driver for the object or NULL
  * @return model index
  */
     int
-Room::addModel(Cube *model)
+Room::addModel(Cube *model, Unit *newUnit)
 {
     model->rules()->takeField(m_field);
     m_models.push_back(model);
+
+    if (newUnit) {
+        newUnit->takeModel(model);
+        m_controls->addUnit(newUnit);
+    }
 
     int model_index = m_models.size() - 1;
     model->setIndex(model_index);
@@ -109,7 +123,7 @@ Room::nextRound()
 }
 //-----------------------------------------------------------------
 /**
- * Play sound when some object has fall.
+ * Play sound like some object has fall.
  * NOTE: only one sound is played even more objects have fall
  */
 void
@@ -119,15 +133,41 @@ Room::playImpact()
         case Cube::NONE:
             break;
         case Cube::LIGHT:
-            SoundAgent::agent()->playRandomSound("impact_light");
+            SoundAgent::agent()->playSound(
+                    m_soundPack->getRandomRes("impact_light"));
             break;
         case Cube::HEAVY:
-            SoundAgent::agent()->playRandomSound("impact_heavy");
+            SoundAgent::agent()->playSound(
+                    m_soundPack->getRandomRes("impact_heavy"));
             break;
         default:
             assert("unknown impact weight" == NULL);
     }
     m_impact = Cube::NONE;
+}
+//-----------------------------------------------------------------
+/**
+ * Play sound like a fish die.
+ * @param model fresh dead fish
+ */
+void
+Room::playDead(Cube *model)
+{
+    DialogAgent::agent()->killSound(model);
+    switch (model->getPower()) {
+        case Cube::LIGHT:
+            SoundAgent::agent()->playSound(
+                    m_soundPack->getRandomRes("dead_small"));
+            break;
+        case Cube::HEAVY:
+            SoundAgent::agent()->playSound(
+                    m_soundPack->getRandomRes("dead_big"));
+            break;
+        default:
+            LOG_WARNING(ExInfo("curious power of dead fish")
+                    .addInfo("power", model->getPower()));
+            break;
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -145,7 +185,11 @@ Room::prepareRound()
         (*i)->rules()->occupyNewPos();
     }
     for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
-        interrupt |= (*j)->rules()->checkDead();
+        bool die = (*j)->rules()->checkDead();
+        interrupt |= die;
+        if (die) {
+            playDead(*j);
+        }
     }
     for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
         interrupt |= (*k)->rules()->checkOut();
@@ -205,12 +249,6 @@ Room::finishRound()
     return room_complete;
 }
 
-//-----------------------------------------------------------------
-void
-Room::addUnit(Unit *unit)
-{
-    m_controls->addUnit(unit);
-}
 //-----------------------------------------------------------------
 void
 Room::switchFish()
@@ -293,4 +331,20 @@ Room::makeMove(char move, bool anim)
     return result;
 }
 
+//-----------------------------------------------------------------
+int
+Room::getW() const {
+    return m_field->getW();
+}
+//-----------------------------------------------------------------
+int
+Room::getH() const {
+    return m_field->getH();
+}
+//-----------------------------------------------------------------
+void
+Room::addSound(const std::string &name, const Path &file)
+{
+    m_soundPack->addSound(name, file);
+}
 

@@ -26,7 +26,6 @@ ScriptState::ScriptState()
     luaopen_string(m_state);
     luaopen_math(m_state);
     luaopen_table(m_state);
-    //TODO: are need others lua libs?
 }
 //-----------------------------------------------------------------
 ScriptState::~ScriptState()

@@ -14,7 +14,6 @@
 #include "MixException.h"
 #include "Random.h"
 #include "BaseMsg.h"
-#include "ResSoundAgent.h"
 #include "OptionAgent.h"
 
 BaseMsg *SDLSoundAgent::ms_finished = NULL;
@@ -68,18 +67,6 @@ SDLSoundAgent::playSound(Mix_Chunk *sound)
     return channel;
 }
 
-//-----------------------------------------------------------------
-/**
- * Play sound once.
- * Take random sound with this name.
- * @param name sound name
- */
-    void
-SDLSoundAgent::playRandomSound(const std::string &name)
-{
-    Mix_Chunk *chunk = ResSoundAgent::agent()->getRandomRes(name);
-    playSound(chunk);
-}
 //-----------------------------------------------------------------
 /**
  * @param volume percentage volume, e.g. 30%=30

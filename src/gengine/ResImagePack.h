@@ -11,12 +11,12 @@
  */
 class ResImagePack : public ResourcePack<SDL_Surface*> {
     protected:
-    virtual void unloadRes(SDL_Surface *res);
+        virtual void unloadRes(SDL_Surface *res);
     public:
-    virtual const char *getName() const { return "image"; }
+        virtual const char *getName() const { return "image_pack"; }
 
-    SDL_Surface *loadImage(const Path &file);
-    void addImage(const std::string &name, const Path &file);
+        SDL_Surface *loadImage(const Path &file);
+        void addImage(const std::string &name, const Path &file);
 };
 
 #endif

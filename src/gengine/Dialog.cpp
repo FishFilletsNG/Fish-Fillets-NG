@@ -8,6 +8,7 @@
  */
 #include "Dialog.h"
 
+#include "Log.h"
 #include "ResSoundAgent.h"
 #include "SoundAgent.h"
 #include "Path.h"

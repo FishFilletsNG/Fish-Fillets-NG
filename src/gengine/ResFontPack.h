@@ -11,11 +11,11 @@
  */
 class ResFontPack : public ResourcePack<SFont_Font*> {
     protected:
-    virtual void unloadRes(SFont_Font *res);
+        virtual void unloadRes(SFont_Font *res);
     public:
-    virtual const char *getName() const { return "font"; }
-    SFont_Font *loadFont(const Path &file);
-    void addFont(const std::string &name, const Path &file);
+        virtual const char *getName() const { return "font_pack"; }
+        SFont_Font *loadFont(const Path &file);
+        void addFont(const std::string &name, const Path &file);
 };
 
 #endif

@@ -14,10 +14,10 @@ class Dialog;
  */
 class ResDialogPack : public ResourcePack<Dialog*> {
     protected:
-    virtual void unloadRes(Dialog *res);
+        virtual void unloadRes(Dialog *res);
     public:
-    virtual const char *getName() const { return "dialog"; }
-    Dialog *findDialog(const std::string &name, const std::string lang);
+        virtual const char *getName() const { return "dialog_pack"; }
+        Dialog *findDialog(const std::string &name, const std::string lang);
 };
 
 #endif

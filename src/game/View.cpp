@@ -8,8 +8,9 @@
  */
 #include "View.h"
 
-#include "Anim.h"
 #include "Cube.h"
+#include "Anim.h"
+
 #include "Rules.h"
 #include "GameAgent.h"
 

@@ -26,8 +26,6 @@ class OptionAgent : public BaseAgent {
         virtual void own_init();
         virtual void own_shutdown();
     public:
-        virtual ~OptionAgent();
-
         void parseCmdOpt(int argc, char *argv[]);
         void setParam(const std::string &name, const std::string &value);
         void setParam(const std::string &name, long value);

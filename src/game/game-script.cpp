@@ -12,16 +12,18 @@
 #include "GameAgent.h"
 #include "KeyControl.h"
 #include "Path.h"
+#include "V2.h"
 #include "Anim.h"
+#include "Shape.h"
 #include "Cube.h"
 #include "Rules.h"
 #include "FishDialog.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
-#include "Shape.h"
 #include "TimerAgent.h"
 #include "SoundAgent.h"
-#include "ResSoundAgent.h"
+#include "Level.h"
+#include "ModelFactory.h"
 
 extern "C" {
 #include "lualib.h"
@@ -43,6 +45,13 @@ catch (...) { \
 }
 
 //-----------------------------------------------------------------
+    inline Cube *
+getModel(int model_index)
+{
+    return GameAgent::agent()->level()->getModel(model_index);
+}
+
+//-----------------------------------------------------------------
 /**
  * void file_include(filename)
  *
@@ -54,9 +63,8 @@ script_file_include(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     const char *filename = luaL_checkstring(L, 1);
 
-    GameAgent::agent()->scriptInclude(Path::dataReadPath(filename));
+    GameAgent::agent()->level()->scriptInclude(Path::dataReadPath(filename));
     END_NOEXCEPTION;
-
     //NOTE: return how many values want to return to lua
     return 0;
 }
@@ -93,10 +101,8 @@ script_game_createRoom(lua_State *L) throw()
     int h = luaL_checkint(L, 2);
     const char *picture = luaL_checkstring(L, 3);
 
-    GameAgent::agent()->createRoom(w, h, Path::dataReadPath(picture));
+    GameAgent::agent()->level()->createRoom(w, h, Path::dataReadPath(picture));
     END_NOEXCEPTION;
-
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -120,10 +126,11 @@ script_game_addModel(lua_State *L) throw()
     int y = luaL_checkint(L, 3);
     const char *shape = luaL_checkstring(L, 4);
 
-    int model_index = GameAgent::agent()->addModel(kind, V2(x, y), shape);
+    Cube *model = ModelFactory::createModel(kind, V2(x, y), shape);
+    Unit *unit = ModelFactory::createUnit(kind);
+    int model_index = GameAgent::agent()->level()->addModel(model, unit);
     lua_pushnumber(L, model_index);
     END_NOEXCEPTION;
-
     //NOTE: return model_index
     return 1;
 }
@@ -136,10 +143,9 @@ script_game_addModel(lua_State *L) throw()
 script_game_getRestartCounter(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    int counter = GameAgent::agent()->getRestartCounter();
+    int counter = GameAgent::agent()->level()->getRestartCounter();
     lua_pushnumber(L, counter);
     END_NOEXCEPTION;
-
     //NOTE: return counter
     return 1;
 }
@@ -152,7 +158,7 @@ script_game_save(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *serialized = luaL_checkstring(L, 1);
-    GameAgent::agent()->saveGame(serialized);
+    GameAgent::agent()->level()->saveGame(serialized);
     END_NOEXCEPTION;
     return 0;
 }
@@ -165,7 +171,7 @@ script_game_load(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *moves = luaL_checkstring(L, 1);
-    GameAgent::agent()->loadGame(moves);
+    GameAgent::agent()->level()->loadGame(moves);
     END_NOEXCEPTION;
     return 0;
 }
@@ -181,7 +187,7 @@ script_game_planAction(lua_State *L) throw()
     luaL_checktype(L, 1, LUA_TFUNCTION);
     int funcRef = luaL_ref(L, LUA_REGISTRYINDEX);
 
-    GameAgent::agent()->planAction(funcRef);
+    GameAgent::agent()->level()->planAction(funcRef);
     END_NOEXCEPTION;
     return 0;
 }
@@ -203,7 +209,7 @@ script_game_action_move(lua_State *L) throw()
         luaL_error(L, error.what());
     }
 
-    bool sucess = GameAgent::agent()->action_move(symbol[0]);
+    bool sucess = GameAgent::agent()->level()->action_move(symbol[0]);
     lua_pushboolean(L, sucess);
     END_NOEXCEPTION;
     //NOTE: return sucess
@@ -211,39 +217,45 @@ script_game_action_move(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void game_action_save()
+ * bool game_action_save()
  */
     int
 script_game_action_save(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    GameAgent::agent()->action_save();
+    bool sucess = GameAgent::agent()->level()->action_save();
+    lua_pushboolean(L, sucess);
     END_NOEXCEPTION;
-    return 0;
+    //NOTE: return sucess
+    return 1;
 }
 //-----------------------------------------------------------------
 /**
- * void game_action_load()
+ * bool game_action_load()
  */
     int
 script_game_action_load(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    GameAgent::agent()->action_load();
+    bool sucess = GameAgent::agent()->level()->action_load();
+    lua_pushboolean(L, sucess);
     END_NOEXCEPTION;
-    return 0;
+    //NOTE: return sucess
+    return 1;
 }
 //-----------------------------------------------------------------
 /**
- * void game_action_restart()
+ * bool game_action_restart()
  */
     int
 script_game_action_restart(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    GameAgent::agent()->action_restart();
+    bool sucess = GameAgent::agent()->level()->action_restart();
+    lua_pushboolean(L, sucess);
     END_NOEXCEPTION;
-    return 0;
+    //NOTE: return sucess
+    return 1;
 }
 
 //-----------------------------------------------------------------
@@ -258,10 +270,9 @@ script_model_addAnim(lua_State *L) throw()
     const char *anim_name = luaL_checkstring(L, 2);
     const char *picture = luaL_checkstring(L, 3);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->anim()->addAnim(anim_name, Path::dataReadPath(picture));
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -277,12 +288,11 @@ script_model_addDuplexAnim(lua_State *L) throw()
     const char *left_picture = luaL_checkstring(L, 3);
     const char *right_picture = luaL_checkstring(L, 4);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->anim()->addDuplexAnim(anim_name,
             Path::dataReadPath(left_picture),
             Path::dataReadPath(right_picture));
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -297,10 +307,9 @@ script_model_runAnim(lua_State *L) throw()
     const char *anim_name = luaL_checkstring(L, 2);
     int phase = luaL_optint(L, 3, 0);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->anim()->runAnim(anim_name, phase);
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -315,10 +324,9 @@ script_model_setAnim(lua_State *L) throw()
     const char *anim_name = luaL_checkstring(L, 2);
     int phase = luaL_checkint(L, 3);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->anim()->setAnim(anim_name, phase);
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -335,10 +343,9 @@ script_model_useSpecialAnim(lua_State *L) throw()
     const char *anim_name = luaL_checkstring(L, 2);
     int phase = luaL_checkint(L, 3);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->anim()->useSpecialAnim(anim_name, phase);
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -351,7 +358,7 @@ script_model_getLoc(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     V2 loc = model->getLocation();
 
     lua_pushnumber(L, loc.getX());
@@ -370,7 +377,7 @@ script_model_getAction(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     std::string action = model->rules()->getAction();
 
     lua_pushlstring(L, action.c_str(), action.size());
@@ -387,7 +394,7 @@ script_model_getState(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     std::string state = model->rules()->getState();
 
     lua_pushlstring(L, state.c_str(), state.size());
@@ -404,7 +411,7 @@ script_model_isAlive(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     bool alive = model->isAlive();
 
     lua_pushboolean(L, alive);
@@ -423,7 +430,7 @@ script_model_isOut(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     bool out = model->isOut();
 
     lua_pushboolean(L, out);
@@ -442,7 +449,7 @@ script_model_isLeft(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     bool left = model->isLeft();
 
     lua_pushboolean(L, left);
@@ -461,7 +468,7 @@ script_model_getW(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     int width = model->shape()->getW();
 
     lua_pushnumber(L, width);
@@ -480,7 +487,7 @@ script_model_getH(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     int height = model->shape()->getH();
 
     lua_pushnumber(L, height);
@@ -508,7 +515,7 @@ script_model_setGoal(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     const char *goalname = luaL_checkstring(L, 2);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     Goal goal = Goal::noGoal();
     if (GOAL_NO == goalname) {
         goal = Goal::noGoal();
@@ -529,7 +536,6 @@ script_model_setGoal(lua_State *L) throw()
     model->setGoal(goal);
 
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -543,11 +549,10 @@ script_model_change_turnSide(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     model->change_turnSide();
 
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -564,7 +569,7 @@ script_model_equals(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     int x = luaL_checkint(L, 2);
     int y = luaL_checkint(L, 3);
-    Cube *other = GameAgent::agent()->askField(V2(x, y));
+    Cube *other = GameAgent::agent()->level()->askField(V2(x, y));
 
     int other_index = -1;
     if (other) {
@@ -606,7 +611,6 @@ script_dialog_addFont(lua_State *L) throw()
     SubTitleAgent::agent()->addFont(name, Path::dataReadPath(file));
 
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -628,7 +632,6 @@ script_dialog_addDialog(lua_State *L) throw()
     DialogAgent::agent()->addDialog(name, dialog);
 
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -641,7 +644,7 @@ script_model_isTalking(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     bool talking = DialogAgent::agent()->isTalking(model);
 
     lua_pushboolean(L, talking);
@@ -662,11 +665,10 @@ script_model_planDialog(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 3);
     bool busy = static_cast<bool>(luaL_optnumber(L, 4, 0));
 
-    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube *model = getModel(model_index);
     DialogAgent::agent()->planDialog(name, delay, model, busy);
 
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -695,7 +697,6 @@ script_sound_playMusic(lua_State *L) throw()
 
     SoundAgent::agent()->playMusic(Path::dataReadPath(music_name), NULL);
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
@@ -711,8 +712,7 @@ script_sound_addSound(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 1);
     const char *file = luaL_checkstring(L, 2);
 
-    ResSoundAgent::agent()->addSound(name, Path::dataReadPath(file));
+    GameAgent::agent()->level()->addSound(name, Path::dataReadPath(file));
     END_NOEXCEPTION;
-    //NOTE: return how many values want to return to lua
     return 0;
 }

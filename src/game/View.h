@@ -15,9 +15,9 @@ class View : public IDrawer, public NoCopy {
         static const int SCALE = 15;
     private:
         const Cube *m_model;
+        Anim *m_anim;
         int m_animShift;
         int m_shiftSize;
-        Anim *m_anim;
     private:
         void computeShiftSize();
     public:

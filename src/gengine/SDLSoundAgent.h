@@ -26,7 +26,6 @@ class SDLSoundAgent : public SoundAgent {
         virtual void own_shutdown();
     public:
         virtual int playSound(Mix_Chunk *);
-        virtual void playRandomSound(const std::string &name);
         virtual void setSoundVolume(int volume);
         virtual int getSoundVolume();
 

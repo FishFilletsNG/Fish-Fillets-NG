@@ -16,16 +16,10 @@ class ResImageAgent : public BaseAgent {
     private:
     ResImagePack *m_pack;
     protected:
+    virtual void own_init();
     virtual void own_shutdown();
     public:
-    ResImageAgent();
-    virtual ~ResImageAgent();
-
     SDL_Surface *loadImage(const Path &file) { return m_pack->loadImage(file); }
-    void addImage(const std::string &name, const Path &file)
-    {
-        m_pack->addImage(name, file);
-    }
 };
 
 #endif

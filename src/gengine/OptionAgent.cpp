@@ -41,17 +41,6 @@
 
 //-----------------------------------------------------------------
 /**
- * Delete left messages.
- */
-OptionAgent::~OptionAgent()
-{
-    t_watchers::iterator end = m_watchers.end();
-    for (t_watchers::iterator i = m_watchers.begin(); i != end; ++i) {
-        delete i->second;
-    }
-}
-//-----------------------------------------------------------------
-/**
  * Set user and sytem dir
  * and process "options.lua" - this will set user and system paths
  * and process "init.lua".
@@ -75,6 +64,7 @@ OptionAgent::own_init()
 //-----------------------------------------------------------------
 /**
  * Save user config.
+ * Delete left messages.
  */
     void
 OptionAgent::own_shutdown()
@@ -95,6 +85,11 @@ OptionAgent::own_shutdown()
     else {
         LOG_WARNING(ExInfo("cannot save config")
                 .addInfo("file", file.getNative()));
+    }
+
+    t_watchers::iterator end = m_watchers.end();
+    for (t_watchers::iterator i = m_watchers.begin(); i != end; ++i) {
+        delete i->second;
     }
 }
 //-----------------------------------------------------------------
