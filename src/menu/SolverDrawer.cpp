@@ -45,6 +45,9 @@ SolverDrawer::SolverDrawer(LevelStatus *status)
             addWidget(new WiLabel(labels.getLabel("solver_check"),
                         usedFont, usedColor));
         }
+
+        enableCentered();
+        recenter();
     }
     catch (BaseException &e) {
         LOG_WARNING(e.info());
