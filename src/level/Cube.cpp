@@ -8,12 +8,12 @@
  */
 #include "Cube.h"
 
-#include "Log.h"
 #include "Shape.h"
 #include "Rules.h"
 #include "LayoutException.h"
 #include "Anim.h"
 #include "EffectDisintegrate.h"
+#include "DialogStack.h"
 
 //-----------------------------------------------------------------
 /**
@@ -39,6 +39,7 @@ Cube::Cube(const V2 &location,
     m_shape = new_shape;
     m_rules = new Rules(this);
     m_anim = new Anim();
+    m_dialogs = NULL;
 }
 //-----------------------------------------------------------------
 /**
@@ -129,6 +130,12 @@ bool
 Cube::isInvisible()
 {
     return m_anim->isInvisible();
+}
+//-----------------------------------------------------------------
+bool
+Cube::isTalking() const
+{
+    return (m_dialogs && m_dialogs->isTalking(m_index));
 }
 //-----------------------------------------------------------------
 std::string

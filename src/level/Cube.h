@@ -4,6 +4,7 @@
 class Shape;
 class Anim;
 class Rules;
+class DialogStack;
 
 #include "V2.h"
 #include "Goal.h"
@@ -46,6 +47,7 @@ class Cube : public NoCopy {
         Goal m_goal;
         Dir::eDir m_outDir;
         int m_outCapacity;
+        const DialogStack *m_dialogs;
     public:
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
@@ -81,6 +83,9 @@ class Cube : public NoCopy {
         bool isOutDir(Dir::eDir dir) const { return m_outDir == dir; }
         void setOutDir(Dir::eDir outDir);
         void decOutCapacity();
+
+        bool isTalking() const;
+        void takeDialogs(const DialogStack *dialogs) { m_dialogs = dialogs; }
 
         bool isDisintegrated();
         bool isInvisible();

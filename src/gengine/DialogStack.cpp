@@ -6,7 +6,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-#include "DialogAgent.h"
+#include "DialogStack.h"
 
 #include "Dialog.h"
 #include "ResDialogPack.h"
@@ -14,35 +14,34 @@
 #include "StringTool.h"
 
 //-----------------------------------------------------------------
-    void
-DialogAgent::own_init()
+DialogStack::DialogStack()
 {
     m_dialogs = new ResDialogPack();
 }
 //-----------------------------------------------------------------
 /**
- * Run planned dialog.
- * Move first planned dialog into the running dialogs.
+ * Releases resources and stops all cycling dialogs.
  */
-    void
-DialogAgent::own_update()
-{
-    removeFirstNotTalking();
-}
-//-----------------------------------------------------------------
-    void
-DialogAgent::own_shutdown()
+DialogStack::~DialogStack()
 {
     removeAll();
     delete m_dialogs;
 }
 //-----------------------------------------------------------------
 /**
- * Store new dialog.
- * @throws NameException when dialog with this name exists
+ * Removes finished dialogs from stack.
  */
     void
-DialogAgent::addDialog(const std::string &name, Dialog *dialog)
+DialogStack::updateStack()
+{
+    removeFirstNotTalking();
+}
+//-----------------------------------------------------------------
+/**
+ * Store new dialog.
+ */
+    void
+DialogStack::addDialog(const std::string &name, Dialog *dialog)
 {
     m_dialogs->addRes(name, dialog);
 }
@@ -58,7 +57,7 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
  * @param loops number of loops, 0=play once, 1=play twice, -1=play infinite
  */
     void
-DialogAgent::actorTalk(int actor, const std::string &name,
+DialogStack::actorTalk(int actor, const std::string &name,
         int volume, int loops)
 {
     StringTool::t_args args = StringTool::split(name, '@');
@@ -82,14 +81,14 @@ DialogAgent::actorTalk(int actor, const std::string &name,
 }
 //-----------------------------------------------------------------
     bool
-DialogAgent::isTalking(int actor) const
+DialogStack::isTalking(int actor) const
 {
     return isTalkingIn(actor, m_running) ||
         isTalkingIn(actor, m_cycling);
 }
 //-----------------------------------------------------------------
     bool
-DialogAgent::isTalkingIn(int actor, const t_running &fifo) const
+DialogStack::isTalkingIn(int actor, const t_running &fifo) const
 {
     t_running::const_iterator end = fifo.end();
     for (t_running::const_iterator i = fifo.begin(); i != end; ++i) {
@@ -104,7 +103,7 @@ DialogAgent::isTalkingIn(int actor, const t_running &fifo) const
  * Remove first not talking dialog from m_running.
  */
     void
-DialogAgent::removeFirstNotTalking()
+DialogStack::removeFirstNotTalking()
 {
     t_running::iterator end = m_running.end();
     for (t_running::iterator i = m_running.begin(); i != end; ++i) {
@@ -120,14 +119,14 @@ DialogAgent::removeFirstNotTalking()
  * Delete all running dialogs made by this actor.
  */
     void
-DialogAgent::killSound(int actor)
+DialogStack::killSound(int actor)
 {
     killSoundIn(actor, m_running);
     killSoundIn(actor, m_cycling);
 }
 //-----------------------------------------------------------------
 void
-DialogAgent::killSoundIn(int actor, t_running &fifo)
+DialogStack::killSoundIn(int actor, t_running &fifo)
 {
     //NOTE: erase on list invalidates only the erased iterator
     t_running::iterator run_end = fifo.end();
@@ -148,14 +147,14 @@ DialogAgent::killSoundIn(int actor, t_running &fifo)
  * Kill all running dialogs.
  */
     void
-DialogAgent::killTalks()
+DialogStack::killTalks()
 {
     killTalksIn(m_running);
     killTalksIn(m_cycling);
 }
 //-----------------------------------------------------------------
 void
-DialogAgent::killTalksIn(t_running &fifo)
+DialogStack::killTalksIn(t_running &fifo)
 {
     t_running::iterator end = fifo.end();
     for (t_running::iterator i = fifo.begin(); i != end; ++i) {
@@ -169,7 +168,7 @@ DialogAgent::killTalksIn(t_running &fifo)
  * Delete all shared dialogs and kill talks.
  */
     void
-DialogAgent::removeAll()
+DialogStack::removeAll()
 {
     killTalks();
     m_dialogs->removeAll();
@@ -180,7 +179,7 @@ DialogAgent::removeAll()
  * NOTE: cycling sounds are ignored
  */
 bool
-DialogAgent::empty() const
+DialogStack::empty() const
 {
     return m_running.empty();
 }

@@ -23,7 +23,7 @@
 #include "Unit.h"
 #include "TimerAgent.h"
 #include "SubTitleAgent.h"
-#include "DialogAgent.h"
+#include "DialogStack.h"
 #include "SoundAgent.h"
 #include "OptionAgent.h"
 #include "ModelList.h"
@@ -59,10 +59,10 @@ Room::Room(int w, int h, const Path &picture,
  */
 Room::~Room()
 {
-    killPlan();
     m_soundPack->removeAll();
     delete m_soundPack;
-    DialogAgent::agent()->removeAll();
+    m_levelScript->killPlan();
+    m_levelScript->dialogs()->removeAll();
     SubTitleAgent::agent()->removeAll();
     delete m_controls;
     delete m_view;
@@ -92,14 +92,6 @@ Room::setWaves(float amplitude, float periode, float speed)
 Room::addDecor(Decor *new_decor)
 {
     m_view->addDecor(new_decor);
-}
-//-----------------------------------------------------------------
-    void
-Room::killPlan()
-{
-    DialogAgent::agent()->killTalks();
-    SubTitleAgent::agent()->killTalks();
-    m_levelScript->interruptPlan();
 }
 //-----------------------------------------------------------------
 /**
@@ -197,7 +189,7 @@ Room::playImpact(Cube::eWeight impact)
     void
 Room::playDead(Cube *model)
 {
-    DialogAgent::agent()->killSound(model->getIndex());
+    m_levelScript->dialogs()->killSound(model->getIndex());
     switch (model->getPower()) {
         case Cube::LIGHT:
             playSound("dead_small");

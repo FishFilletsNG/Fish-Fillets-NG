@@ -71,6 +71,7 @@ LevelScript::interruptPlan()
 LevelScript::addModel(Cube *new_model, Unit *new_unit)
 {
     try {
+        new_model->takeDialogs(dialogs());
         return room()->addModel(new_model, new_unit);
     }
     catch (...) {

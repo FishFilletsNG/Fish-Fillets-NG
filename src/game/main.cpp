@@ -26,7 +26,6 @@
  *  - VideoAgent - inits video mode and calls drawers draw() method.
  *  - SoundAgent - plays music and sound.
  *  - InputAgent - reads input events and handles keystrokes
- *  - DialogAgent - plans NPC dialogs
  *  - SubTitleAgent - scrolls subtitles on display
  *  - GameAgent - updates game states
  *  - TimerAgent - sleeps constant delay = makes stable FPS

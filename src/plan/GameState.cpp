@@ -22,6 +22,7 @@
 //-----------------------------------------------------------------
 GameState::GameState()
 {
+    m_nextState = NULL;
     m_handler = NULL;
     m_active = false;
     m_onBg = false;
@@ -138,7 +139,12 @@ GameState::cleanState()
     void
 GameState::quitState()
 {
-    m_manager->popState(this);
+    if (m_nextState) {
+        changeState(m_nextState);
+    }
+    else {
+        m_manager->popState(this);
+    }
 }
 //-----------------------------------------------------------------
     void

@@ -17,7 +17,7 @@
 #include "StateManager.h"
 #include "NodeDrawer.h"
 #include "Level.h"
-#include "PosterState.h"
+#include "DemoMode.h"
 #include "minmax.h"
 
 //-----------------------------------------------------------------
@@ -141,7 +141,7 @@ Pedometer::runSelected()
     void
 Pedometer::runLevel()
 {
-    PosterState *poster = m_status->createPoster();
+    DemoMode *poster = m_status->createPoster();
     if (poster) {
         poster->setNextState(m_level);
         changeState(poster);

@@ -12,7 +12,7 @@
 #include "Path.h"
 #include "ScriptState.h"
 #include "ScriptException.h"
-#include "PosterState.h"
+#include "DemoMode.h"
 
 #include <stdio.h>
 
@@ -131,14 +131,14 @@ LevelStatus::writeSolvedMoves(const std::string &moves)
 }
 //-----------------------------------------------------------------
 /**
- * Returns PosterState or NULL.
+ * Returns DemoMode or NULL.
  */
-PosterState *
+DemoMode *
 LevelStatus::createPoster() const
 {
-    PosterState *result = NULL;
+    DemoMode *result = NULL;
     if (!m_poster.empty()) {
-        result = new PosterState(Path::dataReadPath(m_poster));
+        result = new DemoMode(Path::dataReadPath(m_poster));
     }
     return result;
 }

@@ -2,7 +2,7 @@
 #define HEADER_LEVELSTATUS_H
 
 class ScriptState;
-class PosterState;
+class DemoMode;
 
 #include <string>
 
@@ -28,7 +28,7 @@ class LevelStatus {
         LevelStatus() { m_complete = false; m_wasRunning = false; }
         void prepareRun(const std::string &codename,
                 const std::string &poster);
-        PosterState *createPoster() const;
+        DemoMode *createPoster() const;
 
         void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }

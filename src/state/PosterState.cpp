@@ -18,7 +18,6 @@
 //-----------------------------------------------------------------
 PosterState::PosterState(const Path &picture)
 {
-    m_nextState = NULL;
     m_bg = new Picture(picture, V2(0, 0));
     takeHandler(new DemoInput(this));
     registerDrawable(m_bg);
@@ -37,15 +36,3 @@ PosterState::own_initState()
     options->setParam("screen_height", m_bg->getH());
     VideoAgent::agent()->initVideoMode();
 }
-//-----------------------------------------------------------------
-    void
-PosterState::quitState()
-{
-    if (m_nextState) {
-        changeState(m_nextState);
-    }
-    else {
-        GameState::quitState();
-    }
-}
-

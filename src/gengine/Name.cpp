@@ -19,8 +19,7 @@ const char *Name::SOUND_NAME = "40sound";
 const char *Name::TIMER_NAME = "50timer";
 
 const char *Name::INPUT_NAME = "60input";
-const char *Name::DIALOG_NAME = "70dialog";
-const char *Name::SUBTITLE_NAME = "75subtitle";
+const char *Name::SUBTITLE_NAME = "70subtitle";
 
 const char *Name::GAME_NAME = "80game";
 

@@ -22,7 +22,6 @@
 #include "DummySoundAgent.h"
 #include "ScriptAgent.h"
 #include "OptionAgent.h"
-#include "DialogAgent.h"
 #include "SubTitleAgent.h"
 #include "ResourceException.h"
 #include "OptionParams.h"
@@ -50,7 +49,6 @@ Application::Application()
 
     m_agents->addAgent(new InputAgent());
 
-    m_agents->addAgent(new DialogAgent());
     m_agents->addAgent(new SubTitleAgent());
     m_agents->addAgent(new GameAgent());
 

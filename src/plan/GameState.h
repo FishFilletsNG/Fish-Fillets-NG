@@ -22,6 +22,7 @@ class GameState : public BaseListener, public NoCopy {
     private:
         bool m_active;
         bool m_onBg;
+        GameState *m_nextState;
         InputHandler *m_handler;
         MultiDrawer *m_drawer;
         StateManager *m_manager;
@@ -45,6 +46,7 @@ class GameState : public BaseListener, public NoCopy {
         virtual bool allowBg() const { return false; }
         bool isRunning() const { return m_active; }
         bool isOnBg() const { return m_onBg; }
+        void setNextState(GameState *nextState) { m_nextState = nextState; }
 
         void initState(StateManager *manager);
         void updateState();
@@ -52,7 +54,7 @@ class GameState : public BaseListener, public NoCopy {
         void resumeState();
         void cleanState();
 
-        virtual void quitState();
+        void quitState();
         void pushState(GameState *new_state);
 
         void noteBg();

@@ -36,7 +36,6 @@ class Room : public StepCounter, public Drawable {
         Cube::eAction m_lastAction;
         int m_startTime;
     private:
-        void killPlan();
         void prepareRound();
         bool fallout(bool interactive=true);
         bool falldown(bool interactive=true);

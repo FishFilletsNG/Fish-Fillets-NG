@@ -13,7 +13,6 @@
 
 #include "Log.h"
 #include "LayoutException.h"
-#include "DialogAgent.h"
 #include "OnStack.h"
 #include "OnWall.h"
 #include "OnStrongPad.h"
@@ -616,7 +615,7 @@ Rules::getState() const
     if (!m_model->isAlive()) {
         return "dead";
     }
-    else if (DialogAgent::agent()->isTalking(m_model->getIndex())) {
+    else if (m_model->isTalking()) {
         return "talking";
     }
     else if (m_outDepth == 1) {

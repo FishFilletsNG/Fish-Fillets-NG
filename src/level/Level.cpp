@@ -29,7 +29,6 @@
 #include "SoundAgent.h"
 #include "SubTitleAgent.h"
 #include "StepDecor.h"
-#include "PosterState.h"
 #include "StatusDisplay.h"
 #include "Picture.h"
 
@@ -122,6 +121,12 @@ Level::own_updateState()
     if (finished) {
         finishLevel();
     }
+}
+//-----------------------------------------------------------------
+    void
+Level::own_pauseState()
+{
+    m_levelScript->killPlan();
 }
 //-----------------------------------------------------------------
     void
@@ -290,7 +295,7 @@ Level::finishLevel()
     m_levelStatus->setComplete();
     saveSolution();
 
-    PosterState *poster = m_levelStatus->createPoster();
+    DemoMode *poster = m_levelStatus->createPoster();
     if (poster) {
         changeState(poster);
     }

@@ -66,7 +66,7 @@ class Level : public GameState {
     protected:
         virtual void own_initState();
         virtual void own_updateState();
-        virtual void own_pauseState() {}
+        virtual void own_pauseState();
         virtual void own_resumeState();
         virtual void own_cleanState();
         virtual void own_noteBg();

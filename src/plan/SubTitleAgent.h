@@ -29,6 +29,7 @@ class SubTitleAgent : public BaseAgent, public Drawable {
 
     Font *m_font;
     ResColorPack *m_colors;
+    int m_limitY;
     private:
     std::string splitAndCreate(const std::string &subtitle, Color *color);
     void trimRest(std::string &buffer);
@@ -42,6 +43,8 @@ class SubTitleAgent : public BaseAgent, public Drawable {
     virtual void own_update();
     virtual void own_shutdown();
     public:
+    int getLimitY() const { return m_limitY; }
+    void setLimitY(int limitY) { m_limitY = limitY; }
     void addFont(const std::string &fontname, Color *new_color);
     void newSubtitle(const std::string &subtitle, const std::string &fontname);
 

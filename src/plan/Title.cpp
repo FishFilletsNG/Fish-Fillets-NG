@@ -19,7 +19,7 @@
  * Y is baseY above bottom screen border.
  *
  * @param baseY number of pixels from the bottom border
- * @param finalY final position, it change when next subtitle is added
+ * @param finalY final position, it changes when next subtitle is added
  * @param bonusTime bonus time for subtitle under bottom border
  * @param limitY max Y distance from bottom border
  * @param content subtitle content
@@ -102,6 +102,8 @@ Title::getY() const
     bool
 Title::isGone()
 {
+    //TEST: long time
     return (m_mintime < 0 || m_y < m_limitY);
+    //return m_y < m_limitY;
 }
 

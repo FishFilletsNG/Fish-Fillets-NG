@@ -74,9 +74,9 @@ StateManager::removeState(GameState *state)
 void
 StateManager::changeState(GameState *who, GameState *new_state)
 {
-    new_state->initState(this);
     insertAfter(who, new_state);
     removeState(who);
+    new_state->initState(this);
     checkStack();
 }
 //-----------------------------------------------------------------
@@ -203,10 +203,9 @@ StateManager::resumeBg(t_states::iterator stateIt)
         (*prev)->noteBg();
     }
 
-    if ((*stateIt)->isRunning()) {
-        (*stateIt)->pauseState();
+    if (!(*stateIt)->isRunning()) {
+        (*stateIt)->resumeState();
     }
-    (*stateIt)->resumeState();
 }
 //-----------------------------------------------------------------
 /**

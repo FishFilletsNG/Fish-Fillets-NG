@@ -13,7 +13,7 @@ class Actor;
 #include "Log.h"
 #include "Path.h"
 #include "FishDialog.h"
-#include "DialogAgent.h"
+#include "DialogStack.h"
 #include "SubTitleAgent.h"
 #include "SoundAgent.h"
 #include "Planner.h"
@@ -26,6 +26,12 @@ class Actor;
 getPlanner(lua_State *L)
 {
     return static_cast<Planner*>(script_getLeader(L));
+}
+//-----------------------------------------------------------------
+    inline DialogStack *
+getDialogs(lua_State *L)
+{
+    return getPlanner(L)->dialogs();
 }
 
 
@@ -116,7 +122,7 @@ script_game_killPlan(lua_State *L) throw()
 script_dialog_empty(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    bool empty = DialogAgent::agent()->empty();
+    bool empty = getDialogs(L)->empty();
     lua_pushboolean(L, empty);
     END_NOEXCEPTION;
     //NOTE: return empty
@@ -156,7 +162,7 @@ script_dialog_addDialog(lua_State *L) throw()
 
     FishDialog *dialog =
         new FishDialog(lang, soundfile, subtitle, fontname);
-    DialogAgent::agent()->addDialog(name, dialog);
+    getDialogs(L)->addDialog(name, dialog);
 
     END_NOEXCEPTION;
     return 0;
@@ -171,7 +177,7 @@ script_model_isTalking(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    bool talking = DialogAgent::agent()->isTalking(model_index);
+    bool talking = getDialogs(L)->isTalking(model_index);
     lua_pushboolean(L, talking);
     END_NOEXCEPTION;
     //NOTE: return talking
@@ -190,7 +196,7 @@ script_model_talk(lua_State *L) throw()
     int volume = luaL_optint(L, 3, 75);
     int loops = luaL_optint(L, 4, 0);
 
-    DialogAgent::agent()->actorTalk(model_index, name, volume, loops);
+    getDialogs(L)->actorTalk(model_index, name, volume, loops);
     END_NOEXCEPTION;
     return 0;
 }
@@ -204,7 +210,7 @@ script_model_killSound(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    DialogAgent::agent()->killSound(model_index);
+    getDialogs(L)->killSound(model_index);
     END_NOEXCEPTION;
     return 0;
 }

@@ -20,6 +20,7 @@
     void
 SubTitleAgent::own_init()
 {
+    m_limitY = TITLE_LIMIT_Y;
     m_colors = new ResColorPack();
 
     m_font = NULL;
@@ -144,8 +145,9 @@ SubTitleAgent::newShortSubtitle(const std::string &subtitle,
 {
     int startY = lowestY();
     int finalY = TITLE_BASE + TITLE_ROW;
-    int bonusTime = (TITLE_BASE - startY) / TITLE_SPEED;
-    Title *title = new Title(startY, finalY, bonusTime, TITLE_LIMIT_Y,
+    int bonusTime = (TITLE_BASE - startY + m_limitY - TITLE_LIMIT_Y)
+        / TITLE_SPEED;
+    Title *title = new Title(startY, finalY, bonusTime, m_limitY,
             subtitle, m_font, color);
     shiftFinalsUp(TITLE_ROW);
     m_titles.push_back(title);

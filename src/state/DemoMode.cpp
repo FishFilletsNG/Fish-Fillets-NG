@@ -13,8 +13,9 @@
 #include "DemoInput.h"
 
 #include "ScriptState.h"
-#include "DialogAgent.h"
 #include "SubTitleAgent.h"
+#include "OptionAgent.h"
+#include "VideoAgent.h"
 #include "SurfaceTool.h"
 
 #include "demo-script.h"
@@ -23,6 +24,7 @@
 DemoMode::DemoMode(const Path &demoscript)
     : m_demoscript(demoscript)
 {
+    m_oldLimitY = 0;
     m_display = NULL;
     m_surfaceBuffer = NULL;
     m_script->registerFunc("demo_display", script_demo_display);
@@ -42,7 +44,7 @@ DemoMode::~DemoMode()
     void
 DemoMode::own_initState()
 {
-    killPlan();
+    m_oldLimitY = SubTitleAgent::agent()->getLimitY();
     m_script->doFile(m_demoscript);
 }
 //-----------------------------------------------------------------
@@ -70,20 +72,15 @@ DemoMode::own_cleanState()
         m_display = NULL;
     }
 
+    SubTitleAgent::agent()->setLimitY(m_oldLimitY);
     killPlan();
 }
 
 //-----------------------------------------------------------------
-void
-DemoMode::killPlan()
-{
-    DialogAgent::agent()->killTalks();
-    SubTitleAgent::agent()->killTalks();
-    interruptPlan();
-}
-//-----------------------------------------------------------------
 /**
  * Store picture to draw it.
+ * NOTE: limitY for long subtitles are prepared when display is set
+ * before planning start
  */
     bool
 DemoMode::action_display(Picture *picture)
@@ -92,6 +89,15 @@ DemoMode::action_display(Picture *picture)
         delete m_display;
     }
     m_display = picture;
+
+    if (NULL == m_surfaceBuffer) {
+        OptionAgent *options = OptionAgent::agent();
+        options->setParam("screen_width", m_display->getW());
+        options->setParam("screen_height", m_display->getH());
+        VideoAgent::agent()->initVideoMode();
+
+        SubTitleAgent::agent()->setLimitY(m_display->getH());
+    }
     return true;
 }
 //-----------------------------------------------------------------

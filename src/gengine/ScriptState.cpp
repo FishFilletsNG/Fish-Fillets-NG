@@ -135,7 +135,8 @@ ScriptState::callCommand(int funcRef, int param)
     if (0 == lua_isboolean(m_state, -1)) {
         const char *type = lua_typename(m_state, lua_type(m_state, -1));
         lua_pop(m_state, numResults);
-        throw ScriptException(ExInfo("script failure - boolean expected")
+        throw ScriptException(
+                ExInfo("script command failure - boolean expected")
                 .addInfo("got", type));
     }
     bool result = lua_toboolean(m_state, -1);

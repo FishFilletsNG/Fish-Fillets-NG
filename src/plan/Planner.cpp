@@ -10,7 +10,9 @@
 
 #include "ScriptState.h"
 #include "CommandQueue.h"
+#include "DialogStack.h"
 
+#include "SubTitleAgent.h"
 #include "ScriptCmd.h"
 #include "dialog-script.h"
 
@@ -19,6 +21,7 @@ Planner::Planner()
 {
     m_script = new ScriptState();
     m_plan = new CommandQueue();
+    m_dialogs = new DialogStack();
     m_script->registerLeader(this);
     registerScriptFuncs();
 }
@@ -49,6 +52,7 @@ Planner::~Planner()
     //NOTE: planned ScriptCmd must be removed before script
     delete m_plan;
     delete m_script;
+    delete m_dialogs;
 }
 //-----------------------------------------------------------------
 /**
@@ -76,8 +80,17 @@ Planner::scriptDo(const std::string &input)
     bool
 Planner::satisfyPlan()
 {
+    m_dialogs->updateStack();
     m_plan->executeFirst();
     return m_plan->empty();
+}
+//-----------------------------------------------------------------
+    void
+Planner::killPlan()
+{
+    m_dialogs->killTalks();
+    SubTitleAgent::agent()->killTalks();
+    interruptPlan();
 }
 //-----------------------------------------------------------------
     void

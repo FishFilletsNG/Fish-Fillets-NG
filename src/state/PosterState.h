@@ -10,8 +10,6 @@ class Picture;
  * Static picture.
  */
 class PosterState : public GameState {
-    private:
-        GameState *m_nextState;
     protected:
         Picture *m_bg;
     protected:
@@ -24,9 +22,6 @@ class PosterState : public GameState {
         PosterState(const Path &picture);
         virtual ~PosterState();
         virtual const char *getName() const { return "state_poster"; };
-
-        void setNextState(GameState *nextState) { m_nextState = nextState; }
-        virtual void quitState();
 };
 
 #endif
