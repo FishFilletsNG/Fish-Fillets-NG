@@ -63,31 +63,32 @@ GameAgent::own_init()
 //-----------------------------------------------------------------
 /**
  * Update game.
+ * Let objects move.
+ * Call script_update() every cycle.
  */
     void
 GameAgent::own_update()
 {
     bool room_complete = false;
-    if (m_lockPhases == 0) {
-        if (m_loadedMoves.empty()) {
+    if (m_loadedMoves.empty()) {
+        if (m_lockPhases == 0) {
             if (m_plan->empty()) {
                 room_complete = updateRoom();
             }
             else {
                 room_complete = planRoom();
             }
-
-            if (m_script) {
-                m_script->doString("script_update()");
-            }
         }
-        else {
-            room_complete = loadMoves();
+
+        if (m_script) {
+            m_script->doString("script_update()");
+        }
+        if (m_lockPhases > 0) {
+            --m_lockPhases;
         }
     }
-
-    if (m_lockPhases > 0) {
-        --m_lockPhases;
+    else {
+        room_complete = loadMoves();
     }
 
     if (room_complete) {
@@ -111,7 +112,6 @@ GameAgent::own_shutdown()
 /*
  * Update room.
  * Let objects to move.
- * Call script_update() every cycle.
  * @return true for finished level
  */
     bool
@@ -495,25 +495,23 @@ GameAgent::loadGame(const std::string &moves)
 GameAgent::loadMoves()
 {
     bool room_complete = false;
-    if (0 == m_lockPhases) {
-        for (int i = 0; i < m_loadSpeed
-                && false == m_loadedMoves.empty(); ++i)
-        {
-            try {
-                char symbol = m_loadedMoves[0];
-                m_loadedMoves.erase(0, 1);
+    for (int i = 0; i < m_loadSpeed
+            && false == m_loadedMoves.empty(); ++i)
+    {
+        try {
+            char symbol = m_loadedMoves[0];
+            m_loadedMoves.erase(0, 1);
 
-                room_complete = m_room->loadMove(symbol);
-            }
-            catch (LoadException &e) {
-                throw LoadException(ExInfo(e.info())
-                        .addInfo("remain", m_loadedMoves));
-            }
+            room_complete = m_room->loadMove(symbol);
         }
+        catch (LoadException &e) {
+            throw LoadException(ExInfo(e.info())
+                    .addInfo("remain", m_loadedMoves));
+        }
+    }
 
-        if (m_loadedMoves.empty()) {
-            m_script->doString("script_loadState()");
-        }
+    if (m_loadedMoves.empty()) {
+        m_script->doString("script_loadState()");
     }
     return room_complete;
 }
