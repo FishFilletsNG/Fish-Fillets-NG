@@ -93,8 +93,10 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
 void
 KeyConsole::activate()
 {
-    VideoAgent::agent()->acceptDrawer(this);
-    m_active = true;
+    if (false == m_active) {
+        VideoAgent::agent()->acceptDrawer(this);
+        m_active = true;
+    }
 }
 //-----------------------------------------------------------------
 void

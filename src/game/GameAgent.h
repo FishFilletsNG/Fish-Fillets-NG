@@ -2,6 +2,7 @@
 #define HEADER_GAMEAGENT_H
 
 class Level;
+class WorldMap;
 
 #include "BaseAgent.h"
 #include "Name.h"
@@ -15,11 +16,11 @@ class GameAgent : public BaseAgent {
     AGENT(GameAgent, Name::GAME_NAME);
     private:
         Level *m_level;
+        WorldMap *m_world;
         int m_lockPhases;
     private:
         void cleanLevel();
         void newLevel();
-        std::string getNextLevel();
 
         void keyBinding();
     protected:

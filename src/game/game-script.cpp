@@ -20,7 +20,6 @@
 #include "FishDialog.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
-#include "TimerAgent.h"
 #include "SoundAgent.h"
 #include "Level.h"
 #include "ModelFactory.h"
@@ -687,13 +686,13 @@ script_model_planDialog(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * int timer_getCycles()
+ * int game_getCycles()
  */
     int
-script_timer_getCycles(lua_State *L) throw()
+script_game_getCycles(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    int cycles = TimerAgent::agent()->getCycles();
+    int cycles = GameAgent::agent()->level()->getCycles();
     lua_pushnumber(L, cycles);
     END_NOEXCEPTION;
     //NOTE: return cycles

@@ -61,6 +61,7 @@ class Level : public NoCopy {
 
         void addSound(const std::string &name, const Path &file);
         void switchFish();
+        int getCycles();
 };
 
 #endif

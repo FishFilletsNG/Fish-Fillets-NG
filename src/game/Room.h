@@ -25,6 +25,7 @@ class Room : public NoCopy {
         Cube::t_models m_models;
         Cube::eWeight m_impact;
         bool m_fresh;
+        int m_startTime;
     private:
         void prepareRound();
         bool falldown();
@@ -50,6 +51,7 @@ class Room : public NoCopy {
         int getW() const;
         int getH() const;
         void addSound(const std::string &name, const Path &file);
+        int getCycles();
 };
 
 #endif

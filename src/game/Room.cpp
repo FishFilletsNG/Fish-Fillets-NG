@@ -21,6 +21,7 @@
 #include "DialogAgent.h"
 #include "LoadException.h"
 #include "Unit.h"
+#include "TimerAgent.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -31,6 +32,7 @@ Room::Room(int w, int h, const Path &picture)
     m_impact = Cube::NONE;
     m_fresh = true;
     m_soundPack = new ResSoundPack();
+    m_startTime = TimerAgent::agent()->getCycles();
 }
 //-----------------------------------------------------------------
 /**
@@ -346,5 +348,11 @@ void
 Room::addSound(const std::string &name, const Path &file)
 {
     m_soundPack->addSound(name, file);
+}
+//-----------------------------------------------------------------
+int
+Room::getCycles()
+{
+    return TimerAgent::agent()->getCycles() - m_startTime;
 }
 

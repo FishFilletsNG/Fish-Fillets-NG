@@ -366,6 +366,13 @@ Level::switchFish()
     }
 }
 //-----------------------------------------------------------------
+int
+Level::getCycles()
+{
+    checkRoom();
+    return m_room->getCycles();
+}
+//-----------------------------------------------------------------
 /**
  * Register functions usable from script.
  */
@@ -413,7 +420,7 @@ Level::registerGameFuncs()
     m_script->registerFunc("model_isTalking", script_model_isTalking);
     m_script->registerFunc("model_planDialog", script_model_planDialog);
 
-    m_script->registerFunc("timer_getCycles", script_timer_getCycles);
+    m_script->registerFunc("game_getCycles", script_game_getCycles);
     m_script->registerFunc("sound_playMusic", script_sound_playMusic);
     m_script->registerFunc("sound_addSound", script_sound_addSound);
 }
