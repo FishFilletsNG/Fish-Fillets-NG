@@ -28,10 +28,10 @@ Rules::Rules(Cube *model)
 {
     m_readyToDie = false;
     m_readyToTurn = false;
-    m_readyToGoout = false;
     m_readyToActive = false;
     m_dir = DIR_NO;
     m_pushing = false;
+    m_outDepth = 0;
 
     m_model = model;
     m_mask = NULL;
@@ -131,29 +131,6 @@ Rules::checkDead()
 
     return dead;
 }
-//-----------------------------------------------------------------
-/**
- * Check out of room objects.
- * @return true when object go out (is at border)
- */
-bool
-Rules::checkOut()
-{
-    bool result = false;
-    if (!m_model->isWall() && !m_model->isLost()
-            && !m_model->isBusy())
-    {
-        //NOTE: normal objects are not allowed to go out of screen
-        if (m_model->shouldGoOut()) {
-            if (m_mask->isAtBorder()) {
-                m_readyToGoout = true;
-                result = true;
-            }
-        }
-    }
-
-    return result;
-}
 
 //-----------------------------------------------------------------
 /**
@@ -230,11 +207,6 @@ Rules::changeState()
 {
     m_dir = DIR_NO;
 
-    if (m_readyToGoout) {
-        m_readyToGoout = false;
-        m_mask->unmask();
-        m_model->change_goOut();
-    }
     if (!m_model->isLost() && m_model->isDisintegrated()) {
         m_mask->unmask();
         m_model->change_remove();
@@ -251,6 +223,35 @@ Rules::changeState()
         m_readyToDie = false;
         m_model->change_die();
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Let model to go out of room.
+ * @return out depth, 0 for normal, 1 for going out, 2... for on the way
+ */
+int
+Rules::actionOut()
+{
+    if (!m_model->isWall() && !m_model->isLost()
+            && !m_model->isBusy())
+    {
+        //NOTE: normal objects are not allowed to go out of screen
+        if (m_model->shouldGoOut()) {
+            eDir borderDir = m_mask->getBorderDir();
+            if (borderDir != DIR_NO) {
+                m_dir = borderDir;
+                m_outDepth += 1;
+            }
+            else {
+                if (m_outDepth > 0) {
+                    m_model->change_goOut();
+                    m_outDepth = 0;
+                }
+            }
+        }
+    }
+
+    return m_outDepth;
 }
 //-----------------------------------------------------------------
 /**
@@ -603,10 +604,7 @@ Rules::dir2xy(eDir dir)
 std::string
 Rules::getAction() const
 {
-    if (m_readyToGoout) {
-        return "goout";
-    }
-    else if (m_readyToTurn) {
+    if (m_readyToTurn) {
         return "turn";
     }
     else if (m_readyToActive) {
@@ -637,11 +635,14 @@ Rules::getState() const
     if (!m_model->isAlive()) {
         return "dead";
     }
-    else if (m_pushing) {
-        return "pushing";
-    }
     else if (DialogAgent::agent()->isTalking(m_model->getIndex())) {
         return "talking";
+    }
+    else if (m_outDepth == 1) {
+        return "goout";
+    }
+    else if (m_pushing) {
+        return "pushing";
     }
     else {
         return "normal";

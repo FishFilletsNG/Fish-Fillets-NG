@@ -84,24 +84,31 @@ MarkMask::writeModel(Cube *model)
 
 //-----------------------------------------------------------------
 /**
- * Returns true when object is at [0,.] or [.,0] or [w-1,.] or [.,h-1].
- * @return true when object go out
+ * Returns dir to out of room.
+ * @return return dir or DIR_NO when model is not at the border.
  */
-    bool
-MarkMask::isAtBorder()
+    Rules::eDir
+MarkMask::getBorderDir() const
 {
     V2 loc = m_model->getLocation();
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
-        if ((mark.getX() == 0 || mark.getX() == m_field->getW() - 1)
-                || (mark.getY() == 0 || mark.getY() == m_field->getH() - 1))
-        {
-            return true;
+        if (mark.getX() == 0) {
+            return Rules::DIR_LEFT;
+        }
+        else if (mark.getX() == m_field->getW() - 1) {
+            return Rules::DIR_RIGHT;
+        }
+        else if (mark.getY() == 0) {
+            return Rules::DIR_UP;
+        }
+        else if (mark.getY() == m_field->getH() - 1) {
+            return Rules::DIR_DOWN;
         }
     }
 
-    return false;
+    return Rules::DIR_NO;
 }
 

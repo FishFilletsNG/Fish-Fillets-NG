@@ -345,8 +345,8 @@ Level::nextLoadAction()
 {
     bool room_complete = false;
     if (m_loadedMoves.empty()) {
-        m_levelScript->room()->beginFall();
-        room_complete = m_levelScript->room()->finishRound();
+        m_levelScript->room()->beginFall(false);
+        room_complete = m_levelScript->room()->finishRound(false);
     }
     else {
         for (int i = 0; i < m_loadSpeed

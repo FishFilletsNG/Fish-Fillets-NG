@@ -29,11 +29,10 @@ class Rules : public NoCopy {
         eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
-        bool m_readyToGoout;
         bool m_readyToActive;
-        bool m_readyToRemove;
         bool m_pushing;
         bool m_lastFall;
+        int m_outDepth;
 
         Cube *m_model;
         MarkMask *m_mask;
@@ -65,10 +64,10 @@ class Rules : public NoCopy {
 
         void occupyNewPos();
         bool checkDead();
-        bool checkOut();
         void changeState();
         void finishRound();
 
+        int actionOut();
         eFall actionFall();
         bool actionMoveDir(eDir dir);
         void actionTurnSide() { m_readyToTurn = true; }

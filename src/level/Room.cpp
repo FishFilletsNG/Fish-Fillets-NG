@@ -232,9 +232,6 @@ Room::prepareRound()
             playDead(*j);
         }
     }
-    for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
-        interrupt |= (*k)->rules()->checkOut();
-    }
     for (Cube::t_models::iterator l = m_models.begin(); l != end; ++l) {
         (*l)->rules()->changeState();
     }
@@ -243,6 +240,33 @@ Room::prepareRound()
         m_levelScript->interruptPlan();
         m_controls->checkActive();
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Let models to go out of screen.
+ * @param interactive whether do anim
+ * @return true when a model went out
+ */
+bool
+Room::fallout(bool interactive)
+{
+    bool wentOut = false;
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        int outDepth = (*i)->rules()->actionOut();
+        if (outDepth > 0) {
+            wentOut = true;
+            if (interactive) {
+                m_locker->ensurePhases(3);
+            }
+        }
+    }
+
+    if (wentOut) {
+        m_levelScript->interruptPlan();
+        m_controls->checkActive();
+    }
+    return wentOut;
 }
 //-----------------------------------------------------------------
 /**
@@ -273,14 +297,14 @@ Room::falldown()
 /**
  * Let models to release their old position.
  * Check complete room.
- * @param anim whether ensure phases for motion animation
+ * @param interactive whether ensure phases for motion animation
  * @return true when room is finished
  */
 bool
-Room::finishRound(bool anim)
+Room::finishRound(bool interactive)
 {
     bool room_complete = true;
-    if (anim) {
+    if (interactive) {
         m_controls->lockPhases();
     }
     m_view->noteNewRound(m_locker->getLocked());
@@ -347,21 +371,27 @@ Room::loadMove(char move)
 //-----------------------------------------------------------------
 /**
  * Begin round.
- * Let objects fall. Don't allow player to move.
- * @param sound whether play sound of impact
+ * Let objects fall.
+ * First objects can fall out of room (even upward),
+ * when nothing is going out, then objects can fall down by gravity.
+ *
+ * @param interactive whether play sound and do anim
  * @return true when something was falling
  */
 bool
-Room::beginFall(bool sound)
+Room::beginFall(bool interactive)
 {
     m_fresh = true;
     prepareRound();
 
-    bool falling = falldown();
-    m_fresh = !falling;
-    if (sound) {
-        playImpact();
+    bool falling = fallout(interactive);
+    if (!falling) {
+        falling = falldown();
+        if (interactive) {
+            playImpact();
+        }
     }
+    m_fresh = !falling;
     return falling;
 }
 //-----------------------------------------------------------------

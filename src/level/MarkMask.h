@@ -23,7 +23,7 @@ class MarkMask : public NoCopy {
         void mask();
         void unmask();
 
-        bool isAtBorder();
+        Rules::eDir getBorderDir() const;
 };
 
 #endif

@@ -39,6 +39,7 @@ class Room : public StepCounter, public NoCopy, public Drawable {
     private:
         void killPlan();
         void prepareRound();
+        bool fallout(bool interactive=true);
         bool falldown();
         void playImpact();
         void playDead(Cube *model);
@@ -53,9 +54,9 @@ class Room : public StepCounter, public NoCopy, public Drawable {
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
 
-        bool beginFall(bool sound=true);
+        bool beginFall(bool interactive=true);
         bool nextRound();
-        bool finishRound(bool anim=true);
+        bool finishRound(bool interactive=true);
 
 
         void switchFish();
