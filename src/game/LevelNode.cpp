@@ -19,10 +19,11 @@
  * Default state is STATE_FAR.
  */
 LevelNode::LevelNode(const std::string &codename, const Path &datafile,
-                const V2 &loc)
+                const V2 &loc, int depth)
 : m_codename(codename), m_datafile(datafile), m_loc(loc)
 {
     m_state = STATE_FAR;
+    m_depth = depth;
 }
 //-----------------------------------------------------------------
 /**
@@ -105,7 +106,7 @@ LevelNode::findSelected(const V2 &cursor)
 Level *
 LevelNode::createLevel(const std::string &desc) const
 {
-    Level *result = new Level(m_codename, m_datafile);
+    Level *result = new Level(m_codename, m_datafile, m_depth);
     result->setDesc(desc);
     return result;
 }

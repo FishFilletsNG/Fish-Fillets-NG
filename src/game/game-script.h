@@ -7,7 +7,6 @@ extern "C" {
 
 extern int script_game_createRoom(lua_State *L) throw();
 extern int script_game_addModel(lua_State *L) throw();
-extern int script_game_getRestartCounter(lua_State *L) throw();
 extern int script_game_save(lua_State *L) throw();
 extern int script_game_load(lua_State *L) throw();
 
@@ -34,6 +33,8 @@ extern int script_model_change_turnSide(lua_State *L) throw();
 extern int script_model_equals(lua_State *L) throw();
 
 extern int script_sound_addSound(lua_State *L) throw();
+extern int script_game_getRestartCounter(lua_State *L) throw();
+extern int script_game_getDepth(lua_State *L) throw();
 extern int script_game_getCycles(lua_State *L) throw();
 extern int script_game_newDemo(lua_State *L) throw();
 

@@ -68,8 +68,6 @@ Cube::createBorder()
     void
 Cube::change_die()
 {
-    LOG_INFO(ExInfo("dead")
-            .addInfo("fish", toString()));
     m_alive = false;
     anim()->setEffect(ViewEffect::EFFECT_DISINTEGRATE);
 }
@@ -81,8 +79,6 @@ Cube::change_die()
 Cube::change_goOut()
 {
     //TODO: nice anim for alive object
-    LOG_INFO(ExInfo("out of room")
-            .addInfo("object", toString()));
     m_out = true;
     change_remove();
 }

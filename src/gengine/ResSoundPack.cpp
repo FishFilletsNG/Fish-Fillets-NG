@@ -8,6 +8,8 @@
  */
 #include "ResSoundPack.h"
 
+#include "OptionAgent.h"
+
 //-----------------------------------------------------------------
     void
 ResSoundPack::unloadRes(Mix_Chunk *res)
@@ -22,11 +24,14 @@ ResSoundPack::unloadRes(Mix_Chunk *res)
     Mix_Chunk *
 ResSoundPack::loadSound(const Path &file)
 {
-    Mix_Chunk *chunk = Mix_LoadWAV(file.getNative().c_str());
-    if (NULL == chunk) {
-        LOG_WARNING(ExInfo("cannot load sound")
-            .addInfo("path", file.getNative())
-            .addInfo("MixError", Mix_GetError()));
+    Mix_Chunk *chunk = NULL;
+    if (OptionAgent::agent()->getAsInt("sound")) {
+        chunk = Mix_LoadWAV(file.getNative().c_str());
+        if (NULL == chunk) {
+            LOG_WARNING(ExInfo("cannot load sound")
+                .addInfo("path", file.getNative())
+                .addInfo("MixError", Mix_GetError()));
+        }
     }
     return chunk;
 }

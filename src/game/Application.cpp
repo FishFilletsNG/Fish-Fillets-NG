@@ -86,7 +86,6 @@ Application::run()
     void
 Application::shutdown()
 {
-    LOG_DEBUG(ExInfo("application shutdown"));
     m_agents->shutdown();
 }
 //-----------------------------------------------------------------

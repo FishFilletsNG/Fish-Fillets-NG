@@ -206,7 +206,6 @@ GameAgent::finishLevel()
 {
     m_world->markSolved();
     m_level->saveSolution();
-    LOG_INFO(ExInfo("gratulation, room is complete"));
     cleanLevel();
 }
 //-----------------------------------------------------------------

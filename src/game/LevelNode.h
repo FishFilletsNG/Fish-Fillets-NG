@@ -28,14 +28,16 @@ class LevelNode : public NoCopy {
         Path m_datafile;
         V2 m_loc;
         eState m_state;
+        int m_depth;
         typedef std::vector<class LevelNode*> t_children;
         t_children m_children;
     private:
         bool isUnder(const V2 &cursor) const;
     public:
         LevelNode(const std::string &codename, const Path &datafile,
-                const V2 &loc);
+                const V2 &loc, int depth);
         virtual ~LevelNode();
+        int getDepth() const { return m_depth; }
 
         std::string getCodeName() const { return m_codename; }
         void setState(eState state);

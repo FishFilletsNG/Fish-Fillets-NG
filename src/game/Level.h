@@ -24,6 +24,7 @@ class Level : public Planner {
         std::string m_desc;
         std::string m_loadedMoves;
         int m_loadSpeed;
+        int m_depth;
     private:
         void cleanRoom();
         bool nextPlayerAction();
@@ -33,14 +34,13 @@ class Level : public Planner {
         void checkRoom();
         void registerGameFuncs();
     public:
-        Level(const std::string &codename, const Path &datafile);
+        Level(const std::string &codename, const Path &datafile, int depth);
         ~Level();
         void setDesc(const std::string &desc) { m_desc = desc; }
         void runLevel();
         void activate();
         void deactivate();
 
-        int getRestartCounter() const { return m_restartCounter; }
         bool nextAction();
         void updateLevel();
 
@@ -62,6 +62,8 @@ class Level : public Planner {
         void addSound(const std::string &name, const Path &file);
         void switchFish();
         int getCycles();
+        int getRestartCounter() const { return m_restartCounter; }
+        int getDepth() const { return m_depth; }
 };
 
 #endif

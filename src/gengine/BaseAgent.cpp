@@ -32,7 +32,6 @@ BaseAgent::init()
     void
 BaseAgent::update()
 {
-    //LOG_DEBUG(ExInfo("update").addInfo("name", getName()));
     if (!m_initialized) {
         throw LogicException(ExInfo("agent is not ready")
             .addInfo("name", getName()));

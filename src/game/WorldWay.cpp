@@ -25,7 +25,7 @@ WorldWay::addChildren(lua_State *L, LevelNode *parent, int table_index)
 {
     lua_pushnil(L);
     while (lua_next(L, table_index) != 0) {
-        parent->addChild(parseNode(L));
+        parent->addChild(parseNode(L, parent->getDepth() + 1));
         //NOTE: remove value from stack, key is keep for next lua_next
         lua_pop(L, 1);
     }
@@ -44,7 +44,7 @@ WorldWay::addChildren(lua_State *L, LevelNode *parent, int table_index)
  * @return node or NULL
  */
 LevelNode *
-WorldWay::parseNode(lua_State *L)
+WorldWay::parseNode(lua_State *L, int depth)
 {
     //NOTE: grow stack
     //need: 1 for children table, 2 for lua_next (1 for key, 1 for value)
@@ -62,7 +62,7 @@ WorldWay::parseNode(lua_State *L)
     LuaTable children = nodeTable.pushTable("children");
 
     LevelNode *result = new LevelNode(codename,
-            Path::dataReadPath(datafile), V2(x, y));
+            Path::dataReadPath(datafile), V2(x, y), depth);
     addChildren(L, result, children.getStackIndex());
     //NOTE: remove children table from stack
     lua_pop(L, 1);
@@ -84,7 +84,7 @@ WorldWay::parseNode(lua_State *L)
 WorldWay::script_parseWay(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    ms_startNode = WorldWay::parseNode(L);
+    ms_startNode = WorldWay::parseNode(L, 1);
     END_NOEXCEPTION;
     return 0;
 }

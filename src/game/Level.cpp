@@ -27,13 +27,14 @@
  * Create new level.
  * Use runLevel() to start it.
  */
-Level::Level(const std::string &codename, const Path &datafile)
+Level::Level(const std::string &codename, const Path &datafile, int depth)
     : m_codename(codename), m_datafile(datafile)
 {
     m_room = NULL;
     m_restartCounter = 0;
     m_loadedMoves = "";
     m_loadSpeed = 1;
+    m_depth = depth;
     registerGameFuncs();
 }
 //-----------------------------------------------------------------
@@ -420,8 +421,6 @@ Level::registerGameFuncs()
 {
     m_script->registerFunc("game_createRoom", script_game_createRoom);
     m_script->registerFunc("game_addModel", script_game_addModel);
-    m_script->registerFunc("game_getRestartCounter",
-            script_game_getRestartCounter);
     m_script->registerFunc("game_save", script_game_save);
     m_script->registerFunc("game_load", script_game_load);
 
@@ -449,6 +448,9 @@ Level::registerGameFuncs()
     m_script->registerFunc("model_equals", script_model_equals);
 
     m_script->registerFunc("sound_addSound", script_sound_addSound);
+    m_script->registerFunc("game_getRestartCounter",
+            script_game_getRestartCounter);
     m_script->registerFunc("game_getCycles", script_game_getCycles);
+    m_script->registerFunc("game_getDepth", script_game_getDepth);
     m_script->registerFunc("game_newDemo", script_game_newDemo);
 }

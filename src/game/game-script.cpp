@@ -80,21 +80,6 @@ script_game_addModel(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * int game_getRestartCounter()
- * 
- */
-    int
-script_game_getRestartCounter(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int counter = GameAgent::agent()->level()->getRestartCounter();
-    lua_pushnumber(L, counter);
-    END_NOEXCEPTION;
-    //NOTE: return counter
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
  * void game_save(serialized)
  */
     int
@@ -528,6 +513,36 @@ script_sound_addSound(lua_State *L) throw()
     GameAgent::agent()->level()->addSound(name, Path::dataReadPath(file));
     END_NOEXCEPTION;
     return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * int game_getRestartCounter()
+ * 
+ */
+    int
+script_game_getRestartCounter(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int counter = GameAgent::agent()->level()->getRestartCounter();
+    lua_pushnumber(L, counter);
+    END_NOEXCEPTION;
+    //NOTE: return counter
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * int game_getDepth()
+ * 
+ */
+    int
+script_game_getDepth(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int depth = GameAgent::agent()->level()->getDepth();
+    lua_pushnumber(L, depth);
+    END_NOEXCEPTION;
+    //NOTE: return depth
+    return 1;
 }
 //-----------------------------------------------------------------
 /**
