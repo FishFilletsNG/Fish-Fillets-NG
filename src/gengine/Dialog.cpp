@@ -58,10 +58,25 @@ Dialog::talk(int volume, int loops)
  * Override this method to run subtitles.
  */
     void
-Dialog::runSubtitle() const
+Dialog::runSubtitle(const StringTool::t_args &args) const
 {
     LOG_INFO(ExInfo("subtitle")
-            .addInfo("content", m_subtitle));
+            .addInfo("content", getFormatedSubtitle(args)));
+}
+//-----------------------------------------------------------------
+/**
+ * Replace %1, %2, ... with the arguments.
+ * NOTE: %0 is not expanded
+ */
+std::string
+Dialog::getFormatedSubtitle(const StringTool::t_args &args) const
+{
+    std::string buffer = m_subtitle;
+    for (unsigned int i = 1; i < args.size(); ++i) {
+        StringTool::replace(buffer,
+                "%" + StringTool::toString(i), args[i]);
+    }
+    return buffer;
 }
 //-----------------------------------------------------------------
 /**

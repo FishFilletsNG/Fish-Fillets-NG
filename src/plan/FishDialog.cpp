@@ -30,11 +30,13 @@ FishDialog::FishDialog(const std::string &lang,
  * Subtitles are optional, dialog can have only sound.
  */
 void
-FishDialog::runSubtitle() const
+FishDialog::runSubtitle(const StringTool::t_args &args) const
 {
-    std::string subtitle = getSubtitle();
-    if (!subtitle.empty() && !m_fontname.empty()) {
-        SubTitleAgent::agent()->newSubtitle(subtitle, m_fontname);
+    if (!m_fontname.empty()) {
+        std::string subtitle = getFormatedSubtitle(args);
+        if (!subtitle.empty()) {
+            SubTitleAgent::agent()->newSubtitle(subtitle, m_fontname);
+        }
     }
 }
 

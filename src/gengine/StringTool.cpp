@@ -49,4 +49,45 @@ StringTool::toString(long value)
     buffer << value;
     return buffer.str();
 }
+//-----------------------------------------------------------------
+/**
+ * Replace one substring with another
+ * @param buffer string to change
+ * @param pattern what replace
+ * @param newstring what to place
+ */
+    void
+StringTool::replace(std::string &buffer,
+        const std::string &pattern, const std::string &newstring)
+{
+    std::string::size_type pos = buffer.find(pattern);
+    while (pos != std::string::npos) {
+        buffer.replace(pos, pattern.size(), newstring);
+        pos = buffer.find(pattern, pos + newstring.size());
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Split string.
+ * @return splited segments without separator
+ */
+    StringTool::t_args
+StringTool::split(const std::string &str, char separator)
+{
+    std::string remain = str;
+    t_args args;
+
+    std::string::size_type pos = remain.find(separator);
+    while (pos != std::string::npos) {
+        args.push_back(remain.substr(0, pos));
+        remain.erase(0, pos + 1);
+
+        pos = remain.find(separator);
+    }
+    if (remain.size() > 0) {
+        args.push_back(remain);
+    }
+
+    return args;
+}
 

@@ -11,6 +11,7 @@
 #include "Dialog.h"
 #include "ResDialogPack.h"
 #include "PlannedDialog.h"
+#include "StringTool.h"
 
 //-----------------------------------------------------------------
     void
@@ -48,6 +49,9 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
 //-----------------------------------------------------------------
 /**
  * Run talk.
+ * Dialog name could contain "name@arg1@arg2..."
+ * to fill %1, %2, ... in subtitles.
+ *
  * @param actor actor index
  * @param name dialog name
  * @param volume dialog volume
@@ -57,11 +61,13 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
 DialogAgent::actorTalk(int actor, const std::string &name,
         int volume, int loops)
 {
-    Dialog *subtitle = m_dialogs->findDialogHard(name);
-    if (subtitle) {
-        subtitle->runSubtitle();
+    StringTool::t_args args = StringTool::split(name, '@');
 
-        Dialog *dialog = m_dialogs->findDialogHard(name, "speech");
+    Dialog *subtitle = m_dialogs->findDialogHard(args[0]);
+    if (subtitle) {
+        subtitle->runSubtitle(args);
+
+        Dialog *dialog = m_dialogs->findDialogHard(args[0], "speech");
         PlannedDialog *talker = new PlannedDialog(actor, dialog,
             subtitle->getMinTime());
         talker->talk(volume, loops);

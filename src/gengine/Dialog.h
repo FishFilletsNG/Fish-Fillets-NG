@@ -2,6 +2,7 @@
 #define HEADER_DIALOG_H
 
 #include "NoCopy.h"
+#include "StringTool.h"
 
 #include "SDL_mixer.h"
 #include <string>
@@ -11,7 +12,7 @@
  */
 class Dialog: public NoCopy {
     public:
-    static const std::string DEFAULT_LANG;
+        static const std::string DEFAULT_LANG;
     private:
         Mix_Chunk *m_sound;
         std::string m_soundfile;
@@ -23,9 +24,10 @@ class Dialog: public NoCopy {
         virtual ~Dialog();
 
         int talk(int volume, int loops=0);
-        virtual void runSubtitle() const;
+        virtual void runSubtitle(const StringTool::t_args &args) const;
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }
+        std::string getFormatedSubtitle(const StringTool::t_args &args) const;
         int getMinTime() const;
 
         bool equalSound(const Mix_Chunk *other) const
