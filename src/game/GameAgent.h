@@ -23,9 +23,9 @@ class GameAgent : public BaseAgent {
         ScriptState *m_script;
         int m_lockPhases;
     private:
-        void newLevel();
+        void newLevel(bool restart=false);
         void clearRoom();
-        std::string getNextLevel();
+        std::string getNextLevel(bool restart=false);
         void registerGameFuncs();
         void checkRoom();
 
@@ -46,6 +46,8 @@ class GameAgent : public BaseAgent {
 
         void ensurePhases(int count);
         int getEnsuredPhases() { return m_lockPhases; }
+
+        virtual void receiveSimple(const SimpleMsg *msg);
 };
 
 #endif

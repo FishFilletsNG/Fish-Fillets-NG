@@ -35,6 +35,7 @@
 #include "Driver.h"
 #include "KeyDriver.h"
 #include "KeyControl.h"
+#include "UnknownMsgException.h"
 
 #include "game-script.h"
 
@@ -93,16 +94,18 @@ GameAgent::own_shutdown()
 /**
  * Create new level.
  * TODO: make levels selection menu
+ *
+ * @param restart whether repeat this level
  */
 void
-GameAgent::newLevel()
+GameAgent::newLevel(bool restart)
 {
     clearRoom();
 
     m_script = new ScriptState();
     registerGameFuncs();
 
-    std::string level = getNextLevel();
+    std::string level = getNextLevel(restart);
     m_script->doFile(Path::dataReadPath(level));
 }
 //-----------------------------------------------------------------
@@ -129,18 +132,21 @@ GameAgent::clearRoom()
 //-----------------------------------------------------------------
 /**
  * Returns next level name.
+ * @param restart whether repeat this level
  */
 std::string
-GameAgent::getNextLevel()
+GameAgent::getNextLevel(bool restart)
 {
-    //TODO: make game menu with level list
-    StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
-                "dostring", "nextLevel()");
-    try {
-        MessagerAgent::agent()->forwardNewMsg(msg);
-    }
-    catch (ScriptException &e) {
-        LOG_WARNING(e.info());
+    if (false == restart) {
+        //TODO: make game menu with level list
+        StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
+                    "dostring", "nextLevel()");
+        try {
+            MessagerAgent::agent()->forwardNewMsg(msg);
+        }
+        catch (ScriptException &e) {
+            LOG_WARNING(e.info());
+        }
     }
 
     return OptionAgent::agent()->getParam("level", "script/level.lua");
@@ -328,6 +334,10 @@ GameAgent::keyBinding()
     KeyStroke fs(SDLK_f, KMOD_NONE);
     msg = new SimpleMsg(Name::VIDEO_NAME, "fullscreen");
     keyBinder->addStroke(fs, msg);
+    // restart
+    KeyStroke restart(SDLK_BACKSPACE, KMOD_NONE);
+    msg = new SimpleMsg(this, "restart");
+    keyBinder->addStroke(restart, msg);
 
     // volume
     KeyStroke key_plus(SDLK_KP_PLUS, KMOD_NONE);
@@ -352,4 +362,21 @@ GameAgent::getModel(int model_index)
     checkRoom();
     return m_room->getModel(model_index);
 }
-
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - restart ... room restart
+ *
+ * @throws UnknownMsgException
+ */
+    void
+GameAgent::receiveSimple(const SimpleMsg *msg)
+{
+    if (msg->equalsName("restart")) {
+        newLevel(true);
+    }
+    else {
+        throw UnknownMsgException(msg);
+    }
+}
