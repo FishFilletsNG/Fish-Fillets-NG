@@ -157,7 +157,7 @@ WiStatusBar *
 MenuOptions::createStatusBar(int width)
 {
     SDL_Color color = {0, 255, 0, 255};
-    Font *new_font = new Font(Path::dataReadPath("font/font_menu.ttf"), 20);
+    Font *new_font = new Font(Path::dataReadPath("font/font_menu.ttf"), 16);
     return new WiStatusBar(new_font, color, width);
 }
 //-----------------------------------------------------------------
