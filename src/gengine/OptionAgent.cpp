@@ -179,7 +179,8 @@ OptionAgent::parseDashOpt(const std::string &arg)
     else {
         throw LogicException(ExInfo("unknown option")
                 .addInfo("arg", arg)
-                .addInfo("usage", "$0 [-hvc] [name=value ...]"));
+                .addInfo("use",
+                    getParam("program") + " --help"));
     }
 }
 //-----------------------------------------------------------------
@@ -192,9 +193,10 @@ OptionAgent::parseParamOpt(const std::string &arg)
         setParam(name, value);
     }
     else {
-        throw LogicException(ExInfo("wrong options format")
+        throw LogicException(ExInfo("unknown option")
                 .addInfo("arg", arg)
-                .addInfo("usage", "$0 [-hvc] [name=value ...]"));
+                .addInfo("use",
+                    getParam("program") + " --help"));
     }
 }
 //-----------------------------------------------------------------
@@ -332,12 +334,12 @@ std::string
 OptionAgent::getHelpInfo() const
 {
     std::string help = "Usage: "
-        + getParam("program") + " [-hvc] [name=value ...]\n";
+        + getParam("program") + " [options] [name=value ...]\n";
     help += "  -h, --help               Show this help\n";
     help += "  -v, --version            Show version\n";
     help += "  -c, --config             Show config\n";
     help += "\n";
-    help += "Options:\n";
+    help += "Config variables:\n";
     help += "  loglevel=<number>        Loglevel uses same numbers as syslog\n";
     help += "  systemdir=<path>         Path to game data\n";
     help += "  userdir=<path>           Path to game data\n";
