@@ -62,7 +62,13 @@ NodeDrawer::drawNode(const LevelNode *node) const
             return;
         case LevelNode::STATE_OPEN:
             {
-                int phase = TimerAgent::agent()->getCycles() % 8;
+                int phase = TimerAgent::agent()->getCycles() % 10;
+                if (phase > 4) {
+                    phase--;
+                }
+                if (phase > 7) {
+                    phase--;
+                }
                 if (phase >= 4) {
                     phase = 7 - phase;
                 }
