@@ -62,7 +62,7 @@ DemoMode::own_updateState()
 void
 DemoMode::own_cleanState()
 {
-    //NOTE: loaded dialogs will be keeped until room end
+    //NOTE: loaded dialogs are released by ~Planner()
     if (m_surfaceBuffer) {
         SDL_FreeSurface(m_surfaceBuffer);
         m_surfaceBuffer = NULL;

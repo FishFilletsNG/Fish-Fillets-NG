@@ -110,7 +110,7 @@ script_dialog_addFont(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void dialog_addDialog(name, lang, soundfile, fontname, subtitle)
+ * void dialog_addDialog(name, lang, soundfile, fontname="", subtitle="")
  */
     int
 script_dialog_addDialog(lua_State *L) throw()
