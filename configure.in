@@ -128,9 +128,9 @@ AC_ARG_ENABLE(debug,
                )
 CXXFLAGS="$CXXFLAGS -Wall -W -Wpointer-arith -Wcast-qual \
 -Wcast-align -Woverloaded-virtual \
--Wconversion -Wshadow -pedantic -ansi"
+-Wconversion -Wshadow"
 if test "x$debug" = "xtrue"; then
-    CXXFLAGS="$CXXFLAGS -pipe -g3 -O0"
+    CXXFLAGS="$CXXFLAGS -pedantic -ansi -pipe -g3 -O0"
 fi
 
 ###################################################
