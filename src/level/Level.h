@@ -69,6 +69,7 @@ class Level : public GameState {
         virtual void own_pauseState() {}
         virtual void own_resumeState();
         virtual void own_cleanState();
+        virtual void own_noteBg();
         virtual void own_noteFg();
     public:
         Level(const std::string &codename, const Path &datafile, int depth);
@@ -98,7 +99,7 @@ class Level : public GameState {
         void newDemo(const Path &demofile);
 
         bool isLoading() const;
-        void togglePause() const;
+        void togglePause();
         bool isShowing() const;
         void interruptShow();
         void planShow(Command *new_command);

@@ -137,10 +137,24 @@ Level::own_cleanState()
     m_levelScript->cleanRoom();
 }
 //-----------------------------------------------------------------
+/**
+ * Loading is paused on background.
+ */
+    void
+Level::own_noteBg()
+{
+    if (m_loading->isLoading() && !m_loading->isPaused()) {
+        m_loading->togglePause();
+    }
+}
+//-----------------------------------------------------------------
     void
 Level::own_noteFg()
 {
     initScreen();
+    if (m_loading->isLoading() && m_loading->isPaused()) {
+        m_loading->togglePause();
+    }
 }
 
 //-----------------------------------------------------------------
@@ -148,6 +162,12 @@ bool
 Level::isLoading() const
 {
     return m_loading->isLoading();
+}
+//-----------------------------------------------------------------
+void
+Level::togglePause()
+{
+    return m_loading->togglePause();
 }
 //-----------------------------------------------------------------
 /**

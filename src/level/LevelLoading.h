@@ -24,6 +24,7 @@ class LevelLoading : public NoCopy {
         void loadGame(const std::string &moves);
         void loadReplay(const std::string &moves);
         void togglePause() { m_paused = !m_paused; }
+        bool isPaused() const { return m_paused; }
 
         bool isLoading() const;
         void nextLoadAction();

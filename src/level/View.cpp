@@ -14,8 +14,8 @@
 
 #include "Cube.h"
 #include "Anim.h"
-
 #include "Rules.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
 /**
@@ -69,7 +69,7 @@ void
 View::drawOn(SDL_Surface *screen)
 {
     m_screen = screen;
-    ++m_animShift;
+    m_animShift = min(SCALE, m_animShift + m_shiftSize);
     m_models.drawOn(this);
     drawDecors();
 }
@@ -114,7 +114,7 @@ View::getScreenPos(const Cube *model) const
     Rules::eDir dir = model->const_rules()->getDir();
     if (dir != Rules::DIR_NO) {
         shift = Rules::dir2xy(dir);
-        shift = shift.scale(m_animShift * m_shiftSize);
+        shift = shift.scale(m_animShift);
     }
     shift = shift.plus(m_screenShift);
 
