@@ -10,8 +10,11 @@ Library SDL = Simple DirectMedia Layer (video, input, sound)
 Library SDL_mixer (multiple sounds)
 - libSDL_mixer >= 1.2.5, http://www.libsdl.org/projects/SDL_mixer/
 
-Library SDL_image (png, jpg support)
+Library SDL_image (png support)
 - libSDL_image, http://www.libsdl.org/projects/SDL_image/
+
+Library SDL_ttf (TrueType UTF-8 fonts)
+- libSDL_ttf, http://www.libsdl.org/projects/SDL_ttf/
 
 Library LUA (script language, used for debug console, configuration, levels,...)
 - liblua50, www.lua.org
@@ -38,7 +41,9 @@ Use space bar to switch between the fish.
 See also "How to Play" data/doc/html/manual.html
 
 restart level - Backspace
-fullscreen - F11
+toggle fullscreen - F11
 save game - F2
 load game - F3
+show/hide level move counter - F5
+hold down to increase game speed - Shift
 
