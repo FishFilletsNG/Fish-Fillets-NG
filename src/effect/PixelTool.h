@@ -19,6 +19,9 @@ class PixelTool {
 
         static Uint32 getPixel(SDL_Surface *surface, int x, int y);
         static void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
+
+        static Uint32 unpackPixel(Uint8 bpp, Uint8 *p);
+        static void packPixel(Uint8 bpp, Uint8 *p, Uint32 pixel);
 };
 
 #endif

@@ -8,6 +8,8 @@
  */
 #include "PixelTool.h"
 
+#include "LogicException.h"
+
 #include <assert.h>
 
 //-----------------------------------------------------------------
@@ -71,6 +73,35 @@ PixelTool::getPixel(SDL_Surface *surface, int x, int y)
     Uint8 *p = static_cast<Uint8*>(surface->pixels) + y * surface->pitch
         + x * bpp;
 
+    return unpackPixel(bpp, p);
+}
+//-----------------------------------------------------------------
+/**
+ * Put pixel at x, y.
+ * Surface must be locked.
+ */
+    void
+PixelTool::putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    if ((0 <= x && x < surface->w) && (0 <= y && y < surface->h)) {
+        int bpp = surface->format->BytesPerPixel;
+        Uint8 *p = static_cast<Uint8*>(surface->pixels) + y * surface->pitch
+            + x * bpp;
+
+        packPixel(bpp, p, pixel);
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Decodes pixel from memory.
+ * @param bpp color depth (8, 16, 24, 32)
+ * @param p pointer to the memory
+ * @return pixel in bpp color depth 
+ * @throws LogicException for unknown color depth
+ */
+    Uint32
+PixelTool::unpackPixel(Uint8 bpp, Uint8 *p)
+{
     switch(bpp) {
         case 1: // 8bit
             return *p;
@@ -86,49 +117,45 @@ PixelTool::getPixel(SDL_Surface *surface, int x, int y)
         case 4: // 32 bit
             return *reinterpret_cast<Uint32*>(p);
         default:
-            assert(!"unknown color depth");
-            return 0;
+            throw LogicException(ExInfo("unknown color depth")
+                    .addInfo("bpp", bpp));
     }
 }
 //-----------------------------------------------------------------
 /**
- * Put pixel at x, y.
- * Surface must be locked.
+ * Encodes pixel to memory.
+ * @param bpp color depth (8, 16, 24, 32)
+ * @param p pointer to the memory
+ * @param pixel prepared pixel in bpp color depth
+ * @throws LogicException for unknown color depth
  */
     void
-PixelTool::putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+PixelTool::packPixel(Uint8 bpp, Uint8 *p, Uint32 pixel)
 {
-    if ((0 <= x && x < surface->w) && (0 <= y && y < surface->h)) {
-        int bpp = surface->format->BytesPerPixel;
-        Uint8 *p = static_cast<Uint8*>(surface->pixels) + y * surface->pitch
-            + x * bpp;
-
-        switch(bpp) {
-            case 1:
-                *p = pixel;
-                break;
-            case 2:
-                *reinterpret_cast<Uint16*>(p) = pixel;
-                break;
-            case 3:
-                if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                    p[0] = (pixel >> 16) & 0xff;
-                    p[1] = (pixel >> 8) & 0xff;
-                    p[2] = pixel & 0xff;
-                } else {
-                    p[0] = pixel & 0xff;
-                    p[1] = (pixel >> 8) & 0xff;
-                    p[2] = (pixel >> 16) & 0xff;
-                }
-                break;
-            case 4:
-                *reinterpret_cast<Uint32*>(p) = pixel;
-                break;
-            default:
-                assert(!"unknown color depth");
-                break;
-        }
+    switch(bpp) {
+        case 1:
+            *p = pixel;
+            break;
+        case 2:
+            *reinterpret_cast<Uint16*>(p) = pixel;
+            break;
+        case 3:
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                p[0] = (pixel >> 16) & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = pixel & 0xff;
+            } else {
+                p[0] = pixel & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = (pixel >> 16) & 0xff;
+            }
+            break;
+        case 4:
+            *reinterpret_cast<Uint32*>(p) = pixel;
+            break;
+        default:
+            throw LogicException(ExInfo("unknown color depth")
+                    .addInfo("bpp", bpp));
     }
 }
-
 

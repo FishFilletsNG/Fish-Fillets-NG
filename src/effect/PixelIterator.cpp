@@ -9,6 +9,7 @@
 #include "PixelIterator.h"
 
 #include "SurfaceLock.h"
+#include "PixelTool.h"
 
 #include <assert.h>
 
@@ -74,24 +75,7 @@ PixelIterator::getColor() const
 Uint32
 PixelIterator::getPixel() const
 {
-    switch(m_bpp) {
-        case 1: // 8bit
-            return *m_p;
-        case 2: // 16bit 
-            return *reinterpret_cast<Uint16*>(m_p);
-        case 3: // 24bit 
-            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                return m_p[0] << 16 | m_p[1] << 8 | m_p[2];
-            }
-            else {
-                return m_p[0] | m_p[1] << 8 | m_p[2] << 16;
-            }
-        case 4: // 32 bit
-            return *reinterpret_cast<Uint32*>(m_p);
-        default:
-            assert(!"unknown color depth");
-            return 0;
-    }
+    return PixelTool::unpackPixel(m_bpp, m_p);
 }
 //-----------------------------------------------------------------
     void
@@ -105,30 +89,6 @@ PixelIterator::putColor(const SDL_Color &color)
     void
 PixelIterator::putPixel(Uint32 pixel)
 {
-    switch(m_bpp) {
-        case 1:
-            *m_p = pixel;
-            break;
-        case 2:
-            *reinterpret_cast<Uint16*>(m_p) = pixel;
-            break;
-        case 3:
-            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                m_p[0] = (pixel >> 16) & 0xff;
-                m_p[1] = (pixel >> 8) & 0xff;
-                m_p[2] = pixel & 0xff;
-            } else {
-                m_p[0] = pixel & 0xff;
-                m_p[1] = (pixel >> 8) & 0xff;
-                m_p[2] = (pixel >> 16) & 0xff;
-            }
-            break;
-        case 4:
-            *reinterpret_cast<Uint32*>(m_p) = pixel;
-            break;
-        default:
-            assert(!"unknown color depth");
-            break;
-    }
+    PixelTool::packPixel(m_bpp, m_p, pixel);
 }
 
