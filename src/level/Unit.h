@@ -45,6 +45,7 @@ class Unit : public Object {
         bool isMoving() const;
         bool isTurning() const;
         bool isPushing() const;
+        bool equalsModel(const Cube *other) const;
 
         int countAnimPhases(const std::string &anim) const;
 };

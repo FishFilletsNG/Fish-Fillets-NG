@@ -1,10 +1,13 @@
 #ifndef HEADER_CONTROLS_H
 #define HEADER_CONTROLS_H
 
+class V2;
 class Unit;
+class Cube;
 class PhaseLocker;
 class KeyStroke;
 class InputProvider;
+class MouseStroke;
 
 #include "NoCopy.h"
 #include "KeyControl.h"
@@ -43,9 +46,15 @@ class Controls : public StepCounter, public NoCopy {
 
         void checkActive();
         void switchActive();
-        void controlEvent(const KeyStroke &stroke);
         bool makeMove(char move);
         bool cannotMove() const;
+
+        void controlEvent(const KeyStroke &stroke);
+        void controlField(const V2 &field, const Cube *occupant);
+        void controlFieldHard(const V2 &field, const Cube *occupant);
+        bool activateSelected(const Cube *occupant);
+        void moveTo(const V2 &loc);
+        void moveHardTo(const V2 &loc);
 
         virtual int getStepCount() const { return m_moves.size(); }
         virtual std::string getMoves() const { return m_moves; }

@@ -26,6 +26,7 @@ class LevelInput : public GameInput {
         virtual void specStroke(const KeyStroke &stroke);
     public:
         LevelInput(Level *level);
+        virtual void mouseEvent(const MouseStroke &buttons);
 };
 
 #endif

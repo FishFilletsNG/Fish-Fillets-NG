@@ -9,6 +9,7 @@ class Picture;
 class DemoMode;
 class LevelStatus;
 class KeyStroke;
+class MouseStroke;
 class LevelStatus;
 class LevelScript;
 class LevelLoading;
@@ -89,6 +90,7 @@ class Level : public GameState {
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
+        void controlMouse(const MouseStroke &button);
 
         std::string getLevelName() const;
         int getRestartCounter() const { return m_restartCounter; }

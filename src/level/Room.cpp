@@ -28,6 +28,7 @@
 #include "OptionAgent.h"
 #include "ModelList.h"
 #include "Landslip.h"
+#include "MouseStroke.h"
 
 #include <assert.h>
 
@@ -308,6 +309,19 @@ Room::switchFish()
 Room::controlEvent(const KeyStroke &stroke)
 {
     m_controls->controlEvent(stroke);
+}
+//-----------------------------------------------------------------
+    void
+Room::controlMouse(const MouseStroke &button)
+{
+    V2 fieldPos = m_view->getFieldPos(button.getLoc());
+    Cube *model = askField(fieldPos);
+    if (button.isLeft()) {
+        m_controls->controlField(fieldPos, model);
+    }
+    else if (button.isRight()) {
+        m_controls->controlFieldHard(fieldPos, model);
+    }
 }
 
 //-----------------------------------------------------------------

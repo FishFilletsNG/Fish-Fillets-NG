@@ -495,6 +495,14 @@ Level::controlEvent(const KeyStroke &stroke)
     }
 }
 //-----------------------------------------------------------------
+    void
+Level::controlMouse(const MouseStroke &button)
+{
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->controlMouse(button);
+    }
+}
+//-----------------------------------------------------------------
 /**
  * Create new room
  * and change screen resolution.

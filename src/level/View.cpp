@@ -107,6 +107,9 @@ View::computeShiftSize(int phases)
     }
 }
 //-----------------------------------------------------------------
+/**
+ * Returns position on screen when model will be drawn.
+ */
 V2
 View::getScreenPos(const Cube *model) const
 {
@@ -118,6 +121,16 @@ View::getScreenPos(const Cube *model) const
     }
     shift = shift.plus(m_screenShift);
 
-    V2 pos_shift = model->const_anim()->getViewShift();
-    return model->getLocation().plus(pos_shift).scale(SCALE).plus(shift);
+    V2 anim_shift = model->const_anim()->getViewShift();
+    return model->getLocation().plus(anim_shift).scale(SCALE).plus(shift);
 }
+//-----------------------------------------------------------------
+/**
+ * Returns position of tile under cursor.
+ */
+V2
+View::getFieldPos(const V2 &cursor) const
+{
+    return cursor.minus(m_screenShift).shrink(SCALE);
+}
+

@@ -36,6 +36,7 @@ class View : public Drawable {
         virtual void drawOn(SDL_Surface *screen);
 
         V2 getScreenPos(const Cube *model) const;
+        V2 getFieldPos(const V2 &cursor) const;
         void addDecor(Decor *new_decor) { m_decors.push_back(new_decor); }
         void removeDecors();
 };

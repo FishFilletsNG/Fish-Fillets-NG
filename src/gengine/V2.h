@@ -4,6 +4,7 @@
 #include "StringTool.h"
 
 #include <string>
+#include <assert.h>
 
 /**
  * Vector x,y.
@@ -30,6 +31,11 @@ class V2 {
         V2 scale(int rate) const
         {
             return V2(m_x * rate, m_y * rate);
+        }
+        V2 shrink(int rate) const
+        {
+            assert(rate != 0);
+            return V2(m_x / rate, m_y / rate);
         }
 
         std::string toString() const

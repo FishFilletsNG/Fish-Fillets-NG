@@ -224,6 +224,15 @@ Unit::isPushing() const
     return m_model->rules()->getState() == "pushing";
 }
 //-----------------------------------------------------------------
+/**
+ * Returns true when models are equal.
+ */
+bool
+Unit::equalsModel(const Cube *other) const
+{
+    return m_model == other;
+}
+//-----------------------------------------------------------------
 int
 Unit::countAnimPhases(const std::string &anim) const
 {

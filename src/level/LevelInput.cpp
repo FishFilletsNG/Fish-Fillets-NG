@@ -90,3 +90,10 @@ LevelInput::toggleShowSteps()
 
     option->setPersistent("show_steps", !show);
 }
+//-----------------------------------------------------------------
+void
+LevelInput::mouseEvent(const MouseStroke &buttons)
+{
+    getLevel()->controlMouse(buttons);
+}
+

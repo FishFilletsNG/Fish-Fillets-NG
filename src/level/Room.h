@@ -6,6 +6,7 @@ class Field;
 class WavyPicture;
 class Controls;
 class KeyStroke;
+class MouseStroke;
 class Unit;
 class ResSoundPack;
 class PhaseLocker;
@@ -60,6 +61,8 @@ class Room : public StepCounter, public Drawable {
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
+        void controlMouse(const MouseStroke &button);
+
         void loadMove(char move);
         bool makeMove(char move);
         bool cannotMove() const;

@@ -12,6 +12,7 @@
 #include "PhaseLocker.h"
 
 #include "KeyStroke.h"
+#include "MouseStroke.h"
 
 //-----------------------------------------------------------------
 /**
@@ -243,10 +244,61 @@ Controls::controlEvent(const KeyStroke &stroke)
         }
     }
 }
-
+//-----------------------------------------------------------------
+/**
+ * Activate fish or move to desired location.
+ */
+void
+Controls::controlField(const V2 &field, const Cube *occupant)
+{
+    if (!activateSelected(occupant)) {
+        moveTo(field);
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Move to desired location, don't worry to push something.
+ */
+void
+Controls::controlFieldHard(const V2 &field, const Cube *occupant)
+{
+    moveHardTo(field);
+}
+//-----------------------------------------------------------------
+/**
+ * Activate fish under cursor.
+ * @param cursor cursor location
+ * @return true when fish was selected
+ */
+bool
+Controls::activateSelected(const Cube *occupant)
+{
+    t_units::iterator end = m_units.end();
+    for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+        if ((*i)->equalsModel(occupant)) {
+            m_active = i;
+            m_switch = true;
+            return true;
+        }
+    }
+    return false;
+}
+//-----------------------------------------------------------------
+void
+Controls::moveTo(const V2 &loc)
+{
+    //TODO: implement
+}
+//-----------------------------------------------------------------
+void
+Controls::moveHardTo(const V2 &loc)
+{
+    //TODO: implement
+}
 //-----------------------------------------------------------------
 /**
  * Change active unit.
+ * NOTE: change is without switch animation
  */
 void
 Controls::setActive(t_units::iterator active)
