@@ -27,6 +27,7 @@ WavyPicture::WavyPicture(const Path &file, const V2 &loc)
 //-----------------------------------------------------------------
 /**
  * Blit entire surface to [x,y].
+ * Do vertical waves with phase shift.
  */
 void
 WavyPicture::draw()

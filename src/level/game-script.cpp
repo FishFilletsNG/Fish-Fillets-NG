@@ -21,6 +21,12 @@
 #include "Room.h"
 #include "RopeDecor.h"
 
+#include "EffectNone.h"
+#include "EffectMirror.h"
+#include "EffectInvisible.h"
+#include "EffectReverse.h"
+#include "EffectZx.h"
+
 #include "def-script.h"
 
 //-----------------------------------------------------------------
@@ -221,16 +227,19 @@ script_model_setEffect(lua_State *L) throw()
 
     Cube *model = getModel(L, model_index);
     if ("none" == effect_name) {
-        model->anim()->setEffect(ViewEffect::EFFECT_NONE);
+        model->anim()->changeEffect(new EffectNone());
     }
     else if ("mirror" == effect_name) {
-        model->anim()->setEffect(ViewEffect::EFFECT_MIRROR);
+        model->anim()->changeEffect(new EffectMirror());
     }
     else if ("invisible" == effect_name) {
-        model->anim()->setEffect(ViewEffect::EFFECT_INVISIBLE);
+        model->anim()->changeEffect(new EffectInvisible());
     }
     else if ("reverse" == effect_name) {
-        model->anim()->setEffect(ViewEffect::EFFECT_REVERSE);
+        model->anim()->changeEffect(new EffectReverse());
+    }
+    else if ("zx" == effect_name) {
+        model->anim()->changeEffect(new EffectZx());
     }
     else {
         ExInfo error = ExInfo("unknown view effect")

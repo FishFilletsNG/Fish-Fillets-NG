@@ -10,6 +10,8 @@
 
 #include "Log.h"
 #include "ResImagePack.h"
+#include "EffectNone.h"
+#include "LogicException.h"
 
 //-----------------------------------------------------------------
 /**
@@ -26,6 +28,7 @@
     m_run = false;
     m_specialAnimName = "";
     m_specialAnimPhase = 0;
+    m_effect = new EffectNone();
 }
 //-----------------------------------------------------------------
 Anim::~Anim()
@@ -34,6 +37,7 @@ Anim::~Anim()
     m_animPack[SIDE_RIGHT]->removeAll();
     delete m_animPack[SIDE_LEFT];
     delete m_animPack[SIDE_RIGHT];
+    delete m_effect;
 }
 //-----------------------------------------------------------------
 /**
@@ -45,7 +49,7 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
 {
     SDL_Surface *surface =
         m_animPack[side]->getRes(m_animName, m_animPhase);
-    m_effect.blit(screen, surface, x, y);
+    m_effect->blit(screen, surface, x, y);
     if (m_run) {
         m_animPhase++;
         if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
@@ -56,11 +60,11 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
     if (!m_specialAnimName.empty()) {
         surface =
             m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
-        m_effect.blit(screen, surface, x, y);
+        m_effect->blit(screen, surface, x, y);
         m_specialAnimName = "";
     }
 
-    m_effect.updateEffect();
+    m_effect->updateEffect();
 }
 //-----------------------------------------------------------------
 /**
@@ -136,4 +140,20 @@ Anim::useSpecialAnim(const std::string &name, int phase)
                 .addInfo("count", count));
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Change effect.
+ * @throws LogicException when new_effect is NULL.
+ */
+void
+Anim::changeEffect(ViewEffect *new_effect)
+{
+    if (NULL == new_effect) {
+        throw LogicException(ExInfo("new_effect is NULL")
+                .addInfo("animName", m_animName)
+                .addInfo("specialAnimName", m_specialAnimName));
+    }
 
+    delete m_effect;
+    m_effect = new_effect;
+}

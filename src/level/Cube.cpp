@@ -13,6 +13,7 @@
 #include "Rules.h"
 #include "LayoutException.h"
 #include "Anim.h"
+#include "EffectDisintegrate.h"
 
 //-----------------------------------------------------------------
 /**
@@ -56,7 +57,7 @@ Cube::~Cube()
 Cube::change_die()
 {
     m_alive = false;
-    anim()->setEffect(ViewEffect::EFFECT_DISINTEGRATE);
+    anim()->changeEffect(new EffectDisintegrate());
 }
 //-----------------------------------------------------------------
 /**
