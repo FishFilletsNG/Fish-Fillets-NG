@@ -130,6 +130,8 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
         //NOTE: must be two times to change MouseState
         SDL_WarpMouse(screen_width / 2, screen_height / 2);
         SDL_WarpMouse(screen_width / 2, screen_height / 2);
+        SDL_ShowCursor(1);
+        SDL_ShowCursor(1);
     }
     else {
         throw SDLException(ExInfo("SetVideoMode")
