@@ -48,7 +48,6 @@ Application::Application()
 
     m_agents->addAgent(new ResSoundAgent());
     m_agents->addAgent(new ResImageAgent());
-    m_agents->addAgent(new SDLSoundAgent());
 }
 //-----------------------------------------------------------------
 Application::~Application()
@@ -62,16 +61,16 @@ Application::init(int argc, char *argv[])
     MessagerAgent::agent()->addListener(this);
     m_agents->init(Name::VIDEO_NAME);
     OptionAgent::agent()->parseCmdOpt(argc, argv);
+    //TODO: better setting sound on/off
+    if (OptionAgent::agent()->getAsInt("sound")) {
+        m_agents->addAgent(new SDLSoundAgent());
+    }
+    else {
+        m_agents->addAgent(new DummySoundAgent());
+    }
 
     prepareLogLevel();
-
     m_agents->init();
-    //TODO: allow no sound
-    /*
-    if (false == OptionAgent::agent()->getAsInt("sound")) {
-        m_agents->updateAgent(new DummySoundAgent());
-    }
-    */
 }
 //-----------------------------------------------------------------
     void
