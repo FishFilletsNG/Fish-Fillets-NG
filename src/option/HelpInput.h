@@ -9,10 +9,12 @@ class GameState;
  * Handle input for help screen.
  */
 class HelpInput : public StateInput {
-    public:
-        HelpInput(GameState *state);
+    protected:
         virtual void enableHelp() { quitState(); }
         virtual void enableMenu() { quitState(); }
+        virtual void specStroke(const KeyStroke &stroke);
+    public:
+        HelpInput(GameState *state);
 
         virtual void mouseEvent(const MouseStroke &buttons);
 };

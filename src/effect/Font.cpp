@@ -122,7 +122,7 @@ SDL_Surface *
 Font::renderTextOutlined(const std::string &text,
                 const SDL_Color &color, int outlineWidth) const
 {
-    SDL_Surface *surface = renderText(text, color);
+    SDL_Surface *surface = renderText(" " + text + " ", color);
     SDL_Color black = {0, 0, 0, 255};
     Outline outline(black, outlineWidth);
 

@@ -9,6 +9,13 @@
 #include "InputHandler.h"
 
 //-----------------------------------------------------------------
+InputHandler::InputHandler()
+: m_mouseLoc(-1, -1)
+{
+    m_pressed = NULL;
+    m_buttons = 0;
+}
+//-----------------------------------------------------------------
 void
 InputHandler::mouseState(const V2 &loc, Uint8 buttons)
 {

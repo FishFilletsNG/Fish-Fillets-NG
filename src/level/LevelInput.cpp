@@ -61,7 +61,7 @@ LevelInput::specKey(int keyIndex)
             getLevel()->action_restart();
             break;
         case KEY_SHOW_STEPS:
-            toggleShowSteps();
+            toggleParam("show_steps");
             break;
         default:
             GameInput::specKey(keyIndex);
@@ -74,15 +74,6 @@ LevelInput::specStroke(const KeyStroke &stroke)
     if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
         getLevel()->controlEvent(stroke);
     }
-}
-//-----------------------------------------------------------------
-    void
-LevelInput::toggleShowSteps()
-{
-    OptionAgent *option = OptionAgent::agent();
-    bool show = option->getAsInt("show_steps");
-
-    option->setPersistent("show_steps", !show);
 }
 //-----------------------------------------------------------------
 void

@@ -42,6 +42,12 @@ StateInput::~StateInput()
     delete m_keymap;
 }
 //-----------------------------------------------------------------
+/**
+ * Inspects keystroke and call:
+ * - common function for quit, console, help, menu, subtitles
+ * - specKey() for defined keystroke but unknown for us
+ * - specStroke() for other keys
+ */
     void
 StateInput::keyEvent(const KeyStroke &stroke)
 {
@@ -93,9 +99,15 @@ StateInput::enableConsole()
     void
 StateInput::enableSubtitles()
 {
+    toggleParam("subtitles");
+}
+//-----------------------------------------------------------------
+    void
+StateInput::toggleParam(const std::string &param)
+{
     OptionAgent *option = OptionAgent::agent();
-    bool enable = option->getAsInt("subtitles");
+    bool enable = option->getAsInt(param);
 
-    option->setPersistent("subtitles", !enable);
+    option->setPersistent(param, !enable);
 }
 

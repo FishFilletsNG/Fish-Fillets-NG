@@ -23,7 +23,7 @@ class InputHandler : public InputProvider, public NoCopy {
         Uint8 m_buttons;
         V2 m_mouseLoc;
     public:
-        InputHandler() : m_mouseLoc(-1, -1) { m_pressed = NULL; }
+        InputHandler();
         void takePressed(Uint8 *pressed) { m_pressed = pressed; }
         void mouseState(const V2 &loc, Uint8 buttons);
 

@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "OptionAgent.h"
 #include "FsPath.h"
+#include "PathException.h"
 
 #include <stdio.h>
 
@@ -36,18 +37,22 @@ Path::dataPath(const std::string &file, bool writeable)
     Path datapath = dataUserPath(file);
 
     if (!datapath.exists())  {
+        FILE *try_open = NULL;
         if (writeable) {
-            LOG_INFO(ExInfo("creating path")
-                    .addInfo("path", datapath.getNative()));
-            FsPath::createPath(datapath.getPosixName());
+            try {
+                LOG_INFO(ExInfo("creating path")
+                        .addInfo("path", datapath.getNative()));
+                FsPath::createPath(datapath.getPosixName());
 
-            FILE *try_open = fopen(datapath.getNative().c_str(), "wb");
-            if (NULL == try_open) {
-                 datapath = dataSystemPath(file);
+                try_open = fopen(datapath.getNative().c_str(), "wb");
             }
-            else {
-                fclose(try_open);
+            catch (PathException &e) {
+                LOG_WARNING(e.info());
             }
+        }
+
+        if (try_open) {
+            fclose(try_open);
         }
         else {
             datapath = dataSystemPath(file);

@@ -19,8 +19,15 @@
 HelpInput::HelpInput(GameState *state)
     : StateInput(state)
 {
-    KeyDesc key_quit(KEY_QUIT, "quit");
-    m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE), key_quit);
+}
+//-----------------------------------------------------------------
+/**
+ * Quits on unhandled keypress.
+ */
+void
+HelpInput::specStroke(const KeyStroke &/*stroke*/)
+{
+    quitState();
 }
 //-----------------------------------------------------------------
 void

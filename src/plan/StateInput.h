@@ -26,6 +26,7 @@ class StateInput : public InputHandler {
         virtual void enableSubtitles();
         virtual void specStroke(const KeyStroke &/*stroke*/) {}
         virtual void specKey(int keyIndex);
+        void toggleParam(const std::string &param);
     public:
         StateInput(GameState *state);
         ~StateInput();

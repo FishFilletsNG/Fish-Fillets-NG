@@ -7,7 +7,7 @@
 #include <string>
 
 /**
- * Contains info mouse button press.
+ * Contains info about mouse click.
  */
 class MouseStroke {
     private:

@@ -19,7 +19,6 @@ class LevelInput : public GameInput {
         static const int KEY_SHOW_STEPS = 105;
     private:
         Level *getLevel();
-        void toggleShowSteps();
     protected:
         virtual void specKey(int keyIndex);
         virtual void specStroke(const KeyStroke &stroke);

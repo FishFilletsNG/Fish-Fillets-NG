@@ -100,7 +100,6 @@ createDir(const std::string &dir)
 #endif
     if (error) {
         throw PathException(ExInfo("cannot create dir")
-            .addInfo("errno", errno)
             .addInfo("stderror", strerror(errno))
             .addInfo("dir", dir));
     }
