@@ -17,20 +17,30 @@ class Actor;
  */
 class Level : public Planner {
     private:
+        enum eRoomState {
+            ROOM_RUNNING,
+            ROOM_COMPLETE,
+            ROOM_WRONG
+        };
+
         std::string m_codename;
         Path m_datafile;
+        int m_depth;
         Room *m_room;
         int m_restartCounter;
         std::string m_desc;
         std::string m_loadedMoves;
         int m_loadSpeed;
-        int m_depth;
+        eRoomState m_roomState;
+        int m_countdown;
     private:
+        bool countDown();
         void cleanRoom();
         bool nextPlayerAction();
         bool nextPlanAction();
         bool nextLoadAction();
 
+        void cannotMove();
         void checkRoom();
         void registerGameFuncs();
     public:

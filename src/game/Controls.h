@@ -39,6 +39,7 @@ class Controls : public NoCopy {
         void switchActive();
         std::string getMoves() const { return m_moves; }
         bool makeMove(char move);
+        bool cannotMove();
 };
 
 #endif

@@ -67,7 +67,8 @@ ViewEffect::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
             blitNone(screen, surface, x, y);
             break;
         default:
-            assert("unknown effect" == NULL);
+            assert(!"unknown effect");
+            break;
     }
 }
 //-----------------------------------------------------------------
@@ -142,7 +143,7 @@ ViewEffect::getPixel(SDL_Surface *surface, int x, int y)
         case 4: // 32 bit
             return *reinterpret_cast<Uint32*>(p);
         default:
-            assert("unknown color default" == NULL);
+            assert(!"unknown color default");
             return 0;
     }
 }
@@ -181,7 +182,8 @@ ViewEffect::putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
                 *reinterpret_cast<Uint32*>(p) = pixel;
                 break;
             default:
-                assert("unknown color depth" == NULL);
+                assert(!"unknown color depth");
+                break;
         }
     }
 }

@@ -606,7 +606,7 @@ Rules::dir2xy(eDir dir) const
         case DIR_NO:
             break;
         default:
-            assert(NULL == "unknown dir");
+            assert(!"unknown dir");
             break;
     }
 
@@ -639,7 +639,7 @@ Rules::getAction() const
         case DIR_UP: return "move_up";
         case DIR_DOWN: return "move_down";
         case DIR_NO: return "rest";
-        default: assert(NULL == "unknown dir"); break;
+        default: assert(!"unknown dir"); break;
     }
 
     return "rest";

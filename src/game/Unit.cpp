@@ -36,6 +36,16 @@ Unit::canDrive()
 }
 //-----------------------------------------------------------------
 /**
+ * Return true when we can move in future.
+ */
+bool
+Unit::willMove()
+{
+    return m_model->isAlive()
+        && !m_model->isLost();
+}
+//-----------------------------------------------------------------
+/**
  * Test keys and try move.
  * @return true when unit has moved
  */

@@ -29,6 +29,7 @@ class Unit {
         bool startActive() { return m_startActive; }
 
         bool canDrive();
+        bool willMove();
         char drive(Uint8 *pressed);
         char driveBorrowed(Uint8 *pressed, const KeyControl &buttons);
         void activate();

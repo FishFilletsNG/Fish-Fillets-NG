@@ -22,6 +22,8 @@
 
 #include "game-script.h"
 
+#include <assert.h>
+
 //-----------------------------------------------------------------
 /**
  * Create new level.
@@ -31,6 +33,8 @@ Level::Level(const std::string &codename, const Path &datafile, int depth)
     : m_codename(codename), m_datafile(datafile)
 {
     m_room = NULL;
+    m_roomState = ROOM_RUNNING;
+    m_countdown = -1;
     m_restartCounter = 0;
     m_loadedMoves = "";
     m_loadSpeed = 1;
@@ -61,6 +65,8 @@ Level::cleanRoom()
 {
     m_loadedMoves = "";
     m_loadSpeed = 1;
+    m_roomState = ROOM_RUNNING;
+    m_countdown = -1;
     if (m_room) {
         delete m_room;
         m_room = NULL;
@@ -103,7 +109,63 @@ Level::nextAction()
     else {
         room_complete = nextLoadAction();
     }
-    return room_complete;
+
+    bool finished = false;
+    if (m_roomState == ROOM_RUNNING) {
+        if (room_complete) {
+            m_roomState = ROOM_COMPLETE;
+        }
+        else if (m_room->cannotMove()) {
+            LOG_DEBUG(ExInfo("TEST: wrong"));
+            m_roomState = ROOM_WRONG;
+        }
+    }
+    else {
+        finished = countDown();
+    }
+    return finished;
+}
+//-----------------------------------------------------------------
+/**
+ * Count for restart or end of level.
+ * @return true for finished level
+ */
+bool
+Level::countDown()
+{
+    bool result = false;
+    if (m_countdown == -1) {
+        switch (m_roomState) {
+            case ROOM_COMPLETE:
+                //NOTE: original was m_countdown=30, but with a dialog
+                m_countdown = 5;
+                break;
+            case ROOM_WRONG:
+                //NOTE: don't forget change briefcase_help_demo too
+                m_countdown = 70;
+                break;
+            default:
+                assert(!"unknown room state for countdown");
+                break;
+        }
+    }
+    else if (m_countdown > 0) {
+        m_countdown--;
+    }
+    else {
+        switch (m_roomState) {
+            case ROOM_COMPLETE:
+                result = true;
+                break;
+            case ROOM_WRONG:
+                action_restart();
+                break;
+            default:
+                assert(!"unknown room state for countdown");
+                break;
+        }
+    }
+    return result;
 }
 //-----------------------------------------------------------------
 /**
@@ -132,7 +194,6 @@ Level::nextPlayerAction()
 
     return room_complete;
 }
-
 //-----------------------------------------------------------------
 /**
  * Check whether room is ready.

@@ -202,5 +202,20 @@ Controls::makeMove(char move)
     }
     return false;
 }
+//-----------------------------------------------------------------
+/**
+ * Returns true when there is no unit which will be able to move.
+ */
+bool
+Controls::cannotMove()
+{
+    t_units::iterator end = m_units.end();
+    for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+        if ((*i)->willMove()) {
+            return false;
+        }
+    }
+    return true;
+}
 
 

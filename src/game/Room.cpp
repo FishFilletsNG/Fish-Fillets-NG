@@ -173,7 +173,7 @@ Room::playImpact()
                     m_soundPack->getRandomRes("impact_heavy"));
             break;
         default:
-            assert("unknown impact weight" == NULL);
+            assert(!"unknown impact weight");
     }
     m_impact = Cube::NONE;
 }
@@ -362,6 +362,15 @@ Room::makeMove(char move)
         result = true;
     }
     return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true when there is no unit which will be able to move.
+ */
+bool
+Room::cannotMove()
+{
+    return m_controls->cannotMove();
 }
 
 //-----------------------------------------------------------------

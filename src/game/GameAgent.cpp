@@ -230,7 +230,7 @@ GameAgent::keyBinding()
     keyBinder->addStroke(esc, msg);
 
     // fullscreen
-    KeyStroke fs(SDLK_f, KMOD_NONE);
+    KeyStroke fs(SDLK_F11, KMOD_NONE);
     msg = new SimpleMsg(Name::VIDEO_NAME, "fullscreen");
     keyBinder->addStroke(fs, msg);
     // restart
