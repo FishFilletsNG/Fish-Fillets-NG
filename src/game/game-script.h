@@ -30,6 +30,7 @@ extern int script_model_getW(lua_State *L) throw();
 extern int script_model_getH(lua_State *L) throw();
 extern int script_model_setGoal(lua_State *L) throw();
 extern int script_model_change_turnSide(lua_State *L) throw();
+extern int script_model_equals(lua_State *L) throw();
 
 extern int script_dialog_empty(lua_State *L) throw();
 extern int script_dialog_addFont(lua_State *L) throw();

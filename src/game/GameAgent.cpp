@@ -185,6 +185,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_setGoal", script_model_setGoal);
     m_script->registerFunc("model_change_turnSide",
             script_model_change_turnSide);
+    m_script->registerFunc("model_equals", script_model_equals);
 
     m_script->registerFunc("dialog_empty", script_dialog_empty);
     m_script->registerFunc("dialog_addFont", script_dialog_addFont);
@@ -371,6 +372,13 @@ GameAgent::getModel(int model_index)
 {
     checkRoom();
     return m_room->getModel(model_index);
+}
+//-----------------------------------------------------------------
+Cube *
+GameAgent::askField(const V2 &loc)
+{
+    checkRoom();
+    return m_room->askField(loc);
 }
 //-----------------------------------------------------------------
 /**

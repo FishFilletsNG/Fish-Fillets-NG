@@ -43,7 +43,8 @@ Field::~Field()
 //-----------------------------------------------------------------
 /**
  * Get model which occupied this location.
- * Locations out of field are NULL filled.
+ * Empty locations are NULL filled.
+ * Locations out of field are filled with border object.
  */
 Cube *
 Field::getModel(const V2 &loc)

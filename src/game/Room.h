@@ -30,6 +30,7 @@ class Room : public NoCopy {
 
         int addModel(Cube *model);
         Cube *getModel(int model_index);
+        Cube *askField(const V2 &loc);
         bool nextRound();
 
         int getW() const { return m_field->getW(); }

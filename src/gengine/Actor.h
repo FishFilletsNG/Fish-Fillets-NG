@@ -14,6 +14,7 @@ class Actor : public NoCopy {
         bool m_busy;
     public:
         Actor();
+        int getIndex() const { return m_index; }
         void setIndex(int model_index) { m_index = model_index; }
         bool equals(const Actor *other) const;
 

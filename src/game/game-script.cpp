@@ -449,6 +449,33 @@ script_model_change_turnSide(lua_State *L) throw()
     //NOTE: return how many values want to return to lua
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void model_equals(model_index, x, y)
+ *
+ * Returns whether object at location(x, y) is equal.
+ * NOTE: model_index can be -1 for empty water.
+ */
+    int
+script_model_equals(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    int x = luaL_checkint(L, 2);
+    int y = luaL_checkint(L, 3);
+    Cube *other = GameAgent::agent()->askField(V2(x, y));
+
+    int other_index = -1;
+    if (other) {
+        other_index = other->getIndex();
+    }
+    bool equal = (other_index == model_index);
+
+    lua_pushboolean(L, equal);
+    END_NOEXCEPTION;
+    //NOTE: return equal
+    return 1;
+}
 
 //-----------------------------------------------------------------
 /**

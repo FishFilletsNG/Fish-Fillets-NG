@@ -76,6 +76,15 @@ Room::getModel(int model_index)
 }
 //-----------------------------------------------------------------
 /**
+ * Return model at location.
+ */
+Cube *
+Room::askField(const V2 &loc)
+{
+    return m_field->getModel(loc);
+}
+//-----------------------------------------------------------------
+/**
  * Update all models.
  * Prepare new move, let models fall, let models drive, release old position.
  * @return true when room is finished

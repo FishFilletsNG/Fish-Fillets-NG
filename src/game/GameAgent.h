@@ -44,6 +44,7 @@ class GameAgent : public BaseAgent {
         int addModel(const std::string &kind,
                 const V2 &loc, const std::string &shape);
         Cube *getModel(int model_index);
+        Cube *askField(const V2 &loc);
 
         void ensurePhases(int count);
         int getEnsuredPhases() const { return m_lockPhases; }
