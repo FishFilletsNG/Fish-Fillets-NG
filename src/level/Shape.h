@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+/**
+ * Stores model shape.
+ * It is uses by MarkMask to ask Field under shape.
+ */
 class Shape : public NoCopy {
     private:
         typedef std::vector<V2> t_marks;

@@ -7,6 +7,7 @@
 
 /**
  * Interface - drawable object.
+ * IDrawer registers oneself to VideoAgent drawers.
  */
 class IDrawer : public NoCopy {
     private:

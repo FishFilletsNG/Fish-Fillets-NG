@@ -30,7 +30,7 @@ GameState::~GameState()
 //-----------------------------------------------------------------
 /**
  * Obtain input handler.
- * @param handler new input handler
+ * @param new_handler new input handler
  */
 void
 GameState::takeHandler(InputHandler *new_handler)

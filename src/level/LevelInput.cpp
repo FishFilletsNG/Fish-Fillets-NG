@@ -13,6 +13,7 @@
 
 #include "Log.h"
 #include "KeyStroke.h"
+#include "OptionAgent.h"
 
 //-----------------------------------------------------------------
 LevelInput::LevelInput(Level *level)
@@ -31,6 +32,8 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_LOAD, "load"));
     m_keymap->registerKey(KeyStroke(SDLK_BACKSPACE, KMOD_NONE),
             KeyDesc(KEY_RESTART, "restart"));
+    m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
+            KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
 }
 //-----------------------------------------------------------------
 LevelInput::~LevelInput()
@@ -63,6 +66,9 @@ LevelInput::keyEvent(const KeyStroke &stroke)
             m_level->interruptShow();
             m_level->action_restart();
             break;
+        case KEY_SHOW_STEPS:
+            toggleShowSteps();
+            break;
         case -1:
             if (!m_level->isShowing() && !m_level->isLoading()) {
                 m_level->controlEvent(stroke);
@@ -73,5 +79,14 @@ LevelInput::keyEvent(const KeyStroke &stroke)
                     .addInfo("index", m_keymap->indexPressed(stroke))
                     .addInfo("stroke", stroke.toString()));
     }
+}
+//-----------------------------------------------------------------
+    void
+LevelInput::toggleShowSteps()
+{
+    OptionAgent *option = OptionAgent::agent();
+    bool show = option->getAsInt("show_steps");
+
+    option->setPersistent("show_steps", !show);
 }
 

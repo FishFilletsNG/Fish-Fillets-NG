@@ -13,7 +13,10 @@ class IDrawer;
 
 
 /**
- * Video utils.
+ * Video agent initializes video mode and
+ * every cycle lets registered drawers to draw().
+ *
+ * IDrawer register oneself in his constructor.
  */
 class VideoAgent : public BaseAgent {
     AGENT(VideoAgent, Name::VIDEO_NAME);

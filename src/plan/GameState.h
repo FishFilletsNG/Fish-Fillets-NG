@@ -9,6 +9,11 @@ class InputHandler;
 
 /**
  * Game state.
+ * GameState installs own InputHandler in init phase.
+ *
+ * To change state,
+ * use m_manager->pushState(topState) or
+ * m_manager->changeState(newState)
  */
 class GameState : public INamed, public NoCopy {
     private:

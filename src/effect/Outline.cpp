@@ -32,6 +32,7 @@ Outline::drawOnColorKey(SDL_Surface *surface)
 //-----------------------------------------------------------------
 /**
  * Draw outline on bg color.
+ * @param surface picture with shape to outline
  * @param bgKey color used for background
  */
 void

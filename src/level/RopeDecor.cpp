@@ -10,7 +10,6 @@
 
 #include "Cube.h"
 
-#include "Log.h"
 #include "View.h"
 
 #include "SDL_gfxPrimitives.h"

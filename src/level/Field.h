@@ -6,6 +6,9 @@ class Cube;
 #include "NoCopy.h"
 #include "V2.h"
 
+/**
+ * Two dimensional game field.
+ */
 class Field : public NoCopy {
     private:
         int m_w;

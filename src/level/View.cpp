@@ -20,7 +20,6 @@
 //-----------------------------------------------------------------
 /**
  * Create new view.
- * @param locker shared locker for anim
  * @param models wrapper arount models
  */
 View::View(const ModelList &models)

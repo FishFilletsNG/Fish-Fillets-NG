@@ -25,6 +25,7 @@
 #include "LogicException.h"
 #include "DemoMode.h"
 #include "SoundAgent.h"
+#include "StepDecor.h"
 #include "minmax.h"
 
 #include <stdio.h>
@@ -460,7 +461,9 @@ Level::controlEvent(const KeyStroke &stroke)
     void
 Level::createRoom(int w, int h, const Path &picture)
 {
-    m_levelScript->takeRoom(new Room(w, h, picture, m_locker, m_levelScript));
+    Room *room = new Room(w, h, picture, m_locker, m_levelScript);
+    room->addDecor(new StepDecor(room));
+    m_levelScript->takeRoom(room);
 
     //TODO: set with and height in one step
     OptionAgent *options = OptionAgent::agent();

@@ -10,6 +10,7 @@ class View;
  */
 class Decor {
     public:
+        virtual ~Decor() {}
         virtual void drawOnScreen(const View *view, SDL_Surface *screen) = 0;
 };
 

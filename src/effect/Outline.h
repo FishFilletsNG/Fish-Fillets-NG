@@ -3,6 +3,10 @@
 
 #include "SDL.h"
 
+/**
+ * Outline around picture.
+ * Used to outline rendered text.
+ */
 class Outline {
     private:
         int m_width;

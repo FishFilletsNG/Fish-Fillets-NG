@@ -8,6 +8,9 @@ class Unit;
 
 #include <string>
 
+/**
+ * Knows how to create new models.
+ */
 class ModelFactory {
     private:
         static void createParams(const std::string &kind,

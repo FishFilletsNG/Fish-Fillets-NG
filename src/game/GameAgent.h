@@ -7,7 +7,9 @@ class StateManager;
 #include "Name.h"
 
 /**
- * Game.
+ * Create game.
+ * GameAgent uses StateManager to manage
+ * WorldMap, Pedometer, Level and DemoMode.
  */
 class GameAgent : public BaseAgent {
     AGENT(GameAgent, Name::GAME_NAME);

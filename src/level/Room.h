@@ -15,14 +15,14 @@ class Decor;
 #include "NoCopy.h"
 #include "Path.h"
 #include "Cube.h"
-#include "SoundAgent.h"
+#include "StepCounter.h"
 
 #include <string>
 
 /**
  * Room with level.
  */
-class Room : public NoCopy {
+class Room : public StepCounter, public NoCopy {
     private:
         WavyPicture *m_bg;
         Field *m_field;
@@ -61,11 +61,12 @@ class Room : public NoCopy {
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
-        std::string getMoves() const;
         bool loadMove(char move);
         bool makeMove(char move);
         bool cannotMove();
         bool isSolvable();
+        int getStepCount() const;
+        std::string getMoves() const;
 
         int getW() const;
         int getH() const;

@@ -24,6 +24,7 @@
 #include "TimerAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
+#include "SoundAgent.h"
 #include "ModelList.h"
 
 //-----------------------------------------------------------------
@@ -33,6 +34,7 @@
  * @param h room height
  * @param picture room background
  * @param locker shared locker for anim
+ * @param levelScript shared planner to interrupt
  */
 Room::Room(int w, int h, const Path &picture,
         PhaseLocker *locker, Planner *levelScript)
@@ -120,8 +122,8 @@ Room::deactivate()
 //-----------------------------------------------------------------
 /**
  * Add model at scene.
- * @param model new object
- * @param newUnit driver for the object or NULL
+ * @param new_model new object
+ * @param new_unit driver for the object or NULL
  * @return model index
  */
     int
@@ -325,6 +327,12 @@ Room::controlEvent(const KeyStroke &stroke)
     m_controls->controlEvent(stroke);
 }
 
+//-----------------------------------------------------------------
+int
+Room::getStepCount() const
+{
+    return m_controls->getStepCount();
+}
 //-----------------------------------------------------------------
 std::string
 Room::getMoves() const

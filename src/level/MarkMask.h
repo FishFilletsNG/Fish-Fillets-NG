@@ -7,6 +7,9 @@ class Field;
 #include "Rules.h"
 #include "Cube.h"
 
+/**
+ * Marks and unmasks object from game field.
+ */
 class MarkMask : public NoCopy {
     private:
         Cube *m_model;

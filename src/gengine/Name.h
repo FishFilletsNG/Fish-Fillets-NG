@@ -1,6 +1,9 @@
 #ifndef HEADER_NAME_H
 #define HEADER_NAME_H
 
+/**
+ * Contains agent names.
+ */
 class Name {
     public:
         static const char *APP_NAME;

@@ -3,6 +3,9 @@
 
 #include "SDL.h"
 
+/**
+ * Constructor for SDL_Color.
+ */
 class Color : public SDL_Color {
     public:
         Color(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha=255)

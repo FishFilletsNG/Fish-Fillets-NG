@@ -24,6 +24,9 @@ class KeyStroke {
         std::string toString() const;
 };
 
+/**
+ * KeyStroke comparation.
+ */
 struct stroke_less
 {
     bool operator()(const KeyStroke &left, const KeyStroke &right) const

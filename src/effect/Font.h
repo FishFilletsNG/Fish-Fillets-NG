@@ -9,6 +9,9 @@
 
 #include <string>
 
+/**
+ * TrueType UTF-8 font.
+ */
 class Font : public NoCopy {
     private:
         TTF_Font *m_ttfont;
@@ -17,6 +20,7 @@ class Font : public NoCopy {
         Font(const Path &file_ttf, int height);
         ~Font();
 
+        int getHeight() { return TTF_FontHeight(m_ttfont); }
         int calcTextWidth(const std::string &text);
         SDL_Surface *renderText(const std::string &text,
                 const SDL_Color &color);

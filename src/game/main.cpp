@@ -20,29 +20,16 @@
  * Every agent has init(), update() and shutdown() method. These methods are empty by default.
  * 
  * Available agents:
-<ul>
-<li>
-     MessagerAgent - allows sending messages to agent and other listeners.
-</li><li>
-     ScriptAgent - makes scripting possible.
-</li><li>
-     OptionAgent - contains global game options.
-</li><li>
-     VideoAgent - inits video mode and calls drawers draw() method.
-</li><li>
-     SoundAgent - plays music and sound.
-</li><li>
-     InputAgent - reads input event and handles keystrokes and in game console.
-</li><li>
-     DialogAgent - plans NPC dialogs
-</li><li>
-     SubTitleAgent - scrolls subtitles on display
-</li><li>
-     GameAgent - it is on you
-</li><li>
-     TimerAgent - sleeps constant delay = makes stable FPS
-</li>
-</ul>
+ *  - MessagerAgent - allows sending messages to agent and other listeners.
+ *  - ScriptAgent - makes scripting possible.
+ *  - OptionAgent - contains global game options.
+ *  - VideoAgent - inits video mode and calls drawers draw() method.
+ *  - SoundAgent - plays music and sound.
+ *  - InputAgent - reads input event and handles keystrokes and in game console.
+ *  - DialogAgent - plans NPC dialogs
+ *  - SubTitleAgent - scrolls subtitles on display
+ *  - GameAgent - updates game states
+ *  - TimerAgent - sleeps constant delay = makes stable FPS
  * 
  * AgentPack will call agents ordered by their names. See Name.cpp for names.
  * AgentPack::init() calls init() on all agents. AgentPack::update() calls
@@ -80,15 +67,10 @@
  * Every agent inherits from BaseAgent.
  * 
  * Rules for agents:
-<ol>
-<li>
-    Agent must not call other agents in his constructor.
-</li><li>
-    Agent can call only agents with lower names and oneself in his init().
-</li><li>
-    Agent can call only agents with higher names and oneself in his shutdown().
-</li>
-</ol>
+ *  -# Agent must not call other agents in his constructor.
+ *  -# Agent can call only agents with lower names and oneself in his init().
+ *  -# Agent can call only agents with higher names
+ *     and oneself in his shutdown().
  * 
  * For example,
  * agent "30video" can ask agent "20option" about screen_width in his init().

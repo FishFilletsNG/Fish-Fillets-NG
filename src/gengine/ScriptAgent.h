@@ -14,7 +14,8 @@ extern "C" {
 }
 
 /**
- * Scripting.
+ * Global scripting.
+ * It is used by OptionAgent and debug console.
  */
 class ScriptAgent : public BaseAgent {
     AGENT(ScriptAgent, Name::SCRIPT_NAME);

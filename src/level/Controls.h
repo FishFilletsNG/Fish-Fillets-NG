@@ -7,6 +7,7 @@ class KeyStroke;
 
 #include "NoCopy.h"
 #include "KeyControl.h"
+#include "StepCounter.h"
 
 #include "SDL.h"
 #include <vector>
@@ -15,7 +16,7 @@ class KeyStroke;
 /**
  * Keyboard and mouse controls.
  */
-class Controls : public NoCopy {
+class Controls : public StepCounter, public NoCopy {
     private:
         typedef std::vector<Unit*> t_units;
         t_units m_units;
@@ -45,7 +46,9 @@ class Controls : public NoCopy {
         void controlEvent(const KeyStroke &stroke);
         bool makeMove(char move);
         bool cannotMove();
-        std::string getMoves() const { return m_moves; }
+
+        virtual int getStepCount() const { return m_moves.size(); }
+        virtual std::string getMoves() const { return m_moves; }
 };
 
 #endif

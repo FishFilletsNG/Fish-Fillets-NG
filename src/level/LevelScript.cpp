@@ -98,8 +98,8 @@ LevelScript::checkRoom() const
 //-----------------------------------------------------------------
 /**
  * Add model at scene.
- * @param model new object
- * @param newUnit driver for the object or NULL
+ * @param new_model new object
+ * @param new_unit driver for the object or NULL
  * @return model index
  * @throws LogicException when room is not created yet
  */
