@@ -143,10 +143,12 @@ OptionAgent::splitOpt(const std::string &option,
 {
     bool result = false;
     std::string::size_type pos = option.find('=');
-    if (pos + 1  < option.size()) {
-        *out_name = option.substr(0, pos);
-        *out_value = option.substr(pos + 1, std::string::npos);
-        result = true;
+    if (pos != std::string::npos) {
+        if (pos + 1  < option.size()) {
+            *out_name = option.substr(0, pos);
+            *out_value = option.substr(pos + 1, std::string::npos);
+            result = true;
+        }
     }
 
     return result;
