@@ -51,6 +51,7 @@ class OptionAgent : public BaseAgent {
                 int implicit=0) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
+        void removeWatchers(const std::string &listenerName);
         void receiveString(const StringMsg *msg);
 };
 

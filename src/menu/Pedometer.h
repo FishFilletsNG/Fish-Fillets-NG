@@ -51,6 +51,7 @@ class Pedometer : public GameState, public Drawable {
 
         void runSelected();
         virtual void drawOn(SDL_Surface *screen);
+        void receiveString(const StringMsg *msg);
 };
 
 #endif

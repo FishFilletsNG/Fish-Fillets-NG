@@ -133,6 +133,7 @@ GameState::cleanState()
     m_active = false;
     m_onBg = false;
     m_manager = NULL;
+    removeWatchers();
     MessagerAgent::agent()->removeListener(getName());
 }
 //-----------------------------------------------------------------

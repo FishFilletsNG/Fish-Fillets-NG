@@ -155,6 +155,22 @@ Environ::addWatcher(const std::string &name, BaseMsg *msg)
             .addInfo("msg", msg->toString()));
 }
 //-----------------------------------------------------------------
+/**
+ * Removes all registered watchers for given listener.
+ */
+void
+Environ::removeWatchers(const std::string &listenerName)
+{
+    t_watchers::iterator end = m_watchers.end();
+    for (t_watchers::iterator i = m_watchers.begin(); i != end; /*empty*/) {
+        t_watchers::iterator cur = i++;
+        if (cur->second->getListenerName() == listenerName) {
+            delete cur->second;
+            m_watchers.erase(cur);
+        }
+    }
+}
+//-----------------------------------------------------------------
 std::string
 Environ::toString() const
 {

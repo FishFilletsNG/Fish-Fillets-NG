@@ -37,7 +37,6 @@ MenuOptions::MenuOptions()
     registerDrawable(this);
     prepareMenu();
 
-    registerWatcher("lang");
     takeHandler(new OptionsInput(this));
 }
 //-----------------------------------------------------------------
@@ -52,6 +51,7 @@ MenuOptions::~MenuOptions()
     void
 MenuOptions::own_initState()
 {
+    registerWatcher("lang");
     own_resumeState();
 }
 //-----------------------------------------------------------------
@@ -86,7 +86,6 @@ MenuOptions::own_updateState()
     std::string tooltip = m_container->getTip(getInput()->getMouseLoc());
     m_statusBar->setLabel(tooltip);
 }
-
 //-----------------------------------------------------------------
 void
 MenuOptions::prepareMenu()
@@ -215,7 +214,8 @@ MenuOptions::drawOn(SDL_Surface *screen)
 {
     SDL_Color gray = {0xf0, 0xf0, 0xf0, 128};
     SurfaceTool::alphaFill(screen, NULL, gray);
-}//-----------------------------------------------------------------
+}
+//-----------------------------------------------------------------
 /**
  * Handle incoming message.
  * Messages:

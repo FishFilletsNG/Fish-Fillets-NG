@@ -19,6 +19,7 @@ class StringMsg;
 class BaseListener : public INamed {
     protected:
         void registerWatcher(const std::string &param);
+        void removeWatchers();
     public:
         virtual ~BaseListener() {}
         virtual void receiveSimple(const SimpleMsg *msg);

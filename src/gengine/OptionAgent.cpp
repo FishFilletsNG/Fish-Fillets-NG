@@ -323,6 +323,12 @@ OptionAgent::addWatcher(const std::string &name, BaseMsg *msg)
     m_environ->addWatcher(name, msg);
 }
 //-----------------------------------------------------------------
+void
+OptionAgent::removeWatchers(const std::string &listenerName)
+{
+    m_environ->removeWatchers(listenerName);
+}
+//-----------------------------------------------------------------
 /**
  * Get help text.
  */

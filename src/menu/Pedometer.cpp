@@ -19,6 +19,8 @@
 #include "SolverDrawer.h"
 #include "Level.h"
 #include "minmax.h"
+#include "StringMsg.h"
+#include "UnknownMsgException.h"
 
 //-----------------------------------------------------------------
 Pedometer::Pedometer(LevelStatus *status, Level *new_level)
@@ -27,6 +29,7 @@ Pedometer::Pedometer(LevelStatus *status, Level *new_level)
     m_status = status;
     m_solution = m_status->readSolvedMoves();
     m_meterPhase = 0;
+    m_bg = NULL;
 
     prepareBg();
     prepareRack();
@@ -68,7 +71,12 @@ Pedometer::prepareBg()
                 bgSurface->h - 150));
     solver.drawOn(bgSurface);
 
-    m_bg = new Picture(bgSurface, V2(0, 0));
+    if (m_bg) {
+        m_bg->changePicture(bgSurface);
+    }
+    else {
+        m_bg = new Picture(bgSurface, V2(0, 0));
+    }
 }
 //-----------------------------------------------------------------
     void
@@ -98,6 +106,7 @@ Pedometer::prepareRack()
     void
 Pedometer::own_initState()
 {
+    registerWatcher("lang");
     own_resumeState();
 }
 //-----------------------------------------------------------------
@@ -216,4 +225,27 @@ Pedometer::drawNumber(SDL_Surface *screen, int x, int y, int shiftY)
 
     SDL_BlitSurface(m_numbers, &src_rect, screen, &dest_rect);
 }
-
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - param_changed(lang) ... refresh bg
+ *
+ * @throws UnknownMsgException
+ */
+    void
+Pedometer::receiveString(const StringMsg *msg)
+{
+    if (msg->equalsName("param_changed")) {
+        std::string param = msg->getValue();
+        if ("lang" == param) {
+            prepareBg();
+        }
+        else {
+            throw UnknownMsgException(msg);
+        }
+    }
+    else {
+        throw UnknownMsgException(msg);
+    }
+}

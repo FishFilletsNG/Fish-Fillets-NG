@@ -31,6 +31,7 @@ class Environ : public NoCopy {
                 int implicit=0) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
+        void removeWatchers(const std::string &listenerName);
         std::string toString() const;
         std::string getHelpInfo() const;
 };

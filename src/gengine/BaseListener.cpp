@@ -26,6 +26,12 @@ BaseListener::registerWatcher(const std::string &param)
     OptionAgent::agent()->addWatcher(param, event);
 }
 //-----------------------------------------------------------------
+    void
+BaseListener::removeWatchers()
+{
+    OptionAgent::agent()->removeWatchers(getName());
+}
+//-----------------------------------------------------------------
 /**
  * @throws UnknownMsgException
  */

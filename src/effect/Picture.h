@@ -24,6 +24,7 @@ class Picture : public Drawable {
 
         void setLoc(const V2 &loc) { m_loc = loc; }
         void changePicture(const Path &file);
+        void changePicture(SDL_Surface *new_surface);
 };
 
 #endif

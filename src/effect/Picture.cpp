@@ -45,6 +45,13 @@ Picture::changePicture(const Path &file)
     m_surface = ResImagePack::loadImage(file);
 }
 //-----------------------------------------------------------------
+void
+Picture::changePicture(SDL_Surface *new_surface)
+{
+    SDL_FreeSurface(m_surface);
+    m_surface = new_surface;
+}
+//-----------------------------------------------------------------
 /**
  * Blit entire surface to [x,y].
  */
