@@ -26,7 +26,7 @@
  */
 Cube::Cube(const V2 &location,
         eWeight weight, eWeight power, bool alive,
-        Driver *driver, View *a_view, Shape *shape)
+        Driver *driver, View *a_view, Shape *ashape)
 : m_loc(location), m_goal(Goal::noGoal())
 {
     m_weight = weight;
@@ -36,7 +36,7 @@ Cube::Cube(const V2 &location,
     m_lookLeft = true;
     m_index = -1;
 
-    m_shape = shape;
+    m_shape = ashape;
     m_driver = driver;
     m_view = a_view;
     m_view->takeModel(this);

@@ -10,10 +10,12 @@
 
 #include "Log.h"
 #include "LogicException.h"
+#include "minmax.h"
 
 #include "SoundAgent.h"
 #include "InputAgent.h"
 #include "OptionAgent.h"
+#include "MessagerAgent.h"
 
 #include "KeyStroke.h"
 #include "KeyBinder.h"
@@ -24,6 +26,7 @@
 #include "Name.h"
 #include "Path.h"
 #include "ScriptState.h"
+#include "ScriptException.h"
 
 #include "Room.h"
 #include "Shape.h"
@@ -114,6 +117,15 @@ GameAgent::newLevel()
     m_script = new ScriptState();
     registerGameFuncs();
 
+    //TODO: game menu with level list
+    StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
+                "dostring", "nextLevel()");
+    try {
+        MessagerAgent::agent()->forwardNewMsg(msg);
+    }
+    catch (ScriptException &e) {
+        LOG_WARNING(e.info());
+    }
     std::string level = OptionAgent::agent()->getParam("level",
             "script/level.lua");
     m_script->doFile(Path::dataReadPath(level));
@@ -141,6 +153,8 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_isAlive", script_model_isAlive);
     m_script->registerFunc("model_isOut", script_model_isOut);
     m_script->registerFunc("model_isLeft", script_model_isLeft);
+    m_script->registerFunc("model_getW", script_model_getW);
+    m_script->registerFunc("model_getH", script_model_getH);
     m_script->registerFunc("model_setGoal", script_model_setGoal);
     m_script->registerFunc("model_change_turnSide",
             script_model_change_turnSide);
@@ -276,8 +290,7 @@ GameAgent::createDriver(const std::string &kind,
     void
 GameAgent::ensurePhases(int count)
 {
-    //TODO: offer MAX macro
-    m_lockPhases = (m_lockPhases > count ? m_lockPhases : count);
+    m_lockPhases = max(m_lockPhases, count);
 }
 
 //-----------------------------------------------------------------

@@ -9,6 +9,7 @@
 #include "Shape.h"
 
 #include "LayoutException.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
 /**
@@ -25,6 +26,8 @@ Shape::Shape(const std::string &shape)
 {
     int x = 0;
     int y = 0;
+    int max_x = -1;
+    int max_y = -1;
 
     for (unsigned int i = 0; i < shape.size(); ++i) {
         switch (shape[i]) {
@@ -34,6 +37,8 @@ Shape::Shape(const std::string &shape)
                 break;
             case 'X':
                 m_marks.push_back(V2(x, y));
+                max_x = max(max_x, x);
+                max_y = max(max_y, y);
                 ++x;
                 break;
             case ' ':
@@ -47,6 +52,9 @@ Shape::Shape(const std::string &shape)
                         .addInfo("shape", shape));
         }
     }
+
+    m_w = max_x + 1;
+    m_h = max_y + 1;
 }
 
 //-----------------------------------------------------------------

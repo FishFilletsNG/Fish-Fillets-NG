@@ -41,6 +41,10 @@ VideoAgent::own_init()
     registerWatcher("screen_height");
     registerWatcher("screen_bpp");
 
+    SDL_WM_SetCaption(
+            OptionAgent::agent()->getParam("program", "A game").c_str(),
+            NULL);
+
     initVideoMode();
 }
 //-----------------------------------------------------------------

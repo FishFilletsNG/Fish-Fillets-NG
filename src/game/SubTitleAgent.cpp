@@ -8,6 +8,7 @@
  */
 #include "SubTitleAgent.h"
 
+#include "minmax.h"
 #include "ResFontPack.h"
 #include "Title.h"
 #include "OptionAgent.h"
@@ -171,8 +172,7 @@ SubTitleAgent::lowestY()
     int lowest = TITLE_BASE;
     if (false == m_titles.empty()) {
         int lastest = m_titles.back()->getY() - TITLE_ROW;
-        //TODO: offer MIN macro
-        lowest = (lowest <= lastest ? lowest : lastest);
+        lowest = min(lowest, lastest);
     }
     return lowest;
 }

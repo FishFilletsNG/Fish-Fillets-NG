@@ -79,9 +79,9 @@ class ResourcePack : public INamed {
         }
         if (range.second == range.first) {
             throw ResourceException(ExInfo("no such resource at index")
-                    .addInfo("resource", getName())
                     .addInfo("name", name)
-                    .addInfo("index", rank));
+                    .addInfo("index", rank)
+                    .addInfo("pack", toString()));
         }
         return range.first->second;
     }
@@ -119,6 +119,19 @@ class ResourcePack : public INamed {
     {
         return m_reses.count(name);
     }
+    //-----------------------------------------------------------------
+    std::string toString()
+    {
+            ExInfo available_res = ExInfo("resources")
+                .addInfo("name", getName());
+
+            t_resIterator end = m_reses.end();
+            for (t_resIterator i = m_reses.begin(); i != end; ++i) {
+                available_res.addInfo("key", i->first);
+            }
+            return std::string(available_res.what());
+    }
+
 };
 
 #endif

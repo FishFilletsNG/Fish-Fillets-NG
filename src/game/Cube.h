@@ -64,7 +64,7 @@ class Cube : public NoCopy {
 
         eWeight getWeight() const { return m_weight; }
         eWeight getPower() const { return m_power; }
-        const Shape *getShape() const { return m_shape; }
+        const Shape *shape() const { return m_shape; }
 
         Anim *anim();
         Rules *rules() { return m_rules; }

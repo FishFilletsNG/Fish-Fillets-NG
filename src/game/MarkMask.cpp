@@ -34,7 +34,7 @@ MarkMask::getResist(Rules::eDir dir) const
     V2 shift = m_model->const_rules()->dir2xy(dir);
     V2 shift_loc = shift.composition(m_model->getLocation());
 
-    const Shape *shape = m_model->getShape();
+    const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
         V2 mark = shift_loc.composition(*i);
@@ -74,7 +74,7 @@ void
 MarkMask::writeModel(Cube *model)
 {
     V2 loc = m_model->getLocation();
-    const Shape *shape = m_model->getShape();
+    const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
         V2 mark = loc.composition(*i);
@@ -91,7 +91,7 @@ MarkMask::writeModel(Cube *model)
 MarkMask::isAtBorder()
 {
     V2 loc = m_model->getLocation();
-    const Shape *shape = m_model->getShape();
+    const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
         V2 mark = loc.composition(*i);

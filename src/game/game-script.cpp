@@ -20,6 +20,7 @@
 #include "FishDialog.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
+#include "Shape.h"
 
 extern "C" {
 #include "lualib.h"
@@ -310,6 +311,44 @@ script_model_isLeft(lua_State *L) throw()
     lua_pushboolean(L, left);
     END_NOEXCEPTION;
     //NOTE: return left
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * int model_getW(model_index)
+ *
+ * Returns model width.
+ */
+    int
+script_model_getW(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    int width = model->shape()->getW();
+
+    lua_pushnumber(L, width);
+    END_NOEXCEPTION;
+    //NOTE: return width
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * int model_getH(model_index)
+ *
+ * Returns model height.
+ */
+    int
+script_model_getH(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    int height = model->shape()->getH();
+
+    lua_pushnumber(L, height);
+    END_NOEXCEPTION;
+    //NOTE: return height
     return 1;
 }
 //-----------------------------------------------------------------

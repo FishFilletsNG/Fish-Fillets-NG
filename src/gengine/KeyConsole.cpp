@@ -62,8 +62,8 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
             if (false == m_input.empty()) {
                 if (false == m_handlerName.empty()) {
                     try {
-                        StringMsg *msg = new StringMsg(m_handlerName, "console",
-                                m_input);
+                        StringMsg *msg = new StringMsg(m_handlerName,
+                                "dostring", m_input);
                         MessagerAgent::agent()->forwardNewMsg(msg);
                         m_history = m_input;
                         //NOTE: clear() is not on FreeBSD

@@ -15,6 +15,7 @@
 #include "Random.h"
 #include "BaseMsg.h"
 #include "ResSoundAgent.h"
+#include "OptionAgent.h"
 
 BaseMsg *SDLSoundAgent::ms_finished = NULL;
 //-----------------------------------------------------------------
@@ -26,9 +27,8 @@ SDLSoundAgent::own_init()
         throw SDLException(ExInfo("SDL_InitSubSystem"));
     }
 
-    //NOTE: music does not play on my ALSA with less frequency than 44100
-    //int frequency = MIX_DEFAULT_FREQUENCY;
-    int frequency = 44100;
+    int frequency =
+       OptionAgent::agent()->getAsInt("sound_frequency", MIX_DEFAULT_FREQUENCY);
     if(Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
         throw MixException(ExInfo("Mix_OpenAudio"));
     }

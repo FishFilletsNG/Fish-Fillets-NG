@@ -151,7 +151,7 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
  * Messages:
  * - dofile("file") ... run script
  * - doall("file") ... run both system and user script, no one is required
- * - console("input") ... run string
+ * - dostring("input") ... run string
  *
  * @throws UnknownMsgException
  */
@@ -170,7 +170,7 @@ ScriptAgent::receiveString(const StringMsg *msg)
             LOG_INFO(e.info());
         }
     }
-    else if (msg->equalsName("console")) {
+    else if (msg->equalsName("dostring")) {
         m_state->doString(msg->getValue());
     }
     else {
