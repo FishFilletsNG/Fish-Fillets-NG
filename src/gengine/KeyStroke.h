@@ -9,7 +9,7 @@
  */
 class KeyStroke {
     private:
-        static const int STROKE_IGNORE = KMOD_NUM|KMOD_CAPS|KMOD_MODE;
+        static const int STROKE_IGNORE = ~(KMOD_SHIFT|KMOD_CTRL|KMOD_ALT);
         SDLKey m_sym;
         int m_mod;
     private:
