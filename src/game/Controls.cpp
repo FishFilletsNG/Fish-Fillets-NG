@@ -99,8 +99,6 @@ Controls::driveUnit()
 
     if (moved > 0) {
         m_moves.push_back(moved);
-        LOG_DEBUG(ExInfo("TEST: moved")
-                .addInfo("symbols", m_moves));
     }
 }
 //-----------------------------------------------------------------
@@ -180,6 +178,10 @@ Controls::makeMove(char move)
     t_units::iterator end = m_units.end();
     for (t_units::iterator i = m_units.begin(); i != end; ++i) {
         if ((*i)->driveOrder(move) == move) {
+            if (i != m_active) {
+                m_speedup = 0;
+                m_active = i;
+            }
             m_moves.push_back(move);
             return true;
         }

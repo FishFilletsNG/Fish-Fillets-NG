@@ -17,6 +17,12 @@ extern int script_game_getRestartCounter(lua_State *L) throw();
 extern int script_game_save(lua_State *L) throw();
 extern int script_game_load(lua_State *L) throw();
 
+extern int script_game_planAction(lua_State *L) throw();
+extern int script_game_action_move(lua_State *L) throw();
+extern int script_game_action_save(lua_State *L) throw();
+extern int script_game_action_load(lua_State *L) throw();
+extern int script_game_action_restart(lua_State *L) throw();
+
 extern int script_model_addAnim(lua_State *L) throw();
 extern int script_model_addDuplexAnim(lua_State *L) throw();
 extern int script_model_runAnim(lua_State *L) throw();

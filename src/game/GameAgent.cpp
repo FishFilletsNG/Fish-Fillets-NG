@@ -38,6 +38,8 @@
 
 #include "minmax.h"
 #include "LoadException.h"
+#include "CommandQueue.h"
+#include "ScriptCmd.h"
 
 #include "game-script.h"
 
@@ -53,6 +55,7 @@ GameAgent::own_init()
     m_codename = "test_save";
     m_loadedMoves = "";
     m_loadSpeed = 1;
+    m_plan = new CommandQueue();
 
     keyBinding();
     newLevel();
@@ -65,11 +68,22 @@ GameAgent::own_init()
 GameAgent::own_update()
 {
     bool room_complete = false;
-    if (m_loadedMoves.empty()) {
-        room_complete = updateRoom();
-    }
-    else {
-        room_complete = loadMoves();
+    if (m_lockPhases == 0) {
+        if (m_loadedMoves.empty()) {
+            if (m_plan->empty()) {
+                room_complete = updateRoom();
+            }
+            else {
+                room_complete = planRoom();
+            }
+
+            if (m_script) {
+                m_script->doString("script_update()");
+            }
+        }
+        else {
+            room_complete = loadMoves();
+        }
     }
 
     if (m_lockPhases > 0) {
@@ -89,7 +103,8 @@ GameAgent::own_update()
     void
 GameAgent::own_shutdown()
 {
-    clearRoom();
+    cleanGame();
+    delete m_plan;
 }
 
 //-----------------------------------------------------------------
@@ -103,49 +118,40 @@ GameAgent::own_shutdown()
 GameAgent::updateRoom()
 {
     bool room_complete = false;
-    if (0 == m_lockPhases) {
-        if (m_room) {
-            room_complete = m_room->nextRound();
-        }
+    if (m_room) {
+        room_complete = m_room->nextRound();
     }
 
-    if (m_script) {
-        m_script->doString("script_update()");
-    }
     return room_complete;
 }
 //-----------------------------------------------------------------
 /**
  * Create new level.
  * TODO: make levels selection menu
- *
  * @param restart whether repeat this level
  */
-void
-GameAgent::newLevel(bool restart)
+    void
+GameAgent::newLevel()
 {
-    clearRoom();
+    cleanGame();
 
     m_script = new ScriptState();
     registerGameFuncs();
 
-    std::string level = getNextLevel(restart);
+    std::string level = getNextLevel(false);
     m_script->doFile(Path::dataReadPath(level));
 }
 //-----------------------------------------------------------------
 /**
- * Clear room after visit.
+ * Clean room after visit.
+ * Script is not clean, it can continue in work.
  */
-void
-GameAgent::clearRoom()
+    void
+GameAgent::cleanRoom()
 {
     //TODO: remove only ResSoundPack used by room
     ResSoundAgent::agent()->removeAll();
 
-    if (m_script) {
-        delete m_script;
-        m_script = NULL;
-    }
     if (m_room) {
         delete m_room;
         m_room = NULL;
@@ -155,17 +161,32 @@ GameAgent::clearRoom()
 }
 //-----------------------------------------------------------------
 /**
+ * Clean game state.
+ */
+    void
+GameAgent::cleanGame()
+{
+    cleanRoom();
+    m_plan->removeAll();
+
+    if (m_script) {
+        delete m_script;
+        m_script = NULL;
+    }
+}
+//-----------------------------------------------------------------
+/**
  * Returns next level name.
  * @param restart whether repeat this level
  */
-std::string
+    std::string
 GameAgent::getNextLevel(bool restart)
 {
     m_restartCounter++;
     if (false == restart) {
         //TODO: make game menu with level list
         StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
-                    "dostring", "nextLevel()");
+                "dostring", "nextLevel()");
         try {
             MessagerAgent::agent()->forwardNewMsg(msg);
             m_restartCounter = 0;
@@ -193,6 +214,12 @@ GameAgent::registerGameFuncs()
             script_game_getRestartCounter);
     m_script->registerFunc("game_save", script_game_save);
     m_script->registerFunc("game_load", script_game_load);
+
+    m_script->registerFunc("game_planAction", script_game_planAction);
+    m_script->registerFunc("game_action_move", script_game_action_move);
+    m_script->registerFunc("game_action_save", script_game_action_save);
+    m_script->registerFunc("game_action_load", script_game_action_load);
+    m_script->registerFunc("game_action_restart", script_game_action_restart);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
@@ -227,7 +254,7 @@ GameAgent::registerGameFuncs()
  * Check whether room is ready.
  * @throws LogicException when room is not ready
  */
-void
+    void
 GameAgent::checkRoom()
 {
     if (NULL == m_room) {
@@ -307,7 +334,6 @@ GameAgent::createUnit(const std::string &kind,
         Cube::eWeight *out_weight, Cube::eWeight *out_power, bool *out_alive)
 {
     Unit *result = NULL;
-    //TODO: better controls (spacebar will switch between fishes)
     if ("fish_small" == kind) {
         KeyControl smallfish;
         smallfish.setUp(SDLK_i);
@@ -406,14 +432,14 @@ GameAgent::keyBinding()
 }
 
 //-----------------------------------------------------------------
-Cube *
+    Cube *
 GameAgent::getModel(int model_index)
 {
     checkRoom();
     return m_room->getModel(model_index);
 }
 //-----------------------------------------------------------------
-Cube *
+    Cube *
 GameAgent::askField(const V2 &loc)
 {
     checkRoom();
@@ -422,22 +448,11 @@ GameAgent::askField(const V2 &loc)
 
 //-----------------------------------------------------------------
 /**
- * Save position.
- */
-void
-GameAgent::saveLevel()
-{
-    if (m_script) {
-        m_script->doString("script_save()");
-    }
-}
-//-----------------------------------------------------------------
-/**
  * Write save to the file.
  * Save moves and models state.
  * @param models saved models
  */
-void
+    void
 GameAgent::saveGame(const std::string &models)
 {
     if (m_room) {
@@ -456,26 +471,6 @@ GameAgent::saveGame(const std::string &models)
         else {
             LOG_WARNING(ExInfo("cannot save game")
                     .addInfo("file", file.getNative()));
-        }
-    }
-}
-//-----------------------------------------------------------------
-/**
- * Load game from file.
- */
-    void
-GameAgent::loadLevel()
-{
-    if (m_script) {
-        Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
-        if (file.exists()) {
-            newLevel(true);
-            m_script->doFile(file);
-            m_script->doString("script_load()");
-        }
-        else {
-            LOG_INFO(ExInfo("there is no file to load")
-                .addInfo("file", file.getNative()));
         }
     }
 }
@@ -524,6 +519,23 @@ GameAgent::loadMoves()
 }
 //-----------------------------------------------------------------
 /**
+ * Let plan execute.
+ * @return true for finished level
+ */
+    bool
+GameAgent::planRoom()
+{
+    bool room_complete = false;
+    if (m_room) {
+        m_room->beginFall();
+        m_plan->executeFirst();
+        room_complete = m_room->finishRound();
+    }
+
+    return room_complete;
+}
+//-----------------------------------------------------------------
+/**
  * Handle incoming message.
  * Messages:
  * - restart ... room restart
@@ -537,13 +549,13 @@ GameAgent::loadMoves()
 GameAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("restart")) {
-        newLevel(true);
+        action_restart();
     }
     else if (msg->equalsName("save")) {
-        saveLevel();
+        action_save();
     }
     else if (msg->equalsName("load")) {
-        loadLevel();
+        action_load();
     }
     else if (msg->equalsName("switch")) {
         if (m_room) {
@@ -554,3 +566,61 @@ GameAgent::receiveSimple(const SimpleMsg *msg)
         throw UnknownMsgException(msg);
     }
 }
+
+//-----------------------------------------------------------------
+    void
+GameAgent::planAction(int funcRef)
+{
+    m_plan->planCommand(new ScriptCmd(m_script, funcRef));
+}
+//-----------------------------------------------------------------
+/**
+ * Move a fish.
+ * @param symbol move symbol, e.g. 'U', 'D', 'L', 'R'
+ */
+    bool
+GameAgent::action_move(char symbol)
+{
+    checkRoom();
+    return m_room->makeMove(symbol);
+}
+//-----------------------------------------------------------------
+/**
+ * Save position.
+ */
+    void
+GameAgent::action_save()
+{
+    if (m_script) {
+        m_script->doString("script_save()");
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Load position.
+ */
+    void
+GameAgent::action_load()
+{
+    if (m_script) {
+        Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
+        if (file.exists()) {
+            action_restart();
+            m_script->doFile(file);
+            m_script->doString("script_load()");
+        }
+        else {
+            LOG_INFO(ExInfo("there is no file to load")
+                    .addInfo("file", file.getNative()));
+        }
+    }
+}
+//-----------------------------------------------------------------
+void
+GameAgent::action_restart()
+{
+    cleanRoom();
+    std::string level = getNextLevel(true);
+    m_script->doFile(Path::dataReadPath(level));
+}
+

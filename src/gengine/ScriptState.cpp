@@ -37,14 +37,16 @@ ScriptState::~ScriptState()
 /**
  * Process script on stack.
  * @param error script load status
+ * @param params number of params
+ * @param returns number of values on return
  *
  * @throws ScriptException when script is bad
  */
     void
-ScriptState::callStack(int error)
+ScriptState::callStack(int error, int params, int returns)
 {
     if (0 == error) {
-        error = lua_pcall(m_state, 0, 0, 0);
+        error = lua_pcall(m_state, params, returns, 0);
     }
 
     if (error) {
@@ -84,8 +86,40 @@ ScriptState::doString(const std::string &input)
     void
 ScriptState::registerFunc(const char *name, lua_CFunction func)
 {
-    LOG_DEBUG(ExInfo("register script func")
-            .addInfo("name", name));
     lua_register(m_state, name, func);
+}
+
+//-----------------------------------------------------------------
+/**
+ * Call "bool function(param)" function.
+ * @param funcRef function index at registry
+ * @param param integer parametr
+ * @return boolean result from function
+ * @throws ScriptException when function is bad
+ */
+bool
+ScriptState::callCommand(int funcRef, int param)
+{
+    lua_rawgeti(m_state, LUA_REGISTRYINDEX, funcRef);
+    lua_pushnumber(m_state, param);
+    callStack(0, 1, 1);
+
+    if (0 == lua_isboolean(m_state, -1)) {
+        const char *type = lua_typename(m_state, lua_type(m_state, -1));
+        lua_pop(m_state, 1);
+        throw ScriptException(ExInfo("script failure - boolean excepted")
+                .addInfo("got", type));
+    }
+    return lua_toboolean(m_state, -1);
+}
+//-----------------------------------------------------------------
+/**
+ * Remove function from registry.
+ * @param funcRef function index at registry
+ */
+void
+ScriptState::unref(int funcRef)
+{
+    luaL_unref(m_state, LUA_REGISTRYINDEX, funcRef);
 }
 

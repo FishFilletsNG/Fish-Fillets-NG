@@ -16,13 +16,15 @@ class ScriptState {
     private:
         lua_State *m_state;
     private:
-        void callStack(int error);
+        void callStack(int error, int params=0, int returns=0);
     public:
         ScriptState();
         ~ScriptState();
 
         void doFile(const Path &file);
         void doString(const std::string &input);
+        bool callCommand(int funcRef, int param);
+        void unref(int funcRef);
 
         void registerFunc(const char *name, lua_CFunction func);
 };

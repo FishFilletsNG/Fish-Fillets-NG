@@ -172,6 +172,82 @@ script_game_load(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
+ * void game_planAction(func)
+ */
+    int
+script_game_planAction(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    luaL_checktype(L, 1, LUA_TFUNCTION);
+    int funcRef = luaL_ref(L, LUA_REGISTRYINDEX);
+
+    GameAgent::agent()->planAction(funcRef);
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * bool game_action_move(symbol)
+ */
+    int
+script_game_action_move(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    size_t size;
+    const char *symbol = luaL_checklstring(L, 1, &size);
+    if (size != 1) {
+        ExInfo error = ExInfo("bad symbol length")
+            .addInfo("length", size)
+            .addInfo("symbol", symbol);
+        LOG_WARNING(error);
+        luaL_error(L, error.what());
+    }
+
+    bool sucess = GameAgent::agent()->action_move(symbol[0]);
+    lua_pushboolean(L, sucess);
+    END_NOEXCEPTION;
+    //NOTE: return sucess
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void game_action_save()
+ */
+    int
+script_game_action_save(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    GameAgent::agent()->action_save();
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void game_action_load()
+ */
+    int
+script_game_action_load(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    GameAgent::agent()->action_load();
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void game_action_restart()
+ */
+    int
+script_game_action_restart(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    GameAgent::agent()->action_restart();
+    END_NOEXCEPTION;
+    return 0;
+}
+
+//-----------------------------------------------------------------
+/**
  * void model_addAnim(model_index, anim_name, picture)
  */
     int

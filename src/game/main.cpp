@@ -130,6 +130,7 @@ main(int argc, char *argv[])
             app.init(argc, argv);
             app.run();
             app.shutdown();
+            return 0;
         }
         catch (BaseException &e) {
             LOG_ERROR(e.info());
@@ -147,6 +148,6 @@ main(int argc, char *argv[])
         LOG_ERROR(ExInfo("unknown exception"));
     }
 
-    return 0;
+    return 1;
 }
 

@@ -4,6 +4,8 @@
 class Room;
 class Unit;
 class ScriptState;
+class Command;
+class CommandQueue;
 
 #include "BaseAgent.h"
 #include "Name.h"
@@ -26,10 +28,13 @@ class GameAgent : public BaseAgent {
         std::string m_codename;
         std::string m_loadedMoves;
         int m_loadSpeed;
+        CommandQueue *m_plan;
     private:
         bool updateRoom();
-        void newLevel(bool restart=false);
-        void clearRoom();
+        bool planRoom();
+        void newLevel();
+        void cleanRoom();
+        void cleanGame();
         std::string getNextLevel(bool restart=false);
         void registerGameFuncs();
         void checkRoom();
@@ -38,8 +43,6 @@ class GameAgent : public BaseAgent {
             Cube::eWeight *out_weight, Cube::eWeight *out_power,
             bool *out_alive);
         void keyBinding();
-        void saveLevel();
-        void loadLevel();
         bool loadMoves();
     protected:
         virtual void own_init();
@@ -61,6 +64,14 @@ class GameAgent : public BaseAgent {
         void loadGame(const std::string &moves);
 
         virtual void receiveSimple(const SimpleMsg *msg);
+
+        //-----------------------------------------------------------------
+        void planAction(int funcRef);
+        bool action_move(char symbol);
+        void action_save();
+        void action_load();
+        void action_restart();
+
 };
 
 #endif

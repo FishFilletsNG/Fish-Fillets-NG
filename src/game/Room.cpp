@@ -8,6 +8,7 @@
  */
 #include "Room.h"
 
+#include "Log.h"
 #include "Picture.h"
 #include "Field.h"
 #include "Rules.h"
@@ -25,6 +26,7 @@ Room::Room(int w, int h, const Path &picture)
     m_field = new Field(w, h);
     m_controls = new Controls();
     m_impact = Cube::NONE;
+    m_fresh = true;
 }
 //-----------------------------------------------------------------
 /**
@@ -97,11 +99,7 @@ Room::askField(const V2 &loc)
     bool
 Room::nextRound()
 {
-    prepareRound();
-
-    bool falling = falldown();
-    playImpact();
-
+    bool falling = beginFall();
     if (false == falling) {
         m_controls->driving();
     }
@@ -170,6 +168,7 @@ Room::prepareRound()
 Room::falldown()
 {
     bool result = false;
+    m_impact = Cube::NONE;
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         Rules::eFall fall = (*i)->rules()->actionFall();
@@ -202,6 +201,7 @@ Room::finishRound()
         room_complete &= (*i)->isSatisfy();
     }
 
+    m_fresh = false;
     return room_complete;
 }
 
@@ -236,15 +236,8 @@ Room::loadMove(char move)
     bool complete = false;
     bool falling = true;
     while (falling) {
-        prepareRound();
-        falling = falldown();
-
-        if (false == falling) {
-            if (false == m_controls->makeMove(move)) {
-                throw LoadException(ExInfo("load error - bad move")
-                        .addInfo("move", std::string(1, move)));
-            }
-        }
+        falling = beginFall(false);
+        makeMove(move, false);
 
         complete = finishRound();
         if (complete && falling) {
@@ -255,6 +248,49 @@ Room::loadMove(char move)
     }
     return complete;
 }
+//-----------------------------------------------------------------
+/**
+ * Begin round.
+ * Let objects fall. Don't allow player to move.
+ * @param sound whether play sound of impact
+ * @return true when something was falling
+ */
+bool
+Room::beginFall(bool sound)
+{
+    m_fresh = true;
+    prepareRound();
 
+    bool falling = falldown();
+    m_fresh = (false == falling);
+    if (sound) {
+        playImpact();
+    }
+    return falling;
+}
+//-----------------------------------------------------------------
+/**
+ * Try make single move.
+ * @param anim whether ensure phases for move animation
+ * @return true for success or false when something has moved before
+ * @throws LoadException for bad moves
+ */
+bool
+Room::makeMove(char move, bool anim)
+{
+    bool result = false;
+    if (m_fresh) {
+        if (false == m_controls->makeMove(move)) {
+            throw LoadException(ExInfo("load error - bad move")
+                    .addInfo("move", std::string(1, move)));
+        }
+        if (anim) {
+            m_controls->lockPhases();
+        }
+        m_fresh = false;
+        result = true;
+    }
+    return result;
+}
 
 
