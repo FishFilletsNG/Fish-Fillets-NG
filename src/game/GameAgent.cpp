@@ -176,7 +176,7 @@ GameAgent::newLevel()
         m_level = m_world->createSelected();
         if (m_level) {
             m_world->deactivate();
-            m_level->action_restart();
+            m_level->runLevel();
         }
     }
 }

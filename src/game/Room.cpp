@@ -33,8 +33,6 @@ Room::Room(int w, int h, const Path &picture)
     m_fresh = true;
     m_soundPack = new ResSoundPack();
     m_startTime = TimerAgent::agent()->getCycles();
-
-    SoundAgent::agent()->stopMusic();
 }
 //-----------------------------------------------------------------
 /**

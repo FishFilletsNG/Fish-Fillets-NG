@@ -14,7 +14,7 @@
 
 #include "Log.h"
 #include "WorldWay.h"
-#include "ResImageAgent.h"
+#include "ResImagePack.h"
 #include "VideoAgent.h"
 #include "OptionAgent.h"
 #include "SoundAgent.h"
@@ -30,7 +30,7 @@ WorldMap::WorldMap(const Path &bg)
     m_selected = NULL;
     m_startNode = NULL;
 
-    m_bg = ResImageAgent::agent()->loadImage(bg);
+    m_bg = ResImagePack::loadImage(bg);
     m_drawer = new NodeDrawer();
     m_descPack = new ResDialogPack();
 }

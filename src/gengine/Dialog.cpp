@@ -9,8 +9,8 @@
 #include "Dialog.h"
 
 #include "Log.h"
-#include "ResSoundAgent.h"
 #include "SoundAgent.h"
+#include "ResSoundPack.h"
 #include "Path.h"
 
 const std::string Dialog::DEFAULT_LANG = "en";
@@ -42,7 +42,7 @@ Dialog::~Dialog()
 Dialog::talk()
 {
     if (NULL == m_sound && !m_soundfile.empty()) {
-        m_sound = ResSoundAgent::agent()->loadSound(
+        m_sound = ResSoundPack::loadSound(
                 Path::dataReadPath(m_soundfile));
     }
 

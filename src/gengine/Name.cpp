@@ -17,10 +17,6 @@ const char *Name::OPTION_NAME = "20option";
 const char *Name::VIDEO_NAME = "30video";
 const char *Name::SOUND_NAME = "40sound";
 
-const char *Name::RESIMAGE_NAME = "50resimage";
-const char *Name::RESSOUND_NAME = "52ressound";
-const char *Name::RESMUSIC_NAME = "54resmusic";
-
 const char *Name::INPUT_NAME = "60input";
 const char *Name::DIALOG_NAME = "70dialog";
 const char *Name::SUBTITLE_NAME = "75subtitle";

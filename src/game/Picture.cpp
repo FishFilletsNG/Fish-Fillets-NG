@@ -9,7 +9,7 @@
 #include "Picture.h"
 
 
-#include "ResImageAgent.h"
+#include "ResImagePack.h"
 
 //-----------------------------------------------------------------
 /**
@@ -18,7 +18,7 @@
 Picture::Picture(const Path &file, const V2 &loc)
     : m_loc(loc)
 {
-    m_surface = ResImageAgent::agent()->loadImage(file);
+    m_surface = ResImagePack::loadImage(file);
 }
 //-----------------------------------------------------------------
 /**

@@ -11,10 +11,6 @@ class Name {
         static const char *VIDEO_NAME;
         static const char *SOUND_NAME;
 
-        static const char *RESIMAGE_NAME;
-        static const char *RESSOUND_NAME;
-        static const char *RESMUSIC_NAME;
-
         static const char *INPUT_NAME;
         static const char *DIALOG_NAME;
         static const char *SUBTITLE_NAME;

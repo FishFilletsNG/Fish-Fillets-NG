@@ -32,10 +32,6 @@
 </li><li>
      SoundAgent - plays music and sound.
 </li><li>
-     ResImageAgent - stores shared images
-</li><li>
-     ResSoundAgent - stores shared sound
-</li><li>
      InputAgent - reads input event and handles keystrokes and in game console.
 </li><li>
      DialogAgent - plans NPC dialogs

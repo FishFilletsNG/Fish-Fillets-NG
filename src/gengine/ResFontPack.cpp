@@ -9,7 +9,7 @@
 #include "ResFontPack.h"
 
 #include "ResourceException.h"
-#include "ResImageAgent.h"
+#include "ResImagePack.h"
 
 //-----------------------------------------------------------------
 /**
@@ -19,7 +19,7 @@
 SFont_Font *
 ResFontPack::loadFont(const Path &file)
 {
-    SDL_Surface *font_face = ResImageAgent::agent()->loadImage(file);
+    SDL_Surface *font_face = ResImagePack::loadImage(file);
 
     SFont_Font *font = SFont_InitFont(font_face);
     if (NULL == font) {

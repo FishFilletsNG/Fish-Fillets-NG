@@ -21,8 +21,6 @@
 #include "DummySoundAgent.h"
 #include "ScriptAgent.h"
 #include "OptionAgent.h"
-#include "ResSoundAgent.h"
-#include "ResImageAgent.h"
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
 
@@ -45,8 +43,6 @@ Application::Application()
     m_agents->addAgent(new OptionAgent());
     m_agents->addAgent(new VideoAgent());
 
-    m_agents->addAgent(new ResSoundAgent());
-    m_agents->addAgent(new ResImageAgent());
     m_agents->addAgent(new InputAgent());
 
     m_agents->addAgent(new DialogAgent());

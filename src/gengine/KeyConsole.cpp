@@ -12,7 +12,7 @@
 #include "StringMsg.h"
 #include "MessagerAgent.h"
 #include "BaseException.h"
-#include "ResImageAgent.h"
+#include "ResImagePack.h"
 #include "VideoAgent.h"
 #include "Path.h"
 #include "LogicException.h"
@@ -32,7 +32,7 @@
     deactivate();
 
     Path file = Path::dataReadPath("font/console.png");
-    SDL_Surface *font_face = ResImageAgent::agent()->loadImage(file);
+    SDL_Surface *font_face = ResImagePack::loadImage(file);
 
     m_font = SFont_InitFont(font_face);
     if (NULL == m_font) {

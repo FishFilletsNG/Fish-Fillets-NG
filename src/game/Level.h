@@ -36,6 +36,7 @@ class Level : public Planner {
         Level(const std::string &codename, const Path &datafile);
         ~Level();
         void setDesc(const std::string &desc) { m_desc = desc; }
+        void runLevel();
         void activate();
         void deactivate();
 

@@ -16,6 +16,7 @@
 #include "LogicException.h"
 #include "LoadException.h"
 #include "ScriptException.h"
+#include "SoundAgent.h"
 #include "View.h"
 #include "minmax.h"
 
@@ -24,7 +25,7 @@
 //-----------------------------------------------------------------
 /**
  * Create new level.
- * Use action_restart() to start it.
+ * Use runLevel() to start it.
  */
 Level::Level(const std::string &codename, const Path &datafile)
     : m_codename(codename), m_datafile(datafile)
@@ -39,6 +40,16 @@ Level::Level(const std::string &codename, const Path &datafile)
 Level::~Level()
 {
     cleanRoom();
+}
+//-----------------------------------------------------------------
+/**
+ * Start gameplay.
+ */
+void
+Level::runLevel()
+{
+    SoundAgent::agent()->stopMusic();
+    action_restart();
 }
 //-----------------------------------------------------------------
 /**
@@ -58,7 +69,6 @@ Level::cleanRoom()
 void
 Level::activate()
 {
-    LOG_DEBUG(ExInfo("TEST: level activate"));
     if (m_room) {
         m_room->activate();
     }
@@ -67,7 +77,6 @@ Level::activate()
 void
 Level::deactivate()
 {
-    LOG_DEBUG(ExInfo("TEST: level deactivate"));
     if (m_room) {
         m_room->deactivate();
     }
