@@ -19,6 +19,7 @@ class ConsoleInput : public StateInput {
         std::string m_history;
     protected:
         virtual void enableConsole();
+        virtual void enableSubtitles() {}
         virtual void specStroke(const KeyStroke &stroke);
         virtual void specKey(int keyIndex);
     private:

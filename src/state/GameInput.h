@@ -10,7 +10,6 @@ class GameInput : public StateInput {
     protected:
         GameInput(GameState *state) : StateInput(state) {}
         virtual void enableMenu();
-        void toggleSubtitles();
 };
 
 #endif

@@ -16,6 +16,7 @@
 #include "WiButton.h"
 #include "Slider.h"
 #include "SelectLang.h"
+#include "RadioBox.h"
 
 #include "SimpleMsg.h"
 #include "OptionsInput.h"
@@ -25,26 +26,9 @@
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
 {
-    HBox *soundBox = new HBox();
-    soundBox->addWidget(new WiPicture(
-                Path::dataReadPath("images/menu/volume_sound.png")));
-    soundBox->addWidget(new WiSpace(10, 0));
-    soundBox->addWidget(new Slider("volume_sound", 0, 100));
+    IWidget *soundBox = createSoundPanel();
+    IWidget *musicBox = createMusicPanel();
 
-    HBox *musicBox = new HBox();
-    musicBox->addWidget(new WiPicture(
-                Path::dataReadPath("images/menu/volume_music.png")));
-    musicBox->addWidget(new WiSpace(10, 0));
-    musicBox->addWidget(new Slider("volume_music", 0, 100));
-
-    WiButton *backButton = new WiButton(new WiPicture(
-                    Path::dataReadPath("images/menu/back.png")),
-            new SimpleMsg(this, "quit"));
-    HBox *backBox = new HBox();
-    backBox->addWidget(new WiSpace(musicBox->getW() - backButton->getW(), 0));
-    backBox->addWidget(backButton);
-
-    //TODO: add "Back" button
     VBox *vbox = new VBox();
     vbox->addWidget(soundBox);
     vbox->addWidget(new WiSpace(0, 10));
@@ -52,6 +36,14 @@ MenuOptions::MenuOptions()
     vbox->addWidget(new WiSpace(0, 10));
     vbox->addWidget(new SelectLang(
                 Path::dataReadPath("script/select_lang.lua")));
+    vbox->addWidget(new WiSpace(0, 10));
+    vbox->addWidget(createSubtitlesPanel());
+
+    IWidget *backButton = createBackButton();
+    HBox *backBox = new HBox();
+    backBox->addWidget(new WiSpace(musicBox->getW() - backButton->getW(), 0));
+    backBox->addWidget(backButton);
+
     vbox->addWidget(backBox);
     m_container = vbox;
 
@@ -95,6 +87,47 @@ MenuOptions::own_resumeState()
 
     m_container->setShift(
             V2((screenW - contentW) / 2, (screenH - contentH) / 2));
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createSoundPanel()
+{
+    HBox *soundBox = new HBox();
+    soundBox->addWidget(new WiPicture(
+                Path::dataReadPath("images/menu/volume_sound.png")));
+    soundBox->addWidget(new WiSpace(10, 0));
+    soundBox->addWidget(new Slider("volume_sound", 0, 100));
+    return soundBox;
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createMusicPanel()
+{
+    HBox *musicBox = new HBox();
+    musicBox->addWidget(new WiPicture(
+                Path::dataReadPath("images/menu/volume_music.png")));
+    musicBox->addWidget(new WiSpace(10, 0));
+    musicBox->addWidget(new Slider("volume_music", 0, 100));
+    return musicBox;
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createSubtitlesPanel()
+{
+    HBox *chooseBox = new HBox();
+    chooseBox->addWidget(new RadioBox("subtitles", "1",
+                Path::dataReadPath("images/menu/subtitles/yes.png")));
+    chooseBox->addWidget(new RadioBox("subtitles", "0",
+                Path::dataReadPath("images/menu/subtitles/no.png")));
+    return chooseBox;
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createBackButton()
+{
+    return new WiButton(
+            new WiPicture(Path::dataReadPath("images/menu/back.png")),
+            new SimpleMsg(this, "quit"));
 }
 //-----------------------------------------------------------------
 /**

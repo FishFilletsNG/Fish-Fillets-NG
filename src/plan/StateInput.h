@@ -21,7 +21,7 @@ class StateInput : public InputHandler {
         virtual void quitState();
         virtual void enableConsole();
         virtual void enableMenu() {};
-        virtual void enableSubtitles() {};
+        virtual void enableSubtitles();
         virtual void specStroke(const KeyStroke &/*stroke*/) {}
         virtual void specKey(int keyIndex);
     public:

@@ -14,6 +14,11 @@ class IWidget;
 class MenuOptions : public GameState, public Drawable {
     private:
         IWidget *m_container;
+    private:
+        IWidget *createSoundPanel();
+        IWidget *createMusicPanel();
+        IWidget *createSubtitlesPanel();
+        IWidget *createBackButton();
     protected:
         virtual void own_initState();
         virtual void own_updateState();

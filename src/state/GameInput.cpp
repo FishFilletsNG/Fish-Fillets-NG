@@ -8,10 +8,7 @@
  */
 #include "GameInput.h"
 
-#include "Log.h"
-#include "KeyConsole.h"
 #include "MenuOptions.h"
-#include "OptionAgent.h"
 
 //-----------------------------------------------------------------
 /**
@@ -21,20 +18,5 @@ void
 GameInput::enableMenu()
 {
     m_state->pushState(new MenuOptions());
-}
-//-----------------------------------------------------------------
-    void
-GameInput::toggleSubtitles()
-{
-    OptionAgent *option = OptionAgent::agent();
-    bool enable = option->getAsInt("subtitles");
-    if (!enable) {
-        LOG_INFO(ExInfo("enabled subtitles"));
-    }
-    else {
-        LOG_INFO(ExInfo("disabled subtitles"));
-    }
-
-    option->setPersistent("subtitles", !enable);
 }
 

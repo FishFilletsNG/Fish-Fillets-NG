@@ -116,7 +116,7 @@ Application::prepareOptions(int argc, char *argv[])
     params.addParam("userdir", OptionParams::TYPE_PATH,
             "Path to game data");
     params.addParam("lang", OptionParams::TYPE_STRING,
-            "2‐letter code (en, cs, fr, de)");
+            "2-letter code (en, cs, fr, de)");
     params.addParam("speech", OptionParams::TYPE_STRING,
             "Lang for speech");
     params.addParam("subtitles", OptionParams::TYPE_BOOLEAN,

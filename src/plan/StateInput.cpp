@@ -14,6 +14,7 @@
 #include "Log.h"
 #include "KeyStroke.h"
 #include "KeyConsole.h"
+#include "OptionAgent.h"
 
 //-----------------------------------------------------------------
 /**
@@ -52,8 +53,10 @@ StateInput::keyEvent(const KeyStroke &stroke)
             break;
         case KEY_MENU:
             enableMenu();
+            break;
         case KEY_SUBTITLES:
             enableSubtitles();
+            break;
         case -1:
             specStroke(stroke);
             break;
@@ -80,5 +83,14 @@ StateInput::quitState()
 StateInput::enableConsole()
 {
     m_state->pushState(new KeyConsole());
+}
+//-----------------------------------------------------------------
+    void
+StateInput::enableSubtitles()
+{
+    OptionAgent *option = OptionAgent::agent();
+    bool enable = option->getAsInt("subtitles");
+
+    option->setPersistent("subtitles", !enable);
 }
 
