@@ -23,6 +23,7 @@ class Path {
 
         std::string getNative() const;
         std::string getBasename() const;
+        bool exists() const;
 };
 
 #endif

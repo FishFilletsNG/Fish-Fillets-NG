@@ -116,7 +116,9 @@ GameAgent::newLevel()
     void
 GameAgent::registerGameFuncs()
 {
-    m_script->registerFunc("path_include", script_path_include);
+    m_script->registerFunc("file_include", script_file_include);
+    m_script->registerFunc("file_exists", script_file_exists);
+
     m_script->registerFunc("game_createRoom", script_game_createRoom);
     m_script->registerFunc("game_addModel", script_game_addModel);
 
@@ -179,7 +181,6 @@ GameAgent::createRoom(int w, int h, const Path &picture)
  * Add model at scene.
  * @param kind kind of item (i.e. "fish_big", "item_light", ...)
  * @param loc placement location
- * @param picture transparent image
  * @param shape see Shape for format
  * @return model index
  *
@@ -187,8 +188,7 @@ GameAgent::createRoom(int w, int h, const Path &picture)
  * @throws LayoutException when shape or location is bad
  */
 int
-GameAgent::addModel(const std::string &kind,
-        const V2 &loc, const Path &picture,
+GameAgent::addModel(const std::string &kind, const V2 &loc,
         const std::string &shape)
 {
     checkRoom();
@@ -197,7 +197,7 @@ GameAgent::addModel(const std::string &kind,
     Cube::eWeight power;
     bool alive;
     Shape *newShape = new Shape(shape);
-    View *newView = new View(picture);
+    View *newView = new View();
     Driver *newDriver = createDriver(kind, &weight, &power, &alive);
     Cube *model = new Cube(loc,
             weight, power, alive,

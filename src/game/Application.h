@@ -20,7 +20,7 @@ class Application : public NoCopy, public BaseListener {
     public:
         Application();
         virtual ~Application();
-        virtual const std::string &getName() const { return Name::APP_NAME; }
+        virtual const char *getName() const { return Name::APP_NAME; }
 
         void init(int argc, char *argv[]);
         void run();

@@ -109,4 +109,9 @@ Path::getBasename() const
 {
     return m_path.leaf();
 }
-
+//-----------------------------------------------------------------
+bool
+Path::exists() const
+{
+    return boost::filesystem::exists(m_path);
+}

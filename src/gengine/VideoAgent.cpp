@@ -170,7 +170,7 @@ VideoAgent::toggleFullScreen()
 void
 VideoAgent::receiveSimple(const SimpleMsg *msg)
 {
-    if ("fullscreen" == msg->getName()) {
+    if (msg->equalsName("fullscreen")) {
         OptionAgent *options = OptionAgent::agent();
         if (options->getAsInt("fullscreen")) {
             options->setParam("fullscreen", "0");
@@ -197,7 +197,7 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
 void
 VideoAgent::receiveString(const StringMsg *msg)
 {
-    if ("param_changed" == msg->getName()) {
+    if (msg->equalsName("param_changed")) {
         std::string param = msg->getValue();
         if ("fullscreen" == param) {
             bool fs = OptionAgent::agent()->getAsInt("fullscreen");

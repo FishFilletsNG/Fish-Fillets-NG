@@ -158,10 +158,10 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
     void
 ScriptAgent::receiveString(const StringMsg *msg)
 {
-    if ("dofile" == msg->getName()) {
+    if (msg->equalsName("dofile")) {
         m_state->doFile(Path::dataReadPath(msg->getValue()));
     }
-    else if ("doall" == msg->getName()) {
+    else if (msg->equalsName("doall")) {
         try {
             m_state->doFile(Path::dataSystemPath(msg->getValue()));
             m_state->doFile(Path::dataUserPath(msg->getValue()));
@@ -170,7 +170,7 @@ ScriptAgent::receiveString(const StringMsg *msg)
             LOG_INFO(e.info());
         }
     }
-    else if ("console" == msg->getName()) {
+    else if (msg->equalsName("console")) {
         m_state->doString(msg->getValue());
     }
     else {

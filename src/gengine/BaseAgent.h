@@ -37,7 +37,7 @@ class BaseAgent : public NoCopy, public BaseListener {
  */
 #define AGENT(TYPE, NAME) \
 public: \
-virtual const std::string &getName() const { return (NAME); } \
+virtual const char *getName() const { return (NAME); } \
 static TYPE * \
 TYPE::agent() \
 { \
@@ -49,6 +49,6 @@ TYPE::agent() \
     return result; \
 } \
 private: \
-static const std::string &sName() { return (NAME); }
+static const char *sName() { return (NAME); }
 
 #endif

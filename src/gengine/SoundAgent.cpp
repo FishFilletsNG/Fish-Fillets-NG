@@ -21,11 +21,11 @@
 void
 SoundAgent::receiveInt(const IntMsg *msg)
 {
-    if ("inc_volume" == msg->getName()) {
+    if (msg->equalsName("inc_volume")) {
         setSoundVolume(getSoundVolume() + msg->getValue());
         setMusicVolume(getMusicVolume() + msg->getValue());
     }
-    else if ("dec_volume" == msg->getName()) {
+    else if (msg->equalsName("dec_volume")) {
         int volume = getSoundVolume() - msg->getValue();
         setSoundVolume(volume > 0 ? volume : 0);
         volume = getMusicVolume() - msg->getValue();

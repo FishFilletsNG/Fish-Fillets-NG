@@ -3,6 +3,7 @@
 
 #include "Log.h"
 #include "Random.h"
+#include "INamed.h"
 #include "ResourceException.h"
 
 #include <string>
@@ -13,7 +14,7 @@
  * Share resources.
  */
 template <class T>
-class ResourcePack {
+class ResourcePack : public INamed {
     public:
     typedef std::vector<T> t_range;
     protected:
@@ -78,6 +79,7 @@ class ResourcePack {
         }
         if (range.second == range.first) {
             throw ResourceException(ExInfo("no such resource at index")
+                    .addInfo("resource", getName())
                     .addInfo("name", name)
                     .addInfo("index", rank));
         }

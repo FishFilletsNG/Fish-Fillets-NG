@@ -118,16 +118,16 @@ Application::prepareLogLevel()
     void
 Application::receiveSimple(const SimpleMsg *msg)
 {
-    if ("quit" == msg->getName()) {
+    if (msg->equalsName("quit")) {
         m_quit = true;
     }
-    else if ("inc_loglevel" == msg->getName()) {
+    else if (msg->equalsName("inc_loglevel")) {
         int level = Log::getLogLevel() + 1;
         if (level <= Log::LEVEL_DEBUG) {
             OptionAgent::agent()->setParam("loglevel", level);
         }
     }
-    else if ("dec_loglevel" == msg->getName()) {
+    else if (msg->equalsName("dec_loglevel")) {
         int level = Log::getLogLevel() - 1;
         if (level >= Log::LEVEL_ERROR) {
             OptionAgent::agent()->setParam("loglevel", level);
@@ -147,7 +147,7 @@ Application::receiveSimple(const SimpleMsg *msg)
     void
 Application::receiveString(const StringMsg *msg)
 {
-    if ("param_changed" == msg->getName()) {
+    if (msg->equalsName("param_changed")) {
         std::string param = msg->getValue();
         if ("loglevel" == param) {
             Log::setLogLevel(OptionAgent::agent()->getAsInt("loglevel"));

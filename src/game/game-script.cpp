@@ -42,12 +42,12 @@ catch (...) { \
 
 //-----------------------------------------------------------------
 /**
- * void path_include(filename)
+ * void file_include(filename)
  *
  * Do file in usedir or systemdir.
  */
     int
-script_path_include(lua_State *L) throw()
+script_file_include(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *filename = luaL_checkstring(L, 1);
@@ -58,6 +58,25 @@ script_path_include(lua_State *L) throw()
     //NOTE: return how many values want to return to lua
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * bool file_exists(filename)
+ *
+ * Returns true when such file exists in userdir or systemdir.
+ */
+    int
+script_file_exists(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *filename = luaL_checkstring(L, 1);
+
+    bool exists = Path::dataReadPath(filename).exists();
+    lua_pushboolean(L, exists);
+    END_NOEXCEPTION;
+    //NOTE: return exists
+    return 1;
+}
+
 //-----------------------------------------------------------------
 /**
  * void game_createRoom(width, height, picture)
@@ -80,7 +99,7 @@ script_game_createRoom(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * int game_addModel(kind, x, y, picture, shape)
+ * int game_addModel(kind, x, y, shape)
  * Return model index.
  *
  *  table = addModel("light", 10, 30, "table.bmp",
@@ -97,11 +116,9 @@ script_game_addModel(lua_State *L) throw()
     const char *kind = luaL_checkstring(L, 1);
     int x = luaL_checkint(L, 2);
     int y = luaL_checkint(L, 3);
-    const char *picture = luaL_checkstring(L, 4);
-    const char *shape = luaL_checkstring(L, 5);
+    const char *shape = luaL_checkstring(L, 4);
 
-    int model_index = GameAgent::agent()->addModel(kind, V2(x, y),
-            Path::dataReadPath(picture), shape);
+    int model_index = GameAgent::agent()->addModel(kind, V2(x, y), shape);
     lua_pushnumber(L, model_index);
     END_NOEXCEPTION;
 

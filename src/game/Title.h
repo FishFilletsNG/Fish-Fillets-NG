@@ -18,12 +18,12 @@ class Title : public IDrawer, public NoCopy {
         int m_x;
         int m_y;
         int m_mintime;
-        int m_minY;
+        int m_limitY;
         int m_finalY;
         const std::string m_content;
         const SFont_Font *m_font;
     public:
-        Title(int baseY, int finalY, int bonusTime, int minY,
+        Title(int baseY, int finalY, int bonusTime, int limitY,
                 const std::string &content, const SFont_Font *font);
 
         void shiftUp(int rate);

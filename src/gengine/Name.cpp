@@ -9,22 +9,22 @@
 #include "Name.h"
 
 
-const std::string Name::APP_NAME = "App";
-const std::string Name::MESSAGER_NAME = "10messager";
-const std::string Name::SCRIPT_NAME = "15script";
-const std::string Name::OPTION_NAME = "20option";
+const char *Name::APP_NAME = "App";
+const char *Name::MESSAGER_NAME = "10messager";
+const char *Name::SCRIPT_NAME = "15script";
+const char *Name::OPTION_NAME = "20option";
 
-const std::string Name::VIDEO_NAME = "30video";
-const std::string Name::SOUND_NAME = "40sound";
+const char *Name::VIDEO_NAME = "30video";
+const char *Name::SOUND_NAME = "40sound";
 
-const std::string Name::RESIMAGE_NAME = "50resimage";
-const std::string Name::RESSOUND_NAME = "52ressound";
-const std::string Name::RESMUSIC_NAME = "54resmusic";
+const char *Name::RESIMAGE_NAME = "50resimage";
+const char *Name::RESSOUND_NAME = "52ressound";
+const char *Name::RESMUSIC_NAME = "54resmusic";
 
-const std::string Name::INPUT_NAME = "60input";
-const std::string Name::DIALOG_NAME = "70input";
-const std::string Name::SUBTITLE_NAME = "75input";
+const char *Name::INPUT_NAME = "60input";
+const char *Name::DIALOG_NAME = "70input";
+const char *Name::SUBTITLE_NAME = "75input";
 
-const std::string Name::GAME_NAME = "80game";
-const std::string Name::TIMER_NAME = "90timer";
+const char *Name::GAME_NAME = "80game";
+const char *Name::TIMER_NAME = "90timer";
 

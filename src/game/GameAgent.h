@@ -39,8 +39,7 @@ class GameAgent : public BaseAgent {
         void scriptInclude(const Path &filename);
         void createRoom(int w, int h, const Path &picture);
         int addModel(const std::string &kind,
-                const V2 &loc, const Path &picture,
-                const std::string &shape);
+                const V2 &loc, const std::string &shape);
         Cube *getModel(int model_index);
 
         void ensurePhases(int count);

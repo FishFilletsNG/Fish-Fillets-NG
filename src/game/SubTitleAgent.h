@@ -23,7 +23,7 @@ class SubTitleAgent : public BaseAgent {
     static const int TITLE_BASE = 20;
     static const int TITLE_SPEED = 2;
     static const int TITLE_BORDER = 20;
-    static const int TITLE_MIN_Y = TITLE_BASE + 5 * TITLE_ROW;
+    static const int TITLE_LIMIT_Y = TITLE_BASE + 5 * TITLE_ROW;
     typedef std::deque<Title*> t_titles;
     t_titles m_titles;
 

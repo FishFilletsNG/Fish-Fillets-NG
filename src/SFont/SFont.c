@@ -117,7 +117,6 @@ void SFont_Write(SDL_Surface *Surface, const SFont_Font *Font,
 
     // these values won't change in the loop
     srcrect.y = 1;
-    dstrect.y = y;
     srcrect.h = dstrect.h = Font->Surface->h - 1;
 
     for(c = text; *c != '\0' && x <= Surface->w ; c++) {
@@ -132,6 +131,7 @@ void SFont_Write(SDL_Surface *Surface, const SFont_Font *Font,
 	    (Font->CharPos[charoffset+2] + Font->CharPos[charoffset+1])/2 -
 	    (Font->CharPos[charoffset] + Font->CharPos[charoffset-1])/2;
 	srcrect.x = (Font->CharPos[charoffset]+Font->CharPos[charoffset-1])/2;
+        dstrect.y = y;
 	dstrect.x = x - (float)(Font->CharPos[charoffset]
 			      - Font->CharPos[charoffset-1])/2;
 

@@ -57,6 +57,8 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
     }
 
     if (false == m_specialAnimName.empty()) {
+        rect.x = x;
+        rect.y = y;
         surface =
             m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
         SDL_BlitSurface(surface, NULL, screen, &rect);

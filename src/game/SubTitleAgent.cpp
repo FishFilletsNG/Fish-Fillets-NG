@@ -131,8 +131,7 @@ SubTitleAgent::newShortSubtitle(const std::string &subtitle,
     int startY = lowestY();
     int finalY = TITLE_BASE + TITLE_ROW;
     int bonusTime = (TITLE_BASE - startY) / TITLE_SPEED;
-    int minY = TITLE_MIN_Y;
-    Title *title = new Title(startY, finalY, bonusTime, minY,
+    Title *title = new Title(startY, finalY, bonusTime, TITLE_LIMIT_Y,
             subtitle, font);
     shiftFinalsUp(TITLE_ROW);
     m_titles.push_back(title);

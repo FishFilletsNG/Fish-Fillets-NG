@@ -3,14 +3,12 @@
 
 class BaseListener;
 
-#include "INamed.h"
-
 #include <string>
 
 /**
  * Messgage.
  */
-class BaseMsg : public INamed {
+class BaseMsg {
     protected:
         std::string m_listenerName;
         std::string m_name;
@@ -21,7 +19,9 @@ class BaseMsg : public INamed {
         virtual void sendActual(BaseListener *listener) const = 0;
 
         void sendClone() const;
-        const std::string &getName() const { return m_name; }
+        bool equalsName(const std::string &name) const
+        { return m_name == name; }
+        const std::string &getMsgName() const { return m_name; }
         const std::string &getListenerName() const { return m_listenerName; }
 
         virtual std::string toString() const;

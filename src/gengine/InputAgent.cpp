@@ -100,7 +100,7 @@ InputAgent::own_shutdown()
 void
 InputAgent::receiveSimple(const SimpleMsg *msg)
 {
-    if ("console" == msg->getName()) {
+    if (msg->equalsName("console")) {
         m_console->activate();
     }
     else {

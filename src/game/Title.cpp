@@ -16,8 +16,13 @@
  * Create new title to draw.
  * X is centred.
  * Y is baseY above bottom screen border.
+ *
+ * @param baseY number of pixels from the bottom border
+ * @param finalY final position, it change when next subtitle is added
+ * @param bonusTime bonus time for subtitle under bottom border
+ * @param limitY max Y distance from bottom border
  */
-Title::Title(int baseY, int finalY, int bonusTime, int minY,
+Title::Title(int baseY, int finalY, int bonusTime, int limitY,
         const std::string &content, const SFont_Font *font)
 : m_content(content)
 {
@@ -30,7 +35,7 @@ Title::Title(int baseY, int finalY, int bonusTime, int minY,
     m_x = (screen_width - text_width) / 2;
     m_y = screen_height - baseY;
     m_finalY = screen_height - finalY;
-    m_minY = screen_height - minY;
+    m_limitY = screen_height - limitY;
     m_mintime = m_content.size() * TIME_PER_CHAR;
     if (m_mintime < TIME_MIN) {
         m_mintime = TIME_MIN;
@@ -81,6 +86,6 @@ Title::getY() const
     bool
 Title::isGone()
 {
-    return (m_mintime < 0 || m_y < m_minY);
+    return (m_mintime < 0 || m_y < m_limitY);
 }
 

@@ -6,9 +6,11 @@ extern "C" {
 }
 
 /**
- * Fuctions for ScriptAgent.
+ * Fuctions for script.
  */
-extern int script_path_include(lua_State *L) throw();
+extern int script_file_include(lua_State *L) throw();
+extern int script_file_exists(lua_State *L) throw();
+
 extern int script_game_createRoom(lua_State *L) throw();
 extern int script_game_addModel(lua_State *L) throw();
 

@@ -22,7 +22,7 @@ class View : public IDrawer, public NoCopy {
     private:
         void computeShiftSize();
     public:
-        View(const Path &picture);
+        View();
         virtual ~View();
         void takeModel(const Cube *model) { m_model = model; }
 
