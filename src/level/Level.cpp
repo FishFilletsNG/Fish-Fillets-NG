@@ -67,6 +67,7 @@ Level::~Level()
     own_cleanState();
     delete m_locker;
     //NOTE: m_show must be removed before levelScript
+    // because uses the same script
     delete m_show;
     delete m_loading;
     delete m_levelScript;
@@ -416,6 +417,7 @@ Level::action_restart()
     own_cleanState();
     m_restartCounter++;
     //TODO: is ok to run the script on second time?
+    //NOTE: planned show remains after restart
     own_initState();
     return true;
 }
