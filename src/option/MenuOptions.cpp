@@ -13,12 +13,14 @@
 #include "VBox.h"
 #include "WiPicture.h"
 #include "WiSpace.h"
+#include "WiButton.h"
 #include "Slider.h"
 #include "SelectLang.h"
+
+#include "SimpleMsg.h"
 #include "OptionsInput.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"
-#include "minmax.h"
 
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
@@ -35,6 +37,13 @@ MenuOptions::MenuOptions()
     musicBox->addWidget(new WiSpace(10, 0));
     musicBox->addWidget(new Slider("volume_music", 0, 100));
 
+    WiButton *backButton = new WiButton(new WiPicture(
+                    Path::dataReadPath("images/menu/back.png")),
+            new SimpleMsg(this, "quit"));
+    HBox *backBox = new HBox();
+    backBox->addWidget(new WiSpace(260, 0));
+    backBox->addWidget(backButton);
+
     //TODO: add "Back" button
     VBox *vbox = new VBox();
     vbox->addWidget(soundBox);
@@ -43,6 +52,7 @@ MenuOptions::MenuOptions()
     vbox->addWidget(new WiSpace(0, 10));
     vbox->addWidget(new SelectLang(
                 Path::dataReadPath("script/select_lang.lua")));
+    vbox->addWidget(backBox);
     m_container = vbox;
 
     takeHandler(new OptionsInput(this));
@@ -79,11 +89,8 @@ MenuOptions::own_resumeState()
     int contentW = m_container->getW();
     int contentH = m_container->getH();
     OptionAgent *options = OptionAgent::agent();
-    int screenW = max(contentW, options->getAsInt("screen_width"));
-    int screenH = max(contentH, options->getAsInt("screen_height"));
-    options->setParam("screen_width", screenW);
-    options->setParam("screen_height", screenH);
-    VideoAgent::agent()->initVideoMode();
+    int screenW = options->getAsInt("screen_width");
+    int screenH = options->getAsInt("screen_height");
 
     m_container->setShift(
             V2((screenW - contentW) / 2, (screenH - contentH) / 2));

@@ -16,6 +16,8 @@
 #include "LogicException.h"
 #include "InputAgent.h"
 #include "VideoAgent.h"
+#include "MessagerAgent.h"
+#include "SimpleMsg.h"
 
 //-----------------------------------------------------------------
 GameState::GameState()
@@ -51,6 +53,7 @@ GameState::takeHandler(InputHandler *new_handler)
 GameState::initState(StateManager *manager)
 {
     LOG_DEBUG(ExInfo("initState").addInfo("name", getName()));
+    MessagerAgent::agent()->addListener(this);
     m_manager = manager;
     m_active = true;
     m_onBg = false;
@@ -122,6 +125,7 @@ GameState::cleanState()
     m_active = false;
     m_onBg = false;
     m_manager = NULL;
+    MessagerAgent::agent()->removeListener(getName());
 }
 //-----------------------------------------------------------------
     void
@@ -178,6 +182,23 @@ void
 GameState::addDrawable(Drawable *drawable)
 {
     m_drawer->acceptDrawer(drawable);
+}
+//-----------------------------------------------------------------
+/**
+ * Handle incoming message.
+ * Messages:
+ * - quit ... quit state
+ */
+    void
+GameState::receiveSimple(const SimpleMsg *msg)
+{
+    if (msg->equalsName("quit")) {
+        quitState();
+    }
+    else {
+        LOG_WARNING(ExInfo("unknown msg")
+                .addInfo("msg", msg->toString()));
+    }
 }
 
 

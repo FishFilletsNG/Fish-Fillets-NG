@@ -12,6 +12,9 @@ class StringMsg;
 
 /**
  * Listen messages.
+ *
+ * Listener must register oneself to MessagerAgent to be
+ * able to receive messages.
  */
 class BaseListener : public INamed {
     protected:

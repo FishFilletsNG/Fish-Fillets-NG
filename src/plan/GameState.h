@@ -6,8 +6,8 @@ class InputHandler;
 class MultiDrawer;
 class Drawable;
 
-#include "INamed.h"
 #include "NoCopy.h"
+#include "BaseListener.h"
 
 /**
  * Game state.
@@ -17,7 +17,7 @@ class Drawable;
  * use m_manager->pushState(topState) or
  * m_manager->changeState(newState)
  */
-class GameState : public INamed, public NoCopy {
+class GameState : public BaseListener, public NoCopy {
     private:
         bool m_active;
         bool m_onBg;
@@ -58,6 +58,8 @@ class GameState : public INamed, public NoCopy {
         void installHandlers();
         void unHandlers();
         void addDrawable(Drawable *drawable);
+
+        void receiveSimple(const SimpleMsg *msg);
 };
 
 #endif

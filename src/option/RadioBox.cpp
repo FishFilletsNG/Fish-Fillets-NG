@@ -8,13 +8,14 @@
  */
 #include "RadioBox.h"
 
+#include "WiPicture.h"
 #include "OptionAgent.h"
 #include "MouseStroke.h"
 
 //-----------------------------------------------------------------
 RadioBox::RadioBox(const std::string &param, const std::string &value,
         const Path &picture)
-: WiPicture(picture), m_param(param), m_value(value)
+: WiContainer(new WiPicture(picture), BORDER), m_param(param), m_value(value)
 {
 }
 //-----------------------------------------------------------------
@@ -34,11 +35,7 @@ RadioBox::drawOn(SDL_Surface *screen)
         Uint32 green = SDL_MapRGB(screen->format, 0x00, 0xff, 0x00);
         SDL_FillRect(screen, &rect, green);
     }
-
-    SDL_Rect rect;
-    rect.x = m_shift.getX() + BORDER;
-    rect.y = m_shift.getY() + BORDER;
-    SDL_BlitSurface(m_surface, NULL, screen, &rect);
+    WiContainer::drawOn(screen);
 }
 //-----------------------------------------------------------------
 /**

@@ -10,7 +10,7 @@ class Path;
  */
 class SelectLang : public VBox {
     private:
-        static const int MAX_WIDTH = 300;
+        static const int MAX_WIDTH = 260;
         WiBox *m_activeRow;
     public:
         SelectLang(const Path &datafile);

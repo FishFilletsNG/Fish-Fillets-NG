@@ -8,7 +8,7 @@
  */
 class Slider : public IWidget {
     private:
-        static const int PIXELS_PER_VALUE = 3;
+        static const int PIXELS_PER_VALUE = 2;
         static const int HEIGHT = 30;
         std::string m_param;
         int m_min;
