@@ -18,14 +18,14 @@ class PlannedDialog : public NoCopy {
         int m_endtime;
         int m_minTime;
     private:
-        bool isPlaying();
+        bool isPlaying() const;
     public:
         PlannedDialog(int actor, Dialog *dialog, int minTime);
 
         void talk(int volume, int loops=0);
         void killTalk();
 
-        bool isTalking();
+        bool isTalking() const;
         bool equalsActor(int other) const;
 };
 

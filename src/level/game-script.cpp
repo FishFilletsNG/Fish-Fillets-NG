@@ -120,6 +120,20 @@ script_game_addDecor(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void game_setScreenShift(x, y)
+ */
+    int
+script_game_setScreenShift(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int x = luaL_checkint(L, 1);
+    int y = luaL_checkint(L, 2);
+    getLevelScript(L)->room()->setScreenShift(V2(x, y));
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**

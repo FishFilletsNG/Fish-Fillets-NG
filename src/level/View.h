@@ -22,12 +22,14 @@ class View : public Drawable {
         int m_animShift;
         int m_shiftSize;
         SDL_Surface *m_screen;
+        V2 m_screenShift;
     private:
         void computeShiftSize(int phases);
         void drawDecors();
     public:
         View(const ModelList &models);
         virtual ~View();
+        void setScreenShift(const V2 &shift) { m_screenShift = shift; }
         void noteNewRound(int phases);
 
         void drawModel(Cube *model);

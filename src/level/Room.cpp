@@ -483,6 +483,13 @@ Room::playSound(const std::string &name, int volume)
 }
 //-----------------------------------------------------------------
 void
+Room::setScreenShift(const V2 &shift)
+{
+    m_bg->setLoc(shift);
+    m_view->setScreenShift(shift);
+}
+//-----------------------------------------------------------------
+void
 Room::drawOn(SDL_Surface *screen)
 {
     m_bg->drawOn(screen);

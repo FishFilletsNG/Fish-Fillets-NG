@@ -172,6 +172,7 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("game_addModel", script_game_addModel);
     m_script->registerFunc("game_getCycles", script_game_getCycles);
     m_script->registerFunc("game_addDecor", script_game_addDecor);
+    m_script->registerFunc("game_setScreenShift", script_game_setScreenShift);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);

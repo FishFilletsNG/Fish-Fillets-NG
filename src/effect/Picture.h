@@ -17,6 +17,7 @@ class Picture : public Drawable {
         Picture(const Path &file, const V2 &loc);
         Picture(SDL_Surface *new_surface, const V2 &loc);
         virtual ~Picture();
+        void setLoc(const V2 &loc) { m_loc = loc; }
         virtual void drawOn(SDL_Surface *screen);
 
         int getW() const { return m_surface->w; }

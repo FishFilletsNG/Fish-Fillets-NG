@@ -75,6 +75,7 @@ class Room : public StepCounter, public Drawable {
         void addSound(const std::string &name, const Path &file);
         void playSound(const std::string &name, int volume=100);
 
+        void setScreenShift(const V2 &shift);
         virtual void drawOn(SDL_Surface *screen);
 };
 

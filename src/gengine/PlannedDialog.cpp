@@ -35,7 +35,12 @@ void
 PlannedDialog::talk(int volume, int loops)
 {
     m_channel = m_dialog->talk(volume, loops);
-    m_endtime = m_minTime + TimerAgent::agent()->getCycles();
+    if (loops == -1) {
+        m_endtime = (unsigned int)-1;
+    }
+    else {
+        m_endtime = m_minTime * loops + TimerAgent::agent()->getCycles();
+    }
 }
 
 //-----------------------------------------------------------------
@@ -61,7 +66,7 @@ PlannedDialog::killTalk()
  * our chunk is the last one on this channel.
  */
 bool
-PlannedDialog::isPlaying()
+PlannedDialog::isPlaying() const
 {
     bool result = false;
     if (m_channel > -1) {
@@ -77,7 +82,7 @@ PlannedDialog::isPlaying()
  * return true for minimal time according subtitle length.
  */
 bool
-PlannedDialog::isTalking()
+PlannedDialog::isTalking() const
 {
     bool result = false;
     if (m_channel > -1) {

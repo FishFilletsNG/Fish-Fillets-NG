@@ -20,8 +20,12 @@ class DialogAgent : public BaseAgent {
 
     typedef std::list<PlannedDialog*> t_running;
     t_running m_running;
+    t_running m_cycling;
     private:
     void removeFirstNotTalking();
+    bool isTalkingIn(int actor, const t_running &fifo) const;
+    void killSoundIn(int actor, t_running &fifo);
+    void killTalksIn(t_running &fifo);
     protected:
     virtual void own_init();
     virtual void own_update();
@@ -31,7 +35,7 @@ class DialogAgent : public BaseAgent {
 
     void actorTalk(int actor, const std::string &name,
             int volume, int loops=0);
-    bool isTalking(int actor);
+    bool isTalking(int actor) const;
     void killSound(int actor);
 
     bool empty();

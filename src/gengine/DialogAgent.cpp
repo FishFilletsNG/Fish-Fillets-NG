@@ -62,17 +62,30 @@ DialogAgent::actorTalk(int actor, const std::string &name,
     if (subtitle) {
         Dialog *dialog = m_dialogs->findDialogHard(name, "speech");
         PlannedDialog *talker = new PlannedDialog(actor, dialog,
-                subtitle->getMinTime());
+            subtitle->getMinTime());
         talker->talk(volume, loops);
-        m_running.push_back(talker);
+
+        if (loops == -1) {
+            m_cycling.push_back(talker);
+        }
+        else {
+            m_running.push_back(talker);
+        }
     }
 }
 //-----------------------------------------------------------------
     bool
-DialogAgent::isTalking(int actor)
+DialogAgent::isTalking(int actor) const
 {
-    t_running::iterator end = m_running.end();
-    for (t_running::iterator i = m_running.begin(); i != end; ++i) {
+    return isTalkingIn(actor, m_running) ||
+        isTalkingIn(actor, m_cycling);
+}
+//-----------------------------------------------------------------
+    bool
+DialogAgent::isTalkingIn(int actor, const t_running &fifo) const
+{
+    t_running::const_iterator end = fifo.end();
+    for (t_running::const_iterator i = fifo.begin(); i != end; ++i) {
         if ((*i)->equalsActor(actor) && (*i)->isTalking()) {
             return true;
         }
@@ -102,16 +115,23 @@ DialogAgent::removeFirstNotTalking()
     void
 DialogAgent::killSound(int actor)
 {
+    killSoundIn(actor, m_running);
+    killSoundIn(actor, m_cycling);
+}
+//-----------------------------------------------------------------
+void
+DialogAgent::killSoundIn(int actor, t_running &fifo)
+{
     //NOTE: erase on list invalidates only the erased iterator
-    t_running::iterator run_end = m_running.end();
-    for (t_running::iterator i = m_running.begin(); i != run_end; /* empty */) {
+    t_running::iterator run_end = fifo.end();
+    for (t_running::iterator i = fifo.begin(); i != run_end; /* empty */) {
         t_running::iterator toKill = i;
         ++i;
 
         if ((*toKill)->equalsActor(actor)) {
             (*toKill)->killTalk();
             delete *toKill;
-            m_running.erase(toKill);
+            fifo.erase(toKill);
         }
     }
 }
@@ -123,12 +143,19 @@ DialogAgent::killSound(int actor)
     void
 DialogAgent::killTalks()
 {
-    t_running::iterator end = m_running.end();
-    for (t_running::iterator i = m_running.begin(); i != end; ++i) {
+    killTalksIn(m_running);
+    killTalksIn(m_cycling);
+}
+//-----------------------------------------------------------------
+void
+DialogAgent::killTalksIn(t_running &fifo)
+{
+    t_running::iterator end = fifo.end();
+    for (t_running::iterator i = fifo.begin(); i != end; ++i) {
         (*i)->killTalk();
         delete *i;
     }
-    m_running.clear();
+    fifo.clear();
 }
 //-----------------------------------------------------------------
 /**
@@ -143,6 +170,7 @@ DialogAgent::removeAll()
 //-----------------------------------------------------------------
 /**
  * Returns true when there is no running dialog.
+ * NOTE: cycling sounds are ignored
  */
 bool
 DialogAgent::empty()

@@ -23,7 +23,7 @@
  * @param models wrapper arount models
  */
 View::View(const ModelList &models)
-     : m_models(models)
+     : m_models(models), m_screenShift(0, 0)
 {
     m_animShift = 0;
     m_shiftSize = SCALE;
@@ -116,7 +116,8 @@ View::getScreenPos(const Cube *model) const
         shift = Rules::dir2xy(dir);
         shift = shift.scale(m_animShift * m_shiftSize);
     }
+    shift = shift.plus(m_screenShift);
 
-    V2 view_shift = model->const_anim()->getViewShift();
-    return model->getLocation().plus(view_shift).scale(SCALE).plus(shift);
+    V2 pos_shift = model->const_anim()->getViewShift();
+    return model->getLocation().plus(pos_shift).scale(SCALE).plus(shift);
 }
