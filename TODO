@@ -4,27 +4,27 @@ priority - 1-High, 2-Medium, 3-Low
 
 
 GAME SPECIFIC
-2 - game menu - select language for subtitles, sound on/off
-2 - software packages - rpm, deb, tar.gz
+1 - game menu - select language for subtitles, sound on/off
 3 - video playback
+3 - level editor
 
 
 INPUT
 2 - mouse control - select fish by left-clicking on it, 
     left-click in level to go there without touching anything
 
+
 STATISTICS
-1 - count steps after finishing level
+- all done
 
 
 LEVEL SPECIFIC
 1 - convert all animation of objects in levels to lua
 1 - convert all triggered dialogs to lua
-2 - in final levels you have to get some object out of screen to win
+1 - in final levels you have to get some object out of screen to win
 
 
 GRAPHICS
-2 - waves in level background
 3 - waves in text dialogs
 
 
