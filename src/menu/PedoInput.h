@@ -14,6 +14,7 @@ class PedoInput : public GameInput {
         Pedometer *getPedo();
     protected:
         virtual void enableSubtitles() {}
+        virtual void enableHelp() {}
     public:
         PedoInput(Pedometer *pedometer);
 

@@ -149,7 +149,8 @@ LevelStatus::createPoster() const
 bool
 LevelStatus::isBetter()
 {
+    int moves = readSolvedMoves().size();
     return m_bestMoves < 0 ||
-        static_cast<int>(readSolvedMoves().size()) < m_bestMoves;
+        (0 < moves && moves < m_bestMoves);
 }
 

@@ -14,6 +14,7 @@ class WorldInput : public GameInput {
         WorldMap *getWorld();
     protected:
         virtual void enableSubtitles() {}
+        virtual void enableHelp() {}
     public:
         WorldInput(WorldMap *world);
 
