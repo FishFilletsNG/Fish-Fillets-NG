@@ -28,12 +28,16 @@ SolverDrawer::SolverDrawer(LevelStatus *status)
         SDL_Color usedColor = {255, 255, 255, 255};
 
         Labels labels(Path::dataReadPath("script/labels.lua"));
-        const char *labelName = "solver_worse";
-        if (status->isBetter()) {
-            labelName = "solver_better";
-        }
-        else {
-            labelName = "solver_worse";
+        const char *labelName;
+        switch (status->compareToBest()) {
+            case 1:
+                labelName = "solver_better";
+                break;
+            case 0:
+                labelName = "solver_equals";
+                break;
+            default:
+                labelName = "solver_worse";
         }
         StringTool::t_args args;
         args.push_back("");

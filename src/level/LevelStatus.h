@@ -18,7 +18,7 @@ class LevelStatus : public Scripter {
         int m_bestMoves;
         std::string m_bestAuthor;
     private:
-        std::string getSolutionFilename();
+        std::string getSolutionFilename() const;
     public:
         LevelStatus();
         void prepareRun(const std::string &codename,
@@ -27,7 +27,7 @@ class LevelStatus : public Scripter {
         GameState *createPoster() const;
         int getBestMoves() const { return m_bestMoves; }
         std::string getBestAuthor() const { return m_bestAuthor; }
-        bool isBetter();
+        int compareToBest();
 
         void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }

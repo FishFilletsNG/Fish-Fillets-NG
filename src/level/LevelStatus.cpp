@@ -75,7 +75,7 @@ LevelStatus::getSolutionFilename(const std::string &codename)
 }
 //-----------------------------------------------------------------
 std::string
-LevelStatus::getSolutionFilename()
+LevelStatus::getSolutionFilename() const
 {
     return getSolutionFilename(m_codename);
 }
@@ -144,13 +144,22 @@ LevelStatus::createPoster() const
 }
 //-----------------------------------------------------------------
 /**
- * Returns true when this player is better than previous best solver.
+ * Compares this player and the best one.
+ * @returns -1 (this is worse), 0 (equals) or 1 (the best)
  */
-bool
-LevelStatus::isBetter()
+int
+LevelStatus::compareToBest()
 {
     int moves = readSolvedMoves().size();
-    return m_bestMoves < 0 ||
-        (0 < moves && moves < m_bestMoves);
+    int result = 1;
+    if (m_bestMoves > 0) {
+        if (m_bestMoves < moves) {
+            result = -1;
+        }
+        else if (m_bestMoves == moves) {
+            result = 0;
+        }
+    }
+    return result;
 }
 
