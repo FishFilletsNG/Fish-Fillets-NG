@@ -4,18 +4,22 @@
 class Keymap;
 class DemoMode;
 
-#include "NoCopy.h"
+#include "InputHandler.h"
 
 /**
  * Handle input for demo.
  */
-class DemoInput : public NoCopy {
+class DemoInput : public InputHandler {
     private:
+        static const int KEY_QUIT = 1;
         Keymap *m_keymap;
+        DemoMode *m_demo;
     public:
-        DemoInput();
+        DemoInput(DemoMode *demo);
         ~DemoInput();
-        bool processInput(DemoMode *demo);
+
+        virtual void keyEvent(const KeyStroke &stroke);
+        virtual void mouseEvent(const MouseStroke &buttons);
 };
 
 #endif

@@ -8,21 +8,29 @@
  */
 #include "LevelInput.h"
 
+#include "Level.h"
 #include "Keymap.h"
 
+#include "Log.h"
 #include "KeyStroke.h"
-#include "Level.h"
 
 //-----------------------------------------------------------------
-LevelInput::LevelInput()
+LevelInput::LevelInput(Level *level)
 {
+    m_level = level;
+
     //TODO: help on F1
     m_keymap = new Keymap();
-    m_keymap->registerKey("quit", KeyStroke(SDLK_ESCAPE, KMOD_NONE));
-    m_keymap->registerKey("switch", KeyStroke(SDLK_SPACE, KMOD_NONE));
-    m_keymap->registerKey("save", KeyStroke(SDLK_F2, KMOD_NONE));
-    m_keymap->registerKey("load", KeyStroke(SDLK_F3, KMOD_NONE));
-    m_keymap->registerKey("restart", KeyStroke(SDLK_BACKSPACE, KMOD_NONE));
+    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
+            KeyDesc(KEY_QUIT, "quit"));
+    m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE),
+            KeyDesc(KEY_SWITCH, "switch"));
+    m_keymap->registerKey(KeyStroke(SDLK_F2, KMOD_NONE),
+            KeyDesc(KEY_SAVE, "save"));
+    m_keymap->registerKey(KeyStroke(SDLK_F3, KMOD_NONE),
+            KeyDesc(KEY_LOAD, "load"));
+    m_keymap->registerKey(KeyStroke(SDLK_BACKSPACE, KMOD_NONE),
+            KeyDesc(KEY_RESTART, "restart"));
 }
 //-----------------------------------------------------------------
 LevelInput::~LevelInput()
@@ -30,36 +38,37 @@ LevelInput::~LevelInput()
     delete m_keymap;
 }
 //-----------------------------------------------------------------
-/**
- * Process pressed keys and return true to allow continue.
- */
-bool
-LevelInput::processInput(Level *level)
+    void
+LevelInput::keyEvent(const KeyStroke &stroke)
 {
-    bool allowContinue = true;
-    if (m_keymap->isPressed("restart")) {
-        level->interruptPlan();
-        level->action_restart();
+    switch (m_keymap->indexPressed(stroke)) {
+        case KEY_QUIT:
+            m_level->quitState();
+            break;
+        case KEY_SWITCH:
+            if (!m_level->isPlanning()) {
+                m_level->switchFish();
+            }
+            break;
+        case KEY_SAVE:
+            if (!m_level->isPlanning()) {
+                m_level->action_save();
+            }
+            break;
+        case KEY_LOAD:
+            m_level->interruptPlan();
+            m_level->action_load();
+            break;
+        case KEY_RESTART:
+            m_level->interruptPlan();
+            m_level->action_restart();
+            break;
+        case -1:
+            break;
+        default:
+            LOG_WARNING(ExInfo("unknown key")
+                    .addInfo("index", m_keymap->indexPressed(stroke))
+                    .addInfo("stroke", stroke.toString()));
     }
-    else if (m_keymap->isPressed("load")) {
-        level->interruptPlan();
-        level->action_load();
-    }
-    else if (m_keymap->isPressed("save")) {
-        if (!level->isPlanning()) {
-            level->action_save();
-        }
-    }
-    else if (m_keymap->isPressed("switch")) {
-        if (!level->isPlanning()) {
-            level->switchFish();
-        }
-    }
-    else if (m_keymap->isPressed("quit")) {
-        level->quitState();
-        allowContinue = false;
-    }
-
-    return allowContinue;
 }
 

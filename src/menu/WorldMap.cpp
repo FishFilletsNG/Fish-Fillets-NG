@@ -37,7 +37,7 @@ WorldMap::WorldMap(const Path &bg)
     m_drawer = new NodeDrawer();
     m_descPack = new ResDialogPack();
     m_levelStatus = new LevelStatus();
-    m_input = new WorldInput();
+    takeHandler(new WorldInput(this));
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
@@ -50,7 +50,6 @@ WorldMap::~WorldMap()
     delete m_descPack;
     delete m_drawer;
     delete m_levelStatus;
-    delete m_input;
 }
 //-----------------------------------------------------------------
     void
@@ -90,10 +89,7 @@ WorldMap::own_initState()
     void
 WorldMap::own_updateState()
 {
-    if (m_input->processInput(this)) {
-        watchCursor();
-        watchButton();
-    }
+    watchCursor();
 }
 //-----------------------------------------------------------------
 /**
@@ -151,15 +147,13 @@ WorldMap::watchCursor()
  * Start level under pressed button.
  */
     void
-WorldMap::watchButton()
+WorldMap::runSelected()
 {
-    if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(1)) {
-        Level *level = createSelected();
-        if (level) {
-            m_levelStatus->setComplete(false);
-            level->fillStatus(m_levelStatus);
-            m_manager->pushState(level);
-        }
+    Level *level = createSelected();
+    if (level) {
+        m_levelStatus->setComplete(false);
+        level->fillStatus(m_levelStatus);
+        m_manager->pushState(level);
     }
 }
 //-----------------------------------------------------------------

@@ -11,10 +11,13 @@
 #include "KeyBinder.h"
 #include "RectBinder.h"
 #include "KeyConsole.h"
+#include "InputHandler.h"
+
 #include "MessagerAgent.h"
 #include "SimpleMsg.h"
 #include "UnknownMsgException.h"
 #include "Name.h"
+#include "MouseStroke.h"
 
 #include "SDL.h"
 
@@ -34,6 +37,7 @@ InputAgent::own_init()
     m_keyBinder = new KeyBinder();
     m_rectBinder = new RectBinder();
     m_console = new KeyConsole();
+    m_handler = NULL;
 
     SDL_EnableUNICODE(1);
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
@@ -64,12 +68,17 @@ InputAgent::own_update()
                 }
                 else {
                     m_keyBinder->keyDown(event.key.keysym);
+                    if (m_handler) {
+                        m_handler->keyEvent(KeyStroke(event.key.keysym));
+                    }
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                //TODO: support right and middle button too
                 if (SDL_BUTTON_LEFT == event.button.button) {
                     m_rectBinder->lbuttonDown(event.button);
+                }
+                if (m_handler) {
+                    m_handler->mouseEvent(MouseStroke(event.button));
                 }
                 break;
             default:

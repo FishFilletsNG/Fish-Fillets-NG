@@ -12,24 +12,23 @@
 
 //-----------------------------------------------------------------
 void
-Keymap::registerKey(const std::string &key, const KeyStroke &stroke)
+Keymap::registerKey(const KeyStroke &stroke, const KeyDesc &desc)
 {
-    m_keys.insert(std::pair<std::string,KeyStroke>(key, stroke));
+    m_keys.insert(std::pair<KeyStroke,KeyDesc>(stroke, desc));
 }
 //-----------------------------------------------------------------
-bool
-Keymap::isPressed(const std::string &key) const
+/**
+ * Return index of pressed key.
+ * @return index or -1
+ */
+int
+Keymap::indexPressed(const KeyStroke &stroke) const
 {
-    bool result = false;
-    t_keys::const_iterator it = m_keys.find(key);
+    int result = -1;
+    t_keys::const_iterator it = m_keys.find(stroke);
     if (m_keys.end() != it) {
-        result = it->second.isPressed();
+        result = it->second.getIndex();
     }
-    else {
-        LOG_WARNING(ExInfo("no such keystroke")
-                .addInfo("key", key));
-    }
-
     return result;
 }
 

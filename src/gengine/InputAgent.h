@@ -4,6 +4,7 @@
 class KeyBinder;
 class RectBinder;
 class KeyConsole;
+class InputHandler;
 
 #include "BaseAgent.h"
 #include "Name.h"
@@ -11,7 +12,7 @@ class KeyConsole;
 #include "SDL.h"
 
 /**
- * Handle input events.
+ * Forward input events to handlers.
  */
 class InputAgent : public BaseAgent {
     AGENT(InputAgent, Name::INPUT_NAME);
@@ -20,12 +21,14 @@ class InputAgent : public BaseAgent {
         KeyBinder *m_keyBinder;
         RectBinder *m_rectBinder;
         KeyConsole *m_console;
+        InputHandler *m_handler;
     protected:
         virtual void own_init();
         virtual void own_update();
         virtual void own_shutdown();
     public:
         virtual void receiveSimple(const SimpleMsg *msg);
+        void installHandler(InputHandler *handler) { m_handler = handler; }
 
         KeyBinder *keyBinder() { return m_keyBinder; }
         RectBinder *rectBinder() { return m_rectBinder; }

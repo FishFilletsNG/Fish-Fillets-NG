@@ -67,7 +67,7 @@ KeyBinder::removeStroke(const KeyStroke &stroke)
 void
 KeyBinder::keyDown(const SDL_keysym &keysym) const
 {
-    const KeyStroke stroke(keysym.sym, keysym.mod);
+    KeyStroke stroke(keysym);
     t_strokes::const_iterator it = m_strokes.find(stroke);
     if (m_strokes.end() != it) {
         it->second->sendClone();

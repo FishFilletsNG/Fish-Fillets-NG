@@ -8,10 +8,38 @@
  */
 #include "GameState.h"
 
+#include "StateManager.h"
+#include "InputHandler.h"
+
 #include "Log.h"
 #include "LogicException.h"
-#include "StateManager.h"
+#include "InputAgent.h"
 
+//-----------------------------------------------------------------
+GameState::GameState()
+{
+    m_handler = NULL;
+}
+//-----------------------------------------------------------------
+GameState::~GameState()
+{
+    if (m_handler) {
+        delete m_handler;
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Obtain input handler.
+ * @param handler new input handler
+ */
+void
+GameState::takeHandler(InputHandler *new_handler)
+{
+    if (m_handler) {
+        delete m_handler;
+    }
+    m_handler = new_handler;
+}
 //-----------------------------------------------------------------
 void
 GameState::initState(StateManager *manager)
@@ -19,6 +47,7 @@ GameState::initState(StateManager *manager)
     LOG_INFO(ExInfo("initState").addInfo("name", getName()));
     m_manager = manager;
     m_active = true;
+    InputAgent::agent()->installHandler(m_handler);
     own_initState();
 }
 //-----------------------------------------------------------------
@@ -49,6 +78,7 @@ GameState::pauseState()
     }
 
     own_pauseState();
+    InputAgent::agent()->installHandler(NULL);
     m_active = false;
 }
 //-----------------------------------------------------------------
@@ -60,6 +90,7 @@ GameState::resumeState()
 {
     LOG_INFO(ExInfo("resumeState").addInfo("name", getName()));
     m_active = true;
+    InputAgent::agent()->installHandler(m_handler);
     own_resumeState();
 }
 //-----------------------------------------------------------------
@@ -69,6 +100,7 @@ GameState::cleanState()
     LOG_INFO(ExInfo("cleanState").addInfo("name", getName()));
     own_cleanState();
 
+    InputAgent::agent()->installHandler(NULL);
     m_active = false;
     m_manager = NULL;
 }

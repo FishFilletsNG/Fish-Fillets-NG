@@ -45,15 +45,14 @@
     m_loadSpeed = 1;
     m_depth = depth;
     m_locker = new PhaseLocker();
-    m_input = new LevelInput();
     registerGameFuncs();
+    takeHandler(new LevelInput(this));
 }
 //-----------------------------------------------------------------
 Level::~Level()
 {
     own_cleanState();
     delete m_locker;
-    delete m_input;
 }
 
 //-----------------------------------------------------------------
@@ -73,17 +72,15 @@ Level::own_initState()
     void
 Level::own_updateState()
 {
-    if (m_input->processInput(this)) {
-        bool finished = false;
-        if (m_locker->getLocked() == 0) {
-            finished = nextAction();
-        }
-        updateLevel();
-        m_locker->decLock();
+    bool finished = false;
+    if (m_locker->getLocked() == 0) {
+        finished = nextAction();
+    }
+    updateLevel();
+    m_locker->decLock();
 
-        if (finished) {
-            finishLevel();
-        }
+    if (finished) {
+        finishLevel();
     }
 }
 //-----------------------------------------------------------------

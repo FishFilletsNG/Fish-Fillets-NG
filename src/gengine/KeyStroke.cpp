@@ -12,6 +12,15 @@
 
 //-----------------------------------------------------------------
 /**
+ * Create new keystroke from event.
+ */
+KeyStroke::KeyStroke(const SDL_keysym &keysym)
+{
+    m_sym = keysym.sym;
+    m_mod = modStrip(keysym.mod);
+}
+//-----------------------------------------------------------------
+/**
  * Create new keystroke.
  * NOTE: KMOD_ALT mean (KMOD_LALT and KMOD_RALT),
  * i.e. either ALTs pressed!
@@ -63,18 +72,6 @@ KeyStroke::equals(const KeyStroke &other) const
 {
     return m_sym == other.m_sym &&
         m_mod == other.m_mod;
-}
-//-----------------------------------------------------------------
-bool
-KeyStroke::isPressed() const
-{
-    bool result = false;
-    Uint8 *keys = SDL_GetKeyState(NULL);
-    if (keys[m_sym]) {
-        int modes = SDL_GetModState();
-        result = (m_mod == modStrip(modes));
-    }
-    return result;
 }
 //-----------------------------------------------------------------
 /**

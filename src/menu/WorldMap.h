@@ -7,7 +7,6 @@ class NodeDrawer;
 class ResDialogPack;
 class LevelDesc;
 class LevelStatus;
-class WorldInput;
 
 #include "Path.h"
 #include "IDrawer.h"
@@ -24,10 +23,8 @@ class WorldMap : public GameState, public IDrawer {
         ResDialogPack *m_descPack;
         LevelStatus *m_levelStatus;
         SDL_Surface *m_bg;
-        WorldInput *m_input;
     private:
         void watchCursor();
-        void watchButton();
         Level *createSelected() const;
         void markSolved();
     protected:
@@ -45,6 +42,7 @@ class WorldMap : public GameState, public IDrawer {
         int getH() const { return m_bg->h; }
 
         virtual void draw();
+        void runSelected();
 
         void addDesc(const std::string &codename, LevelDesc *desc);
         std::string findLevelName(const std::string &codename) const;

@@ -4,18 +4,23 @@
 class Keymap;
 class WorldMap;
 
-#include "NoCopy.h"
+#include "InputHandler.h"
 
 /**
  * Handle input for worldmap.
  */
-class WorldInput : public NoCopy {
+class WorldInput : public InputHandler {
     private:
+        static const int KEY_QUIT = 1;
+
+        WorldMap *m_world;
         Keymap *m_keymap;
     public:
-        WorldInput();
+        WorldInput(WorldMap *world);
         ~WorldInput();
-        bool processInput(WorldMap *world);
+
+        virtual void keyEvent(const KeyStroke &stroke);
+        virtual void mouseEvent(const MouseStroke &buttons);
 };
 
 #endif

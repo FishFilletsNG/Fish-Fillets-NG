@@ -8,16 +8,20 @@
  */
 #include "WorldInput.h"
 
+#include "WorldMap.h"
 #include "Keymap.h"
 
+#include "Log.h"
 #include "KeyStroke.h"
-#include "WorldMap.h"
+#include "MouseStroke.h"
 
 //-----------------------------------------------------------------
-WorldInput::WorldInput()
+WorldInput::WorldInput(WorldMap *world)
 {
+    m_world = world;
     m_keymap = new Keymap();
-    m_keymap->registerKey("quit", KeyStroke(SDLK_ESCAPE, KMOD_NONE));
+    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
+            KeyDesc(KEY_QUIT, "quit"));
 }
 //-----------------------------------------------------------------
 WorldInput::~WorldInput()
@@ -25,18 +29,27 @@ WorldInput::~WorldInput()
     delete m_keymap;
 }
 //-----------------------------------------------------------------
-/**
- * Process pressed keys and return true to allow continue.
- */
-    bool
-WorldInput::processInput(WorldMap *world)
+    void
+WorldInput::keyEvent(const KeyStroke &stroke)
 {
-    bool allowContinue = true;
-    if (m_keymap->isPressed("quit")) {
-        world->quitState();
-        allowContinue = false;
+    switch (m_keymap->indexPressed(stroke)) {
+        case KEY_QUIT:
+            m_world->quitState();
+            break;
+        case -1:
+            break;
+        default:
+            LOG_WARNING(ExInfo("unknown key")
+                    .addInfo("index", m_keymap->indexPressed(stroke))
+                    .addInfo("stroke", stroke.toString()));
     }
-
-    return allowContinue;
+}
+//-----------------------------------------------------------------
+void
+WorldInput::mouseEvent(const MouseStroke &buttons)
+{
+    if (buttons.equals(MouseStroke(SDL_BUTTON_LEFT))) {
+        m_world->runSelected();
+    }
 }
 

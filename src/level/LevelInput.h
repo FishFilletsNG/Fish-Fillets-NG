@@ -1,21 +1,30 @@
 #ifndef HEADER_LEVELINPUT_H
 #define HEADER_LEVELINPUT_H
 
-class Keymap;
 class Level;
+class Keymap;
+class KeyStroke;
 
-#include "NoCopy.h"
+#include "InputHandler.h"
 
 /**
  * Handle input for level.
  */
-class LevelInput : public NoCopy {
+class LevelInput : public InputHandler {
     private:
+        static const int KEY_QUIT = 1;
+        static const int KEY_SWITCH = 2;
+        static const int KEY_SAVE = 3;
+        static const int KEY_LOAD = 4;
+        static const int KEY_RESTART = 5;
+
+        Level *m_level;
         Keymap *m_keymap;
     public:
-        LevelInput();
+        LevelInput(Level *level);
         ~LevelInput();
-        bool processInput(Level *level);
+
+        virtual void keyEvent(const KeyStroke &stroke);
 };
 
 #endif

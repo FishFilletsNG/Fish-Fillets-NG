@@ -24,13 +24,12 @@ DemoMode::DemoMode()
     m_bg = NULL;
     m_display = NULL;
     m_script->registerFunc("demo_display", script_demo_display);
-    m_input = new DemoInput();
+    takeHandler(new DemoInput(this));
 }
 //-----------------------------------------------------------------
 DemoMode::~DemoMode()
 {
     own_cleanState();
-    delete m_input;
 }
 //-----------------------------------------------------------------
     void
@@ -47,10 +46,8 @@ DemoMode::runDemo(Picture *bg, const Path &demoscript)
 void
 DemoMode::own_updateState()
 {
-    if (m_input->processInput(this)) {
-        if (finishPlan()) {
-            quitState();
-        }
+    if (finishPlan()) {
+        quitState();
     }
 }
 //-----------------------------------------------------------------

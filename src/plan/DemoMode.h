@@ -19,7 +19,6 @@ class DemoMode : public Planner, public GameState {
         Picture *m_display;
         typedef std::map<int,Actor*> t_actors;
         t_actors m_actors;
-        DemoInput *m_input;
     protected:
         virtual void own_initState() {}
         virtual void own_updateState();

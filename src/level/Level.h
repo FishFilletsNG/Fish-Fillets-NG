@@ -6,7 +6,6 @@ class Unit;
 class Room;
 class Actor;
 class PhaseLocker;
-class LevelInput;
 class Picture;
 class DemoMode;
 class LevelStatus;
@@ -34,7 +33,6 @@ class Level : public Planner, public GameState {
         int m_depth;
         Room *m_room;
         PhaseLocker *m_locker;
-        LevelInput *m_input;
         int m_restartCounter;
         std::string m_desc;
         std::string m_loadedMoves;

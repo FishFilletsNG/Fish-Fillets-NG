@@ -6,14 +6,6 @@ class BaseMsg;
 #include "NoCopy.h"
 #include "KeyStroke.h"
 
-struct stroke_less
-{
-    bool operator()(const KeyStroke &left, const KeyStroke &right) const
-    {
-        return left.less(right);
-    }
-};
-
 #include <map>
 
 /**

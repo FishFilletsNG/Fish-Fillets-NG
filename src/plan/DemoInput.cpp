@@ -10,15 +10,22 @@
 
 #include "Keymap.h"
 
+#include "Log.h"
 #include "KeyStroke.h"
 #include "DemoMode.h"
 
 //-----------------------------------------------------------------
-DemoInput::DemoInput()
+/**
+ * Create demo input handler.
+ * @param demo pointer to the leader
+ */
+DemoInput::DemoInput(DemoMode *demo)
 {
+    m_demo = demo;
     m_keymap = new Keymap();
-    m_keymap->registerKey("quit", KeyStroke(SDLK_ESCAPE, KMOD_NONE));
-    m_keymap->registerKey("interrupt", KeyStroke(SDLK_SPACE, KMOD_NONE));
+    KeyDesc key_quit(KEY_QUIT, "quit");
+    m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE), key_quit);
+    m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE), key_quit);
 }
 //-----------------------------------------------------------------
 DemoInput::~DemoInput()
@@ -26,20 +33,25 @@ DemoInput::~DemoInput()
     delete m_keymap;
 }
 //-----------------------------------------------------------------
-/**
- * Process pressed keys and return true to allow continue.
- */
-bool
-DemoInput::processInput(DemoMode *demo)
+    void
+DemoInput::keyEvent(const KeyStroke &stroke)
 {
-    bool allowContinue = true;
-    if (m_keymap->isPressed("quit") ||
-            m_keymap->isPressed("interrupt"))
-    {
-        demo->quitState();
-        allowContinue = false;
+    switch (m_keymap->indexPressed(stroke)) {
+        case KEY_QUIT:
+            m_demo->quitState();
+            break;
+        case -1:
+            break;
+        default:
+            LOG_WARNING(ExInfo("unknown key")
+                    .addInfo("index", m_keymap->indexPressed(stroke))
+                    .addInfo("stroke", stroke.toString()));
     }
-
-    return allowContinue;
+}
+//-----------------------------------------------------------------
+void
+DemoInput::mouseEvent(const MouseStroke &/*buttons*/)
+{
+    m_demo->quitState();
 }
 
