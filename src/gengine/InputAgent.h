@@ -20,7 +20,7 @@ class InputAgent : public BaseAgent {
         KeyBinder *m_keyBinder;
         InputHandler *m_handler;
     private:
-        V2 getMouseState(Uint8 *buttons);
+        V2 getMouseState(Uint8 *out_buttons);
     protected:
         virtual void own_init();
         virtual void own_update();

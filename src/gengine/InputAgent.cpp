@@ -99,16 +99,17 @@ InputAgent::installHandler(InputHandler *handler)
 //-----------------------------------------------------------------
 /**
  * Return mouse location.
+ * @param out_buttons place where to store state of buttons
  * @return (mouseX, mouseY)
  */
     V2
-InputAgent::getMouseState(Uint8 *buttons)
+InputAgent::getMouseState(Uint8 *out_buttons)
 {
     int x;
     int y;
     int pressed = SDL_GetMouseState(&x, &y);
-    if (buttons) {
-        *buttons = pressed;
+    if (out_buttons) {
+        *out_buttons = pressed;
     }
     return V2(x, y);
 }
