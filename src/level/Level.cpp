@@ -441,7 +441,8 @@ Level::action_save()
         m_levelScript->scriptDo("script_save()");
     }
     else {
-        LOG_INFO(ExInfo("wrong way, no save is made"));
+        LOG_INFO(ExInfo("bad level condition, level cannot be finished, "
+                    "no save is made"));
     }
     return true;
 }
