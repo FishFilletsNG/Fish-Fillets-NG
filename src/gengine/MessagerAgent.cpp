@@ -18,7 +18,7 @@
 //-----------------------------------------------------------------
 /**
  * Remember listener under his name.
- * NOTE: listeners may be added befor own_init()
+ * NOTE: listeners may be added before own_init()
  *
  * @param listener listener, borowed pointer
  */

@@ -66,7 +66,6 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
                                 "dostring", m_input);
                         MessagerAgent::agent()->forwardNewMsg(msg);
                         m_history = m_input;
-                        //NOTE: clear() is not on FreeBSD
                         m_input = "";
                     }
                     catch (BaseException &e) {

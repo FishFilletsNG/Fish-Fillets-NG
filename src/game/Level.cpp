@@ -279,7 +279,7 @@ Level::saveSolution()
     Path oldSolution = Path::dataReadPath("solved/" + m_codename + ".lua");
     if (oldSolution.exists()) {
         try {
-            //NOTE: hack, load old solution to the m_loadedMoves
+            //NOTE: hack, loads old solution to the m_loadedMoves
             m_script->doString("saved_moves=nil");
             m_script->doFile(oldSolution);
             m_script->doString("script_load()");

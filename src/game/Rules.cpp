@@ -137,7 +137,7 @@ Rules::checkOut()
     if (!isWall() && !m_model->isLost()
             && !m_model->isBusy())
     {
-        //NOTE: normal objects must not go out of screen
+        //NOTE: normal objects are not allowed to go out of screen
         if (m_model->shouldGoOut()) {
             if (m_mask->isAtBorder()) {
                 m_readyToGoout = true;

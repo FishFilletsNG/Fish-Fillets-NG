@@ -14,7 +14,7 @@
 /**
  * Create new keystroke.
  * NOTE: KMOD_ALT mean (KMOD_LALT and KMOD_RALT),
- * i.e. either ALT pressed!
+ * i.e. either ALTs pressed!
  *
  * @param sym SDLKey
  * @param mod SDLMod ored

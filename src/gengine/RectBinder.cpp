@@ -58,7 +58,7 @@ RectBinder::rectToString(const SDL_Rect &rect) const
  * Only one rect is activated.
  * When listener is not available, it will be removed.
  *
- * NOTE: only useable for small count of rect.
+ * NOTE: only useable for small count of rects.
  */
 void
 RectBinder::lbuttonDown(const SDL_MouseButtonEvent &button)

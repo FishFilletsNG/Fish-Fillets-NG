@@ -15,7 +15,6 @@
 //-----------------------------------------------------------------
 /**
  * Two dimensional array of Cube pointers.
- * NOTE: [y][x] indexes
  */
 Field::Field(int w, int h)
 {

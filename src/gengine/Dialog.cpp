@@ -12,6 +12,7 @@
 #include "SoundAgent.h"
 #include "ResSoundPack.h"
 #include "Path.h"
+#include "minmax.h"
 
 const std::string Dialog::DEFAULT_LANG = "en";
 //-----------------------------------------------------------------
@@ -69,7 +70,7 @@ Dialog::runSubtitle() const
 int
 Dialog::getMinTime() const
 {
-    return m_subtitle.size();
+    return min(180, m_subtitle.size());
 }
 
 

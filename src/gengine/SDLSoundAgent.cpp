@@ -152,8 +152,6 @@ SDLSoundAgent::stopMusic()
 {
     if(Mix_PlayingMusic()) {
         Mix_HookMusicFinished(NULL);
-        //NOTE: nice fadeout is too slow
-        //Mix_FadeOutMusic(1000);
         Mix_HaltMusic();
     }
     if (m_music) {

@@ -108,7 +108,6 @@ Controls::driveUnit()
     void
 Controls::lockPhases()
 {
-    //NOTE: original limits were {6, 10}
     static const int SPEED_WARP1 = 6;
     static const int SPEED_WARP2 = 10;
 

@@ -32,8 +32,7 @@ TimerAgent::own_update()
     }
 
     now = SDL_GetTicks();
-    //NOTE: there are two posibilities
-    //m_nextTime += TIMEINTERVAL;
+    //NOTE: every cycle have fixed time interval
     m_nextTime = now + TIMEINTERVAL;
 
     m_deltaTime = now - m_lastTime;

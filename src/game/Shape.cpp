@@ -41,9 +41,7 @@ Shape::Shape(const std::string &shape)
                 max_y = max(max_y, y);
                 ++x;
                 break;
-            case ' ':
             case '.':
-                //NOTE: ' ' is for compatibility
                 ++x;
                 break;
             default:
