@@ -8,8 +8,18 @@
  */
 #include "GameInput.h"
 
+#include "MenuHelp.h"
 #include "MenuOptions.h"
 
+//-----------------------------------------------------------------
+/**
+ * Push help screen at top.
+ */
+void
+GameInput::enableHelp()
+{
+    m_state->pushState(new MenuHelp());
+}
 //-----------------------------------------------------------------
 /**
  * Push menu state at top.

@@ -30,8 +30,6 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_RESTART, "restart"));
     m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
             KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
-    m_keymap->registerKey(KeyStroke(SDLK_F1, KMOD_NONE),
-            KeyDesc(KEY_HELP, "help"));
 }
 //-----------------------------------------------------------------
 Level *
@@ -64,10 +62,6 @@ LevelInput::specKey(int keyIndex)
             break;
         case KEY_SHOW_STEPS:
             toggleShowSteps();
-            break;
-        case KEY_HELP:
-            SubTitleAgent::agent()->newSubtitle(
-                    "http://fillets.sf.net/manual.php", "font_white");
             break;
         default:
             GameInput::specKey(keyIndex);

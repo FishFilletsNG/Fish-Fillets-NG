@@ -6,7 +6,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-#include "DemoInput.h"
+#include "HelpInput.h"
 
 #include "Keymap.h"
 #include "KeyDesc.h"
@@ -14,19 +14,17 @@
 
 //-----------------------------------------------------------------
 /**
- * Create demo input handler.
  * Escape, space or mouse click quit state.
- * @param demo pointer to the leader
  */
-DemoInput::DemoInput(GameState *demo)
-    : GameInput(demo)
+HelpInput::HelpInput(GameState *state)
+    : StateInput(state)
 {
     KeyDesc key_quit(KEY_QUIT, "quit");
     m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE), key_quit);
 }
 //-----------------------------------------------------------------
 void
-DemoInput::mouseEvent(const MouseStroke &/*buttons*/)
+HelpInput::mouseEvent(const MouseStroke &/*buttons*/)
 {
     quitState();
 }
