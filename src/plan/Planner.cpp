@@ -15,6 +15,7 @@
 #include "SubTitleAgent.h"
 #include "ScriptCmd.h"
 #include "dialog-script.h"
+#include "options-script.h"
 
 //-----------------------------------------------------------------
 Planner::Planner()
@@ -45,6 +46,8 @@ Planner::registerScriptFuncs()
 
     m_script->registerFunc("sound_playMusic", script_sound_playMusic);
     m_script->registerFunc("sound_stopMusic", script_sound_stopMusic);
+
+    m_script->registerFunc("options_getParam", script_options_getParam);
 }
 //-----------------------------------------------------------------
 Planner::~Planner()
