@@ -123,5 +123,22 @@ InputAgent::receiveSimple(const SimpleMsg *msg)
         throw UnknownMsgException(msg);
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Return mouse location.
+ * @return (mouseX, mouseY) or (-1, -1) when mouse is outside window
+ */
+V2
+InputAgent::getMouseLoc()
+{
+    V2 result(-1, -1);
+    int x;
+    int y;
+    SDL_GetMouseState(&x, &y);
+    if (SDL_GetAppState() & SDL_APPMOUSEFOCUS) {
+        result = V2(x, y);
+    }
+    return result;
+}
 
 

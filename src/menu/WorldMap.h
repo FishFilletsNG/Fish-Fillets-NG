@@ -7,6 +7,7 @@ class NodeDrawer;
 class ResDialogPack;
 class LevelDesc;
 class LevelStatus;
+class LayeredPicture;
 
 #include "Path.h"
 #include "IDrawer.h"
@@ -22,11 +23,22 @@ class WorldMap : public GameState, public IDrawer {
         NodeDrawer *m_drawer;
         ResDialogPack *m_descPack;
         LevelStatus *m_levelStatus;
-        SDL_Surface *m_bg;
+
+        LayeredPicture *m_bg;
+        Uint32 m_activeMask;
+        Uint32 m_maskIntro;
+        Uint32 m_maskExit;
+        Uint32 m_maskCredits;
+        Uint32 m_maskOptions;
     private:
+        void prepareBg();
         void watchCursor();
         Level *createSelected() const;
         void markSolved();
+
+        void runIntro();
+        void runCredits();
+        void runOptions();
     protected:
         virtual void own_initState();
         virtual void own_updateState();
@@ -34,12 +46,10 @@ class WorldMap : public GameState, public IDrawer {
         virtual void own_resumeState();
         virtual void own_cleanState();
     public:
-        WorldMap(const Path &bg);
+        WorldMap();
         virtual ~WorldMap();
         virtual const char *getName() const { return "state_worldmap"; };
         void initWay(const Path &way, const Path &desc);
-        int getW() const { return m_bg->w; }
-        int getH() const { return m_bg->h; }
 
         virtual void draw();
         void runSelected();

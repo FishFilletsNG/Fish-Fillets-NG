@@ -8,6 +8,7 @@ class InputHandler;
 
 #include "BaseAgent.h"
 #include "Name.h"
+#include "V2.h"
 
 #include "SDL.h"
 
@@ -34,6 +35,7 @@ class InputAgent : public BaseAgent {
         KeyBinder *keyBinder() { return m_keyBinder; }
         RectBinder *rectBinder() { return m_rectBinder; }
         Uint8 *getKeys() { return m_keys; }
+        V2 getMouseLoc();
 };
 
 #endif

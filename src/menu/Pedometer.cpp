@@ -13,6 +13,7 @@
 #include "PedoInput.h"
 #include "LayeredPicture.h"
 
+#include "InputAgent.h"
 #include "ResImagePack.h"
 #include "StateManager.h"
 #include "NodeDrawer.h"
@@ -55,7 +56,7 @@ Pedometer::prepareBg()
 {
     //TODO: allow to set differect images
     SDL_Surface *bgSurface = ResImagePack::loadImage(
-            Path::dataReadPath("images/menu/mapa-0.png"));
+            Path::dataReadPath("images/menu/map.png"));
     NodeDrawer drawer;
     drawer.setScreen(bgSurface);
     drawer.drawSelected(m_status->getLevelName());
@@ -130,10 +131,8 @@ Pedometer::own_resumeState()
     void
 Pedometer::watchCursor()
 {
-    int x;
-    int y;
-    SDL_GetMouseState(&x, &y);
-    m_activeMask = m_rack->getMaskAtWorld(V2(x, y));
+    V2 mouseLoc = InputAgent::agent()->getMouseLoc();
+    m_activeMask = m_rack->getMaskAtWorld(mouseLoc);
     if (m_activeMask == m_maskRun
             || m_activeMask == m_maskReplay
             || m_activeMask == m_maskCancel)

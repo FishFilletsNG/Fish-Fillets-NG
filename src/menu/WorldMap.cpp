@@ -21,21 +21,23 @@
 #include "OptionAgent.h"
 #include "VideoAgent.h"
 #include "SoundAgent.h"
+#include "InputAgent.h"
 #include "LogicException.h"
 #include "ResDialogPack.h"
 #include "LevelDesc.h"
 #include "ScriptState.h"
 #include "Level.h"
 #include "Pedometer.h"
+#include "LayeredPicture.h"
 
 //-----------------------------------------------------------------
-WorldMap::WorldMap(const Path &bg)
+WorldMap::WorldMap()
 {
-    deactivate();
     m_selected = NULL;
     m_startNode = NULL;
+    deactivate();
+    prepareBg();
 
-    m_bg = ResImagePack::loadImage(bg);
     m_drawer = new NodeDrawer();
     m_descPack = new ResDialogPack();
     m_levelStatus = new LevelStatus();
@@ -47,11 +49,32 @@ WorldMap::~WorldMap()
     if (m_startNode) {
         delete m_startNode;
     }
-    SDL_FreeSurface(m_bg);
+    delete m_bg;
     m_descPack->removeAll();
     delete m_descPack;
     delete m_drawer;
     delete m_levelStatus;
+}
+//-----------------------------------------------------------------
+/**
+ * Prepare background with buttons.
+ */
+    void
+WorldMap::prepareBg()
+{
+    //TODO: allow to set differect images
+    m_bg = new LayeredPicture(
+            Path::dataReadPath("images/menu/map.png"),
+            V2(0, 0),
+            Path::dataReadPath("images/menu/map_lower.png"),
+            Path::dataReadPath("images/menu/map_mask.png"));
+
+    m_maskIntro = m_bg->getMaskAt(V2(0, 0));
+    m_maskExit = m_bg->getMaskAt(V2(m_bg->getW() - 1, 0));
+    m_maskCredits = m_bg->getMaskAt(V2(0, m_bg->getH() - 1));
+    m_maskOptions = m_bg->getMaskAt(V2(m_bg->getW() - 1, m_bg->getH() - 1));
+    m_activeMask = m_bg->getNoMask();
+    m_bg->deactivate();
 }
 //-----------------------------------------------------------------
     void
@@ -102,6 +125,7 @@ WorldMap::own_updateState()
 WorldMap::own_pauseState()
 {
     deactivate();
+    m_bg->deactivate();
 }
 //-----------------------------------------------------------------
 /**
@@ -110,6 +134,8 @@ WorldMap::own_pauseState()
     void
 WorldMap::own_resumeState()
 {
+    //NOTE: order is significant
+    m_bg->activate();
     activate();
 
     if (m_levelStatus->wasRunning()) {
@@ -123,8 +149,8 @@ WorldMap::own_resumeState()
         //TODO: set with and height in one step
         OptionAgent *options = OptionAgent::agent();
         options->setParam("caption", findDesc("menu"));
-        options->setParam("screen_width", getW());
-        options->setParam("screen_height", getH());
+        options->setParam("screen_width", m_bg->getW());
+        options->setParam("screen_height", m_bg->getH());
         VideoAgent::agent()->initVideoMode();
     }
 }
@@ -139,15 +165,25 @@ WorldMap::own_cleanState()
 }
 //-----------------------------------------------------------------
 /**
- * Mark node under cursor as selected.
+ * Mark node or mask under cursor as selected.
  */
     void
 WorldMap::watchCursor()
 {
-    int x;
-    int y;
-    SDL_GetMouseState(&x, &y);
-    m_selected = m_startNode->findSelected(V2(x, y));
+    V2 mouseLoc = InputAgent::agent()->getMouseLoc();
+    m_selected = m_startNode->findSelected(mouseLoc);
+
+    m_activeMask = m_bg->getMaskAtWorld(mouseLoc);
+    if (m_activeMask == m_maskIntro
+            || m_activeMask == m_maskExit
+            || m_activeMask == m_maskCredits
+            || m_activeMask == m_maskOptions)
+    {
+        m_bg->setActiveMask(m_activeMask);
+    }
+    else {
+        m_bg->setNoActive();
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -160,7 +196,7 @@ WorldMap::runSelected()
     Level *level = createSelected();
     if (level && m_selected) {
         m_levelStatus->prepareRun(m_selected->getCodename(),
-            findLevelName(m_selected->getCodename()));
+                findLevelName(m_selected->getCodename()));
         level->fillStatus(m_levelStatus);
 
         if (m_selected->getState() == LevelNode::STATE_SOLVED) {
@@ -169,6 +205,20 @@ WorldMap::runSelected()
         }
         else {
             m_manager->pushState(level);
+        }
+    }
+    else {
+        if (m_activeMask == m_maskIntro) {
+            runIntro();
+        }
+        else if (m_activeMask == m_maskExit) {
+            quitState();
+        }
+        else if (m_activeMask == m_maskCredits) {
+            runCredits();
+        }
+        else if (m_activeMask == m_maskOptions) {
+            runOptions();
         }
     }
 }
@@ -200,11 +250,6 @@ WorldMap::markSolved()
     void
 WorldMap::draw()
 {
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.y = 0;
-    SDL_BlitSurface(m_bg, NULL, m_screen, &rect);
-
     m_drawer->setScreen(m_screen);
     m_startNode->drawPath(m_drawer);
     if (m_selected) {
@@ -240,5 +285,23 @@ WorldMap::findDesc(const std::string &codename) const
         result = "???";
     }
     return result;
+}
+//-----------------------------------------------------------------
+    void
+WorldMap::runIntro()
+{
+    LOG_INFO(ExInfo("intro is not implemented yet"));
+}
+//-----------------------------------------------------------------
+    void
+WorldMap::runCredits()
+{
+    LOG_INFO(ExInfo("credits are not implemented yet"));
+}
+//-----------------------------------------------------------------
+    void
+WorldMap::runOptions()
+{
+    LOG_INFO(ExInfo("options is not implemented yet"));
 }
 

@@ -20,6 +20,9 @@ class Picture : public IDrawer {
         Picture(SDL_Surface *new_surface, const V2 &loc);
         virtual ~Picture();
         virtual void draw();
+
+        int getW() const { return m_surface->w; }
+        int getH() const { return m_surface->h; }
 };
 
 #endif
