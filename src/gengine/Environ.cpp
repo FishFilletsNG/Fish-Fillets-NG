@@ -136,6 +136,12 @@ Environ::getAsInt(const std::string &name,
     bool ok;
     int result = StringTool::readInt(value.c_str(), &ok);
     if (!ok) {
+        if (value != "") {
+            LOG_WARNING(ExInfo("cannot recognize numeric value")
+                    .addInfo("property", name)
+                    .addInfo("value", value)
+                    .addInfo("default", implicit));
+        }
         result = implicit;
     }
     return result;
@@ -169,6 +175,7 @@ Environ::getAsBool(const std::string &name,
             LOG_WARNING(ExInfo("cannot recognize boolean value")
                     .addInfo("property", name)
                     .addInfo("value", value)
+                    .addInfo("default", implicit)
                     .addInfo("hint", "use 1/0, true/false, on/off, yes/no"));
         }
         result = implicit;
