@@ -34,14 +34,15 @@ class ViewEffect {
         SDL_Color getColor(SDL_Surface *surface, int x, int y);
         void putColor(SDL_Surface *surface, int x, int y,
                 const SDL_Color &color);
-        Uint32 getPixel(SDL_Surface *surface, int x, int y);
-        void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
     public:
         ViewEffect();
         void setEffect(eEffect effect);
         void updateEffect();
         bool isInvisible() const;
         void blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
+
+        static Uint32 getPixel(SDL_Surface *surface, int x, int y);
+        static void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 };
 
 #endif

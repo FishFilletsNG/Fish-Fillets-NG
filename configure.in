@@ -69,13 +69,19 @@ AM_PATH_SDL($SDL_VERSION,
 AC_CHECK_LIB([SDL_mixer], [Mix_OpenAudio],
              SDL_LIBS="-lSDL_mixer $SDL_LIBS",
              AC_MSG_ERROR([*** SDL_mixer-devel library not found!]),
-             $SDL_CFLAS $SDL_LIBS
+             $SDL_CFLAGS $SDL_LIBS
 )
 # SDL_image
 AC_CHECK_LIB([SDL_image], [IMG_Load],
              SDL_LIBS="-lSDL_image $SDL_LIBS",
              AC_MSG_ERROR([*** SDL_image-devel library not found!]),
-             $SDL_CFLAS $SDL_LIBS
+             $SDL_CFLAGS $SDL_LIBS
+)
+# SDL_ttf
+AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
+             SDL_LIBS="-lSDL_ttf $SDL_LIBS",
+             AC_MSG_ERROR([*** SDL_ttf-devel library not found!]),
+             $SDL_CFLAGS $SDL_LIBS
 )
 
 ###################################################
@@ -140,9 +146,9 @@ fi
 AC_OUTPUT([
            Makefile
            src/Makefile
-           src/SFont/Makefile
            src/SDL_gfx/Makefile
            src/gengine/Makefile
+           src/effect/Makefile
            src/plan/Makefile
            src/level/Makefile
            src/menu/Makefile

@@ -10,7 +10,7 @@
 
 #include "KeyBinder.h"
 #include "RectBinder.h"
-#include "KeyConsole.h"
+#include "IKeyConsole.h"
 #include "InputHandler.h"
 
 #include "MessagerAgent.h"
@@ -36,20 +36,11 @@ InputAgent::own_init()
 {
     m_keyBinder = new KeyBinder();
     m_rectBinder = new RectBinder();
-    m_console = new KeyConsole();
+    m_console = NULL;
     m_handler = NULL;
     m_keys = SDL_GetKeyState(NULL);
 
     SDL_EnableUNICODE(1);
-    //TODO: simulate repeat only in console
-    //SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY,
-    //        SDL_DEFAULT_REPEAT_INTERVAL);
-
-    //TODO: print lua output to window, it is now printed to the text console
-    m_console->setHandler(Name::SCRIPT_NAME);
-    KeyStroke tilde = KeyStroke(SDLK_BACKQUOTE, KMOD_NONE);
-    SimpleMsg *console = new SimpleMsg(this, "console");
-    m_keyBinder->addStroke(tilde, console);
 }
 //-----------------------------------------------------------------
     void
@@ -65,7 +56,7 @@ InputAgent::own_update()
                     break;
                 }
             case SDL_KEYDOWN:
-                if (m_console->isActive()) {
+                if (m_console && m_console->isActive()) {
                     m_console->keyDown(event.key.keysym);
                 }
                 else {
@@ -95,9 +86,20 @@ InputAgent::own_update()
     void
 InputAgent::own_shutdown()
 {
-    delete m_console;
+    if (m_console) {
+        delete m_console;
+    }
     delete m_rectBinder;
     delete m_keyBinder;
+}
+//-----------------------------------------------------------------
+void 
+InputAgent::enableConsole(IKeyConsole *new_console)
+{
+    if (m_console) {
+        delete m_console;
+    }
+    m_console = new_console;
 }
 //-----------------------------------------------------------------
 /**
@@ -111,7 +113,9 @@ void
 InputAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("console")) {
-        m_console->activate();
+        if (m_console) {
+            m_console->activate();
+        }
     }
     else {
         throw UnknownMsgException(msg);

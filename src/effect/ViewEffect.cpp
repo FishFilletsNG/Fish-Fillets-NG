@@ -49,7 +49,8 @@ ViewEffect::updateEffect()
 bool
 ViewEffect::isInvisible() const
 {
-    return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint);
+    return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint)
+        || m_effect == EFFECT_INVISIBLE;
 }
 //-----------------------------------------------------------------
 void

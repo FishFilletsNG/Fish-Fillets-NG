@@ -9,7 +9,7 @@
 
 DEBUG = yes
 OPTIMIZE = 0
-INCLUDE = -Igame -Imenu -Ilevel -Iplan -ISFont -ISDL_gfx -Igengine
+INCLUDE = -Igame -Imenu -Ilevel -Iplan -Ieffect -ISDL_gfx -Igengine
 
 CFLAGS = -Wall
 CFLAGS += $Sdl_cflags
@@ -24,6 +24,6 @@ LIBS += $Sdl_libs $Lua_libs $Lualib_libs
 
 all: game/fillets
 
-:program game/fillets : SFont/SFont.c SDL_gfx/SDL_gfxPrimitives.c `glob("*/*.cpp")`
+:program game/fillets : SDL_gfx/SDL_gfxPrimitives.c `glob("*/*.cpp")`
 
 

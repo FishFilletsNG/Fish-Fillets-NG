@@ -14,6 +14,7 @@ class GameAgent : public BaseAgent {
     private:
         StateManager *m_manager;
     private:
+        void enableConsole();
         void keyBinding();
     protected:
         virtual void own_init();

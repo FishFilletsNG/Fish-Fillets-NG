@@ -3,7 +3,7 @@
 
 class KeyBinder;
 class RectBinder;
-class KeyConsole;
+class IKeyConsole;
 class InputHandler;
 
 #include "BaseAgent.h"
@@ -20,7 +20,7 @@ class InputAgent : public BaseAgent {
         Uint8 *m_keys;
         KeyBinder *m_keyBinder;
         RectBinder *m_rectBinder;
-        KeyConsole *m_console;
+        IKeyConsole *m_console;
         InputHandler *m_handler;
     protected:
         virtual void own_init();
@@ -29,6 +29,7 @@ class InputAgent : public BaseAgent {
     public:
         virtual void receiveSimple(const SimpleMsg *msg);
         void installHandler(InputHandler *handler) { m_handler = handler; }
+        void enableConsole(IKeyConsole *new_console);
 
         KeyBinder *keyBinder() { return m_keyBinder; }
         RectBinder *rectBinder() { return m_rectBinder; }

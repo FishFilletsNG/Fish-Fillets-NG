@@ -1,9 +1,10 @@
 #ifndef HEADER_TITLE_H
 #define HEADER_TITLE_H
 
-#include "IDrawer.h"
+class Font;
+class Color;
 
-#include "SFont.h"
+#include "IDrawer.h"
 
 #include <string>
 
@@ -20,10 +21,13 @@ class Title : public IDrawer {
         int m_limitY;
         int m_finalY;
         const std::string m_content;
-        const SFont_Font *m_font;
+        Font *m_font;
+        SDL_Surface *m_surface;
     public:
         Title(int baseY, int finalY, int bonusTime, int limitY,
-                const std::string &content, const SFont_Font *font);
+                const std::string &content,
+                Font *font, const Color *color);
+        virtual Title::~Title();
 
         void shiftUp(int rate);
         void shiftFinalUp(int rate);

@@ -1,6 +1,6 @@
 SFONT_CFLAGS = -I@top_srcdir@/src/SFont
 
-INCLUDES = -I@top_srcdir@/src/gengine $(SFONT_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
+INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect $(SFONT_CFLAGS) $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
 
 noinst_LIBRARIES = libplan.a
 

@@ -8,8 +8,8 @@
  */
 #include "Title.h"
 
-#include "Log.h"
-#include "OptionAgent.h"
+#include "Font.h"
+#include "Color.h"
 
 //-----------------------------------------------------------------
 /**
@@ -22,27 +22,32 @@
  * @param bonusTime bonus time for subtitle under bottom border
  * @param limitY max Y distance from bottom border
  * @param content subtitle content
- * @param font subtitle font
+ * @param font subtitle font (shared)
+ * @param color subtitle color (shared)
  */
 Title::Title(int baseY, int finalY, int bonusTime, int limitY,
-        const std::string &content, const SFont_Font *font)
+        const std::string &content, Font *font, const Color *color)
 : m_content(content)
 {
     m_font = font;
+    m_surface = m_font->renderTextOutlined(content, *color);
 
-    int screen_width = OptionAgent::agent()->getAsInt("screen_width");
-    int screen_height = OptionAgent::agent()->getAsInt("screen_height");
-    int text_width = SFont_TextWidth(m_font, content.c_str());
+    int text_width = m_font->calcTextWidth(content);
 
-    m_x = (screen_width - text_width) / 2;
-    m_y = screen_height - baseY;
-    m_finalY = screen_height - finalY;
-    m_limitY = screen_height - limitY;
+    m_x = (m_screen->w - text_width) / 2;
+    m_y = m_screen->h - baseY;
+    m_finalY = m_screen->h - finalY;
+    m_limitY = m_screen->h - limitY;
     m_mintime = m_content.size() * TIME_PER_CHAR;
     if (m_mintime < TIME_MIN) {
         m_mintime = TIME_MIN;
     }
     m_mintime += bonusTime;
+}
+//-----------------------------------------------------------------
+Title::~Title()
+{
+    SDL_FreeSurface(m_surface);
 }
 //-----------------------------------------------------------------
 /**
@@ -53,7 +58,11 @@ Title::Title(int baseY, int finalY, int bonusTime, int limitY,
 Title::draw()
 {
     //TODO: wavy text
-    SFont_Write(m_screen, m_font, m_x, m_y, m_content.c_str());
+    SDL_Rect rect;
+    rect.x = m_x;
+    rect.y = m_y;
+
+    SDL_BlitSurface(m_surface, NULL, m_screen, &rect);
     m_mintime--;
 }
 //-----------------------------------------------------------------
@@ -78,8 +87,7 @@ Title::shiftFinalUp(int rate)
 int
 Title::getY() const
 {
-    int screen_height = OptionAgent::agent()->getAsInt("screen_height");
-    return screen_height - m_y;
+    return m_screen->h - m_y;
 }
 //-----------------------------------------------------------------
 /**

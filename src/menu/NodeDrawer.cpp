@@ -9,11 +9,11 @@
 #include "NodeDrawer.h"
 
 #include "ResImagePack.h"
+#include "Font.h"
 
 #include "Log.h"
 #include "Path.h"
 #include "LevelNode.h"
-#include "ResFontPack.h"
 #include "TimerAgent.h"
 
 #include "SDL_gfxPrimitives.h"
@@ -21,6 +21,9 @@
 //-----------------------------------------------------------------
 NodeDrawer::NodeDrawer()
 {
+    //TODO: allow to set font and color
+    m_font = new Font(Path::dataReadPath("font/font_menu.ttf"), 22);
+
     m_imagePack = new ResImagePack();
     m_imagePack->addImage("solved",
             Path::dataReadPath("images/menu/n0.png"));
@@ -36,15 +39,13 @@ NodeDrawer::NodeDrawer()
 
     m_imagePack->addImage("far",
             Path::dataReadPath("images/menu/n_far.png"));
-
-    m_font = ResFontPack::loadFont(Path::dataReadPath("font/font_menu.png"));
 }
 //-----------------------------------------------------------------
 NodeDrawer::~NodeDrawer()
 {
     m_imagePack->removeAll();
     delete m_imagePack;
-    SFont_FreeFont(m_font);
+    delete m_font;
 }
 //-----------------------------------------------------------------
 /**
@@ -104,8 +105,16 @@ void
 NodeDrawer::drawSelected(const std::string &levelname) const
 {
     //TODO: draw deflected text
-    int y = m_screen->h - 50;
-    SFont_WriteCenter(m_screen, m_font, y, levelname.c_str());
+    int text_width = m_font->calcTextWidth(levelname);
+
+    SDL_Rect rect;
+    rect.x = (m_screen->w - text_width) / 2;
+    rect.y = m_screen->h - 50;
+
+    SDL_Color color = {255, 255, 0, 255};
+    SDL_Surface *surface = m_font->renderTextOutlined(levelname, color);
+    SDL_BlitSurface(surface, NULL, m_screen, &rect);
+    SDL_FreeSurface(surface);
 }
 //-----------------------------------------------------------------
 void

@@ -17,6 +17,7 @@ class Actor;
 #include "SubTitleAgent.h"
 #include "SoundAgent.h"
 #include "Planner.h"
+#include "Color.h"
 
 #include "def-script.h"
 
@@ -111,16 +112,18 @@ script_dialog_empty(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void dialog_addFont(fontname, file)
+ * void dialog_addFont(fontname, red, green, blue)
  */
     int
 script_dialog_addFont(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *name = luaL_checkstring(L, 1);
-    const char *file = luaL_checkstring(L, 2);
+    int red = luaL_checkint(L, 2);
+    int green = luaL_checkint(L, 3);
+    int blue = luaL_checkint(L, 4);
 
-    SubTitleAgent::agent()->addFont(name, Path::dataReadPath(file));
+    SubTitleAgent::agent()->addFont(name, new Color(red, green, blue));
 
     END_NOEXCEPTION;
     return 0;

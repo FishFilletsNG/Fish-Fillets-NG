@@ -3,9 +3,9 @@
 
 class LevelNode;
 class ResImagePack;
+class Font;
 
 #include "NoCopy.h"
-#include "SFont.h"
 #include "V2.h"
 
 #include "SDL.h"
@@ -18,7 +18,7 @@ class NodeDrawer : public NoCopy {
     private:
         ResImagePack *m_imagePack;
         SDL_Surface *m_screen;
-        SFont_Font *m_font;
+        Font *m_font;
     private:
         void drawDot(SDL_Surface *dot, const V2 &loc) const;
     public:

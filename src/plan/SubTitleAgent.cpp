@@ -8,16 +8,21 @@
  */
 #include "SubTitleAgent.h"
 
-#include "minmax.h"
-#include "ResFontPack.h"
 #include "Title.h"
+#include "Font.h"
+#include "ResColorPack.h"
+
 #include "OptionAgent.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
     void
 SubTitleAgent::own_init()
 {
-    m_fonts = new ResFontPack();
+    m_colors = new ResColorPack();
+
+    m_font = NULL;
+    m_font = new Font(Path::dataReadPath("font/font_subtitle.ttf"), 20);
 }
 //-----------------------------------------------------------------
 /**
@@ -41,14 +46,17 @@ SubTitleAgent::own_update()
 SubTitleAgent::own_shutdown()
 {
     removeAll();
-    delete m_fonts;
+    delete m_colors;
+    if (m_font) {
+        delete m_font;
+    }
 }
 
 //-----------------------------------------------------------------
     void
-SubTitleAgent::addFont(const std::string &fontname, const Path &file)
+SubTitleAgent::addFont(const std::string &fontname, Color *new_color)
 {
-    m_fonts->addFont(fontname, file);
+    m_colors->addRes(fontname, new_color);
 }
 //-----------------------------------------------------------------
 /**
@@ -59,11 +67,11 @@ void
 SubTitleAgent::newSubtitle(const std::string &original,
         const std::string &fontname)
 {
-    SFont_Font *font = m_fonts->getRes(fontname);
+    Color *color = m_colors->getRes(fontname);
 
     std::string subtitle = original;
     while (!subtitle.empty()) {
-        subtitle = splitAndCreate(subtitle, font);
+        subtitle = splitAndCreate(subtitle, color);
     }
 }
 //-----------------------------------------------------------------
@@ -73,20 +81,20 @@ SubTitleAgent::newSubtitle(const std::string &original,
  */
 std::string
 SubTitleAgent::splitAndCreate(const std::string &original,
-        SFont_Font *font)
+        Color *color)
 {
     std::string subtitle = original;
     int screen_width = OptionAgent::agent()->getAsInt("screen_width");
 
-    int text_width = SFont_TextWidth(font, subtitle.c_str());
+    int text_width = m_font->calcTextWidth(subtitle);
     while (text_width > screen_width - 2 * TITLE_BORDER) {
         trimRest(subtitle);
-        text_width = SFont_TextWidth(font, subtitle.c_str());
+        text_width = m_font->calcTextWidth(subtitle);
     }
 
     std::string rest = "";
     if (!subtitle.empty()) {
-        newShortSubtitle(subtitle, font);
+        newShortSubtitle(subtitle, color);
 
         if (original.size() > subtitle.size()) {
             rest = original.substr(subtitle.size());
@@ -126,13 +134,13 @@ SubTitleAgent::trimRest(std::string &buffer)
 //-----------------------------------------------------------------
     void
 SubTitleAgent::newShortSubtitle(const std::string &subtitle,
-        SFont_Font *font)
+        Color *color)
 {
     int startY = lowestY();
     int finalY = TITLE_BASE + TITLE_ROW;
     int bonusTime = (TITLE_BASE - startY) / TITLE_SPEED;
     Title *title = new Title(startY, finalY, bonusTime, TITLE_LIMIT_Y,
-            subtitle, font);
+            subtitle, m_font, color);
     shiftFinalsUp(TITLE_ROW);
     m_titles.push_back(title);
 }
@@ -196,5 +204,5 @@ SubTitleAgent::killTalks()
 SubTitleAgent::removeAll()
 {
     killTalks();
-    m_fonts->removeAll();
+    m_colors->removeAll();
 }

@@ -1,14 +1,14 @@
 #ifndef HEADER_SUBTITLEAGENT_H
 #define HEADER_SUBTITLEAGENT_H
 
-class ResFontPack;
+class ResColorPack;
 class Title;
+class Font;
+class Color;
 
 #include "BaseAgent.h"
 #include "Name.h"
 #include "Path.h"
-
-#include "SFont.h"
 
 #include <string>
 #include <deque>
@@ -27,11 +27,12 @@ class SubTitleAgent : public BaseAgent {
     typedef std::deque<Title*> t_titles;
     t_titles m_titles;
 
-    ResFontPack *m_fonts;
+    Font *m_font;
+    ResColorPack *m_colors;
     private:
-    std::string splitAndCreate(const std::string &subtitle, SFont_Font *font);
+    std::string splitAndCreate(const std::string &subtitle, Color *color);
     void trimRest(std::string &buffer);
-    void newShortSubtitle(const std::string &subtitle, SFont_Font *font);
+    void newShortSubtitle(const std::string &subtitle, Color *color);
 
     void shiftTitlesUp(int rate);
     void shiftFinalsUp(int rate);
@@ -41,7 +42,7 @@ class SubTitleAgent : public BaseAgent {
     virtual void own_update();
     virtual void own_shutdown();
     public:
-    void addFont(const std::string &fontname, const Path &file);
+    void addFont(const std::string &fontname, Color *new_color);
     void newSubtitle(const std::string &subtitle, const std::string &fontname);
 
     void killTalks();

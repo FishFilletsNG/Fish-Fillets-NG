@@ -14,6 +14,7 @@
 #include "WorldMap.h"
 #include "InputAgent.h"
 #include "KeyStroke.h"
+#include "KeyConsole.h"
 #include "KeyBinder.h"
 #include "SimpleMsg.h"
 #include "IntMsg.h"
@@ -23,8 +24,6 @@
     void
 GameAgent::own_init()
 {
-    keyBinding();
-
     m_manager = new StateManager();
     //TODO: allow set different worldmap picture
     WorldMap *worldmap = new WorldMap(
@@ -33,6 +32,9 @@ GameAgent::own_init()
             Path::dataReadPath("script/worldmap.lua"),
             Path::dataReadPath("script/worlddesc.lua"));
     m_manager->changeState(worldmap);
+
+    enableConsole();
+    keyBinding();
 }
 //-----------------------------------------------------------------
 /**
@@ -54,6 +56,22 @@ GameAgent::own_shutdown()
     delete m_manager;
 }
 
+//-----------------------------------------------------------------
+/**
+ * Enable debug console on tilde.
+ */
+void
+GameAgent::enableConsole()
+{
+    //TODO: print lua output to window, it is now printed to the text console
+    KeyConsole *console = new KeyConsole();
+    console->setHandler(Name::SCRIPT_NAME);
+    InputAgent::agent()->enableConsole(console);
+
+    KeyStroke tilde = KeyStroke(SDLK_BACKQUOTE, KMOD_NONE);
+    SimpleMsg *enable = new SimpleMsg(Name::INPUT_NAME, "console");
+    InputAgent::agent()->keyBinder()->addStroke(tilde, enable);
+}
 //-----------------------------------------------------------------
     void
 GameAgent::keyBinding()

@@ -8,14 +8,14 @@
  */
 #include "KeyConsole.h"
 
+#include "Font.h"
+
 #include "Log.h"
 #include "StringMsg.h"
 #include "MessagerAgent.h"
 #include "BaseException.h"
-#include "ResImagePack.h"
 #include "VideoAgent.h"
 #include "Path.h"
-#include "LogicException.h"
 
 
 #include <ctype.h>
@@ -23,32 +23,24 @@
 //-----------------------------------------------------------------
 /**
  * Console starts as deactivated.
- *
- * @throws LogicException when font cannot be created
  */
     KeyConsole::KeyConsole()
-: m_history(), m_input(), m_handlerName()
+: m_history(), m_input(), m_handlerName(), m_color(0, 200, 0)
 {
     deactivate();
 
-    Path file = Path::dataReadPath("font/console.png");
-    SDL_Surface *font_face = ResImagePack::loadImage(file);
-
-    m_font = SFont_InitFont(font_face);
-    if (NULL == m_font) {
-        throw LogicException(ExInfo("cannot create font")
-                .addInfo("font", file.getNative()));
-    }
+    m_font = new Font(Path::dataReadPath("font/font_console.ttf"), 16);
 }
 //-----------------------------------------------------------------
 KeyConsole::~KeyConsole()
 {
-    SFont_FreeFont(m_font);
+    delete m_font;
 }
 //-----------------------------------------------------------------
     void
 KeyConsole::keyDown(const SDL_keysym &keysym)
 {
+    //TODO: simulate key repeat in console
     switch (keysym.sym) {
         case SDLK_UP:
             m_input = m_history;
@@ -87,6 +79,7 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
             if (isprint(c)) {
                 m_input.push_back(c);
             }
+            break;
     }
 }
 //-----------------------------------------------------------------
@@ -96,9 +89,13 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
     void
 KeyConsole::draw()
 {
-    SFont_Write(m_screen, m_font, 10, 10,
-           ("console] " + m_input).c_str());
+    SDL_Rect rect;
+    rect.x = 10;
+    rect.y = 10;
 
+    SDL_Surface *surface = m_font->renderText("console] " + m_input, m_color);
+    SDL_BlitSurface(surface, NULL, m_screen, &rect);
+    SDL_FreeSurface(surface);
 }
 //-----------------------------------------------------------------
 /**
