@@ -29,20 +29,20 @@ class Unit {
         void takeModel(Cube *model) { m_model = model; }
         bool startActive() { return m_startActive; }
 
-        bool canDrive();
-        bool willMove();
+        bool canDrive() const;
+        bool willMove() const;
         char drive(const InputProvider *input);
         char driveBorrowed(const InputProvider *input,
                 const KeyControl &buttons);
         void activate();
 
-        char mySymbol(SDLKey key);
-        char mySymbolBorrowed(SDLKey key, const KeyControl &buttons);
+        char mySymbol(SDLKey key) const;
+        char mySymbolBorrowed(SDLKey key, const KeyControl &buttons) const;
         char driveOrder(char move);
 
-        bool isMoving();
-        bool isTurning();
-        bool isPushing();
+        bool isMoving() const;
+        bool isTurning() const;
+        bool isPushing() const;
 };
 
 #endif

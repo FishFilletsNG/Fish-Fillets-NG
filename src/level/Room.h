@@ -55,16 +55,17 @@ class Room : public StepCounter, public Drawable {
         Cube *askField(const V2 &loc);
 
         bool beginFall(bool interactive=true);
-        bool nextRound(const InputProvider *input);
-        bool finishRound(bool interactive=true);
+        void nextRound(const InputProvider *input);
+        void finishRound(bool interactive=true);
 
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
-        bool loadMove(char move);
+        void loadMove(char move);
         bool makeMove(char move);
-        bool cannotMove();
-        bool isSolvable();
+        bool cannotMove() const;
+        bool isSolvable() const;
+        bool isSolved() const;
         int getStepCount() const;
         std::string getMoves() const;
         void unBusyUnits();

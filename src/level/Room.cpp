@@ -154,9 +154,8 @@ Room::askField(const V2 &loc)
 /**
  * Update all models.
  * Prepare new move, let models fall, let models drive, release old position.
- * @return true when room is finished
  */
-    bool
+    void
 Room::nextRound(const InputProvider *input)
 {
     bool falling = beginFall();
@@ -164,7 +163,7 @@ Room::nextRound(const InputProvider *input)
         m_controls->driving(input);
     }
 
-    return finishRound();
+    finishRound();
 }
 //-----------------------------------------------------------------
 /**
@@ -298,14 +297,11 @@ Room::falldown()
 //-----------------------------------------------------------------
 /**
  * Let models to release their old position.
- * Check complete room.
  * @param interactive whether ensure phases for motion animation
- * @return true when room is finished
  */
-bool
+    void
 Room::finishRound(bool interactive)
 {
-    bool room_complete = true;
     if (interactive) {
         m_controls->lockPhases();
     }
@@ -314,11 +310,7 @@ Room::finishRound(bool interactive)
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->rules()->finishRound();
-        room_complete &= (*i)->isSatisfy();
     }
-
-    m_fresh = false;
-    return room_complete;
 }
 
 //-----------------------------------------------------------------
@@ -359,25 +351,18 @@ Room::unBusyUnits()
 /**
  * Load this move, let object to fall fast.
  * Don't play sound.
- * @return true for finished level
  * @throws LoadException for bad moves
  */
-bool
+    void
 Room::loadMove(char move)
 {
-    bool complete = false;
     bool falling = true;
     while (falling) {
         falling = beginFall(false);
         makeMove(move);
 
-        complete = finishRound(false);
-        if (complete && falling) {
-            throw LoadException(ExInfo("load error - early finished level")
-                    .addInfo("move", std::string(1, move)));
-        }
+        finishRound(false);
     }
-    return complete;
 }
 //-----------------------------------------------------------------
 /**
@@ -430,7 +415,7 @@ Room::makeMove(char move)
  * Returns true when there is no unit which will be able to move.
  */
 bool
-Room::cannotMove()
+Room::cannotMove() const
 {
     return m_controls->cannotMove();
 }
@@ -439,11 +424,31 @@ Room::cannotMove()
  * Returns true when all goals can be solved.
  */
 bool
-Room::isSolvable()
+Room::isSolvable() const
 {
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+    Cube::t_models::const_iterator end = m_models.end();
+    for (Cube::t_models::const_iterator i = m_models.begin(); i != end; ++i) {
         if ((*i)->isWrong()) {
+            return false;
+        }
+    }
+    return true;
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true when all goal all satisfied.
+ * Right time to ask is after finishRound.
+ * NOTE: room is not solved when somethig is still falling
+ */
+    bool
+Room::isSolved() const
+{
+    if (!m_fresh) {
+        return false;
+    }
+    Cube::t_models::const_iterator end = m_models.end();
+    for (Cube::t_models::const_iterator i = m_models.begin(); i != end; ++i) {
+        if (!(*i)->isSatisfy()) {
             return false;
         }
     }

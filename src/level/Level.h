@@ -29,7 +29,7 @@ class Level : public GameState {
         static const int SPEED_REPLAY = 1;
         enum eRoomState {
             ROOM_RUNNING,
-            ROOM_COMPLETE,
+            ROOM_SOLVED,
             ROOM_WRONG
         };
 
@@ -56,11 +56,12 @@ class Level : public GameState {
         bool nextAction();
         void updateLevel();
         void finishLevel();
-        bool satisfyRoom(bool room_complete);
+        bool satisfyRoom();
+        void setCountDown();
         bool countDown();
-        bool nextPlayerAction();
-        bool nextShowAction();
-        bool nextLoadAction();
+        void nextPlayerAction();
+        void nextShowAction();
+        void nextLoadAction();
         void saveSolution();
         void displaySaveStatus();
     protected:

@@ -28,7 +28,7 @@ Unit::Unit(const KeyControl &buttons, const ControlSym &symbols,
 }
 //-----------------------------------------------------------------
 bool
-Unit::canDrive()
+Unit::canDrive() const
 {
     return m_model->isAlive()
         && !m_model->isLost()
@@ -39,7 +39,7 @@ Unit::canDrive()
  * Return true when we can move in future.
  */
 bool
-Unit::willMove()
+Unit::willMove() const
 {
     return m_model->isAlive()
         && !m_model->isLost();
@@ -93,7 +93,7 @@ Unit::activate()
  * @return symbol or SYM_NONE for unknown key
  */
 char
-Unit::mySymbol(SDLKey key)
+Unit::mySymbol(SDLKey key) const
 {
     return mySymbolBorrowed(key, m_buttons);
 }
@@ -103,7 +103,7 @@ Unit::mySymbol(SDLKey key)
  * @return symbol or SYM_NONE for unknown key
  */
 char
-Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons)
+Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons) const
 {
     if (key == buttons.getLeft()) {
         return m_symbols.getLeft();
@@ -198,7 +198,7 @@ Unit::goDown()
 
 //-----------------------------------------------------------------
 bool
-Unit::isMoving()
+Unit::isMoving() const
 {
     bool result = false;
     if (canDrive()) {
@@ -211,14 +211,14 @@ Unit::isMoving()
 }
 //-----------------------------------------------------------------
 bool
-Unit::isTurning()
+Unit::isTurning() const
 {
     std::string action = m_model->rules()->getAction();
     return action == "turn";
 }
 //-----------------------------------------------------------------
 bool
-Unit::isPushing()
+Unit::isPushing() const
 {
     return m_model->rules()->getState() == "pushing";
 }

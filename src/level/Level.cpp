@@ -157,20 +157,19 @@ Level::isLoading() const
     bool
 Level::nextAction()
 {
-    bool room_complete = false;
     if (isLoading()) {
-        room_complete = nextLoadAction();
+        nextLoadAction();
     }
     else {
         if (isShowing()) {
-            room_complete = nextShowAction();
+            nextShowAction();
         }
         else {
-            room_complete = nextPlayerAction();
+            nextPlayerAction();
         }
     }
 
-    return satisfyRoom(room_complete);
+    return satisfyRoom();
 }
 //-----------------------------------------------------------------
 /**
@@ -178,63 +177,68 @@ Level::nextAction()
  * @return true for finished room (solved or wrong)
  */
     bool
-Level::satisfyRoom(bool room_complete)
+Level::satisfyRoom()
 {
-    bool finished = false;
-    if (m_roomState == ROOM_RUNNING) {
-        if (room_complete) {
-            m_roomState = ROOM_COMPLETE;
-        }
-        else if (m_levelScript->room()->cannotMove()) {
-            m_roomState = ROOM_WRONG;
-        }
+    if (m_levelScript->room()->isSolved()) {
+        m_roomState = ROOM_SOLVED;
+    }
+    else if (m_levelScript->room()->cannotMove()) {
+        m_roomState = ROOM_WRONG;
     }
     else {
-        finished = countDown();
+        m_roomState = ROOM_RUNNING;
     }
-    return finished;
+
+    setCountDown();
+    return countDown();
+}
+//-----------------------------------------------------------------
+    void
+Level::setCountDown()
+{
+    if (m_countdown == -1) {
+        switch (m_roomState) {
+            case ROOM_SOLVED:
+                if (m_replayMode) {
+                    m_countdown = 0;
+                }
+                else {
+                    m_countdown = 30;
+                }
+                break;
+            case ROOM_WRONG:
+                //NOTE: don't forget to change briefcase_help_demo too
+                m_countdown = 70;
+                break;
+            default:
+                m_countdown = -1;
+                break;
+        }
+    }
 }
 //-----------------------------------------------------------------
 /**
  * Count for restart or end of level.
+ * NOTE: will do restart when it time come
  * @return true for finished level
  */
     bool
 Level::countDown()
 {
     bool result = false;
-    if (m_countdown == -1) {
-        if (m_replayMode) {
-            m_countdown = 0;
-        }
-        else {
-            switch (m_roomState) {
-                case ROOM_COMPLETE:
-                    m_countdown = 30;
-                    break;
-                case ROOM_WRONG:
-                    //NOTE: don't forget to change briefcase_help_demo too
-                    m_countdown = 70;
-                    break;
-                default:
-                    assert(!"unknown room state for countdown");
-                    break;
-            }
-        }
-    }
-    else if (m_countdown > 0) {
+    if (m_countdown > 0) {
         m_countdown--;
     }
     else {
         switch (m_roomState) {
-            case ROOM_COMPLETE:
+            case ROOM_SOLVED:
                 result = true;
                 break;
             case ROOM_WRONG:
                 action_restart();
                 break;
             default:
-                assert(!"unknown room state for countdown");
+                //NOTE: running
                 break;
         }
     }
@@ -274,17 +278,13 @@ Level::finishLevel()
 /*
  * Update room.
  * Let objects to move.
- * @return true for finished level
  */
-    bool
+    void
 Level::nextPlayerAction()
 {
-    bool room_complete = false;
     if (m_levelScript->isRoom()) {
-        room_complete = m_levelScript->room()->nextRound(getInput());
+         m_levelScript->room()->nextRound(getInput());
     }
-
-    return room_complete;
 }
 
 //-----------------------------------------------------------------
@@ -364,16 +364,14 @@ Level::loadReplay(const std::string &moves)
 //-----------------------------------------------------------------
 /**
  * Load a few moves.
- * @return true for finished level
  * @throws LoadException for bad load
  */
-    bool
+    void
 Level::nextLoadAction()
 {
-    bool room_complete = false;
     if (m_loadedMoves.empty()) {
         m_levelScript->room()->beginFall(false);
-        room_complete = m_levelScript->room()->finishRound(false);
+        m_levelScript->room()->finishRound(false);
     }
     else {
         for (int i = 0; i < m_loadSpeed
@@ -383,7 +381,7 @@ Level::nextLoadAction()
                 char symbol = m_loadedMoves[0];
                 m_loadedMoves.erase(0, 1);
 
-                room_complete = m_levelScript->room()->loadMove(symbol);
+                m_levelScript->room()->loadMove(symbol);
             }
             catch (LoadException &e) {
                 throw LoadException(ExInfo(e.info())
@@ -397,26 +395,20 @@ Level::nextLoadAction()
             }
         }
     }
-
-    return room_complete;
 }
 
 //-----------------------------------------------------------------
 /**
  * Let show execute.
- * @return true for finished level
  */
-    bool
+    void
 Level::nextShowAction()
 {
-    bool room_complete = false;
     if (m_levelScript->isRoom()) {
         m_levelScript->room()->beginFall();
         m_show->executeFirst();
-        room_complete = m_levelScript->room()->finishRound();
+        m_levelScript->room()->finishRound();
     }
-
-    return room_complete;
 }
 //-----------------------------------------------------------------
 /**

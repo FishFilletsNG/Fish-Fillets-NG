@@ -44,7 +44,7 @@ class Controls : public StepCounter, public NoCopy {
         void switchActive();
         void controlEvent(const KeyStroke &stroke);
         bool makeMove(char move);
-        bool cannotMove();
+        bool cannotMove() const;
 
         virtual int getStepCount() const { return m_moves.size(); }
         virtual std::string getMoves() const { return m_moves; }
