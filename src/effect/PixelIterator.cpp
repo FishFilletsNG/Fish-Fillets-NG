@@ -46,17 +46,6 @@ PixelIterator::setPos(const V2 &pos)
         x * m_bpp;
 }
 //-----------------------------------------------------------------
-/**
- * Increments iterator position.
- * @return true when there is more data
- */
-    bool
-PixelIterator::inc()
-{
-    m_p += m_bpp;
-    return m_p < m_end;
-}
-//-----------------------------------------------------------------
 bool
 PixelIterator::isTransparent() const
 {

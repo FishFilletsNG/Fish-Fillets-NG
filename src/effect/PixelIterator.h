@@ -22,7 +22,8 @@ class PixelIterator : public NoCopy {
         PixelIterator(SDL_Surface *surface);
         virtual ~PixelIterator();
         void setPos(const V2 &pos);
-        bool inc();
+        inline bool isValid() const { return m_p < m_end; }
+        inline void inc() { m_p += m_bpp; }
 
         bool isTransparent() const;
         SDL_Color getColor() const;
