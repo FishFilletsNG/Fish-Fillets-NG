@@ -15,7 +15,7 @@
 #include "StringMsg.h"
 #include "MessagerAgent.h"
 #include "UnknownMsgException.h"
-#include "LogicException.h"
+#include "ScriptException.h"
 #include "Path.h"
 #include "OptionAgent.h"
 
@@ -161,9 +161,9 @@ ScriptAgent::own_shutdown()
  * Process script on stack.
  * @param error script load status
  *
- * @throws LogicException when script is bad
+ * @throws ScriptException when script is bad
  */
-void
+    void
 ScriptAgent::callStack(int error)
 {
     if (0 == error) {
@@ -176,7 +176,7 @@ ScriptAgent::callStack(int error)
             msg = "(error with no message)";
         }
         lua_pop(m_state, 1);
-        throw LogicException(ExInfo("script failure")
+        throw ScriptException(ExInfo("script failure")
                 .addInfo("error", msg));
     }
 }
@@ -185,7 +185,7 @@ ScriptAgent::callStack(int error)
  * Process script file.
  * @param file script
  */
-void
+    void
 ScriptAgent::doFile(const Path &file)
 {
     int error = luaL_loadfile(m_state, file.getNative().c_str());
@@ -196,7 +196,7 @@ ScriptAgent::doFile(const Path &file)
  * Process string.
  * @param input script
  */
-void
+    void
 ScriptAgent::doString(const std::string &input)
 {
     int error = luaL_loadbuffer(m_state, input.c_str(), input.size(),
@@ -204,7 +204,7 @@ ScriptAgent::doString(const std::string &input)
     callStack(error);
 }
 //-----------------------------------------------------------------
-void
+    void
 ScriptAgent::registerFunc(const char *name, lua_CFunction func)
 {
     LOG_INFO(ExInfo("register script func")
@@ -215,15 +215,25 @@ ScriptAgent::registerFunc(const char *name, lua_CFunction func)
 /**
  * Messages:
  * - dofile("file") ... run script
+ * - doall("file") ... run both system and user script, no one is required
  * - console("input") ... run string
  *
  * @throws UnknownMsgException
  */
-void
+    void
 ScriptAgent::receiveString(const StringMsg *msg)
 {
     if ("dofile" == msg->getName()) {
         doFile(Path::dataReadPath(msg->getValue()));
+    }
+    else if ("doall" == msg->getName()) {
+        try {
+            doFile(Path::dataSystemPath(msg->getValue()));
+            doFile(Path::dataUserPath(msg->getValue()));
+        }
+        catch (BaseException &e) {
+            LOG_INFO(e.info());
+        }
     }
     else if ("console" == msg->getName()) {
         doString(msg->getValue());

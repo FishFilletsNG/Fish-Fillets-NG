@@ -18,6 +18,9 @@ class Path {
         static Path dataReadPath(const std::string &file);
         static Path dataWritePath(const std::string &file);
 
+        static Path dataSystemPath(const std::string &file);
+        static Path dataUserPath(const std::string &file);
+
         std::string getNative() const;
         std::string getBasename() const;
 };

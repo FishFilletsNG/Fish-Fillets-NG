@@ -44,21 +44,22 @@ OptionAgent::~OptionAgent()
 //-----------------------------------------------------------------
 /**
  * Set user and sytem dir
- * and process "init.lua" and "options.lua".
- * NOTE: these scripts are read before setting paths from "options.lua"
+ * and process "options.lua" - this will set user and system paths
+ * and process "init.lua".
  */
     void
 OptionAgent::own_init()
 {
     prepareDataPaths();
 
+    //NOTE: process system_dir options first,
+    // user options will overwrite them later
     BaseMsg *msg = new StringMsg(Name::SCRIPT_NAME,
-            "dofile", "script/init.lua");
+            "doall", "script/options.lua");
     MessagerAgent::agent()->forwardNewMsg(msg);
-    //TODO: process system_dir options first,
-    // now user must define all options or remove file from HOME
+
     msg = new StringMsg(Name::SCRIPT_NAME,
-            "dofile", "script/options.lua");
+            "dofile", "script/init.lua");
     MessagerAgent::agent()->forwardNewMsg(msg);
 }
 //-----------------------------------------------------------------

@@ -12,8 +12,8 @@
 
 #include <stdlib.h>
 
-//int Log::ms_logLevel = LEVEL_INFO;
-int Log::ms_logLevel = LEVEL_DEBUG;
+int Log::ms_logLevel = LEVEL_INFO;
+//int Log::ms_logLevel = LEVEL_DEBUG;
 //-----------------------------------------------------------------
 /**
  * Print log info.

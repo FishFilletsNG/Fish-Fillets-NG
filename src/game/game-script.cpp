@@ -105,10 +105,6 @@ script_model_addAnim(lua_State *L) throw()
         const char *anim_name = luaL_checkstring(L, 2);
         const char *picture = luaL_checkstring(L, 3);
 
-        LOG_DEBUG(ExInfo("TEST: model_addAnim")
-                .addInfo("model_index", model_index)
-                .addInfo("name", anim_name)
-                .addInfo("picture", picture));
         GameAgent::agent()->model_addAnim(model_index, anim_name, picture);
     }
     catch (std::exception &e) {

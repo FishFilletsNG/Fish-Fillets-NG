@@ -42,6 +42,7 @@ GameAgent::own_init()
     m_room = NULL;
     m_lockPhases = 0;
 
+    //TODO: select music for room
     SoundAgent::agent()->playMusic(
             Path::dataReadPath("music/tuxi.ogg"), NULL);
     keyBinding();

@@ -145,6 +145,7 @@ Cube::checkDead()
                     .addInfo("fish", toString()));
             m_alive = false;
             m_view->setAnim("skeleton");
+            SoundAgent::agent()->playSound("xplo");
         }
     }
 }

@@ -32,31 +32,28 @@ Path::Path(const boost::filesystem::path &file)
 Path
 Path::dataPath(const std::string &file, bool writeable)
 {
-    std::string userdir = OptionAgent::agent()->getParam("userdir");
-    boost::filesystem::path datafile(userdir);
-    datafile /= file;
+    Path datapath = dataUserPath(file);
 
     const char *mode = "rb";
     if (writeable) {
         mode = "wb";
         LOG_DEBUG(ExInfo("creating path")
-                .addInfo("path", datafile.native_file_string()));
-        boost::filesystem::create_directories(datafile.branch_path());
+                .addInfo("path", datapath.getNative()));
+        boost::filesystem::create_directories(
+                datapath.m_path.branch_path());
     }
 
-    FILE *try_open = fopen(datafile.native_file_string().c_str(), mode);
+    FILE *try_open = fopen(datapath.getNative().c_str(), mode);
     if (NULL == try_open) {
         LOG_DEBUG(ExInfo("no user file")
-                .addInfo("file", datafile.native_file_string()));
-        //NOTE: systemfile does not need to exist
-        datafile = OptionAgent::agent()->getParam("systemdir");
-        datafile /= file;
+                .addInfo("file", datapath.getNative()));
+        datapath = dataSystemPath(file);
     }
     else {
         fclose(try_open);
     }
 
-    return Path(datafile);
+    return datapath;
 }
 //-----------------------------------------------------------------
 Path
@@ -70,7 +67,32 @@ Path::dataWritePath(const std::string &file)
 {
     return dataPath(file, true);
 }
-
+//-----------------------------------------------------------------
+/**
+ * Return path to system file.
+ * Path does not need to exist.
+ */
+Path
+Path::dataSystemPath(const std::string &file)
+{
+    boost::filesystem::path datafile =
+        OptionAgent::agent()->getParam("systemdir");
+    datafile /= file;
+    return Path(datafile);
+}
+//-----------------------------------------------------------------
+/**
+ * Return path to user file.
+ * Path does not need to exist.
+ */
+Path
+Path::dataUserPath(const std::string &file)
+{
+    boost::filesystem::path datafile =
+        OptionAgent::agent()->getParam("userdir");
+    datafile /= file;
+    return Path(datafile);
+}
 //-----------------------------------------------------------------
 std::string
 Path::getNative() const

@@ -88,9 +88,6 @@ Room::nextRound()
     if (false == falldown()) {
         driving();
     }
-    else {
-        LOG_DEBUG(ExInfo("TEST: falling"));
-    }
 
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->finishRound();
