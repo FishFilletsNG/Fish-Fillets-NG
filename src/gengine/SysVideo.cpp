@@ -38,7 +38,7 @@ SysVideo::setCaption(const std::string &title)
 /**
  * Set window title.
  * @param info system dependent info
- * @param title title
+ * @param title utf-8 string
  * @return true for success
  */
 #ifdef HAVE_X11
@@ -75,22 +75,24 @@ sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
 #elif defined(WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <alloca.h>
 bool
 sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
 {
     bool result = false;
-    LPWSTR lpszW = (LPWSTR)alloca(title.size() * 2)
+    LOG_DEBUG(ExInfo("TEST: win")
+            .addInfo("title", title));
+    LPWSTR lpszW = new WCHAR[title.size()];
     if (MultiByteToWideChar(CP_UTF8, 0, title.c_str(), -1,
                 lpszW, title.size()))
     {
-        result = SetWindowText(info->window, lpszW);
+        result = SetWindowTextW(info->window, lpszW);
     }
     else {
         LOG_DEBUG(ExInfo("not supported conversion")
                 .addInfo("error", GetLastError())
                 .addInfo("title", title));
     }
+    delete[] lpszW;
     return result;
 }
 #endif

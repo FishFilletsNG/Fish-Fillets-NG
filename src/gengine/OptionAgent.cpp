@@ -86,6 +86,7 @@ OptionAgent::prepareVersion()
 //-----------------------------------------------------------------
 /**
  * Set user and sytem dir options.
+ * Userdir="$HOME/.fillets-ng" or ""
  */
     void
 OptionAgent::prepareDataPaths()
@@ -98,8 +99,11 @@ OptionAgent::prepareDataPaths()
     const char *home = getenv("HOME");
     if (home) {
         userdir = FsPath::join(home, USER_DATA_DIR);
+        OptionAgent::agent()->setParam("userdir", userdir);
     }
-    OptionAgent::agent()->setParam("userdir", userdir);
+    else {
+        readUserConfig();
+    }
 }
 //-----------------------------------------------------------------
 /**
