@@ -21,13 +21,11 @@
 #include "OptionsInput.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
 {
-    m_bg = new Picture(Path::dataReadPath("images/menu/map.png"), V2(0, 0));
-    m_bg->deactivate();
-
     HBox *soundBox = new HBox();
     soundBox->addWidget(new WiPicture(
                 Path::dataReadPath("images/menu/volume_sound.png")));
@@ -57,7 +55,6 @@ MenuOptions::MenuOptions()
 MenuOptions::~MenuOptions()
 {
     delete m_container;
-    delete m_bg;
 }
 //-----------------------------------------------------------------
 /**
@@ -82,7 +79,6 @@ MenuOptions::own_updateState()
 MenuOptions::own_pauseState()
 {
     m_container->deactivate();
-    m_bg->deactivate();
 }
 //-----------------------------------------------------------------
 /**
@@ -92,20 +88,19 @@ MenuOptions::own_pauseState()
     void
 MenuOptions::own_resumeState()
 {
-    m_bg->activate();
     m_container->activate();
-
-    int bgW = m_bg->getW();
-    int bgH = m_bg->getH();
-    OptionAgent *options = OptionAgent::agent();
-    options->setParam("screen_width", bgW);
-    options->setParam("screen_height", bgH);
-    VideoAgent::agent()->initVideoMode();
 
     int contentW = m_container->getW();
     int contentH = m_container->getH();
+    OptionAgent *options = OptionAgent::agent();
+    int screenW = max(contentW, options->getAsInt("screen_width"));
+    int screenH = max(contentH, options->getAsInt("screen_height"));
+    options->setParam("screen_width", screenW);
+    options->setParam("screen_height", screenH);
+    VideoAgent::agent()->initVideoMode();
+
     m_container->setShift(
-            V2((bgW - contentW) / 2, (bgH - contentH) / 2));
+            V2((screenW - contentW) / 2, (screenH - contentH) / 2));
 }
 //-----------------------------------------------------------------
 /**

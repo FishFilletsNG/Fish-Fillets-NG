@@ -9,6 +9,7 @@
 #include "Level.h"
 
 #include "StateManager.h"
+#include "DescFinder.h"
 #include "PhaseLocker.h"
 #include "LevelInput.h"
 #include "LevelStatus.h"
@@ -38,6 +39,7 @@
     Level::Level(const std::string &codename, const Path &datafile, int depth)
 : m_codename(codename), m_datafile(datafile)
 {
+    m_desc = NULL;
     m_levelStatus = NULL;
     m_restartCounter = 1;
     m_countdown = -1;
@@ -65,11 +67,15 @@ Level::~Level()
 //-----------------------------------------------------------------
 /**
  * Start gameplay.
- * fillStatus() must be called before.
+ * fillDesc() and fillStatus() must be called before.
  */
     void
 Level::own_initState()
 {
+    if (NULL == m_desc) {
+        throw LogicException(ExInfo("level description is NULL")
+                .addInfo("codename", m_codename));
+    }
     if (NULL == m_levelStatus) {
         throw LogicException(ExInfo("level status is NULL")
                 .addInfo("codename", m_codename));
@@ -115,6 +121,7 @@ Level::own_resumeState()
 {
     if (m_levelScript->isRoom()) {
         m_levelScript->room()->activate();
+        initScreen();
     }
 }
 //-----------------------------------------------------------------
@@ -125,6 +132,12 @@ Level::own_resumeState()
 Level::own_cleanState()
 {
     m_levelScript->cleanRoom();
+}
+//-----------------------------------------------------------------
+    void
+Level::own_noteFg()
+{
+    initScreen();
 }
 
 //-----------------------------------------------------------------
@@ -389,9 +402,13 @@ Level::nextShowAction()
     bool
 Level::action_restart()
 {
+    //TODO: list of drawers does not support drawers change
+    while (isOnBg()) {
+        quitState();
+    }
     own_cleanState();
     m_restartCounter++;
-    //TODO: is ok to run the script on second time
+    //TODO: is ok to run the script on second time?
     own_initState();
     return true;
 }
@@ -471,12 +488,24 @@ Level::createRoom(int w, int h, const Path &picture)
     room->addDecor(new StepDecor(room));
     m_levelScript->takeRoom(room);
 
-    //TODO: set with and height in one step
-    OptionAgent *options = OptionAgent::agent();
-    options->setParam("caption", m_desc);
-    options->setParam("screen_width", w * View::SCALE);
-    options->setParam("screen_height", h * View::SCALE);
-    VideoAgent::agent()->initVideoMode();
+    initScreen();
+}
+//-----------------------------------------------------------------
+void
+Level::initScreen()
+{
+    if (m_levelScript->isRoom()) {
+        std::string title = m_desc->findDesc(m_codename);
+        title.append(": " + m_desc->findLevelName(m_codename));
+
+        OptionAgent *options = OptionAgent::agent();
+        options->setParam("caption", title);
+        options->setParam("screen_width",
+                m_levelScript->room()->getW() * View::SCALE);
+        options->setParam("screen_height",
+                m_levelScript->room()->getH() * View::SCALE);
+        VideoAgent::agent()->initVideoMode();
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -492,8 +521,17 @@ Level::setRoomWaves(double amplitude, double periode, double speed)
 Level::newDemo(Picture *new_bg, const Path &demofile)
 {
     DemoMode *demo = new DemoMode();
-    m_manager->pushState(demo);
     demo->runDemo(new_bg, demofile);
+    pushState(demo);
+}
+//-----------------------------------------------------------------
+/**
+ * Pause level and run new game state.
+ */
+    void
+Level::pushState(GameState *new_state)
+{
+    m_manager->pushState(new_state);
 }
 
 //-----------------------------------------------------------------

@@ -18,6 +18,9 @@ class StateManager : public NoCopy {
     private:
         void emptyTrash();
         void removeCurrent();
+        void resumeStack();
+        void resumeBg(t_states::iterator state);
+        void pauseRunning();
     public:
         virtual ~StateManager();
         void updateGame();

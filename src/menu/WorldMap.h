@@ -12,11 +12,12 @@ class LayeredPicture;
 #include "Path.h"
 #include "IDrawer.h"
 #include "GameState.h"
+#include "DescFinder.h"
 
 /**
  * Map with path from one level to another.
  */
-class WorldMap : public GameState, public IDrawer {
+class WorldMap : public GameState, public DescFinder, public IDrawer {
     private:
         LevelNode *m_startNode;
         LevelNode *m_selected;
@@ -55,8 +56,8 @@ class WorldMap : public GameState, public IDrawer {
         void runSelected();
 
         void addDesc(const std::string &codename, LevelDesc *desc);
-        std::string findLevelName(const std::string &codename) const;
-        std::string findDesc(const std::string &codename) const;
+        virtual std::string findLevelName(const std::string &codename) const;
+        virtual std::string findDesc(const std::string &codename) const;
 };
 
 #endif

@@ -232,10 +232,8 @@ WorldMap::createSelected() const
 {
     Level *result = NULL;
     if (m_selected) {
-        std::string title = findDesc(m_selected->getCodename());
-        title.append(": " + findLevelName(m_selected->getCodename()));
         result = m_selected->createLevel();
-        result->setDesc(title);
+        result->fillDesc(this);
     }
     return result;
 }

@@ -17,7 +17,8 @@ class LevelInput : public InputHandler {
         static const int KEY_SAVE = 3;
         static const int KEY_LOAD = 4;
         static const int KEY_RESTART = 5;
-        static const int KEY_SHOW_STEPS = 6;
+        static const int KEY_OPTIONS = 6;
+        static const int KEY_SHOW_STEPS = 7;
 
         Level *m_level;
         Keymap *m_keymap;

@@ -14,6 +14,7 @@
 #include "Log.h"
 #include "KeyStroke.h"
 #include "OptionAgent.h"
+#include "MenuOptions.h"
 
 //-----------------------------------------------------------------
 LevelInput::LevelInput(Level *level)
@@ -32,6 +33,8 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_LOAD, "load"));
     m_keymap->registerKey(KeyStroke(SDLK_BACKSPACE, KMOD_NONE),
             KeyDesc(KEY_RESTART, "restart"));
+    m_keymap->registerKey(KeyStroke(SDLK_F10, KMOD_NONE),
+            KeyDesc(KEY_OPTIONS, "options menu"));
     m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
             KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
 }
@@ -65,6 +68,9 @@ LevelInput::keyEvent(const KeyStroke &stroke)
         case KEY_RESTART:
             m_level->interruptShow();
             m_level->action_restart();
+            break;
+        case KEY_OPTIONS:
+            m_level->pushState(new MenuOptions());
             break;
         case KEY_SHOW_STEPS:
             toggleShowSteps();

@@ -197,8 +197,8 @@ SelectLang::drawSelected(SDL_Surface *screen, const V2 &loc)
     rect.w = selectedW();
     rect.h = selectedH();
 
-    Uint32 yellow = SDL_MapRGB(screen->format, 0xff, 0xff, 0x00);
-    SDL_FillRect(screen, &rect, yellow);
+    Uint32 green = SDL_MapRGB(screen->format, 0x00, 0xff, 0x00);
+    SDL_FillRect(screen, &rect, green);
 }
 //-----------------------------------------------------------------
 /**

@@ -25,6 +25,8 @@ OptionsInput::OptionsInput(MenuOptions *menu)
     m_keymap = new Keymap();
     m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
             KeyDesc(KEY_QUIT, "quit"));
+    m_keymap->registerKey(KeyStroke(SDLK_F10, KMOD_NONE),
+            KeyDesc(KEY_QUIT, "quit"));
 }
 //-----------------------------------------------------------------
 OptionsInput::~OptionsInput()

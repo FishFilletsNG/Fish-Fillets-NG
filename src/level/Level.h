@@ -3,6 +3,7 @@
 
 class Cube;
 class Unit;
+class DescFinder;
 class PhaseLocker;
 class Picture;
 class DemoMode;
@@ -31,7 +32,7 @@ class Level : public GameState {
         };
 
         int m_depth;
-        std::string m_desc;
+        const DescFinder *m_desc;
         std::string m_codename;
         Path m_datafile;
         PhaseLocker *m_locker;
@@ -47,6 +48,7 @@ class Level : public GameState {
         eRoomState m_roomState;
         LevelStatus *m_levelStatus;
     private:
+        void initScreen();
         bool nextAction();
         void updateLevel();
         void finishLevel();
@@ -62,11 +64,12 @@ class Level : public GameState {
         virtual void own_pauseState();
         virtual void own_resumeState();
         virtual void own_cleanState();
+        virtual void own_noteFg();
     public:
         Level(const std::string &codename, const Path &datafile, int depth);
         ~Level();
         virtual const char *getName() const { return "state_level"; };
-        void setDesc(const std::string &desc) { m_desc = desc; }
+        void fillDesc(const DescFinder *desc) { m_desc = desc; }
         void fillStatus(LevelStatus *status) { m_levelStatus = status; }
 
         void saveGame(const std::string &models);
@@ -88,6 +91,7 @@ class Level : public GameState {
         void createRoom(int w, int h, const Path &picture);
         void setRoomWaves(double amplitude, double periode, double speed);
         void newDemo(Picture *new_bg, const Path &demofile);
+        void pushState(GameState *new_state);
 
         bool isLoading() const;
         bool isShowing() const;

@@ -21,7 +21,7 @@ class RectBinder;
 class SelectLang : public IWidget, public BaseListener {
     private:
         static const int MAX_WIDTH = 300;
-        static const int FLAG_MARGIN = 5;
+        static const int FLAG_MARGIN = 4;
         typedef std::vector<LangFlag*> t_flags;
         t_flags m_flags;
         int m_flagW;

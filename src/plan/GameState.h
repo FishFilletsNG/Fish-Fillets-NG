@@ -18,6 +18,7 @@ class InputHandler;
 class GameState : public INamed, public NoCopy {
     private:
         bool m_active;
+        bool m_onBg;
         InputHandler *m_handler;
     protected:
         StateManager *m_manager;
@@ -29,18 +30,25 @@ class GameState : public INamed, public NoCopy {
         virtual void own_pauseState() = 0;
         virtual void own_resumeState() = 0;
         virtual void own_cleanState() = 0;
+
+        virtual void own_noteBg() {}
+        virtual void own_noteFg() {}
     public:
         GameState();
         virtual ~GameState();
+        bool isRunning() const { return m_active; }
+        bool isOnBg() const { return m_onBg; }
+        virtual bool allowBg() const { return false; }
 
         void initState(StateManager *manager);
         void updateState();
         void pauseState();
         void resumeState();
         void cleanState();
+        void quitState();
 
-        bool isRunning() const { return m_active; }
-        virtual void quitState();
+        void noteBg();
+        void noteFg();
 };
 
 #endif

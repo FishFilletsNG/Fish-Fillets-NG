@@ -12,7 +12,6 @@ class MouseStroke;
  */
 class MenuOptions : public GameState {
     private:
-        Picture *m_bg;
         WidgetContainer *m_container;
     protected:
         virtual void own_initState();
@@ -24,6 +23,7 @@ class MenuOptions : public GameState {
         MenuOptions();
         virtual ~MenuOptions();
         virtual const char *getName() const { return "state_options"; };
+        virtual bool allowBg() const { return true; }
 
         void mouseButton(const MouseStroke &stroke);
 };

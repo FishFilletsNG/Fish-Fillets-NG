@@ -19,6 +19,8 @@
 GameState::GameState()
 {
     m_handler = NULL;
+    m_active = false;
+    m_onBg = false;
 }
 //-----------------------------------------------------------------
 GameState::~GameState()
@@ -32,7 +34,7 @@ GameState::~GameState()
  * Obtain input handler.
  * @param new_handler new input handler
  */
-void
+    void
 GameState::takeHandler(InputHandler *new_handler)
 {
     if (m_handler) {
@@ -41,7 +43,7 @@ GameState::takeHandler(InputHandler *new_handler)
     m_handler = new_handler;
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::initState(StateManager *manager)
 {
     LOG_DEBUG(ExInfo("initState").addInfo("name", getName()));
@@ -54,12 +56,12 @@ GameState::initState(StateManager *manager)
 /**
  * @throws LogicException when state is not active
  */
-void
+    void
 GameState::updateState()
 {
     if (!m_active) {
         throw LogicException(ExInfo("state is not active")
-            .addInfo("name", getName()));
+                .addInfo("name", getName()));
     }
 
     own_updateState();
@@ -68,13 +70,13 @@ GameState::updateState()
 /**
  * @throws LogicException when state is not active
  */
-void
+    void
 GameState::pauseState()
 {
     LOG_DEBUG(ExInfo("pauseState").addInfo("name", getName()));
     if (!m_active) {
         throw LogicException(ExInfo("pause - state is not active")
-            .addInfo("name", getName()));
+                .addInfo("name", getName()));
     }
 
     own_pauseState();
@@ -83,9 +85,9 @@ GameState::pauseState()
 }
 //-----------------------------------------------------------------
 /**
- * @throws LogicException when state is not active
+ * Reactivate state after pause.
  */
-void
+    void
 GameState::resumeState()
 {
     LOG_DEBUG(ExInfo("resumeState").addInfo("name", getName()));
@@ -94,7 +96,7 @@ GameState::resumeState()
     own_resumeState();
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::cleanState()
 {
     LOG_DEBUG(ExInfo("cleanState").addInfo("name", getName()));
@@ -105,10 +107,28 @@ GameState::cleanState()
     m_manager = NULL;
 }
 //-----------------------------------------------------------------
-void
+    void
 GameState::quitState()
 {
     m_manager->popState();
+}
+//-----------------------------------------------------------------
+void
+GameState::noteBg()
+{
+    LOG_DEBUG(ExInfo("noteBg").addInfo("name", getName()));
+    own_noteBg();
+    InputAgent::agent()->installHandler(NULL);
+    m_onBg = true;
+}
+//-----------------------------------------------------------------
+void
+GameState::noteFg()
+{
+    LOG_DEBUG(ExInfo("noteFg").addInfo("name", getName()));
+    m_onBg = false;
+    InputAgent::agent()->installHandler(m_handler);
+    own_noteFg();
 }
 
 
