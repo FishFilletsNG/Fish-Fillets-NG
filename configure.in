@@ -123,9 +123,8 @@ AC_ARG_ENABLE(debug,
                esac],[debug=false]
                )
 CXXFLAGS="$CXXFLAGS -Wall -W -Wpointer-arith -Wcast-qual \
--Wcast-align -Wmissing-prototypes -Woverloaded-virtual \
--Wconversion -Wshadow \
--Wstrict-prototypes"
+-Wcast-align -Woverloaded-virtual \
+-Wconversion -Wshadow"
 if test "x$debug" = "xtrue"; then
     CXXFLAGS="$CXXFLAGS -pipe -g3 -O0"
 fi
