@@ -2,7 +2,6 @@
 #define HEADER_INPUTAGENT_H
 
 class KeyBinder;
-class RectBinder;
 class IKeyConsole;
 class InputHandler;
 
@@ -20,7 +19,6 @@ class InputAgent : public BaseAgent {
     private:
         Uint8 *m_keys;
         KeyBinder *m_keyBinder;
-        RectBinder *m_rectBinder;
         IKeyConsole *m_console;
         InputHandler *m_handler;
     protected:
@@ -33,7 +31,6 @@ class InputAgent : public BaseAgent {
         void enableConsole(IKeyConsole *new_console);
 
         KeyBinder *keyBinder() { return m_keyBinder; }
-        RectBinder *rectBinder() { return m_rectBinder; }
         Uint8 *getKeys() { return m_keys; }
         V2 getMouseLoc();
 };

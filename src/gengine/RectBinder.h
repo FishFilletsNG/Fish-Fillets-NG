@@ -2,6 +2,8 @@
 #define HEADER_RECTBINDER_H
 
 class BaseMsg;
+class MouseStroke;
+class V2;
 
 #include "NoCopy.h"
 #include "SDL.h"
@@ -23,8 +25,7 @@ class RectBinder : public NoCopy {
         ~RectBinder();
 
         void addRect(const SDL_Rect &rect, BaseMsg *msg);
-
-        void lbuttonDown(const SDL_MouseButtonEvent &button);
+        void mouseDown(const V2 &loc);
 };
 
 #endif

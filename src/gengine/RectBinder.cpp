@@ -10,12 +10,16 @@
 
 #include "Log.h"
 #include "BaseMsg.h"
+#include "MouseStroke.h"
 #include "StringTool.h"
 #include "NameException.h"
 
 #include <string>
 
 //-----------------------------------------------------------------
+/**
+ * Release all messages.
+ */
 RectBinder::~RectBinder()
 {
     t_rects::iterator end = m_rects.end();
@@ -52,22 +56,22 @@ RectBinder::rectToString(const SDL_Rect &rect) const
 }
 //-----------------------------------------------------------------
 /**
- * Find rect in which left mouse button was pressed.
- * The last added rect will be checked fist
- * (it is in the front).
+ * Find rect in which mouse button was pressed.
+ * The last added rect will be checked fist (it is in the front).
  * Only one rect is activated.
  * When listener is not available, it will be removed.
  *
  * NOTE: only useable for small count of rects.
+ * @param loc where mouse was pressed
  */
 void
-RectBinder::lbuttonDown(const SDL_MouseButtonEvent &button)
+RectBinder::mouseDown(const V2 &loc)
 {
     t_rects::iterator end = m_rects.end();
     for (t_rects::iterator i = m_rects.begin(); i != end; ++i) {
         const SDL_Rect &rect = i->first;
-        if (button.x >= rect.x && button.x <= rect.x + rect.w
-            && button.y >= rect.y && button.y <= rect.y + rect.h)
+        if (loc.getX() >= rect.x && loc.getX() <= rect.x + rect.w
+            && loc.getY() >= rect.y && loc.getY() <= rect.y + rect.h)
         {
             try {
                 i->second->sendClone();

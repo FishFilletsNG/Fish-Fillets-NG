@@ -29,6 +29,7 @@
 #include "Level.h"
 #include "Pedometer.h"
 #include "LayeredPicture.h"
+#include "MenuOptions.h"
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap()
@@ -302,6 +303,7 @@ WorldMap::runCredits()
     void
 WorldMap::runOptions()
 {
-    LOG_INFO(ExInfo("options is not implemented yet"));
+    MenuOptions *options = new MenuOptions();
+    m_manager->pushState(options);
 }
 

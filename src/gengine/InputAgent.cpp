@@ -9,7 +9,6 @@
 #include "InputAgent.h"
 
 #include "KeyBinder.h"
-#include "RectBinder.h"
 #include "IKeyConsole.h"
 #include "InputHandler.h"
 
@@ -35,7 +34,6 @@
 InputAgent::own_init()
 {
     m_keyBinder = new KeyBinder();
-    m_rectBinder = new RectBinder();
     m_console = NULL;
     m_handler = NULL;
     m_keys = SDL_GetKeyState(NULL);
@@ -67,9 +65,6 @@ InputAgent::own_update()
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if (SDL_BUTTON_LEFT == event.button.button) {
-                    m_rectBinder->lbuttonDown(event.button);
-                }
                 if (m_handler) {
                     m_handler->mouseEvent(MouseStroke(event.button));
                 }
@@ -89,7 +84,6 @@ InputAgent::own_shutdown()
     if (m_console) {
         delete m_console;
     }
-    delete m_rectBinder;
     delete m_keyBinder;
 }
 //-----------------------------------------------------------------

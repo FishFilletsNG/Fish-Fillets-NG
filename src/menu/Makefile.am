@@ -4,5 +4,5 @@ INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/s
 
 noinst_LIBRARIES = libmenu.a
 
-libmenu_a_SOURCES = LevelDesc.cpp LevelDesc.h LevelNode.cpp LevelNode.h LuaTable.cpp LuaTable.h NodeDrawer.cpp NodeDrawer.h WorldMap.cpp WorldMap.h WorldWay.cpp WorldWay.h WorldInput.cpp WorldInput.h Pedometer.cpp Pedometer.h PedoInput.cpp PedoInput.h worldmap-script.cpp worldmap-script.h
+libmenu_a_SOURCES = LangFlag.cpp LangFlag.h LevelDesc.cpp LevelDesc.h LevelNode.cpp LevelNode.h LuaTable.cpp LuaTable.h MenuOptions.cpp MenuOptions.h NodeDrawer.cpp NodeDrawer.h OptionsInput.cpp OptionsInput.h PedoInput.cpp PedoInput.h Pedometer.cpp Pedometer.h SelectLang.cpp SelectLang.h WorldInput.cpp WorldInput.h WorldMap.cpp WorldMap.h WorldWay.cpp WorldWay.h worldmap-script.cpp worldmap-script.h
 
