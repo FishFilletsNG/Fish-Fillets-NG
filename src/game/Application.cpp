@@ -101,8 +101,7 @@ Application::prepareLogLevel()
     OptionAgent *options = OptionAgent::agent();
     StringMsg *event = new StringMsg(this, "param_changed", "loglevel");
     options->addWatcher("loglevel", event);
-    options->setParam("loglevel",
-            options->getAsInt("loglevel", Log::getLogLevel()));
+    options->setDefault("loglevel", Log::getLogLevel());
 }
 //-----------------------------------------------------------------
 /**

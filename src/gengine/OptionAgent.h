@@ -31,6 +31,8 @@ class OptionAgent : public BaseAgent {
         void setParam(const std::string &name, long value);
         void setPersistent(const std::string &name, const std::string &value);
         void setPersistent(const std::string &name, long value);
+        void setDefault(const std::string &name, const std::string &value);
+        void setDefault(const std::string &name, int value);
 
         std::string getParam(const std::string &name,
                 const std::string &implicit="");

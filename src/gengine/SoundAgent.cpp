@@ -19,12 +19,14 @@
     void
 SoundAgent::own_init()
 {
+    OptionAgent *options = OptionAgent::agent();
+    options->setDefault("volume_sound", 90);
+    options->setDefault("volume_music", 50);
+    setSoundVolume(options->getAsInt("volume_sound"));
+    setMusicVolume(options->getAsInt("volume_music"));
+
     registerWatcher("volume_sound");
     registerWatcher("volume_music");
-
-    OptionAgent *options = OptionAgent::agent();
-    setSoundVolume(options->getAsInt("volume_sound", 90));
-    setMusicVolume(options->getAsInt("volume_music", 50));
 }
 //-----------------------------------------------------------------
 /**

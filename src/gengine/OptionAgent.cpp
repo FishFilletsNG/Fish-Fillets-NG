@@ -83,7 +83,7 @@ OptionAgent::own_shutdown()
 /**
  * Set user and sytem dir options.
  */
-void
+    void
 OptionAgent::prepareDataPaths()
 {
     OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
@@ -101,7 +101,7 @@ OptionAgent::prepareDataPaths()
  * For 2-letter lang codes
  * see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
  */
-void
+    void
 OptionAgent::prepareLang()
 {
     setlocale(LC_ALL, "");
@@ -122,7 +122,7 @@ OptionAgent::prepareLang()
  *
  * @throws LogicException when format is wrong
  */
-void
+    void
 OptionAgent::parseCmdOpt(int argc, char *argv[])
 {
     if (argc >= 1) {
@@ -147,9 +147,9 @@ OptionAgent::parseCmdOpt(int argc, char *argv[])
  * Split "name=value".
  * @return true for success
  */
-bool
+    bool
 OptionAgent::splitOpt(const std::string &option,
-    std::string *out_name, std::string *out_value)
+        std::string *out_name, std::string *out_value)
 {
     bool result = false;
     std::string::size_type pos = option.find('=');
@@ -197,7 +197,7 @@ OptionAgent::setParam(const std::string &name, long value)
  */
     std::string
 OptionAgent::getParam(const std::string &name,
-                const std::string &implicit)
+        const std::string &implicit)
 {
     return m_environ->getParam(name, implicit);
 }
@@ -212,7 +212,7 @@ OptionAgent::getParam(const std::string &name,
  */
     int
 OptionAgent::getAsInt(const std::string &name,
-                int implicit)
+        int implicit)
 {
     return m_environ->getAsInt(name, implicit);
 }
@@ -221,7 +221,7 @@ OptionAgent::getAsInt(const std::string &name,
  * Set param also on disk.
  * Preserve all current params in options file.
  */
-void
+    void
 OptionAgent::setPersistent(const std::string &name, const std::string &value)
 {
     //NOTE: path must be created before change of environ
@@ -246,10 +246,25 @@ OptionAgent::setPersistent(const std::string &name, const std::string &value)
     setParam(name, value);
 }
 //-----------------------------------------------------------------
-void
+    void
 OptionAgent::setPersistent(const std::string &name, long value)
 {
     setPersistent(name, StringTool::toString(value));
+}
+//-----------------------------------------------------------------
+/**
+ * Set value when it is empty.
+ */
+void
+OptionAgent::setDefault(const std::string &name, const std::string &value)
+{
+    m_environ->setParam(name, m_environ->getParam(name, value));
+}
+//-----------------------------------------------------------------
+void
+OptionAgent::setDefault(const std::string &name, int value)
+{
+    m_environ->setParam(name, m_environ->getAsInt(name, value));
 }
 //-----------------------------------------------------------------
     void
