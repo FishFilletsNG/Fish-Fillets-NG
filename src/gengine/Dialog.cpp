@@ -19,13 +19,9 @@
  */
 Dialog::Dialog(const std::string &lang,
         const std::string &soundfile, const std::string &subtitle)
-    : m_lang(lang), m_subtitle(subtitle)
+    : m_soundfile(soundfile), m_lang(lang), m_subtitle(subtitle)
 {
     m_sound = NULL;
-    if (false == soundfile.empty()) {
-        m_sound = ResSoundAgent::agent()->loadSound(
-                Path::dataReadPath(soundfile));
-    }
 }
 //-----------------------------------------------------------------
 Dialog::~Dialog()
@@ -37,11 +33,17 @@ Dialog::~Dialog()
 //-----------------------------------------------------------------
 /**
  * Run dialog.
+ * Do lazy loading of sound.
  * @return channel number where the sound is played or -1
  */
     int
-Dialog::talk() const
+Dialog::talk()
 {
+    if (NULL == m_sound && false == m_soundfile.empty()) {
+        m_sound = ResSoundAgent::agent()->loadSound(
+                Path::dataReadPath(m_soundfile));
+    }
+
     int channel = SoundAgent::agent()->playSound(m_sound);
     if (false == m_subtitle.empty()) {
         runSubtitle();

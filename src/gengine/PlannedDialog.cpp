@@ -18,10 +18,10 @@
  * Structure to store planned dialog.
  * @param actor who will talk
  * @param delay when will talk
- * @param dialog what will talk
+ * @param dialog what will talk, shared resource
  * @param busy whether actor will be set to busy during talk
  */
-PlannedDialog::PlannedDialog(Actor *actor, int delay, const Dialog *dialog,
+PlannedDialog::PlannedDialog(Actor *actor, int delay, Dialog *dialog,
         bool busy)
 {
     m_actor = actor;

@@ -12,6 +12,7 @@
 class Dialog: public NoCopy {
     private:
         Mix_Chunk *m_sound;
+        std::string m_soundfile;
         std::string m_lang;
         std::string m_subtitle;
     protected:
@@ -21,7 +22,7 @@ class Dialog: public NoCopy {
                 const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
-        int talk() const;
+        int talk();
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }
         int getMinTime() const;
