@@ -26,6 +26,7 @@ WorldWay::addChildren(lua_State *L, LevelNode *parent, int table_index)
     lua_pushnil(L);
     while (lua_next(L, table_index) != 0) {
         parent->addChild(parseNode(L));
+        //NOTE: remove value from stack, key is keep for next lua_next
         lua_pop(L, 1);
     }
 }
@@ -45,6 +46,12 @@ WorldWay::addChildren(lua_State *L, LevelNode *parent, int table_index)
 LevelNode *
 WorldWay::parseNode(lua_State *L)
 {
+    //NOTE: grow stack
+    //need: 1 for children table, 2 for lua_next (1 for key, 1 for value)
+    if (0 == lua_checkstack(L, 3)) {
+        luaL_error(L, ExInfo("out of stack")
+                .addInfo("top", lua_gettop(L)).what());
+    }
 
     LuaTable nodeTable(L, lua_gettop(L));
     std::string codename = nodeTable.getString("codename");
@@ -59,12 +66,13 @@ WorldWay::parseNode(lua_State *L)
             .addInfo("datafile", datafile)
             .addInfo("x", x)
             .addInfo("y", y)
-            .addInfo("hidden", hidden));
+            .addInfo("hidden", hidden)
+            .addInfo("childIndex", children.getStackIndex()));
 
     LevelNode *result = new LevelNode(codename,
             Path::dataReadPath(datafile), V2(x, y));
     addChildren(L, result, children.getStackIndex());
-    //NOTE: remove children table
+    //NOTE: remove children table from stack
     lua_pop(L, 1);
 
     if (Path::dataReadPath("solved/" + codename + ".lua").exists()) {
