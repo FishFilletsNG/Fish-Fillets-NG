@@ -21,6 +21,7 @@ class WorldMap : public GameState, public DescFinder, public Drawable {
     private:
         LevelNode *m_startNode;
         LevelNode *m_selected;
+        LevelNode *m_ending;
         NodeDrawer *m_drawer;
         ResDialogPack *m_descPack;
         LevelStatus *m_levelStatus;
@@ -36,6 +37,7 @@ class WorldMap : public GameState, public DescFinder, public Drawable {
         void watchCursor();
         Level *createSelected() const;
         void markSolved();
+        bool checkEnding() const;
 
         void runIntro();
         void runCredits();

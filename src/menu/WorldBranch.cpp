@@ -45,24 +45,57 @@ script_branch_addNode(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void branch_setEnding(codename, datafile, poster="")
+ */
+    int
+script_branch_setEnding(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *codename = luaL_checkstring(L, 1);
+    const char *datafile = luaL_checkstring(L, 2);
+    const char *poster = luaL_optstring(L, 3, "");
 
+    LevelNode *node = new LevelNode(codename,
+                Path::dataReadPath(datafile), V2(-1, -1), poster);
+    getBranch(L)->setEnding(node);
+    END_NOEXCEPTION;
+    return 0;
+
+}
 //-----------------------------------------------------------------
 WorldBranch::WorldBranch(LevelNode *root)
 {
     m_root = root;
+    m_ending = NULL;
 }
 //-----------------------------------------------------------------
 /**
  * Execute script which will add nodes.
+ * @param datafile worldmap file
+ * @param outEnding pointer to store ending node. It is not changed when
+ * endingNode is set.
  * @return root node (can be NULL)
  */
 LevelNode *
-WorldBranch::parseMap(const Path &datafile)
+WorldBranch::parseMap(const Path &datafile, LevelNode **outEnding)
 {
     ScriptState script;
     script.registerLeader(this);
     script.registerFunc("branch_addNode", script_branch_addNode);
+    script.registerFunc("branch_setEnding", script_branch_setEnding);
     script.doFile(datafile);
+
+    if (m_ending) {
+        if (outEnding) {
+            *outEnding = m_ending;
+        }
+        else {
+            throw LogicException(ExInfo("cannot export ending node")
+                    .addInfo("ending", m_ending->getCodename()));
+        }
+    }
 
     if (m_root && m_root->getState() < LevelNode::STATE_OPEN) {
         m_root->setState(LevelNode::STATE_OPEN);
@@ -79,6 +112,25 @@ WorldBranch::addNode(const std::string &parent, LevelNode *new_node,
 {
     prepareNode(new_node, hidden);
     insertNode(parent, new_node);
+}
+//-----------------------------------------------------------------
+/**
+ * Take ending node.
+ */
+void
+WorldBranch::setEnding(LevelNode *new_node)
+{
+    if (m_ending) {
+        delete m_ending;
+    }
+    m_ending = new_node;
+    if (wasSolved(m_ending->getCodename())) {
+        m_ending->setState(LevelNode::STATE_SOLVED);
+    }
+    else {
+        m_ending->setState(LevelNode::STATE_OPEN);
+    }
+    m_ending->setDepth(-1);
 }
 //-----------------------------------------------------------------
 /**

@@ -38,6 +38,7 @@ WorldMap::WorldMap()
 {
     m_selected = NULL;
     m_startNode = NULL;
+    m_ending = NULL;
     prepareBg();
 
     m_drawer = new NodeDrawer();
@@ -52,6 +53,9 @@ WorldMap::~WorldMap()
 {
     if (m_startNode) {
         delete m_startNode;
+    }
+    if (m_ending) {
+        delete m_ending;
     }
     delete m_bg;
     m_descPack->removeAll();
@@ -94,7 +98,7 @@ WorldMap::addDesc(const std::string &codename, LevelDesc *desc)
 WorldMap::initMap(const Path &mapfile, const Path &descfile)
 {
     WorldBranch parser(NULL);
-    m_startNode = parser.parseMap(mapfile);
+    m_startNode = parser.parseMap(mapfile, &m_ending);
     if (NULL == m_startNode) {
         throw LogicException(ExInfo("cannot create world map")
                 .addInfo("file", mapfile.getNative()));
@@ -119,7 +123,12 @@ WorldMap::own_initState()
     void
 WorldMap::own_updateState()
 {
-    watchCursor();
+    if (m_selected == m_ending) {
+        runSelected();
+    }
+    else {
+        watchCursor();
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -129,11 +138,15 @@ WorldMap::own_updateState()
 WorldMap::own_resumeState()
 {
     if (m_levelStatus->wasRunning()) {
+        LevelNode *nextLevel = NULL;
         if (m_levelStatus->isComplete()) {
             markSolved();
+            if (checkEnding()) {
+                nextLevel = m_ending;
+            }
         }
+        m_selected = nextLevel;
         m_levelStatus->setRunning(false);
-        m_selected = NULL;
 
         SoundAgent::agent()->playMusic(
                 Path::dataReadPath("music/menu.ogg"), NULL);
@@ -233,6 +246,28 @@ WorldMap::markSolved()
     if (m_selected) {
         m_selected->setState(LevelNode::STATE_SOLVED);
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Try run ending node.
+ * Ending node is started when all levels were solved.
+ * @return true when ending is started
+ */
+    bool
+WorldMap::checkEnding() const
+{
+    bool result = false;
+    if (m_ending && m_selected != m_ending) {
+        if (m_ending->getState() == LevelNode::STATE_SOLVED) {
+            if (m_selected->isLeaf()) {
+                result = true;
+            }
+        }
+        else if (m_startNode->areAllSolved()) {
+            result = true;
+        }
+    }
+    return result;
 }
 //-----------------------------------------------------------------
     void

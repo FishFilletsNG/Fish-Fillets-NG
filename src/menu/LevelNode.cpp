@@ -128,6 +128,24 @@ LevelNode::findNamed(const std::string &codename)
     return NULL;
 }
 //-----------------------------------------------------------------
+/**
+ * Returns true when all nodes are solved.
+ */
+bool
+LevelNode::areAllSolved() const
+{
+    if (m_state != STATE_SOLVED) {
+        return false;
+    }
+    t_children::const_iterator end = m_children.end();
+    for (t_children::const_iterator i = m_children.begin(); i != end; ++i) {
+        if (!(*i)->areAllSolved()) {
+            return false;
+        }
+    }
+    return true;
+}
+//-----------------------------------------------------------------
 Level *
 LevelNode::createLevel() const
 {
