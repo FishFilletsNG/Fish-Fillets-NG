@@ -9,7 +9,7 @@ Game:
 
 
 Engine:
-- NOTE: SDL_RLEACCEL may seedup transparent bliting
+- NOTE: SDL_RLEACCEL may speedup transparent bliting
 - NOTE: SDL_WarpMouse() may be enough instead moving window
 
 - make nice aap build

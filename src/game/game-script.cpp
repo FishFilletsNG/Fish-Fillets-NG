@@ -15,10 +15,24 @@
 #include "KeyControl.h"
 #include "Path.h"
 #include "View.h"
+#include "Cube.h"
 
 extern "C" {
 #include "lualib.h"
 #include "lauxlib.h"
+}
+
+#define BEGIN_NOEXCEPTION try {
+#define END_NOEXCEPTION \
+} \
+catch (std::exception &e) { \
+    LOG_WARNING(ExInfo("script error") \
+            .addInfo("what", e.what())); \
+        luaL_error(L, e.what()); \
+} \
+catch (...) { \
+    LOG_ERROR(ExInfo("script error")); \
+        luaL_error(L, "unknown exception"); \
 }
 
 //-----------------------------------------------------------------
@@ -32,23 +46,13 @@ extern "C" {
     int
 script_createRoom(lua_State *L) throw()
 {
-    try {
-        int w = luaL_checkint(L, 1);
-        int h = luaL_checkint(L, 2);
-        const char *picture = luaL_checkstring(L, 3);
+    BEGIN_NOEXCEPTION;
+    int w = luaL_checkint(L, 1);
+    int h = luaL_checkint(L, 2);
+    const char *picture = luaL_checkstring(L, 3);
 
-        GameAgent::agent()->createRoom(w, h,
-                Path::dataReadPath(picture));
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - createRoom()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - createRoom()"));
-        luaL_error(L, "unknown exception");
-    }
+    GameAgent::agent()->createRoom(w, h, Path::dataReadPath(picture));
+    END_NOEXCEPTION;
 
     //NOTE: return how many values want to return to lua
     return 0;
@@ -68,26 +72,17 @@ script_createRoom(lua_State *L) throw()
     int
 script_addModel(lua_State *L) throw()
 {
-    try {
-        const char *kind = luaL_checkstring(L, 1);
-        int x = luaL_checkint(L, 2);
-        int y = luaL_checkint(L, 3);
-        const char *picture = luaL_checkstring(L, 4);
-        const char *shape = luaL_checkstring(L, 5);
+    BEGIN_NOEXCEPTION;
+    const char *kind = luaL_checkstring(L, 1);
+    int x = luaL_checkint(L, 2);
+    int y = luaL_checkint(L, 3);
+    const char *picture = luaL_checkstring(L, 4);
+    const char *shape = luaL_checkstring(L, 5);
 
-        int model_index = GameAgent::agent()->addModel(kind, V2(x, y),
-                Path::dataReadPath(picture), shape);
-        lua_pushnumber(L, model_index);
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - addModel()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - addModel()"));
-        luaL_error(L, "unknown exception");
-    }
+    int model_index = GameAgent::agent()->addModel(kind, V2(x, y),
+            Path::dataReadPath(picture), shape);
+    lua_pushnumber(L, model_index);
+    END_NOEXCEPTION;
 
     //NOTE: return model_index
     return 1;
@@ -101,24 +96,14 @@ script_addModel(lua_State *L) throw()
     int
 script_model_addAnim(lua_State *L) throw()
 {
-    try {
-        int model_index = luaL_checkint(L, 1);
-        const char *anim_name = luaL_checkstring(L, 2);
-        const char *picture = luaL_checkstring(L, 3);
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+    const char *picture = luaL_checkstring(L, 3);
 
-        Cube *model = GameAgent::agent()->getModel(model_index);
-        model->view()->addAnim(anim_name, Path::dataReadPath(picture));
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - model_addAnim()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - model_addAnim()"));
-        luaL_error(L, "unknown exception");
-    }
-
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    model->view()->addAnim(anim_name, Path::dataReadPath(picture));
+    END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
 }
@@ -131,24 +116,14 @@ script_model_addAnim(lua_State *L) throw()
     int
 script_model_setAnim(lua_State *L) throw()
 {
-    try {
-        int model_index = luaL_checkint(L, 1);
-        const char *anim_name = luaL_checkstring(L, 2);
-        int phase = luaL_optint(L, 3, 0);
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+    int phase = luaL_optint(L, 3, 0);
 
-        Cube *model = GameAgent::agent()->getModel(model_index);
-        model->view()->setAnim(anim_name, phase);
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - model_setAnim()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - model_setAnim()"));
-        luaL_error(L, "unknown exception");
-    }
-
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    model->view()->setAnim(anim_name, phase);
+    END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
 }
@@ -161,26 +136,35 @@ script_model_setAnim(lua_State *L) throw()
     int
 script_model_getLoc(lua_State *L) throw()
 {
-    try {
-        int model_index = luaL_checkint(L, 1);
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
 
-        Cube *model = GameAgent::agent()->getModel(model_index);
-        V2 loc = model->getLocation();
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    V2 loc = model->getLocation();
 
-        lua_pushnumber(L, loc.getX());
-        lua_pushnumber(L, loc.getY());
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - model_setAnim()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - model_setAnim()"));
-        luaL_error(L, "unknown exception");
-    }
-
+    lua_pushnumber(L, loc.getX());
+    lua_pushnumber(L, loc.getY());
+    END_NOEXCEPTION;
     //NOTE: return (x, y)
     return 2;
 }
 
+//-----------------------------------------------------------------
+/**
+ * eDir model_getDir(model_index)
+ *
+ * NOTE: no one exception can be passed to "C" lua code
+ */
+    int
+script_model_getDir(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    Cube::eDir dir = model->getDir();
+
+    lua_pushnumber(L, dir);
+    END_NOEXCEPTION;
+    //NOTE: return dir
+    return 1;
+}

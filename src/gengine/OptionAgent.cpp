@@ -72,8 +72,12 @@ OptionAgent::prepareDataPaths()
 {
     OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
 
-    std::string userdir = getenv("HOME");
-    userdir += USER_DATA_DIR;
+    std::string userdir = "";
+    const char *home = getenv("HOME");
+    if (home) {
+        userdir = home;
+        userdir += USER_DATA_DIR;
+    }
     OptionAgent::agent()->setParam("userdir", userdir);
 }
 //-----------------------------------------------------------------

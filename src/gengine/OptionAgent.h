@@ -27,7 +27,7 @@ class OptionAgent : public BaseAgent {
     public:
         virtual ~OptionAgent();
 
-        void parseCmdOpt(int argc, char *argc[]);
+        void parseCmdOpt(int argc, char *argv[]);
         void setParam(const std::string &name, const std::string &value);
         void setParam(const std::string &name, long value);
 

@@ -27,8 +27,7 @@ class ResourcePack {
      * Free all resources.
      * NOTE: we cannot call virtual functions from desctructor
      */
-    void
-        ResourcePack::removeAll()
+    void removeAll()
         {
             t_resIterator end = m_reses.end();
             for (t_resIterator i = m_reses.begin(); i != end; ++i) {
@@ -39,8 +38,7 @@ class ResourcePack {
     /**
      * Unload all resources with this name.
      */
-    void
-        ResourcePack::removeRes(const std::string &name)
+    void removeRes(const std::string &name)
         {
             std::pair<t_resIterator, t_resIterator> range =
                 m_reses.equal_range(name);

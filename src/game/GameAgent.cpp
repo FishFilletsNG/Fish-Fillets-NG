@@ -117,6 +117,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
+    m_script->registerFunc("model_getDir", script_model_getDir);
 }
 //-----------------------------------------------------------------
 /**
