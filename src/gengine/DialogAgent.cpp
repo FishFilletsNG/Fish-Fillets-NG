@@ -14,11 +14,14 @@
 #include "PlannedDialog.h"
 
 
+const std::string DialogAgent::DEFAULT_LANG = "en";
 //-----------------------------------------------------------------
     void
 DialogAgent::own_init()
 {
     m_dialogs = new ResDialogPack();
+    //NOTE: "pause" dialog is used to delay dialogs
+    addDialog("pause", new Dialog(DEFAULT_LANG, "", ""));
 }
 //-----------------------------------------------------------------
 /**
@@ -73,8 +76,6 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
 DialogAgent::planDialog(const std::string &name, int delay, Actor *actor,
         bool busy)
 {
-    static const char *DEFAULT_LANG = "en";
-
     std::string lang = OptionAgent::agent()->getParam("lang");
     Dialog *dialog = m_dialogs->findDialog(name, lang);
     if (NULL == dialog) {

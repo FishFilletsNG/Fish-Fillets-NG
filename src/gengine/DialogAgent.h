@@ -21,6 +21,7 @@ class PlannedDialog;
 class DialogAgent : public BaseAgent {
     AGENT(DialogAgent, Name::DIALOG_NAME);
     private:
+    static const std::string DEFAULT_LANG;
     ResDialogPack *m_dialogs;
 
     typedef std::deque<PlannedDialog*> t_planned;

@@ -43,7 +43,9 @@ Dialog::~Dialog()
 Dialog::talk() const
 {
     int channel = SoundAgent::agent()->playSound(m_sound);
-    runSubtitle();
+    if (false == m_subtitle.empty()) {
+        runSubtitle();
+    }
 
     return channel;
 }
