@@ -41,7 +41,6 @@ class LevelScript : public Planner {
         int addModel(Cube *new_model, Unit *new_unit);
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
-        int getCycles() const;
 
         void addSound(const std::string &name, const Path &file);
         void playSound(const std::string &name, int volume);

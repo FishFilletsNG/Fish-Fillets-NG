@@ -127,8 +127,7 @@ LevelScript::addModel(Cube *new_model, Unit *new_unit)
     Cube *
 LevelScript::getModel(int model_index)
 {
-    checkRoom();
-    return m_room->getModel(model_index);
+    return room()->getModel(model_index);
 }
 //-----------------------------------------------------------------
 /**
@@ -137,30 +136,20 @@ LevelScript::getModel(int model_index)
     Cube *
 LevelScript::askField(const V2 &loc)
 {
-    checkRoom();
-    return m_room->askField(loc);
+    return room()->askField(loc);
 }
 
-//-----------------------------------------------------------------
-    int
-LevelScript::getCycles() const
-{
-    checkRoom();
-    return m_room->getCycles();
-}
 //-----------------------------------------------------------------
     void
 LevelScript::addSound(const std::string &name, const Path &file)
 {
-    checkRoom();
-    m_room->addSound(name, file);
+    room()->addSound(name, file);
 }
 //-----------------------------------------------------------------
     void
 LevelScript::playSound(const std::string &name, int volume)
 {
-    checkRoom();
-    m_room->playSound(name, volume);
+    room()->playSound(name, volume);
 }
 //-----------------------------------------------------------------
 /**
@@ -169,10 +158,12 @@ LevelScript::playSound(const std::string &name, int volume)
     void
 LevelScript::registerGameFuncs()
 {
+    m_script->registerFunc("game_setRoomWaves", script_game_setRoomWaves);
     m_script->registerFunc("game_addModel", script_game_addModel);
     m_script->registerFunc("game_getCycles", script_game_getCycles);
     m_script->registerFunc("game_addDecor", script_game_addDecor);
     m_script->registerFunc("game_setScreenShift", script_game_setScreenShift);
+    m_script->registerFunc("game_changeBg", script_game_changeBg);
 
     m_script->registerFunc("model_addAnim", script_model_addAnim);
     m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
@@ -217,7 +208,6 @@ LevelScript::registerLevelFuncs()
     m_script->registerFunc("level_action_restart", script_level_action_restart);
 
     m_script->registerFunc("level_createRoom", script_level_createRoom);
-    m_script->registerFunc("level_setRoomWaves", script_level_setRoomWaves);
     m_script->registerFunc("level_getRestartCounter",
             script_level_getRestartCounter);
     m_script->registerFunc("level_getDepth", script_level_getDepth);

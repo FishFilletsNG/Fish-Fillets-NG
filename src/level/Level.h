@@ -95,7 +95,6 @@ class Level : public GameState {
         bool isNewRound() const { return m_newRound; }
 
         void createRoom(int w, int h, const Path &picture);
-        void setRoomWaves(double amplitude, double periode, double speed);
         void newDemo(const Path &demofile);
 
         bool isLoading() const;

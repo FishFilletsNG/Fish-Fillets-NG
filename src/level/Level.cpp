@@ -523,15 +523,6 @@ Level::initScreen()
     }
 }
 //-----------------------------------------------------------------
-/**
- * Set waves on background.
- */
-    void
-Level::setRoomWaves(double amplitude, double periode, double speed)
-{
-    m_levelScript->room()->setWaves(amplitude, periode, speed);
-}
-//-----------------------------------------------------------------
     void
 Level::newDemo(const Path &demofile)
 {

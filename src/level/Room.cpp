@@ -87,13 +87,13 @@ Room::setWaves(double amplitude, double periode, double speed)
     m_bg->setWspeed(speed);
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::addDecor(Decor *new_decor)
 {
     m_view->addDecor(new_decor);
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::killPlan()
 {
     DialogAgent::agent()->killTalks();
@@ -127,7 +127,7 @@ Room::addModel(Cube *new_model, Unit *new_unit)
  * Return model at index.
  * @throws LogicException when model_index is out of range
  */
-Cube *
+    Cube *
 Room::getModel(int model_index)
 {
     Cube *result = NULL;
@@ -145,7 +145,7 @@ Room::getModel(int model_index)
 /**
  * Return model at location.
  */
-Cube *
+    Cube *
 Room::askField(const V2 &loc)
 {
     return m_field->getModel(loc);
@@ -170,7 +170,7 @@ Room::nextRound(const InputProvider *input)
  * Play sound like some object has fall.
  * NOTE: only one sound is played even more objects have fall
  */
-void
+    void
 Room::playImpact()
 {
     switch (m_impact) {
@@ -192,7 +192,7 @@ Room::playImpact()
  * Play sound like a fish die.
  * @param model fresh dead fish
  */
-void
+    void
 Room::playDead(Cube *model)
 {
     DialogAgent::agent()->killSound(model->getIndex());
@@ -214,7 +214,7 @@ Room::playDead(Cube *model)
  * Move all models to new position
  * and check dead fihes.
  */
-void
+    void
 Room::prepareRound()
 {
     bool interrupt = false;
@@ -246,7 +246,7 @@ Room::prepareRound()
  * @param interactive whether do anim
  * @return true when a model went out
  */
-bool
+    bool
 Room::fallout(bool interactive)
 {
     bool wentOut = false;
@@ -314,13 +314,13 @@ Room::finishRound(bool interactive)
 }
 
 //-----------------------------------------------------------------
-void
+    void
 Room::switchFish()
 {
     m_controls->switchActive();
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::controlEvent(const KeyStroke &stroke)
 {
     m_controls->controlEvent(stroke);
@@ -339,7 +339,7 @@ Room::getMoves() const
     return m_controls->getMoves();
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::unBusyUnits()
 {
     Cube::t_models::iterator end = m_models.end();
@@ -374,7 +374,7 @@ Room::loadMove(char move)
  * @param interactive whether play sound and do anim
  * @return true when something was falling
  */
-bool
+    bool
 Room::beginFall(bool interactive)
 {
     m_fresh = true;
@@ -396,7 +396,7 @@ Room::beginFall(bool interactive)
  * @return true for success or false when something has moved before
  * @throws LoadException for bad moves
  */
-bool
+    bool
 Room::makeMove(char move)
 {
     bool result = false;
@@ -440,7 +440,7 @@ Room::isSolvable() const
  * Right time to ask is after finishRound.
  * NOTE: room is not solved when somethig is still falling
  */
-    bool
+bool
 Room::isSolved() const
 {
     if (!m_fresh) {
@@ -474,13 +474,13 @@ Room::getCycles() const
     return TimerAgent::agent()->getCycles() - m_startTime;
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::addSound(const std::string &name, const Path &file)
 {
     m_soundPack->addSound(name, file);
 }
 //-----------------------------------------------------------------
-void
+    void
 Room::playSound(const std::string &name, int volume)
 {
     SoundAgent::agent()->playSound(
@@ -491,13 +491,19 @@ Room::playSound(const std::string &name, int volume)
  * Shift room content.
  * NOTE: background is not shifted
  */
-void
+    void
 Room::setScreenShift(const V2 &shift)
 {
     m_view->setScreenShift(shift);
 }
 //-----------------------------------------------------------------
 void
+Room::changeBg(const Path &picture)
+{
+    m_bg->changePicture(picture);
+}
+//-----------------------------------------------------------------
+    void
 Room::drawOn(SDL_Surface *screen)
 {
     m_bg->drawOn(screen);

@@ -145,22 +145,6 @@ script_level_createRoom(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void level_setRoomWaves(amplitude, periode, speed)
- */
-    int
-script_level_setRoomWaves(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    double amp = luaL_checknumber(L, 1);
-    double periode = luaL_checknumber(L, 2);
-    double speed = luaL_checknumber(L, 3);
-
-    getLevel(L)->setRoomWaves(amp, periode, speed);
-    END_NOEXCEPTION;
-    return 0;
-}
-//-----------------------------------------------------------------
-/**
  * int level_getRestartCounter()
  * 
  * Returns number of attemps, starts from 1. 

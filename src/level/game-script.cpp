@@ -44,6 +44,22 @@ getModel(lua_State *L, int model_index)
 
 //-----------------------------------------------------------------
 /**
+ * void game_setRoomWaves(amplitude, periode, speed)
+ */
+    int
+script_game_setRoomWaves(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    double amp = luaL_checknumber(L, 1);
+    double periode = luaL_checknumber(L, 2);
+    double speed = luaL_checknumber(L, 3);
+
+    getLevelScript(L)->room()->setWaves(amp, periode, speed);
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
  * int game_addModel(kind, x, y, shape)
  * Return model index.
  *
@@ -79,7 +95,7 @@ script_game_addModel(lua_State *L) throw()
 script_game_getCycles(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    int cycles = getLevelScript(L)->getCycles();
+    int cycles = getLevelScript(L)->room()->getCycles();
     lua_pushnumber(L, cycles);
     END_NOEXCEPTION;
     //NOTE: return cycles
@@ -131,6 +147,19 @@ script_game_setScreenShift(lua_State *L) throw()
     int x = luaL_checkint(L, 1);
     int y = luaL_checkint(L, 2);
     getLevelScript(L)->room()->setScreenShift(V2(x, y));
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void game_changeBg(picture)
+ */
+    int
+script_game_changeBg(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *picture = luaL_checkstring(L, 1);
+    getLevelScript(L)->room()->changeBg(Path::dataReadPath(picture));
     END_NOEXCEPTION;
     return 0;
 }
