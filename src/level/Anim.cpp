@@ -15,8 +15,8 @@
 /**
  * Create new animation sprite.
  */
-Anim::Anim()
-    : m_viewShift(0, 0)
+    Anim::Anim()
+: m_viewShift(0, 0)
 {
     m_animPack[SIDE_LEFT] = new ResImagePack();
     m_animPack[SIDE_RIGHT] = new ResImagePack();
@@ -73,7 +73,7 @@ Anim::addAnim(const std::string &name, const Path &picture)
     m_animPack[SIDE_LEFT]->addImage(name, picture);
 }
 //-----------------------------------------------------------------
-void
+    void
 Anim::addDuplexAnim(const std::string &name,
         const Path &left_picture, const Path &right_picture)
 {
@@ -89,8 +89,7 @@ Anim::addDuplexAnim(const std::string &name,
 Anim::runAnim(const std::string &name, int start_phase)
 {
     if (m_animName != name) {
-        m_animPhase = start_phase;
-        m_animName = name;
+        setAnim(name, start_phase);
     }
     m_run = true;
 }
@@ -104,6 +103,15 @@ Anim::setAnim(const std::string &name, int phase)
     m_run = false;
     m_animName = name;
     m_animPhase = phase;
+
+    int count = m_animPack[SIDE_LEFT]->countRes(name);
+    if (m_animPhase >= count) {
+        m_animPhase %= count;
+        LOG_WARNING(ExInfo("anim phase over-flow")
+                .addInfo("anim", name)
+                .addInfo("phase", phase)
+                .addInfo("count", count));
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -118,5 +126,14 @@ Anim::useSpecialAnim(const std::string &name, int phase)
 {
     m_specialAnimName = name;
     m_specialAnimPhase = phase;
+
+    int count = m_animPack[SIDE_LEFT]->countRes(name);
+    if (m_specialAnimPhase >= count) {
+        m_specialAnimPhase %= count;
+        LOG_WARNING(ExInfo("special anim phase over-flow")
+                .addInfo("anim", name)
+                .addInfo("phase", phase)
+                .addInfo("count", count));
+    }
 }
 
