@@ -20,13 +20,14 @@ class StatusDisplay;
 
 #include "Path.h"
 #include "GameState.h"
+#include "CountAdvisor.h"
 
 #include <string>
 
 /**
  * Game level with room.
  */
-class Level : public GameState {
+class Level : public GameState, public CountAdvisor {
     private:
         static const int SPEED_REPLAY = 1;
 
@@ -94,6 +95,9 @@ class Level : public GameState {
         bool isShowing() const;
         void interruptShow();
         void planShow(Command *new_command);
+
+        virtual int getCountForSolved() const;
+        virtual int getCountForWrong() const;
 };
 
 #endif

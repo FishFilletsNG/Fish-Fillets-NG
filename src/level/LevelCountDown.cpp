@@ -12,6 +12,7 @@
 #include "RoomAccess.h"
 #include "Room.h"
 #include "LogicException.h"
+#include "CountAdvisor.h"
 
 //-----------------------------------------------------------------
 /**
@@ -40,15 +41,15 @@ LevelCountDown::reset()
 //-----------------------------------------------------------------
 /**
  * Countdown to zero.
- * @param fast use fast countdown (used when loading)
+ * @param advisor advisor which known usable coundown values
  * @return true when counter is at zero
  */
 bool
-LevelCountDown::countDown(bool fast)
+LevelCountDown::countDown(const CountAdvisor *advisor)
 {
     bool result = false;
     if (m_countdown < 0) {
-        setCountDown(fast);
+        setCountDown(advisor);
     }
     else if (m_countdown > 0) {
         m_countdown--;
@@ -60,19 +61,13 @@ LevelCountDown::countDown(bool fast)
 }
 //-----------------------------------------------------------------
 void
-LevelCountDown::setCountDown(bool fast)
+LevelCountDown::setCountDown(const CountAdvisor *advisor)
 {
     if (m_access->const_room()->isSolved()) {
-        if (fast) {
-            m_countdown = 0;
-        }
-        else {
-            m_countdown = 30;
-        }
+        m_countdown = advisor->getCountForSolved();
     }
     else if (m_access->const_room()->cannotMove()) {
-        //NOTE: don't forget to change briefcase_help_demo too
-        m_countdown = 70;
+        m_countdown = advisor->getCountForWrong();
     }
     else {
         m_countdown = -1;

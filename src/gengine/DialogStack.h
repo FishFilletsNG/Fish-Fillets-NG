@@ -39,6 +39,7 @@ class DialogStack : public NoCopy {
         void killSound(int actor);
 
         bool isDialog() const;
+        bool areRunning() const { return !m_running.empty(); }
         void killTalks();
         void removeAll();
 };

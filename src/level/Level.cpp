@@ -31,6 +31,7 @@
 #include "StepDecor.h"
 #include "StatusDisplay.h"
 #include "Picture.h"
+#include "DialogStack.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -115,7 +116,7 @@ Level::own_updateState()
     updateLevel();
     m_locker->decLock();
 
-    if (m_countdown->countDown(isLoading())) {
+    if (m_countdown->countDown(this)) {
         finishLevel();
     }
 }
@@ -480,5 +481,25 @@ std::string
 Level::getLevelName() const
 {
     return m_desc->findLevelName(m_codename);
+}
+//-----------------------------------------------------------------
+int
+Level::getCountForSolved() const
+{
+    int countdown = 10;
+    if (isLoading()) {
+        countdown = 0;
+    }
+    else if (m_levelScript->dialogs()->areRunning()) {
+        countdown = 30;
+    }
+    return countdown;
+}
+//-----------------------------------------------------------------
+int
+Level::getCountForWrong() const
+{
+    //NOTE: don't forget to change briefcase_help_demo too
+    return 70;
 }
 
