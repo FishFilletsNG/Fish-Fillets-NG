@@ -16,6 +16,7 @@ class StateManager : public NoCopy {
         t_states m_states;
         t_states m_trash;
     private:
+        void emptyTrash();
         void removeCurrent();
     public:
         virtual ~StateManager();

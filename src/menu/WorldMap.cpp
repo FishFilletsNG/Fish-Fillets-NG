@@ -116,6 +116,8 @@ WorldMap::own_resumeState()
         if (m_levelStatus->isComplete()) {
             markSolved();
         }
+        m_selected = NULL;
+
         SoundAgent::agent()->playMusic(
                 Path::dataReadPath("music/menu.ogg"), NULL);
         //TODO: set with and height in one step

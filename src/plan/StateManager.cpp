@@ -16,10 +16,22 @@
 //-----------------------------------------------------------------
 StateManager::~StateManager()
 {
+    emptyTrash();
+
     t_states::iterator end = m_states.end();
     for (t_states::iterator i = m_states.begin(); i != end; ++i) {
         delete (*i);
     }
+}
+//-----------------------------------------------------------------
+    void
+StateManager::emptyTrash()
+{
+    t_states::iterator end = m_trash.end();
+    for (t_states::iterator i = m_trash.begin(); i != end; ++i) {
+        delete (*i);
+    }
+    m_trash.clear();
 }
 //-----------------------------------------------------------------
 /**
@@ -33,11 +45,7 @@ StateManager::updateGame()
         m_states.back()->updateState();
     }
 
-    t_states::iterator end = m_trash.end();
-    for (t_states::iterator i = m_trash.begin(); i != end; ++i) {
-        delete (*i);
-    }
-    m_trash.clear();
+    emptyTrash();
 }
 
 //-----------------------------------------------------------------
