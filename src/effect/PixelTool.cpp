@@ -23,6 +23,12 @@ PixelTool::colorEquals(const SDL_Color &color1, const SDL_Color &color2)
         && color1.b == color2.b;
 }
 //-----------------------------------------------------------------
+Uint32
+PixelTool::convertColor(SDL_PixelFormat *format, const SDL_Color &color)
+{
+    return SDL_MapRGB(format, color.r, color.g, color.b);
+}
+//-----------------------------------------------------------------
 /**
  * Get color at x, y.
  * Surface must be locked.

@@ -60,11 +60,14 @@ EffectZx::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
     SurfaceLock lock1(screen);
     SurfaceLock lock2(surface);
 
-    SDL_Color colorZX1 = PixelTool::getColor(surface, 0, 0);
-    SDL_Color colorZX2 = PixelTool::getColor(surface, 0, surface->h - 1);
-    SDL_Color colorZX3 = PixelTool::getColor(surface, surface->w - 1, 0);
-    SDL_Color colorZX4 = PixelTool::getColor(surface,
-            surface->w - 1, surface->h - 1);
+    Uint32 colorZX1 = PixelTool::convertColor(screen->format,
+            PixelTool::getColor(surface, 0, 0));
+    Uint32 colorZX2 = PixelTool::convertColor(screen->format,
+            PixelTool::getColor(surface, 0, surface->h - 1));
+    Uint32 colorZX3 = PixelTool::convertColor(screen->format,
+            PixelTool::getColor(surface, surface->w - 1, 0));
+    Uint32 colorZX4 = PixelTool::convertColor(screen->format,
+            PixelTool::getColor(surface, surface->w - 1, surface->h - 1));
 
     for (int py = 0; py < surface->h; ++py) {
         m_countHeight++;
@@ -86,27 +89,28 @@ EffectZx::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
             }
         }
 
-        SDL_Color *usedColor;
+        Uint32 usedColor;
         switch (m_zx) {
             case ZX1:
-                usedColor = &colorZX1;
+                usedColor = colorZX1;
                 break;
             case ZX2:
-                usedColor = &colorZX2;
+                usedColor = colorZX2;
                 break;
             case ZX3:
-                usedColor = &colorZX3;
+                usedColor = colorZX3;
                 break;
             default:
-                usedColor = &colorZX4;
+                usedColor = colorZX4;
                 break;
         }
 
+        //TODO: optimize for speed
         for (int px = 0; px < surface->w; ++px) {
             SDL_Color pixel = PixelTool::getColor(surface, px, py);
             if (pixel.unused == 255) {
-                PixelTool::putColor(screen,
-                        x + px, y + py, *usedColor);
+                PixelTool::putPixel(screen,
+                        x + px, y + py, usedColor);
             }
         }
     }

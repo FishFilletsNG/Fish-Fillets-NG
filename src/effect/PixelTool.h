@@ -10,6 +10,8 @@ class PixelTool {
     public:
         static bool colorEquals(const SDL_Color &color1,
                 const SDL_Color &color2);
+        static Uint32 convertColor(SDL_PixelFormat *format,
+                const SDL_Color &color);
 
         static SDL_Color getColor(SDL_Surface *surface, int x, int y);
         static void putColor(SDL_Surface *surface, int x, int y,

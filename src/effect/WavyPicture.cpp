@@ -32,6 +32,11 @@ WavyPicture::WavyPicture(const Path &file, const V2 &loc)
 void
 WavyPicture::drawOn(SDL_Surface *screen)
 {
+    if (m_amp == 0) {
+        Picture::drawOn(screen);
+        return;
+    }
+
     //NOTE: Wamp = Wamp_in_orig/2.0
     //NOTE: Wspeed = 1.0/Wspd_in_orig
     SDL_Rect dest_rect;
