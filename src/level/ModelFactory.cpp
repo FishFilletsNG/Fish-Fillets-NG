@@ -57,6 +57,11 @@ ModelFactory::createParams(const std::string &kind,
         *out_power = Cube::HEAVY;
         *out_alive = true;
     }
+    else if ("fish_extra" == kind) {
+        *out_weight = Cube::LIGHT;
+        *out_power = Cube::LIGHT;
+        *out_alive = true;
+    }
     else {
         *out_power = Cube::NONE;
         *out_alive = false;
@@ -100,6 +105,14 @@ ModelFactory::createUnit(const std::string &kind)
         bigfish.setLeft(SDLK_a);
         bigfish.setRight(SDLK_d);
         result = new Unit(bigfish, ControlSym('U', 'D', 'L', 'R'));
+    }
+    else if ("fish_extra" == kind) {
+        KeyControl extrafish;
+        extrafish.setUp(SDLK_KP8);
+        extrafish.setDown(SDLK_KP5);
+        extrafish.setLeft(SDLK_KP4);
+        extrafish.setRight(SDLK_KP6);
+        result = new Unit(extrafish, ControlSym('8', '5', '4', '6'));
     }
     return result;
 }
