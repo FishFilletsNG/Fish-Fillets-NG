@@ -8,6 +8,8 @@
  */
 #include "Dir.h"
 
+#include <assert.h>
+
 //-----------------------------------------------------------------
 /**
  * Convert dir to relative coordinations.
