@@ -469,11 +469,11 @@ script_model_equals(lua_State *L) throw()
     if (other) {
         other_index = other->getIndex();
     }
-    bool equal = (other_index == model_index);
+    bool equals = (other_index == model_index);
 
-    lua_pushboolean(L, equal);
+    lua_pushboolean(L, equals);
     END_NOEXCEPTION;
-    //NOTE: return equal
+    //NOTE: return equals
     return 1;
 }
 

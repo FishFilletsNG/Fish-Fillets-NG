@@ -75,6 +75,7 @@ KeyDriver::speedup(const Cube *model)
     static const int SPEED_WARP1 = 3;
     static const int SPEED_WARP2 = 10;
 
+    int phases = 3;
     std::string action = model->const_rules()->getAction();
     if (action == "move_left" || action == "move_right"
             || action == "move_up" || action == "move_down")
@@ -87,7 +88,6 @@ KeyDriver::speedup(const Cube *model)
         }
 
 
-        int phases = 3;
         if (m_speedup > SPEED_WARP2) {
             phases = 1;
         }
@@ -98,6 +98,9 @@ KeyDriver::speedup(const Cube *model)
             phases = 3;
         }
 
+        GameAgent::agent()->ensurePhases(phases);
+    }
+    else if (action == "turn") {
         GameAgent::agent()->ensurePhases(phases);
     }
     else {

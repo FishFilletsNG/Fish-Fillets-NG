@@ -22,6 +22,7 @@ BaseMsg *SDLSoundAgent::ms_finished = NULL;
     void
 SDLSoundAgent::own_init()
 {
+    m_music = NULL;
     //TODO: load volume option
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
         throw SDLException(ExInfo("SDL_InitSubSystem"));
@@ -33,7 +34,6 @@ SDLSoundAgent::own_init()
         throw MixException(ExInfo("Mix_OpenAudio"));
     }
 
-    m_music = NULL;
     m_soundVolume = MIX_MAX_VOLUME;
     Mix_AllocateChannels(8);
 }

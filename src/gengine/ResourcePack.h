@@ -35,8 +35,8 @@ class ResourcePack : public INamed {
     void removeAll()
         {
             t_resIterator end = m_reses.end();
-            for (t_resIterator i = m_reses.begin(); i != end; ++i) {
-                unloadRes(i->second);
+            for (t_resIterator item = m_reses.begin(); item != end; ++item) {
+                unloadRes(item->second);
             }
             m_reses.clear();
         }
@@ -132,8 +132,8 @@ class ResourcePack : public INamed {
                 .addInfo("name", getName());
 
             t_resIterator end = m_reses.end();
-            for (t_resIterator i = m_reses.begin(); i != end; ++i) {
-                available_res.addInfo("key", i->first);
+            for (t_resIterator item = m_reses.begin(); item != end; ++item) {
+                available_res.addInfo("key", item->first);
             }
             return std::string(available_res.what());
     }
