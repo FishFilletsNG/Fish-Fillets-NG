@@ -8,6 +8,7 @@ class InputProvider;
 #include "ControlSym.h"
 
 #include "SDL.h"
+#include <string>
 
 /**
  * Unit to drive.
@@ -43,6 +44,8 @@ class Unit {
         bool isMoving() const;
         bool isTurning() const;
         bool isPushing() const;
+
+        int countAnimPhases(const std::string &anim) const;
 };
 
 #endif

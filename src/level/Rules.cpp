@@ -243,10 +243,8 @@ Rules::actionOut()
         if (m_model->shouldGoOut()) {
             eDir borderDir = m_mask->getBorderDir();
             if (borderDir != DIR_NO) {
-                if (isFreeDir(borderDir)) {
-                    m_dir = borderDir;
-                    m_outDepth += 1;
-                }
+                m_dir = borderDir;
+                m_outDepth += 1;
             }
             else {
                 if (m_outDepth > 0) {
@@ -302,18 +300,6 @@ Rules::freeOldPos()
     }
 }
 
-//-----------------------------------------------------------------
-/**
- * Whether there is no resist.
- */
-    bool
-Rules::isFreeDir(eDir dir)
-{
-    m_mask->unmask();
-    Cube::t_models resist = m_mask->getResist(dir);
-    m_mask->mask();
-    return resist.empty();
-}
 //-----------------------------------------------------------------
 /**
  * Whether object is direct or undirect on something specific.

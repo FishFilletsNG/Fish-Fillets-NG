@@ -15,8 +15,8 @@ class MarkMask : public NoCopy {
         Cube *m_model;
         Field *m_field;
     private:
-        void removeBorder(Cube::t_models &models) const;
         void writeModel(Cube *model);
+        bool isBorderDir(Rules::eDir dir) const;
     public:
         MarkMask(Cube *model, Field *field);
 

@@ -35,8 +35,8 @@ MarkMask::getResist(Rules::eDir dir) const
     V2 shift_loc = shift.plus(m_model->getLocation());
 
     const Shape *shape = m_model->shape();
-    Shape::const_iterator end = shape->end();
-    for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
+    Shape::const_iterator end = shape->marksEnd();
+    for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = shift_loc.plus(*i);
 
         Cube *resist = m_field->getModel(mark);
@@ -49,26 +49,7 @@ MarkMask::getResist(Rules::eDir dir) const
     Cube::t_models::iterator last = std::unique(models.begin(), models.end());
     models.erase(last, models.end());
 
-    removeBorder(models);
     return models;
-}
-//-----------------------------------------------------------------
-/**
- * Remove border from list of models.
- * List contains unique models.
- */
-void
-MarkMask::removeBorder(Cube::t_models &models) const
-{
-    if (m_model->shouldGoOut()) {
-        Cube::t_models::iterator end = models.end();
-        for (Cube::t_models::iterator i = models.begin(); i != end; ++i) {
-            if (*i == m_field->getBorder()) {
-                models.erase(i);
-                return;
-            }
-        }
-    }
 }
 //-----------------------------------------------------------------
 /**
@@ -94,8 +75,8 @@ MarkMask::writeModel(Cube *model)
 {
     V2 loc = m_model->getLocation();
     const Shape *shape = m_model->shape();
-    Shape::const_iterator end = shape->end();
-    for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
+    Shape::const_iterator end = shape->marksEnd();
+    for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
         m_field->setModel(mark, model);
     }
@@ -104,6 +85,7 @@ MarkMask::writeModel(Cube *model)
 //-----------------------------------------------------------------
 /**
  * Returns dir to out of room.
+ * The direction must be without resist.
  * @return return dir or DIR_NO when model is not at the border.
  */
     Rules::eDir
@@ -111,23 +93,43 @@ MarkMask::getBorderDir() const
 {
     V2 loc = m_model->getLocation();
     const Shape *shape = m_model->shape();
-    Shape::const_iterator end = shape->end();
-    for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
+    Shape::const_iterator end = shape->marksEnd();
+    for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
-        if (mark.getX() == 0) {
+        if (mark.getX() == 0 && isBorderDir(Rules::DIR_LEFT)) {
             return Rules::DIR_LEFT;
         }
-        else if (mark.getX() == m_field->getW() - 1) {
+        else if (mark.getX() == m_field->getW() - 1 &&
+                isBorderDir(Rules::DIR_RIGHT))
+        {
             return Rules::DIR_RIGHT;
         }
-        else if (mark.getY() == 0) {
+        else if (mark.getY() == 0 && isBorderDir(Rules::DIR_UP)) {
             return Rules::DIR_UP;
         }
-        else if (mark.getY() == m_field->getH() - 1) {
+        else if (mark.getY() == m_field->getH() - 1 &&
+                isBorderDir(Rules::DIR_DOWN))
+        {
             return Rules::DIR_DOWN;
         }
     }
 
     return Rules::DIR_NO;
+}
+//-----------------------------------------------------------------
+/**
+ * Test whether there is only border in this direction.
+ */
+    bool
+MarkMask::isBorderDir(Rules::eDir dir) const
+{
+    bool result = false;
+    Cube::t_models resist = getResist(dir);
+    if (resist.size() == 1) {
+        if (resist[0]->getIndex() == -1) {
+            result = true;
+        }
+    }
+    return result;
 }
 

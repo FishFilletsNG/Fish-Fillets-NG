@@ -38,7 +38,7 @@ class DialogAgent : public BaseAgent {
     bool isTalking(int actor) const;
     void killSound(int actor);
 
-    bool empty();
+    bool empty() const;
     void killTalks();
     void removeAll();
 };

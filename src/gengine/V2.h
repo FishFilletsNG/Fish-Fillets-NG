@@ -39,5 +39,4 @@ class V2 {
         }
 };
 
-
 #endif

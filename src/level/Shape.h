@@ -12,18 +12,18 @@
  * It is uses by MarkMask to ask Field under shape.
  */
 class Shape : public NoCopy {
-    private:
+    public:
         typedef std::vector<V2> t_marks;
+        typedef t_marks::const_iterator const_iterator;
+    private:
         t_marks m_marks;
         int m_w;
         int m_h;
     public:
-        typedef t_marks::const_iterator const_iterator;
-    public:
         Shape(const std::string &shape);
 
-        const_iterator begin() const { return m_marks.begin(); }
-        const_iterator end() const { return m_marks.end(); }
+        const_iterator marksBegin() const { return m_marks.begin(); }
+        const_iterator marksEnd() const { return m_marks.end(); }
         int getW() const { return m_w; }
         int getH() const { return m_h; }
 

@@ -61,8 +61,8 @@ Shape::toString() const
 {
     std::string result;
 
-    const_iterator this_end = end();
-    for (const_iterator i = begin(); i != this_end; ++i) {
+    t_marks::const_iterator end = m_marks.end();
+    for (t_marks::const_iterator i = m_marks.begin(); i != end; ++i) {
         result.append(i->toString());
     }
     return result;

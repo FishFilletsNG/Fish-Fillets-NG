@@ -140,11 +140,7 @@ Controls::driveUnit(const InputProvider *input)
     void
 Controls::lockPhases()
 {
-    static const int SPEED_WARP1 = 6;
-    static const int SPEED_WARP2 = 10;
-
     if (m_active != m_units.end() && (*m_active)->isMoving()) {
-        int phases = 3;
         if ((*m_active)->isPushing()) {
             m_speedup = 0;
         }
@@ -152,20 +148,33 @@ Controls::lockPhases()
             m_speedup++;
         }
 
-        if (m_speedup > SPEED_WARP2) {
-            phases = 1;
-        }
-        else if (m_speedup > SPEED_WARP1) {
-            phases = 2;
-        }
-        else {
-            phases = 3;
-        }
-        m_locker->ensurePhases(phases);
+        m_locker->ensurePhases(getNeededPhases(m_speedup));
     }
     else {
         m_speedup = 0;
     }
+}
+//-----------------------------------------------------------------
+int
+Controls::getNeededPhases(int speedup) const
+{
+    static const int SPEED_WARP1 = 6;
+    static const int SPEED_WARP2 = 10;
+
+    int phases = 3;
+    if ((*m_active)->isTurning()) {
+        phases = (*m_active)->countAnimPhases("turn");
+    }
+    else if (speedup > SPEED_WARP2) {
+        phases = 1;
+    }
+    else if (speedup > SPEED_WARP1) {
+        phases = 2;
+    }
+    else {
+        phases = 3;
+    }
+    return phases;
 }
 //-----------------------------------------------------------------
 /**

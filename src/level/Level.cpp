@@ -467,6 +467,7 @@ Level::action_load()
 {
     Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
     if (file.exists()) {
+        m_restartCounter--;
         action_restart();
         m_levelScript->scriptInclude(file);
         m_levelScript->scriptDo("script_load()");

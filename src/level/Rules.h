@@ -46,7 +46,6 @@ class Rules : public NoCopy {
         bool isHeavier(Cube::eWeight power) const;
         Cube::t_models whoIsHeavier(Cube::eWeight power);
 
-        bool isFreeDir(eDir dir);
         bool canDir(eDir dir, Cube::eWeight power);
         bool canMoveOthers(eDir dir, Cube::eWeight weight);
         void moveDirBrute(eDir dir);

@@ -32,6 +32,7 @@ class Controls : public StepCounter, public NoCopy {
         bool useStroke();
         bool driveUnit(const InputProvider *input);
         void setActive(t_units::iterator active);
+        int getNeededPhases(int speedup) const;
     public:
         Controls(PhaseLocker *locker);
         ~Controls();

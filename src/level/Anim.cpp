@@ -9,6 +9,7 @@
 #include "Anim.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "ResImagePack.h"
 #include "EffectNone.h"
 #include "LogicException.h"
@@ -74,6 +75,7 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
     void
 Anim::addAnim(const std::string &name, const Path &picture)
 {
+    m_usedPath = picture.getPosixName();
     m_animPack[SIDE_LEFT]->addImage(name, picture);
 }
 //-----------------------------------------------------------------
@@ -81,6 +83,7 @@ Anim::addAnim(const std::string &name, const Path &picture)
 Anim::addDuplexAnim(const std::string &name,
         const Path &left_picture, const Path &right_picture)
 {
+    m_usedPath = left_picture.getPosixName();
     m_animPack[SIDE_LEFT]->addImage(name, left_picture);
     m_animPack[SIDE_RIGHT]->addImage(name, right_picture);
 }
@@ -114,7 +117,8 @@ Anim::setAnim(const std::string &name, int phase)
         LOG_WARNING(ExInfo("anim phase over-flow")
                 .addInfo("anim", name)
                 .addInfo("phase", phase)
-                .addInfo("count", count));
+                .addInfo("count", count)
+                .addInfo("usedPath", m_usedPath));
     }
 }
 //-----------------------------------------------------------------
@@ -163,3 +167,10 @@ Anim::changeEffect(ViewEffect *new_effect)
     delete m_effect;
     m_effect = new_effect;
 }
+//-----------------------------------------------------------------
+    int
+Anim::countAnimPhases(const std::string &anim, eSide side) const
+{
+    return m_animPack[side]->countRes(anim);
+}
+

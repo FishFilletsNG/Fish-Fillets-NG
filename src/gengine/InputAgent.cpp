@@ -26,7 +26,7 @@
  * Set console handler to ScriptAgent.
  *
  * NOTE: every SDL_InitSubSystem will disable UNICODE
- * hence InputAgent init must be after VideoAgent.
+ * hence InputAgent init must be after VideoAgent and SoundAgent.
  * NOTE: KeyConsole() use Path which asks OptionAgent
  */
     void

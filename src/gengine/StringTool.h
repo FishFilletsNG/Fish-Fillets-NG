@@ -14,6 +14,8 @@ class StringTool {
         static long readInt(const char *text, bool *ok);
         static std::string toString(long value);
 
+        static bool startsWith(const std::string &str,
+                const std::string &prefix);
         static void replace(std::string &buffer,
                 const std::string &pattern, const std::string &newstring);
         static t_args split(const std::string &str, char separator);

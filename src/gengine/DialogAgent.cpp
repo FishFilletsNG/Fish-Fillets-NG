@@ -180,7 +180,7 @@ DialogAgent::removeAll()
  * NOTE: cycling sounds are ignored
  */
 bool
-DialogAgent::empty()
+DialogAgent::empty() const
 {
     return m_running.empty();
 }

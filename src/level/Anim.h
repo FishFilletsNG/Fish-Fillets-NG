@@ -28,6 +28,7 @@ class Anim : public NoCopy {
         bool m_run;
         std::string m_specialAnimName;
         int m_specialAnimPhase;
+        std::string m_usedPath;
     private:
         void blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
     public:
@@ -48,6 +49,9 @@ class Anim : public NoCopy {
         void changeEffect(ViewEffect *new_effect);
         void setViewShift(const V2 &shift) { m_viewShift = shift; }
         V2 getViewShift() const { return m_viewShift; };
+
+        int countAnimPhases(const std::string &anim,
+                eSide side=SIDE_LEFT) const;
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include "Unit.h"
 #include "Shape.h"
 #include "LogicException.h"
+#include "StringTool.h"
 
 //-----------------------------------------------------------------
 /**
@@ -58,9 +59,14 @@ ModelFactory::createParams(const std::string &kind,
         *out_power = Cube::HEAVY;
         *out_alive = true;
     }
-    else if ("fish_extra" == kind) {
+    else if (StringTool::startsWith(kind, "fish_extra")) {
         *out_weight = Cube::LIGHT;
         *out_power = Cube::LIGHT;
+        *out_alive = true;
+    }
+    else if (StringTool::startsWith(kind, "fish_EXTRA")) {
+        *out_weight = Cube::LIGHT;
+        *out_power = Cube::HEAVY;
         *out_alive = true;
     }
     else {
@@ -107,13 +113,15 @@ ModelFactory::createUnit(const std::string &kind)
         bigfish.setRight(SDLK_d);
         result = new Unit(bigfish, ControlSym('U', 'D', 'L', 'R'));
     }
-    else if ("fish_extra" == kind) {
+    else if (StringTool::startsWith(kind, "fish_extra") ||
+        StringTool::startsWith(kind, "fish_EXTRA"))
+    {
         KeyControl extrafish;
-        extrafish.setUp(SDLK_KP8);
-        extrafish.setDown(SDLK_KP5);
-        extrafish.setLeft(SDLK_KP4);
-        extrafish.setRight(SDLK_KP6);
-        result = new Unit(extrafish, ControlSym('8', '5', '4', '6'));
+        extrafish.setUp(SDLK_LAST);
+        extrafish.setDown(SDLK_LAST);
+        extrafish.setLeft(SDLK_LAST);
+        extrafish.setRight(SDLK_LAST);
+        result = new Unit(extrafish, parseExtraControlSym(kind));
     }
     return result;
 }
@@ -129,3 +137,25 @@ ModelFactory::createBorder()
             new Shape("X\n"));
     return border;
 }
+//-----------------------------------------------------------------
+/**
+ * Define controls symbols for extra fish.
+ * Format: "fish_extra-UDLR"
+ * @throws LogicException when symbols are not specified
+ */
+ControlSym
+ModelFactory::parseExtraControlSym(const std::string &kind)
+{
+    static const std::string PREFIX = "fish_extra-";
+    if (kind.size() != PREFIX.size() + 4) {
+        throw LogicException(ExInfo("you must specify control symbols")
+                .addInfo("kind", kind));
+    }
+
+    char up = kind[PREFIX.size()];
+    char down = kind[PREFIX.size() + 1];
+    char left = kind[PREFIX.size() + 2];
+    char right = kind[PREFIX.size() + 3];
+    return ControlSym(up, down, left, right);
+}
+

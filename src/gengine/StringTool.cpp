@@ -50,6 +50,13 @@ StringTool::toString(long value)
     return buffer.str();
 }
 //-----------------------------------------------------------------
+    bool
+StringTool::startsWith(const std::string &str,
+        const std::string &prefix)
+{
+    return prefix == str.substr(0, prefix.size());
+}
+//-----------------------------------------------------------------
 /**
  * Replace one substring with another
  * @param buffer string to change

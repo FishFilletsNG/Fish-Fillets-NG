@@ -11,6 +11,7 @@
 #include "Cube.h"
 #include "Rules.h"
 #include "InputProvider.h"
+#include "Anim.h"
 
 //-----------------------------------------------------------------
 /**
@@ -221,6 +222,12 @@ bool
 Unit::isPushing() const
 {
     return m_model->rules()->getState() == "pushing";
+}
+//-----------------------------------------------------------------
+int
+Unit::countAnimPhases(const std::string &anim) const
+{
+    return m_model->anim()->countAnimPhases(anim);
 }
 
 

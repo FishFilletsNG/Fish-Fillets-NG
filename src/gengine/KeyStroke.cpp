@@ -82,7 +82,7 @@ KeyStroke::equals(const KeyStroke &other) const
 std::string
 KeyStroke::toString() const
 {
-    std::string result = StringTool::toString(m_sym);
+    std::string result = SDL_GetKeyName(m_sym);
     result.append("+" + StringTool::toString(m_mod));
     return result;
 }
