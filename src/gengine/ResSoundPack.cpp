@@ -25,6 +25,7 @@ ResSoundPack::unloadRes(Mix_Chunk *res)
 ResSoundPack::loadSound(const Path &file)
 {
     Mix_Chunk *chunk = NULL;
+    //TODO: ask SoundAgent to load this sound
     if (OptionAgent::agent()->getAsInt("sound")) {
         chunk = Mix_LoadWAV(file.getNative().c_str());
         if (NULL == chunk) {

@@ -18,6 +18,11 @@
 
 BaseMsg *SDLSoundAgent::ms_finished = NULL;
 //-----------------------------------------------------------------
+/**
+ * Init sound subsystem.
+ * @throws SDLException when SDL_INIT_AUDIO cannot be initialized
+ * @throws MixException when SDL_mixer cannot be initialized
+ */
     void
 SDLSoundAgent::own_init()
 {

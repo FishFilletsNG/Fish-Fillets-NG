@@ -17,6 +17,7 @@ class Application : public NoCopy, public BaseListener {
 
     private:
         void prepareLogLevel();
+        void addSoundAgent();
     public:
         Application();
         virtual ~Application();

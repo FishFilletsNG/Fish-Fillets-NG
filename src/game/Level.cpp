@@ -285,7 +285,7 @@ Level::saveSolution()
             m_script->doString("script_load()");
         }
         catch (ScriptException &e) {
-            LOG_INFO(e.info());
+            LOG_WARNING(e.info());
         }
     }
 

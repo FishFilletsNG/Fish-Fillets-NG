@@ -52,18 +52,22 @@ OptionAgent::own_init()
     prepareLang();
 
     try {
-        ScriptAgent::agent()->doFile(
-                Path::dataSystemPath(CONFIG_FILE));
+        Path systemConfig = Path::dataSystemPath(CONFIG_FILE);
+        if (systemConfig.exists()) {
+            ScriptAgent::agent()->doFile(systemConfig);
+        }
     }
     catch (ScriptException &e) {
         LOG_WARNING(e.info());
     }
     try {
-        ScriptAgent::agent()->doFile(
-                Path::dataUserPath(CONFIG_FILE));
+        Path userConfig = Path::dataUserPath(CONFIG_FILE);
+        if (userConfig.exists()) {
+            ScriptAgent::agent()->doFile(userConfig);
+        }
     }
     catch (ScriptException &e) {
-        LOG_DEBUG(e.info());
+        LOG_WARNING(e.info());
     }
 
     ScriptAgent::agent()->doFile(Path::dataReadPath("script/init.lua"));
@@ -237,7 +241,14 @@ OptionAgent::setPersistent(const std::string &name, const std::string &value)
     Environ *swap_env = m_environ;
     m_environ = new Environ();
 
-    ScriptAgent::agent()->doFile(config);
+    try {
+        if (config.exists()) {
+            ScriptAgent::agent()->doFile(config);
+        }
+    }
+    catch (ScriptException &e) {
+        LOG_WARNING(e.info());
+    }
     setParam(name, value);
     m_environ->store(config);
 

@@ -63,15 +63,11 @@ Application::init(int argc, char *argv[])
     MessagerAgent::agent()->addListener(this);
     m_agents->init(Name::VIDEO_NAME);
     OptionAgent::agent()->parseCmdOpt(argc, argv);
-    //TODO: better setting sound on/off
-    if (OptionAgent::agent()->getAsInt("sound", 1)) {
-        m_agents->addAgent(new SDLSoundAgent());
-    }
-    else {
-        m_agents->addAgent(new DummySoundAgent());
-    }
-
     prepareLogLevel();
+
+    m_agents->init(Name::INPUT_NAME);
+    addSoundAgent();
+
     m_agents->init();
 }
 //-----------------------------------------------------------------
@@ -102,6 +98,34 @@ Application::prepareLogLevel()
     options->setParam("loglevel",
             options->getAsInt("loglevel", Log::getLogLevel()));
 }
+//-----------------------------------------------------------------
+/**
+ * Choose SDL or Dummy sound agent.
+ * Reads 'sound' config option.
+ */
+    void
+Application::addSoundAgent()
+{
+    //TODO: better setting sound on/off
+    //TODO: move to the SoundAgent
+    SoundAgent *soundAgent = NULL;
+    if (OptionAgent::agent()->getAsInt("sound", 1)) {
+        soundAgent = new SDLSoundAgent();
+        try {
+            soundAgent->init();
+        }
+        catch (BaseException &e) {
+            LOG_WARNING(e.info());
+            delete soundAgent;
+            soundAgent = new DummySoundAgent();
+        }
+    }
+    else {
+        soundAgent = new DummySoundAgent();
+    }
+    m_agents->addAgent(soundAgent);
+}
+
 //-----------------------------------------------------------------
 /**
  * Handle incoming message.
