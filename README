@@ -8,7 +8,7 @@ Library SDL = Simple DirectMedia Layer (video, input, sound)
 - libSDL >= 1.2, www.libsdl.org
 
 Library SDL_mixer (multiple sounds)
-- libSDL_mixer, http://www.libsdl.org/projects/SDL_mixer/
+- libSDL_mixer >= 1.2.5, http://www.libsdl.org/projects/SDL_mixer/
 
 Library SDL_image (png, jpg support)
 - libSDL_image, http://www.libsdl.org/projects/SDL_image/
@@ -27,8 +27,9 @@ How to run:
 3. cp src/game/fillets path_to_data
 4. cd path_to_data
 5. ./fillets
+(e.g. ./fillets level=script/cellar/init.lua )
 
-Alternative you can copy all game data to $HOME/fillets-ng
+Alternative you can copy all game data to $HOME/.fillets-ng
 
 Controls:
 small fish ... ijkl

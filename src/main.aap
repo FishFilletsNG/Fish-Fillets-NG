@@ -22,8 +22,8 @@ CXXFLAGS += -W -Wpointer-arith -Wcast-qual
 LIBS = -lSDL_mixer -lSDL_image -lboost_filesystem -lm
 LIBS += $Sdl_libs $Lua_libs $Lualib_libs
 
-all: game/game
+all: game/fillets
 
-:program game/game : SFont/SFont.c `glob("game/*.cpp")` `glob("gengine/*.cpp")`
+:program game/fillets : SFont/SFont.c `glob("game/*.cpp")` `glob("gengine/*.cpp")`
 
 

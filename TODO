@@ -12,13 +12,13 @@ GAME SPECIFIC
 
 
 INPUT
-1 - keyboard control - arrow keys & space bar to switch between fishes
-2 - mouse control - select fish by left-clicking on it, left-click in level to go there without touching anything
-2 - key to load/save position
+3 - mouse control - select fish by left-clicking on it, left-click in level to go there without touching anything
 ------
+OK: 1 - keyboard control - arrow keys & space bar to switch between fishes
 OK: 1 - key to restart level
 OK: 2 - keyboard control - 'asdw' keys and 'jkli' keys
 OK: 2 - fish move acceleration
+OK: 2 - key to load/save position
 
 STATISTICS
 2 - implement load/save position

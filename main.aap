@@ -8,4 +8,4 @@ PKGNAME = fillets-ng
 
 :child src/main.aap
 
-all: src/game/game
+all: src/game/fillets
