@@ -96,6 +96,7 @@ Outline::drawAlongCopy(SDL_Surface *surface, Uint32 bgKey, SDL_Surface *copy)
 void
 Outline::fillNeighbourhood(SDL_Surface *surface, Uint32 bgKey, int x, int y)
 {
+    //TODO: optimize for speed
     if (x > 0 && ViewEffect::getPixel(surface, x - 1, y) == bgKey) {
         ViewEffect::putPixel(surface, x - 1, y, m_pixel);
     }

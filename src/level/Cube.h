@@ -69,7 +69,7 @@ class Cube : public NoCopy {
         eWeight getPower() const { return m_power; }
         const Shape *shape() const { return m_shape; }
 
-        bool isInvisible();
+        bool isDisintegrated();
         Anim *anim();
         Rules *rules() { return m_rules; }
 

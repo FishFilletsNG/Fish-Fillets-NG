@@ -96,6 +96,8 @@ InputAgent::own_shutdown()
 void 
 InputAgent::enableConsole(IKeyConsole *new_console)
 {
+    //FIXME: make sure that console will be always the top drawer
+    // This is not true when level restarts.
     if (m_console) {
         delete m_console;
     }

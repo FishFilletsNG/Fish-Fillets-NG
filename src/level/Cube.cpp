@@ -102,9 +102,9 @@ Cube::change_turnSide()
 
 //-----------------------------------------------------------------
 bool
-Cube::isInvisible()
+Cube::isDisintegrated()
 {
-    return m_anim->isInvisible();
+    return m_anim->isDisintegrated();
 }
 //-----------------------------------------------------------------
     Anim *

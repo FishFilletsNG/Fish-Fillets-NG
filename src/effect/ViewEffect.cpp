@@ -44,13 +44,12 @@ ViewEffect::updateEffect()
 }
 //-----------------------------------------------------------------
 /**
- * Returns true for invisible object.
+ * Returns true for object for who the disint effect is finished.
  */
 bool
-ViewEffect::isInvisible() const
+ViewEffect::isDisintegrated() const
 {
-    return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint)
-        || m_effect == EFFECT_INVISIBLE;
+    return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint);
 }
 //-----------------------------------------------------------------
 void

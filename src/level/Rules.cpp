@@ -231,7 +231,7 @@ Rules::changeState()
         m_mask->unmask();
         m_model->change_goOut();
     }
-    if (!m_model->isLost() && m_model->isInvisible()) {
+    if (!m_model->isLost() && m_model->isDisintegrated()) {
         m_mask->unmask();
         m_model->change_remove();
     }
