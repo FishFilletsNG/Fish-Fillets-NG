@@ -30,6 +30,7 @@
 #include "Pedometer.h"
 #include "LayeredPicture.h"
 #include "MenuOptions.h"
+#include "PosterState.h"
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap()
@@ -278,7 +279,8 @@ WorldMap::findDesc(const std::string &codename) const
     void
 WorldMap::runIntro()
 {
-    LOG_INFO(ExInfo("intro is not implemented yet"));
+    //TODO: intro as video
+    pushState(new PosterState(Path::dataReadPath("images/menu/intro.png")));
 }
 //-----------------------------------------------------------------
     void
