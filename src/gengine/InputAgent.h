@@ -2,7 +2,6 @@
 #define HEADER_INPUTAGENT_H
 
 class KeyBinder;
-class IKeyConsole;
 class InputHandler;
 
 #include "BaseAgent.h"
@@ -19,16 +18,13 @@ class InputAgent : public BaseAgent {
     private:
         Uint8 *m_keys;
         KeyBinder *m_keyBinder;
-        IKeyConsole *m_console;
         InputHandler *m_handler;
     protected:
         virtual void own_init();
         virtual void own_update();
         virtual void own_shutdown();
     public:
-        virtual void receiveSimple(const SimpleMsg *msg);
         void installHandler(InputHandler *handler) { m_handler = handler; }
-        void enableConsole(IKeyConsole *new_console);
 
         KeyBinder *keyBinder() { return m_keyBinder; }
         Uint8 *getKeys() { return m_keys; }

@@ -78,14 +78,14 @@ LayeredPicture::getMaskAt(const V2 &loc)
 }
 //-----------------------------------------------------------------
     void
-LayeredPicture::draw()
+LayeredPicture::drawOn(SDL_Surface *screen)
 {
-    Picture::draw();
+    Picture::drawOn(screen);
     if (m_activeColor == MASK_NO) {
         return;
     }
 
-    SurfaceLock lock1(m_screen);
+    SurfaceLock lock1(screen);
     SurfaceLock lock2(m_lowerLayer);
     SurfaceLock lock3(m_colorMask);
 
@@ -98,7 +98,7 @@ LayeredPicture::draw()
             if (sample == m_activeColor) {
                 SDL_Color lower = PixelTool::getColor(m_lowerLayer, px, py);
                 if (lower.unused == 255) {
-                    PixelTool::putColor(m_screen,
+                    PixelTool::putColor(screen,
                             m_loc.getX() + px, world_y, lower);
                 }
             }

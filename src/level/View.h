@@ -5,14 +5,14 @@ class Cube;
 class PhaseLocker;
 class Decor;
 
-#include "IDrawer.h"
+#include "Drawable.h"
 #include "ModelList.h"
 #include "V2.h"
 
 /**
  * View for model.
  */
-class View : public IDrawer {
+class View : public Drawable {
     public:
         static const int SCALE = 15;
     private:
@@ -21,6 +21,7 @@ class View : public IDrawer {
         ModelList m_models;
         int m_animShift;
         int m_shiftSize;
+        SDL_Surface *m_screen;
     private:
         void computeShiftSize(int phases);
         void drawDecors();
@@ -30,7 +31,7 @@ class View : public IDrawer {
         void noteNewRound(int phases);
 
         void drawModel(Cube *model);
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 
         V2 getScreenPos(const Cube *model) const;
         void addDecor(Decor *new_decor) { m_decors.push_back(new_decor); }

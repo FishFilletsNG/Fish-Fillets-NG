@@ -7,6 +7,7 @@ class Font;
 class Color;
 
 #include "BaseAgent.h"
+#include "Drawable.h"
 #include "Name.h"
 #include "Path.h"
 
@@ -16,7 +17,7 @@ class Color;
 /**
  * Subtitles manager.
  */
-class SubTitleAgent : public BaseAgent {
+class SubTitleAgent : public BaseAgent, public Drawable {
     AGENT(SubTitleAgent, Name::SUBTITLE_NAME);
     public:
     static const int TITLE_ROW = 26;
@@ -47,6 +48,8 @@ class SubTitleAgent : public BaseAgent {
 
     void killTalks();
     void removeAll();
+
+    virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

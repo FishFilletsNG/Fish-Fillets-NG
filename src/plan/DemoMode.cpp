@@ -14,6 +14,7 @@
 
 #include "ScriptState.h"
 #include "DialogAgent.h"
+#include "SubTitleAgent.h"
 
 #include "demo-script.h"
 
@@ -24,6 +25,8 @@ DemoMode::DemoMode()
     m_display = NULL;
     m_script->registerFunc("demo_display", script_demo_display);
     takeHandler(new DemoInput(this));
+    addDrawable(this);
+    addDrawable(SubTitleAgent::agent());
 }
 //-----------------------------------------------------------------
 DemoMode::~DemoMode()
@@ -38,10 +41,17 @@ DemoMode::runDemo(Picture *new_bg, const Path &demoscript)
         delete m_bg;
     }
     m_bg = new_bg;
-    m_bg->deactivate();
+    killPlan();
     m_script->doFile(demoscript);
 }
-
+//-----------------------------------------------------------------
+void
+DemoMode::killPlan()
+{
+    DialogAgent::agent()->killTalks();
+    SubTitleAgent::agent()->killTalks();
+    interruptPlan();
+}
 //-----------------------------------------------------------------
 /**
  * Run demo.
@@ -50,7 +60,6 @@ DemoMode::runDemo(Picture *new_bg, const Path &demoscript)
 void
 DemoMode::own_updateState()
 {
-    m_bg->activate();
     if (satisfyPlan()) {
         quitState();
     }
@@ -69,8 +78,7 @@ DemoMode::own_cleanState()
         m_display = NULL;
     }
 
-    interruptPlan();
-    DialogAgent::agent()->killTalks();
+    killPlan();
 }
 //-----------------------------------------------------------------
 /**
@@ -85,5 +93,17 @@ DemoMode::action_display(Picture *picture)
     m_display = picture;
     return true;
 }
+//-----------------------------------------------------------------
+void
+DemoMode::drawOn(SDL_Surface *screen)
+{
+    if (m_bg) {
+        m_bg->drawOn(screen);
+    }
+    if (m_display) {
+        m_display->drawOn(screen);
+    }
+}
+
 
 

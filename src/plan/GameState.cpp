@@ -10,10 +10,12 @@
 
 #include "StateManager.h"
 #include "InputHandler.h"
+#include "MultiDrawer.h"
 
 #include "Log.h"
 #include "LogicException.h"
 #include "InputAgent.h"
+#include "VideoAgent.h"
 
 //-----------------------------------------------------------------
 GameState::GameState()
@@ -21,6 +23,7 @@ GameState::GameState()
     m_handler = NULL;
     m_active = false;
     m_onBg = false;
+    m_drawer = new MultiDrawer();
 }
 //-----------------------------------------------------------------
 GameState::~GameState()
@@ -28,6 +31,7 @@ GameState::~GameState()
     if (m_handler) {
         delete m_handler;
     }
+    delete m_drawer;
 }
 //-----------------------------------------------------------------
 /**
@@ -50,7 +54,6 @@ GameState::initState(StateManager *manager)
     m_manager = manager;
     m_active = true;
     m_onBg = false;
-    InputAgent::agent()->installHandler(m_handler);
     own_initState();
 }
 //-----------------------------------------------------------------
@@ -61,7 +64,7 @@ GameState::initState(StateManager *manager)
 GameState::updateState()
 {
     if (!m_active) {
-        throw LogicException(ExInfo("state is not active")
+        throw LogicException(ExInfo("update - state is not active")
                 .addInfo("name", getName()));
     }
 
@@ -81,7 +84,6 @@ GameState::pauseState()
     }
 
     own_pauseState();
-    InputAgent::agent()->installHandler(NULL);
     m_active = false;
     m_onBg = false;
 }
@@ -99,17 +101,24 @@ GameState::resumeState()
                 .addInfo("name", getName()));
     }
     m_active = true;
-    InputAgent::agent()->installHandler(m_handler);
     own_resumeState();
 }
 //-----------------------------------------------------------------
+/**
+ * Clean state after run.
+ * @throws LogicException when state is not active
+ */
     void
 GameState::cleanState()
 {
     LOG_DEBUG(ExInfo("cleanState").addInfo("name", getName()));
+    if (!m_active) {
+        throw LogicException(ExInfo("clean - state is not active")
+                .addInfo("name", getName()));
+    }
     own_cleanState();
+    unHandlers();
 
-    InputAgent::agent()->installHandler(NULL);
     m_active = false;
     m_onBg = false;
     m_manager = NULL;
@@ -138,7 +147,6 @@ GameState::noteBg()
 {
     LOG_DEBUG(ExInfo("noteBg").addInfo("name", getName()));
     own_noteBg();
-    InputAgent::agent()->installHandler(NULL);
     m_onBg = true;
 }
 //-----------------------------------------------------------------
@@ -147,8 +155,29 @@ GameState::noteFg()
 {
     LOG_DEBUG(ExInfo("noteFg").addInfo("name", getName()));
     m_onBg = false;
-    InputAgent::agent()->installHandler(m_handler);
     own_noteFg();
+}
+//-----------------------------------------------------------------
+void
+GameState::unHandlers()
+{
+    LOG_DEBUG(ExInfo("unHandlers").addInfo("state", getName()));
+    InputAgent::agent()->installHandler(NULL);
+    VideoAgent::agent()->removeDrawer(m_drawer);
+}
+//-----------------------------------------------------------------
+void
+GameState::installHandlers()
+{
+    LOG_DEBUG(ExInfo("installHandlers").addInfo("state", getName()));
+    InputAgent::agent()->installHandler(m_handler);
+    VideoAgent::agent()->acceptDrawer(m_drawer);
+}
+//-----------------------------------------------------------------
+void
+GameState::addDrawable(Drawable *drawable)
+{
+    m_drawer->acceptDrawer(drawable);
 }
 
 

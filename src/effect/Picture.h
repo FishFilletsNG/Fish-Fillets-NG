@@ -3,7 +3,7 @@
 
 class CVideo;
 
-#include "IDrawer.h"
+#include "Drawable.h"
 #include "Path.h"
 #include "V2.h"
 
@@ -11,7 +11,7 @@ class CVideo;
 /**
  * Static picture at fixed screen position.
  */
-class Picture : public IDrawer {
+class Picture : public Drawable {
     protected:
         V2 m_loc;
         SDL_Surface *m_surface;
@@ -19,7 +19,7 @@ class Picture : public IDrawer {
         Picture(const Path &file, const V2 &loc);
         Picture(SDL_Surface *new_surface, const V2 &loc);
         virtual ~Picture();
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 
         int getW() const { return m_surface->w; }
         int getH() const { return m_surface->h; }

@@ -15,6 +15,7 @@
 #include "LevelStatus.h"
 #include "LevelScript.h"
 #include "CommandQueue.h"
+#include "MultiDrawer.h"
 
 #include "Log.h"
 #include "Room.h"
@@ -26,6 +27,7 @@
 #include "LogicException.h"
 #include "DemoMode.h"
 #include "SoundAgent.h"
+#include "SubTitleAgent.h"
 #include "StepDecor.h"
 #include "minmax.h"
 
@@ -52,7 +54,10 @@
     m_locker = new PhaseLocker();
     m_levelScript = new LevelScript(this);
     m_show = new CommandQueue();
+    m_background = new MultiDrawer();
     takeHandler(new LevelInput(this));
+    addDrawable(m_background);
+    addDrawable(SubTitleAgent::agent());
 }
 //-----------------------------------------------------------------
 Level::~Level()
@@ -62,6 +67,7 @@ Level::~Level()
     //NOTE: m_show must be removed before levelScript
     delete m_show;
     delete m_levelScript;
+    delete m_background;
 }
 
 //-----------------------------------------------------------------
@@ -109,18 +115,9 @@ Level::own_updateState()
 }
 //-----------------------------------------------------------------
     void
-Level::own_pauseState()
-{
-    if (m_levelScript->isRoom()) {
-        m_levelScript->room()->deactivate();
-    }
-}
-//-----------------------------------------------------------------
-    void
 Level::own_resumeState()
 {
     if (m_levelScript->isRoom()) {
-        m_levelScript->room()->activate();
         initScreen();
     }
 }
@@ -484,6 +481,8 @@ Level::createRoom(int w, int h, const Path &picture)
     Room *room = new Room(w, h, picture, m_locker, m_levelScript);
     room->addDecor(new StepDecor(room));
     m_levelScript->takeRoom(room);
+    m_background->removeAll();
+    m_background->acceptDrawer(room);
 
     initScreen();
 }
@@ -517,6 +516,7 @@ Level::setRoomWaves(double amplitude, double periode, double speed)
     void
 Level::newDemo(Picture *new_bg, const Path &demofile)
 {
+    m_levelScript->interruptPlan();
     DemoMode *demo = new DemoMode();
     demo->runDemo(new_bg, demofile);
     pushState(demo);

@@ -17,7 +17,7 @@ class WavyPicture : public Picture {
         void setWperiode(double periode) { m_periode = periode; }
         void setWspeed(double speed) { m_speed = speed; }
 
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

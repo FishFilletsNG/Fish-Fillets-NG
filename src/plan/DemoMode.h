@@ -6,13 +6,12 @@ class DemoInput;
 
 #include "GameState.h"
 #include "Planner.h"
-
-#include <map>
+#include "Drawable.h"
 
 /**
  * Graphic demo.
  */
-class DemoMode : public Planner, public GameState {
+class DemoMode : public Planner, public GameState, public Drawable {
     private:
         Picture *m_bg;
         Picture *m_display;
@@ -22,6 +21,7 @@ class DemoMode : public Planner, public GameState {
         virtual void own_pauseState() {}
         virtual void own_resumeState() {}
         virtual void own_cleanState();
+        void killPlan();
     public:
         DemoMode();
         virtual ~DemoMode();
@@ -30,6 +30,7 @@ class DemoMode : public Planner, public GameState {
         void runDemo(Picture *new_bg, const Path &demoscript);
 
         bool action_display(Picture *picture);
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

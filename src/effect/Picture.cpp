@@ -43,13 +43,13 @@ Picture::~Picture()
  * Blit entire surface to [x,y].
  */
 void
-Picture::draw()
+Picture::drawOn(SDL_Surface *screen)
 {
     SDL_Rect rect;
     rect.x = m_loc.getX();
     rect.y = m_loc.getY();
 
-    SDL_BlitSurface(m_surface, NULL, m_screen, &rect);
+    SDL_BlitSurface(m_surface, NULL, screen, &rect);
 }
 
 

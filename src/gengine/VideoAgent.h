@@ -1,9 +1,8 @@
 #ifndef HEADER_VIDEOAGENT_H
 #define HEADER_VIDEOAGENT_H
 
-class IDrawer;
-
 #include "BaseAgent.h"
+#include "MultiDrawer.h"
 #include "Name.h"
 #include "Path.h"
 
@@ -11,18 +10,15 @@ class IDrawer;
 
 #include <vector>
 
-
 /**
  * Video agent initializes video mode and
  * every cycle lets registered drawers to draw().
  *
  * IDrawer register oneself in his constructor.
  */
-class VideoAgent : public BaseAgent {
+class VideoAgent : public BaseAgent, public MultiDrawer {
     AGENT(VideoAgent, Name::VIDEO_NAME);
     private:
-        typedef std::vector<IDrawer*> t_drawers;
-        t_drawers m_drawers;
         SDL_Surface *m_screen;
         bool m_fullscreen;
 
@@ -31,10 +27,6 @@ class VideoAgent : public BaseAgent {
         void changeVideoMode(int screen_width, int screen_height);
         int getVideoFlags();
         void toggleFullScreen();
-        static void setTransparent(SDL_Surface *surface);
-        void updateDrawersScreen();
-        void setCaption(const std::string &title);
-
     protected:
         virtual void own_init();
         virtual void own_update();
@@ -45,8 +37,6 @@ class VideoAgent : public BaseAgent {
         virtual void receiveString(const StringMsg *msg);
 
         void initVideoMode();
-        void acceptDrawer(IDrawer *drawer);
-        void removeDrawer(const IDrawer *drawer);
 };
 
 #endif

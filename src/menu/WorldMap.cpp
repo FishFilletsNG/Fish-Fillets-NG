@@ -36,13 +36,14 @@ WorldMap::WorldMap()
 {
     m_selected = NULL;
     m_startNode = NULL;
-    deactivate();
     prepareBg();
 
     m_drawer = new NodeDrawer();
     m_descPack = new ResDialogPack();
     m_levelStatus = new LevelStatus();
     takeHandler(new WorldInput(this));
+    addDrawable(m_bg);
+    addDrawable(this);
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
@@ -75,7 +76,6 @@ WorldMap::prepareBg()
     m_maskCredits = m_bg->getMaskAt(V2(0, m_bg->getH() - 1));
     m_maskOptions = m_bg->getMaskAt(V2(m_bg->getW() - 1, m_bg->getH() - 1));
     m_activeMask = m_bg->getNoMask();
-    m_bg->deactivate();
 }
 //-----------------------------------------------------------------
     void
@@ -120,26 +120,11 @@ WorldMap::own_updateState()
 }
 //-----------------------------------------------------------------
 /**
- * Hide menu.
- * NOTE: level will stop music
- */
-    void
-WorldMap::own_pauseState()
-{
-    deactivate();
-    m_bg->deactivate();
-}
-//-----------------------------------------------------------------
-/**
  * Display menu and play menu music.
  */
     void
 WorldMap::own_resumeState()
 {
-    //NOTE: order is significant
-    m_bg->activate();
-    activate();
-
     if (m_levelStatus->wasRunning()) {
         if (m_levelStatus->isComplete()) {
             markSolved();
@@ -249,9 +234,9 @@ WorldMap::markSolved()
 }
 //-----------------------------------------------------------------
     void
-WorldMap::draw()
+WorldMap::drawOn(SDL_Surface *screen)
 {
-    m_drawer->setScreen(m_screen);
+    m_drawer->setScreen(screen);
     m_startNode->drawPath(m_drawer);
     if (m_selected) {
         m_drawer->drawSelected(findLevelName(m_selected->getCodename()));

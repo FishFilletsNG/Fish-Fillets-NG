@@ -27,6 +27,7 @@ View::View(const ModelList &models)
 {
     m_animShift = 0;
     m_shiftSize = SCALE;
+    m_screen = NULL;
 }
 //-----------------------------------------------------------------
 View::~View()
@@ -65,8 +66,9 @@ View::noteNewRound(int phases)
 }
 //-----------------------------------------------------------------
 void
-View::draw()
+View::drawOn(SDL_Surface *screen)
 {
+    m_screen = screen;
     ++m_animShift;
     m_models.drawOn(this);
     drawDecors();

@@ -26,7 +26,7 @@ class KeyConsole : public IKeyConsole {
         virtual void keyDown(const SDL_keysym &keysym);
         void setHandler(const std::string &handlerName);
 
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

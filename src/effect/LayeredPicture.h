@@ -26,7 +26,7 @@ class LayeredPicture : public Picture {
         Uint32 getMaskAt(const V2 &loc);
         Uint32 getNoMask() const { return MASK_NO; }
 
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

@@ -30,7 +30,7 @@ WavyPicture::WavyPicture(const Path &file, const V2 &loc)
  * Do vertical waves with phase shift.
  */
 void
-WavyPicture::draw()
+WavyPicture::drawOn(SDL_Surface *screen)
 {
     //NOTE: Wamp = Wamp_in_orig/2.0
     //NOTE: Wspeed = 1.0/Wspd_in_orig
@@ -49,7 +49,7 @@ WavyPicture::draw()
         line_rect.x = static_cast<int>(0.5 + wave);
         line_rect.y = py;
 
-        SDL_BlitSurface(m_surface, &line_rect, m_screen, &dest_rect);
+        SDL_BlitSurface(m_surface, &line_rect, screen, &dest_rect);
     }
 }
 

@@ -23,6 +23,7 @@ class StateManager : public NoCopy {
         void checkStack();
         void pauseBg(t_states::iterator stateIt);
         void resumeBg(t_states::iterator stateIt);
+        void installHandlers();
     public:
         virtual ~StateManager();
         void updateGame();

@@ -6,7 +6,7 @@ class LevelStatus;
 class LayeredPicture;
 class Picture;
 
-#include "IDrawer.h"
+#include "Drawable.h"
 #include "GameState.h"
 
 #include "SDL.h"
@@ -15,7 +15,7 @@ class Picture;
 /**
  * Pedometer with tree buttons.
  */
-class Pedometer : public GameState, public IDrawer {
+class Pedometer : public GameState, public Drawable {
     private:
         Picture *m_bg;
         LayeredPicture *m_rack;
@@ -36,13 +36,13 @@ class Pedometer : public GameState, public IDrawer {
         void runLevel();
         void runReplay();
 
-        void drawNumbers(int value);
-        void drawNumber(int x, int y, int shiftY);
+        void drawNumbers(SDL_Surface *screen, int value);
+        void drawNumber(SDL_Surface *screen, int x, int y, int shiftY);
     protected:
         virtual void own_initState();
         virtual void own_updateState();
-        virtual void own_pauseState();
-        virtual void own_resumeState();
+        virtual void own_pauseState() {}
+        virtual void own_resumeState() {}
         virtual void own_cleanState() {}
     public:
         Pedometer(LevelStatus *status, Level *level);
@@ -50,7 +50,7 @@ class Pedometer : public GameState, public IDrawer {
         virtual const char *getName() const { return "state_pedometer"; };
 
         void runSelected();
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

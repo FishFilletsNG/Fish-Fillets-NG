@@ -28,7 +28,6 @@ Pedometer::Pedometer(LevelStatus *status, Level *new_level)
     m_solution = m_status->readSolvedMoves();
     m_meterPhase = 0;
 
-    deactivate();
     prepareBg();
     prepareRack();
 
@@ -36,6 +35,9 @@ Pedometer::Pedometer(LevelStatus *status, Level *new_level)
             Path::dataReadPath("images/menu/numbers.png"));
 
     takeHandler(new PedoInput(this));
+    addDrawable(m_bg);
+    addDrawable(m_rack);
+    addDrawable(this);
 }
 //-----------------------------------------------------------------
 Pedometer::~Pedometer()
@@ -61,7 +63,6 @@ Pedometer::prepareBg()
     drawer.setScreen(bgSurface);
     drawer.drawSelected(m_status->getLevelName());
     m_bg = new Picture(bgSurface, V2(0, 0));
-    m_bg->deactivate();
 }
 //-----------------------------------------------------------------
     void
@@ -82,7 +83,6 @@ Pedometer::prepareRack()
     m_maskReplay = m_rack->getMaskAt(V2(128, 100));
     m_maskCancel = m_rack->getMaskAt(V2(170, 100));
     m_activeMask = m_rack->getNoMask();
-    m_rack->deactivate();
 }
 
 //-----------------------------------------------------------------
@@ -99,29 +99,6 @@ Pedometer::own_initState()
 Pedometer::own_updateState()
 {
     watchCursor();
-}
-//-----------------------------------------------------------------
-/**
- * Hide picture.
- */
-    void
-Pedometer::own_pauseState()
-{
-    deactivate();
-    m_rack->deactivate();
-    m_bg->deactivate();
-}
-//-----------------------------------------------------------------
-/**
- * Display picture.
- */
-    void
-Pedometer::own_resumeState()
-{
-    //NOTE: order is significant
-    m_bg->activate();
-    m_rack->activate();
-    activate();
 }
 
 //-----------------------------------------------------------------
@@ -178,9 +155,9 @@ Pedometer::runReplay()
 
 //-----------------------------------------------------------------
     void
-Pedometer::draw()
+Pedometer::drawOn(SDL_Surface *screen)
 {
-    drawNumbers(m_solution.size());
+    drawNumbers(screen, m_solution.size());
 }
 //-----------------------------------------------------------------
 /**
@@ -188,7 +165,7 @@ Pedometer::draw()
  * Draw nice rotating numbers.
  */
     void
-Pedometer::drawNumbers(int value)
+Pedometer::drawNumbers(SDL_Surface *screen, int value)
 {
     static const int CIPHERS = 5;
     static const int POS_X = 275;
@@ -206,12 +183,12 @@ Pedometer::drawNumbers(int value)
                 numberHeight * 9 - SHIFT_SPEED * m_meterPhase);
         m_meterPhase++;
 
-        drawNumber(x, POS_Y, shiftY);
+        drawNumber(screen, x, POS_Y, shiftY);
     }
 }
 //-----------------------------------------------------------------
 void
-Pedometer::drawNumber(int x, int y, int shiftY)
+Pedometer::drawNumber(SDL_Surface *screen, int x, int y, int shiftY)
 {
     SDL_Rect dest_rect;
     dest_rect.x = x;
@@ -223,6 +200,6 @@ Pedometer::drawNumber(int x, int y, int shiftY)
     src_rect.w = m_numbers->w;
     src_rect.h = m_numbers->h / 10;
 
-    SDL_BlitSurface(m_numbers, &src_rect, m_screen, &dest_rect);
+    SDL_BlitSurface(m_numbers, &src_rect, screen, &dest_rect);
 }
 

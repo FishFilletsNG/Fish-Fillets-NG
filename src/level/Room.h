@@ -13,6 +13,7 @@ class View;
 class Decor;
 
 #include "NoCopy.h"
+#include "Drawable.h"
 #include "Path.h"
 #include "Cube.h"
 #include "StepCounter.h"
@@ -22,7 +23,7 @@ class Decor;
 /**
  * Room with level.
  */
-class Room : public StepCounter, public NoCopy {
+class Room : public StepCounter, public NoCopy, public Drawable {
     private:
         WavyPicture *m_bg;
         Field *m_field;
@@ -47,8 +48,6 @@ class Room : public StepCounter, public NoCopy {
         ~Room();
         void setWaves(double amplitude, double periode, double speed);
         void addDecor(Decor *new_decor);
-        void activate();
-        void deactivate();
 
         int addModel(Cube *new_model, Unit *new_unit);
         Cube *getModel(int model_index);
@@ -73,6 +72,8 @@ class Room : public StepCounter, public NoCopy {
         int getCycles() const;
         void addSound(const std::string &name, const Path &file);
         void playSound(const std::string &name, int volume=100);
+
+        virtual void drawOn(SDL_Surface *screen);
 };
 
 #endif

@@ -34,7 +34,6 @@
 InputAgent::own_init()
 {
     m_keyBinder = new KeyBinder();
-    m_console = NULL;
     m_handler = NULL;
     m_keys = SDL_GetKeyState(NULL);
 
@@ -54,14 +53,9 @@ InputAgent::own_update()
                     break;
                 }
             case SDL_KEYDOWN:
-                if (m_console && m_console->isActive()) {
-                    m_console->keyDown(event.key.keysym);
-                }
-                else {
-                    m_keyBinder->keyDown(event.key.keysym);
-                    if (m_handler) {
-                        m_handler->keyEvent(KeyStroke(event.key.keysym));
-                    }
+                m_keyBinder->keyDown(event.key.keysym);
+                if (m_handler) {
+                    m_handler->keyEvent(KeyStroke(event.key.keysym));
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
@@ -81,41 +75,7 @@ InputAgent::own_update()
     void
 InputAgent::own_shutdown()
 {
-    if (m_console) {
-        delete m_console;
-    }
     delete m_keyBinder;
-}
-//-----------------------------------------------------------------
-void 
-InputAgent::enableConsole(IKeyConsole *new_console)
-{
-    //FIXME: make sure that console will be always the top drawer
-    // This is not true when level restarts.
-    if (m_console) {
-        delete m_console;
-    }
-    m_console = new_console;
-}
-//-----------------------------------------------------------------
-/**
- * Handle incoming message.
- * Messages:
- * - console ... activate debug console
- *
- * @throws UnknownMsgException
- */
-void
-InputAgent::receiveSimple(const SimpleMsg *msg)
-{
-    if (msg->equalsName("console")) {
-        if (m_console) {
-            m_console->activate();
-        }
-    }
-    else {
-        throw UnknownMsgException(msg);
-    }
 }
 //-----------------------------------------------------------------
 /**

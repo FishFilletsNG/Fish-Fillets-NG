@@ -1,14 +1,14 @@
 #ifndef HEADER_IKEYCONSOLE_H
 #define HEADER_IKEYCONSOLE_H
 
-#include "IDrawer.h"
+#include "Drawable.h"
 
 #include "SDL.h"
 
 /**
  * Console interface.
  */
-class IKeyConsole : public IDrawer {
+class IKeyConsole : public Drawable {
     public:
         virtual ~IKeyConsole() {}
 

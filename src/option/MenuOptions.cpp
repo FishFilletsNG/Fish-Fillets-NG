@@ -8,9 +8,6 @@
  */
 #include "MenuOptions.h"
 
-#include "Picture.h"
-#include "WidgetContainer.h"
-
 #include "Path.h"
 #include "HBox.h"
 #include "VBox.h"
@@ -46,10 +43,10 @@ MenuOptions::MenuOptions()
     vbox->addWidget(new WiSpace(0, 10));
     vbox->addWidget(new SelectLang(
                 Path::dataReadPath("script/select_lang.lua")));
-    m_container = new WidgetContainer(vbox);
-    m_container->deactivate();
+    m_container = vbox;
 
     takeHandler(new OptionsInput(this));
+    addDrawable(m_container);
 }
 //-----------------------------------------------------------------
 MenuOptions::~MenuOptions()
@@ -73,23 +70,12 @@ MenuOptions::own_updateState()
 }
 //-----------------------------------------------------------------
 /**
- * Hide menu.
- */
-    void
-MenuOptions::own_pauseState()
-{
-    m_container->deactivate();
-}
-//-----------------------------------------------------------------
-/**
  * Display options menu.
  * Menu will be centred on screen.
  */
     void
 MenuOptions::own_resumeState()
 {
-    m_container->activate();
-
     int contentW = m_container->getW();
     int contentH = m_container->getH();
     OptionAgent *options = OptionAgent::agent();

@@ -10,14 +10,14 @@ class LevelStatus;
 class LayeredPicture;
 
 #include "Path.h"
-#include "IDrawer.h"
+#include "Drawable.h"
 #include "GameState.h"
 #include "DescFinder.h"
 
 /**
  * Map with path from one level to another.
  */
-class WorldMap : public GameState, public DescFinder, public IDrawer {
+class WorldMap : public GameState, public DescFinder, public Drawable {
     private:
         LevelNode *m_startNode;
         LevelNode *m_selected;
@@ -43,7 +43,7 @@ class WorldMap : public GameState, public DescFinder, public IDrawer {
     protected:
         virtual void own_initState();
         virtual void own_updateState();
-        virtual void own_pauseState();
+        virtual void own_pauseState() {}
         virtual void own_resumeState();
         virtual void own_cleanState();
     public:
@@ -52,7 +52,7 @@ class WorldMap : public GameState, public DescFinder, public IDrawer {
         virtual const char *getName() const { return "state_worldmap"; };
         void initWay(const Path &way, const Path &desc);
 
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
         void runSelected();
 
         void addDesc(const std::string &codename, LevelDesc *desc);

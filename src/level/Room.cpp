@@ -102,29 +102,6 @@ Room::killPlan()
 }
 //-----------------------------------------------------------------
 /**
- * Activate all drawers.
- */
-void
-Room::activate()
-{
-    //NOTE: order is significant, background must be drawed first
-    m_bg->activate();
-    m_view->activate();
-}
-//-----------------------------------------------------------------
-/**
- * Dectivate all drawers.
- */
-void
-Room::deactivate()
-{
-    killPlan();
-
-    m_bg->deactivate();
-    m_view->deactivate();
-}
-//-----------------------------------------------------------------
-/**
  * Add model at scene.
  * @param new_model new object
  * @param new_unit driver for the object or NULL
@@ -463,3 +440,11 @@ Room::playSound(const std::string &name, int volume)
     SoundAgent::agent()->playSound(
             m_soundPack->getRandomRes(name), volume);
 }
+//-----------------------------------------------------------------
+void
+Room::drawOn(SDL_Surface *screen)
+{
+    m_bg->drawOn(screen);
+    m_view->drawOn(screen);
+}
+

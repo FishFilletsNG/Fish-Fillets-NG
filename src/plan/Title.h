@@ -4,17 +4,19 @@
 class Font;
 class Color;
 
-#include "IDrawer.h"
+#include "Drawable.h"
 
 #include <string>
 
 /**
  * Subtitle.
  */
-class Title : public IDrawer {
+class Title : public Drawable {
     private:
         static const int TIME_PER_CHAR = 2;
         static const int TIME_MIN = 40;
+        int m_screenW;
+        int m_screenH;
         int m_x;
         int m_y;
         int m_mintime;
@@ -31,7 +33,7 @@ class Title : public IDrawer {
 
         void shiftUp(int rate);
         void shiftFinalUp(int rate);
-        virtual void draw();
+        virtual void drawOn(SDL_Surface *screen);
         bool isGone();
 
         int getY() const;

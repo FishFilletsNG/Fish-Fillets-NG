@@ -146,12 +146,13 @@ StateManager::findIter(GameState *who)
  * Preserve stack consistency.
  * - Node at top must be running.
  * - Only running node which allowBg have running states below.
+ * @throws LogicException stack is empty
  */
 void
 StateManager::checkStack()
 {
     if (m_states.empty()) {
-        return;
+        throw LogicException(ExInfo("game state stack is empty"));
     }
 
     t_states::iterator topIt = m_states.end();
@@ -162,11 +163,12 @@ StateManager::checkStack()
     }
     pauseBg(topIt);
     resumeBg(topIt);
+    installHandlers();
 }
 //-----------------------------------------------------------------
 /**
  * Pause all running states below on stack which all not allowed.
- * The toppers will be paused first.
+ * The toppers will be paused first but the order should be insignificant
  * @param stateIt states bellow will be check
  */
 void
@@ -186,7 +188,7 @@ StateManager::pauseBg(t_states::iterator stateIt)
 //-----------------------------------------------------------------
 /**
  * Recursive resume given state and all states below on stack which is allowed.
- * The lowers will be resumed first (they should be draw as first).
+ * The lowers will be resumed first but the order should be insignificant.
  * @param stateIt state to run
  */
 void
@@ -198,10 +200,33 @@ StateManager::resumeBg(t_states::iterator stateIt)
         resumeBg(prev);
         (*prev)->noteBg();
     }
-    //NOTE: hack, solve drawers list problem,
+
     if ((*stateIt)->isRunning()) {
         (*stateIt)->pauseState();
     }
     (*stateIt)->resumeState();
+}
+//-----------------------------------------------------------------
+/**
+ * Let all running states to install input and draw handler.
+ * And all paused states will uninstall their handlers.
+ * The lowers will be called first, order is insignificant.
+ *
+ * NOTE: first the handlers will be uninstalled and then
+ * installed back in right order
+ */
+void
+StateManager::installHandlers()
+{
+    t_states::iterator end = m_states.end();
+    for (t_states::iterator i = m_states.begin(); i != end; ++i) {
+        if ((*i)->isRunning()) {
+            (*i)->unHandlers();
+            (*i)->installHandlers();
+        }
+        else {
+            (*i)->unHandlers();
+        }
+    }
 }
 

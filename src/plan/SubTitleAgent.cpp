@@ -206,3 +206,16 @@ SubTitleAgent::removeAll()
     killTalks();
     m_colors->removeAll();
 }
+
+//-----------------------------------------------------------------
+/**
+ * Draw all subtitles.
+ */
+void
+SubTitleAgent::drawOn(SDL_Surface *screen)
+{
+    t_titles::iterator end = m_titles.end();
+    for (t_titles::iterator i = m_titles.begin(); i != end; ++i) {
+        (*i)->drawOn(screen);
+    }
+}

@@ -10,6 +10,7 @@
 
 #include "Font.h"
 #include "Color.h"
+#include "OptionAgent.h"
 
 //-----------------------------------------------------------------
 /**
@@ -34,10 +35,12 @@ Title::Title(int baseY, int finalY, int bonusTime, int limitY,
 
     int text_width = m_font->calcTextWidth(content);
 
-    m_x = (m_screen->w - text_width) / 2;
-    m_y = m_screen->h - baseY;
-    m_finalY = m_screen->h - finalY;
-    m_limitY = m_screen->h - limitY;
+    m_screenW = OptionAgent::agent()->getAsInt("screen_width");
+    m_screenH = OptionAgent::agent()->getAsInt("screen_height");
+    m_x = (m_screenW - text_width) / 2;
+    m_y = m_screenH - baseY;
+    m_finalY = m_screenH - finalY;
+    m_limitY = m_screenH - limitY;
     m_mintime = m_content.size() * TIME_PER_CHAR;
     if (m_mintime < TIME_MIN) {
         m_mintime = TIME_MIN;
@@ -55,14 +58,14 @@ Title::~Title()
  * Decrease m_mintime.
  */
     void
-Title::draw()
+Title::drawOn(SDL_Surface *screen)
 {
     //TODO: wavy text
     SDL_Rect rect;
     rect.x = m_x;
     rect.y = m_y;
 
-    SDL_BlitSurface(m_surface, NULL, m_screen, &rect);
+    SDL_BlitSurface(m_surface, NULL, screen, &rect);
     m_mintime--;
 }
 //-----------------------------------------------------------------
@@ -87,7 +90,7 @@ Title::shiftFinalUp(int rate)
 int
 Title::getY() const
 {
-    return m_screen->h - m_y;
+    return m_screenH - m_y;
 }
 //-----------------------------------------------------------------
 /**

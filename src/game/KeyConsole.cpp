@@ -27,8 +27,6 @@
     KeyConsole::KeyConsole()
 : m_history(), m_input(), m_handlerName(), m_color(0, 200, 0)
 {
-    deactivate();
-
     m_font = new Font(Path::dataReadPath("font/font_console.ttf"), 16);
 }
 //-----------------------------------------------------------------
@@ -67,12 +65,14 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
                 }
             }
             else {
-                deactivate();
+                //TODO: make console GameState and call quitState()
+                //deactivate();
             }
             break;
         case SDLK_ESCAPE:
         case SDLK_BACKQUOTE:
-            deactivate();
+            //TODO: make console GameState and call quitState()
+            //deactivate();
             break;
         default:
             char c = keysym.unicode & 0x7F;
@@ -87,14 +87,14 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
  * Draw console.
  */
     void
-KeyConsole::draw()
+KeyConsole::drawOn(SDL_Surface *screen)
 {
     SDL_Rect rect;
     rect.x = 10;
     rect.y = 10;
 
     SDL_Surface *surface = m_font->renderText("console] " + m_input, m_color);
-    SDL_BlitSurface(surface, NULL, m_screen, &rect);
+    SDL_BlitSurface(surface, NULL, screen, &rect);
     SDL_FreeSurface(surface);
 }
 //-----------------------------------------------------------------

@@ -13,6 +13,7 @@ class LevelStatus;
 class LevelScript;
 class CommandQueue;
 class Command;
+class MultiDrawer;
 
 #include "Path.h"
 #include "GameState.h"
@@ -47,6 +48,7 @@ class Level : public GameState {
         //TODO: move eRoomState, satisfyRoom(), countDown() to the LevelStatus
         eRoomState m_roomState;
         LevelStatus *m_levelStatus;
+        MultiDrawer *m_background;
     private:
         void initScreen();
         bool nextAction();
@@ -61,7 +63,7 @@ class Level : public GameState {
     protected:
         virtual void own_initState();
         virtual void own_updateState();
-        virtual void own_pauseState();
+        virtual void own_pauseState() {}
         virtual void own_resumeState();
         virtual void own_cleanState();
         virtual void own_noteFg();

@@ -3,6 +3,8 @@
 
 class StateManager;
 class InputHandler;
+class MultiDrawer;
+class Drawable;
 
 #include "INamed.h"
 #include "NoCopy.h"
@@ -20,6 +22,7 @@ class GameState : public INamed, public NoCopy {
         bool m_active;
         bool m_onBg;
         InputHandler *m_handler;
+        MultiDrawer *m_drawer;
         StateManager *m_manager;
     protected:
         void takeHandler(InputHandler *new_handler);
@@ -52,6 +55,9 @@ class GameState : public INamed, public NoCopy {
 
         void noteBg();
         void noteFg();
+        void installHandlers();
+        void unHandlers();
+        void addDrawable(Drawable *drawable);
 };
 
 #endif
