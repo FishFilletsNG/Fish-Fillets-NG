@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "Dialog.h"
 #include "OptionAgent.h"
+#include "minmax.h"
 
 //-----------------------------------------------------------------
     void
@@ -20,19 +21,50 @@ ResDialogPack::unloadRes(Dialog *res)
 }
 //-----------------------------------------------------------------
 /**
+ * Return number of equal characters at the start.
+ */
+int
+ResDialogPack::matchScore(const std::string first,
+        const std::string second) const
+{
+    int score = 0;
+    int minSize = min(first.size(), second.size());
+    for (int i = 0; i < minSize; ++i) {
+        if (first[i] == second[i]) {
+            score++;
+        }
+        else {
+            return score;
+        }
+    }
+    return score;
+}
+//-----------------------------------------------------------------
+/**
  * Return dialog or NULL.
+ * Compare dialog names and lang codes.
+ * The best lang match is selected, at least two characters must equals.
  */
     Dialog *
 ResDialogPack::findDialog(const std::string &name, const std::string lang)
 {
+    int bestScore = 0;
+    Dialog *bestDialog = NULL;
+
     t_range range = getRange(name);
     t_range::iterator end = range.end();
     for (t_range::iterator i = range.begin(); i != end; ++i) {
-        if ((*i)->getLang() == lang) {
-            return *i;
+        int score = matchScore(lang, (*i)->getLang());
+        if (bestScore < score) {
+            bestScore = score;
+            bestDialog = *i;
         }
     }
-    return NULL;
+
+    if (bestScore < 2) {
+        bestDialog = NULL;
+    }
+    return bestDialog;
 }
 //-----------------------------------------------------------------
 /**

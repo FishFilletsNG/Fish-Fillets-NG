@@ -16,6 +16,7 @@
 #include "StringTool.h"
 #include "LogicException.h"
 #include "ScriptException.h"
+#include "minmax.h"
 
 #include <string.h>
 #include <locale.h>
@@ -121,8 +122,9 @@ OptionAgent::prepareLang()
     setlocale(LC_NUMERIC, "C");
     if (getParam("lang").empty()) {
         char *form = setlocale(LC_MESSAGES, NULL);
-        if (form && strlen(form) >= 2) {
-            setParam("lang", std::string(form, 2));
+        int size = min(5, strlen(form));
+        if (form && size >= 2) {
+            setParam("lang", std::string(form, size));
         }
     }
 }

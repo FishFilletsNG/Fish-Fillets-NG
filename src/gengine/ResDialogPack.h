@@ -15,6 +15,8 @@ class Dialog;
 class ResDialogPack : public ResourcePack<Dialog*> {
     protected:
         virtual void unloadRes(Dialog *res);
+        int matchScore(const std::string first,
+                const std::string second) const;
     public:
         virtual const char *getName() const { return "dialog_pack"; }
         Dialog *findDialog(const std::string &name, const std::string lang);
