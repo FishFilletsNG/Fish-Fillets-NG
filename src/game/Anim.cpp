@@ -42,13 +42,10 @@ Anim::~Anim()
     void
 Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
 {
-    SDL_Rect rect;
-    rect.x = x;
-    rect.y = y;
 
     SDL_Surface *surface =
         m_animPack[side]->getRes(m_animName, m_animPhase);
-    SDL_BlitSurface(surface, NULL, screen, &rect);
+    m_effect.blit(screen, surface, x, y);
     if (m_run) {
         m_animPhase++;
         if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
@@ -57,11 +54,9 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
     }
 
     if (false == m_specialAnimName.empty()) {
-        rect.x = x;
-        rect.y = y;
         surface =
             m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
-        SDL_BlitSurface(surface, NULL, screen, &rect);
+        m_effect.blit(screen, surface, x, y);
         m_specialAnimName = "";
     }
 }

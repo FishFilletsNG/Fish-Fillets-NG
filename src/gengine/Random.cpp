@@ -10,8 +10,8 @@
 
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 
+unsigned char Random::ms_randArray[];
 //----------------------------------------------------------
 /**
  *  Init random generator.
@@ -19,6 +19,9 @@
 void
 Random::init() {
     srand( static_cast<unsigned>(time(NULL)) );
+    for (int i = 0; i < ARRAY_SIZE; ++i) {
+        ms_randArray[i] = randomInt(256);
+    }
 }
 
 //-----------------------------------------------------------------
@@ -28,7 +31,9 @@ Random::init() {
     int
 Random::randomInt(int bound)
 {
-    assert(bound != 0);
+    if (bound == 0) {
+        return 0;
+    }
     return rand() % bound;
 }
 //-----------------------------------------------------------------
@@ -39,5 +44,15 @@ Random::randomInt(int bound)
 Random::randomReal(double bound)
 {
     return bound * rand() / (RAND_MAX + 1.0);
+}
+//-----------------------------------------------------------------
+/**
+ * Return a value from interval <0,255>.
+ * @param index index of byte, the byte and a index is alway the same
+ */
+    unsigned char
+Random::aByte(unsigned int index)
+{
+    return ms_randArray[index % ARRAY_SIZE];
 }
 
