@@ -12,7 +12,6 @@
 #include "LogicException.h"
 #include "minmax.h"
 
-#include "SoundAgent.h"
 #include "InputAgent.h"
 #include "OptionAgent.h"
 #include "MessagerAgent.h"
@@ -45,9 +44,6 @@ GameAgent::own_init()
     m_script = NULL;
     m_lockPhases = 0;
 
-    //TODO: select music for room
-    SoundAgent::agent()->playMusic(
-            Path::dataReadPath("music/tuxi.ogg"), NULL);
     keyBinding();
     newLevel();
 }
@@ -60,18 +56,15 @@ GameAgent::own_init()
     void
 GameAgent::own_update()
 {
-    if (m_script) {
-        m_script->doString("update()");
-    }
-
     bool room_complete = false;
     if (0 == m_lockPhases) {
         if (m_room) {
             room_complete = m_room->nextRound();
-            if (m_script) {
-                m_script->doString("nextRound()");
-            }
         }
+    }
+
+    if (m_script) {
+        m_script->doString("update()");
     }
 
     if (m_lockPhases > 0) {
@@ -163,6 +156,9 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
     m_script->registerFunc("model_isTalking", script_model_isTalking);
     m_script->registerFunc("model_planDialog", script_model_planDialog);
+
+    m_script->registerFunc("timer_getCycles", script_timer_getCycles);
+    m_script->registerFunc("sound_playMusic", script_sound_playMusic);
 }
 //-----------------------------------------------------------------
 /**

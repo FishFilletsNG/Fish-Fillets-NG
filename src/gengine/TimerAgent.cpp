@@ -15,6 +15,7 @@ TimerAgent::own_init()
     m_lastTime = SDL_GetTicks();
     m_nextTime = m_lastTime;
     m_deltaTime = 1;
+    m_count = 0;
 }
 //-----------------------------------------------------------------
 /**
@@ -23,6 +24,8 @@ TimerAgent::own_init()
     void
 TimerAgent::own_update()
 {
+    m_count++;
+
     Uint32 now = SDL_GetTicks();
     if (now < m_nextTime) {
         SDL_Delay(m_nextTime - now);

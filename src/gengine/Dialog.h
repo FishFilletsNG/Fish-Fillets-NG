@@ -2,7 +2,6 @@
 #define HEADER_DIALOG_H
 
 #include "NoCopy.h"
-#include "Path.h"
 
 #include "SDL_mixer.h"
 #include <string>
@@ -19,7 +18,7 @@ class Dialog: public NoCopy {
         virtual void runSubtitle() const;
     public:
         Dialog(const std::string &lang,
-                const Path &soundfile, const std::string &subtitle);
+                const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
         int talk() const;

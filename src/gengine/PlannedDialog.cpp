@@ -46,6 +46,7 @@ PlannedDialog::killTalk()
 bool
 PlannedDialog::isTalking()
 {
+    //TODO: return true for minimal time according subtitle length
     bool result = false;
     if (m_channel > -1) {
         if (Mix_Playing(m_channel)) {

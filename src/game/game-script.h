@@ -34,5 +34,7 @@ extern int script_dialog_addDialog(lua_State *L) throw();
 extern int script_model_isTalking(lua_State *L) throw();
 extern int script_model_planDialog(lua_State *L) throw();
 
+extern int script_timer_getCycles(lua_State *L) throw();
+extern int script_sound_playMusic(lua_State *L) throw();
 
 #endif

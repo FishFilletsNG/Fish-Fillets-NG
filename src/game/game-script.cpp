@@ -21,6 +21,8 @@
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
 #include "Shape.h"
+#include "TimerAgent.h"
+#include "SoundAgent.h"
 
 extern "C" {
 #include "lualib.h"
@@ -433,7 +435,7 @@ script_dialog_addFont(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void dialog_addDialog(name, lang, fontname, soundfile, subtitle)
+ * void dialog_addDialog(name, lang, soundfile, fontname, subtitle)
  */
     int
 script_dialog_addDialog(lua_State *L) throw()
@@ -441,12 +443,12 @@ script_dialog_addDialog(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     const char *name = luaL_checkstring(L, 1);
     const char *lang = luaL_checkstring(L, 2);
-    const char *fontname = luaL_checkstring(L, 3);
-    const char *soundfile = luaL_checkstring(L, 4);
-    const char *subtitle = luaL_checkstring(L, 5);
+    const char *soundfile = luaL_checkstring(L, 3);
+    const char *fontname = luaL_optstring(L, 4, "");
+    const char *subtitle = luaL_optstring(L, 5, "");
 
     FishDialog *dialog =
-        new FishDialog(lang, Path::dataReadPath(soundfile), subtitle, fontname);
+        new FishDialog(lang, soundfile, subtitle, fontname);
     DialogAgent::agent()->addDialog(name, dialog);
 
     END_NOEXCEPTION;
@@ -484,6 +486,35 @@ script_model_planDialog(lua_State *L) throw()
     //TODO: set dialog font (or color)
     DialogAgent::agent()->planDialog(name, delay, model_index);
 
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * int timer_getCycles()
+ */
+    int
+script_timer_getCycles(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int cycles = TimerAgent::agent()->getCycles();
+    lua_pushnumber(L, cycles);
+    END_NOEXCEPTION;
+    //NOTE: return cycles
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void sound_playMusic(music_name)
+ */
+    int
+script_sound_playMusic(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *music_name = luaL_checkstring(L, 1);
+
+    SoundAgent::agent()->playMusic(Path::dataReadPath(music_name), NULL);
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;

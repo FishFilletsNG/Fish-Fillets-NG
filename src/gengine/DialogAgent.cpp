@@ -28,16 +28,19 @@ DialogAgent::own_init()
     void
 DialogAgent::own_update()
 {
+    removeFirstNotTalking();
+
     if (false == m_planned.empty()) {
-        PlannedDialog *dialog = m_planned.front();
-        if (dialog->getDelay() > 0) {
-            dialog->decDelay();
-        }
-        else {
-            dialog->talk();
-            m_planned.pop_front();
-            removeFirstNotTalking();
-            m_running.push_back(dialog);
+        if (m_running.empty()) {
+            PlannedDialog *dialog = m_planned.front();
+            if (dialog->getDelay() > 0) {
+                dialog->decDelay();
+            }
+            else {
+                dialog->talk();
+                m_planned.pop_front();
+                m_running.push_back(dialog);
+            }
         }
     }
 }

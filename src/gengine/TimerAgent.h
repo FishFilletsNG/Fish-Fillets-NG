@@ -17,11 +17,13 @@ class TimerAgent : public BaseAgent {
         Uint32 m_lastTime;
         Uint32 m_nextTime;
         Uint32 m_deltaTime;
+        int m_count;
     protected:
         virtual void own_init();
         virtual void own_update();
     public:
         Uint32 getDeltaTime() const { return m_deltaTime; }
+        int getCycles() const { return m_count; }
 };
 
 #endif

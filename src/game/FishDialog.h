@@ -15,7 +15,7 @@ class FishDialog : public Dialog {
         virtual void runSubtitle() const;
     public:
         FishDialog(const std::string &lang,
-                const Path &soundfile, const std::string &subtitle,
+                const std::string &soundfile, const std::string &subtitle,
                 const std::string &fontname);
 
 };

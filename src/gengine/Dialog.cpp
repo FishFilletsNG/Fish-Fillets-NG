@@ -10,13 +10,22 @@
 
 #include "ResSoundAgent.h"
 #include "SoundAgent.h"
+#include "Path.h"
 
 //-----------------------------------------------------------------
+/**
+ * Create new dialog.
+ * Both sound file and subtitles are optional.
+ */
 Dialog::Dialog(const std::string &lang,
-        const Path &soundfile, const std::string &subtitle)
+        const std::string &soundfile, const std::string &subtitle)
     : m_lang(lang), m_subtitle(subtitle)
 {
-    m_sound = ResSoundAgent::agent()->loadSound(soundfile);
+    m_sound = NULL;
+    if (false == soundfile.empty()) {
+        m_sound = ResSoundAgent::agent()->loadSound(
+                Path::dataReadPath(soundfile));
+    }
 }
 //-----------------------------------------------------------------
 Dialog::~Dialog()
