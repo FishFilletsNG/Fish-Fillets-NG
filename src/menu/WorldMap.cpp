@@ -123,7 +123,7 @@ WorldMap::own_initState()
     void
 WorldMap::own_updateState()
 {
-    if (m_selected == m_ending) {
+    if (m_ending && m_selected == m_ending) {
         runSelected();
     }
     else {
