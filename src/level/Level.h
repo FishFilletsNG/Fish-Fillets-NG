@@ -39,12 +39,14 @@ class Level : public GameState {
         CommandQueue *m_show;
         int m_restartCounter;
         int m_loadSpeed;
+        bool m_replayMode;
         std::string m_loadedMoves;
         int m_countdown;
         //TODO: move eRoomState, satisfyRoom(), countDown() to the LevelStatus
         eRoomState m_roomState;
         LevelStatus *m_levelStatus;
     private:
+        bool isLoading() const;
         bool nextAction();
         void updateLevel();
         void finishLevel();

@@ -346,7 +346,6 @@ Room::loadMove(char move)
             throw LoadException(ExInfo("load error - early finished level")
                     .addInfo("move", std::string(1, move)));
         }
-
     }
     return complete;
 }

@@ -40,6 +40,7 @@
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
     m_loadedMoves = "";
+    m_replayMode = false;
     m_loadSpeed = 1;
     m_depth = depth;
     m_locker = new PhaseLocker();
@@ -69,6 +70,7 @@ Level::own_initState()
     m_roomState = ROOM_RUNNING;
     m_loadedMoves = "";
     m_loadSpeed = 1;
+    m_replayMode = false;
     m_levelScript->scriptInclude(m_datafile);
 }
 //-----------------------------------------------------------------
@@ -113,6 +115,12 @@ Level::own_cleanState()
 }
 
 //-----------------------------------------------------------------
+bool
+Level::isLoading() const
+{
+    return !m_loadedMoves.empty() || m_replayMode;
+}
+//-----------------------------------------------------------------
 /**
  * Process next action.
  * @return true for finished level
@@ -121,16 +129,16 @@ Level::own_cleanState()
 Level::nextAction()
 {
     bool room_complete = false;
-    if (m_loadedMoves.empty()) {
+    if (isLoading()) {
+        room_complete = nextLoadAction();
+    }
+    else {
         if (isShowing()) {
             room_complete = nextShowAction();
         }
         else {
             room_complete = nextPlayerAction();
         }
-    }
-    else {
-        room_complete = nextLoadAction();
     }
 
     return satisfyRoom(room_complete);
@@ -206,7 +214,7 @@ Level::countDown()
     void
 Level::updateLevel()
 {
-    if (m_loadedMoves.empty()) {
+    if (!isLoading()) {
         m_levelScript->updateScript();
     }
 }
@@ -289,7 +297,7 @@ Level::saveGame(const std::string &models)
 Level::loadGame(const std::string &moves)
 {
     m_loadedMoves = moves;
-    m_loadSpeed = min(50, max(SPEED_REPLAY + 4, m_loadedMoves.size() / 150));
+    m_loadSpeed = min(50, max(5, m_loadedMoves.size() / 150));
 }
 //-----------------------------------------------------------------
 /**
@@ -300,7 +308,8 @@ Level::loadGame(const std::string &moves)
 Level::loadReplay(const std::string &moves)
 {
     m_loadedMoves = moves;
-    m_loadSpeed = SPEED_REPLAY;
+    m_loadSpeed = 1;
+    m_replayMode = true;
 }
 //-----------------------------------------------------------------
 /**
@@ -312,24 +321,33 @@ Level::loadReplay(const std::string &moves)
 Level::nextLoadAction()
 {
     bool room_complete = false;
-    for (int i = 0; i < m_loadSpeed
-            && !m_loadedMoves.empty(); ++i)
-    {
-        try {
-            char symbol = m_loadedMoves[0];
-            m_loadedMoves.erase(0, 1);
+    if (m_loadedMoves.empty()) {
+        m_levelScript->room()->beginFall();
+        room_complete = m_levelScript->room()->finishRound();
+    }
+    else {
+        for (int i = 0; i < m_loadSpeed
+                && !m_loadedMoves.empty(); ++i)
+        {
+            try {
+                char symbol = m_loadedMoves[0];
+                m_loadedMoves.erase(0, 1);
 
-            room_complete = m_levelScript->room()->loadMove(symbol);
+                room_complete = m_levelScript->room()->loadMove(symbol);
+            }
+            catch (LoadException &e) {
+                throw LoadException(ExInfo(e.info())
+                        .addInfo("remain", m_loadedMoves));
+            }
         }
-        catch (LoadException &e) {
-            throw LoadException(ExInfo(e.info())
-                    .addInfo("remain", m_loadedMoves));
+
+        if (m_loadedMoves.empty()) {
+            if (!m_replayMode) {
+                m_levelScript->scriptDo("script_loadState()");
+            }
         }
     }
 
-    if (m_loadedMoves.empty() && m_loadSpeed > SPEED_REPLAY) {
-        m_levelScript->scriptDo("script_loadState()");
-    }
     return room_complete;
 }
 
