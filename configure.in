@@ -99,14 +99,14 @@ if test x$BOOSTPFX != x ; then
     BOOST_CFLAGS="-I$BOOSTPFX"
     BOOST_LIBS="-L$BOOSTPFX"
 fi
-OLD_CPPFLAGS=$CPPFLAGS
+OLD_CPPFLAGS="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $BOOST_CFLAGS"
 AC_CHECK_HEADER(boost/filesystem/path.hpp, [],
     [AC_MSG_ERROR([*** boost_filesystem-devel library not found!
                    Try --with-boost=PREFIX
                    You can download boost from http://www.boost.org])], []
 )
-CPPFLAGS=$OLD_CPPFLAGS
+CPPFLAGS="$OLD_CPPFLAGS"
 AC_CHECK_LIB(boost_filesystem, main,
             [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem"],
 AC_CHECK_LIB(boost_filesystem-gcc, main,

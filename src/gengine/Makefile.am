@@ -1,5 +1,7 @@
 
 INCLUDES = $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
+CPPFLAGS = -DSYSTEM_DATA_DIR=\"$(datadir)\" @CPPFLAGS@
+
 
 noinst_LIBRARIES = libgengine.a
 
