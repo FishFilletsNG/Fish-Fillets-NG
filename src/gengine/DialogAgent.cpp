@@ -9,12 +9,9 @@
 #include "DialogAgent.h"
 
 #include "Dialog.h"
-#include "OptionAgent.h"
 #include "ResDialogPack.h"
 #include "PlannedDialog.h"
 
-
-const std::string DialogAgent::DEFAULT_LANG = "en";
 //-----------------------------------------------------------------
     void
 DialogAgent::own_init()
@@ -74,12 +71,7 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
 DialogAgent::planDialog(const std::string &name, int delay, Actor *actor,
         bool busy)
 {
-    std::string lang = OptionAgent::agent()->getParam("lang");
-    Dialog *dialog = m_dialogs->findDialog(name, lang);
-    if (NULL == dialog) {
-        dialog = m_dialogs->findDialog(name, DEFAULT_LANG);
-    }
-
+    Dialog *dialog = m_dialogs->findDialogHard(name);
     if (dialog) {
         PlannedDialog *plan = new PlannedDialog(actor, delay, dialog, busy);
         m_planned.push_back(plan);
@@ -87,12 +79,6 @@ DialogAgent::planDialog(const std::string &name, int delay, Actor *actor,
         LOG_DEBUG(ExInfo("planned dialog")
                 .addInfo("name", name)
                 .addInfo("delay", delay));
-    }
-    else {
-        LOG_WARNING(ExInfo("cannot find dialog")
-                .addInfo("name", name)
-                .addInfo("lang", lang)
-                .addInfo("pack", m_dialogs->toString()));
     }
 }
 //-----------------------------------------------------------------

@@ -13,6 +13,7 @@
 #include "SoundAgent.h"
 #include "Path.h"
 
+const std::string Dialog::DEFAULT_LANG = "en";
 //-----------------------------------------------------------------
 /**
  * Create new dialog.

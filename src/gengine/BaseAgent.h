@@ -38,8 +38,7 @@ class BaseAgent : public NoCopy, public BaseListener {
 #define AGENT(TYPE, NAME) \
 public: \
 virtual const char *getName() const { return (NAME); } \
-static TYPE * \
-TYPE::agent() \
+static TYPE *agent() \
 { \
     TYPE *result = dynamic_cast<TYPE *>(AgentPack::getAgent(sName())); \
     if (NULL == result) { \

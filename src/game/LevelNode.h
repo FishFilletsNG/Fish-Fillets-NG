@@ -23,7 +23,7 @@ class LevelNode : public NoCopy {
             STATE_SOLVED
         };
     private:
-        static const int DOT_RADIUS = 20;
+        static const int DOT_RADIUS = 13;
         std::string m_codename;
         Path m_datafile;
         V2 m_loc;
@@ -41,7 +41,7 @@ class LevelNode : public NoCopy {
         void setState(eState state);
         V2 getLoc() const { return m_loc; }
         eState getState() const { return m_state; }
-        Level *createLevel() const;
+        Level *createLevel(const std::string &desc) const;
 
         void addChild(LevelNode *node);
 

@@ -33,6 +33,7 @@ class GameAgent : public BaseAgent {
         int getEnsuredPhases() const { return m_lockPhases; }
 
         Level *level();
+        WorldMap *world() { return m_world; }
 
         virtual void receiveSimple(const SimpleMsg *msg);
 };

@@ -43,9 +43,6 @@ VideoAgent::own_init()
     registerWatcher("screen_height");
     registerWatcher("screen_bpp");
 
-    SDL_WM_SetCaption(
-            OptionAgent::agent()->getParam("caption", "A game").c_str(),
-            NULL);
     setIcon(Path::dataReadPath("images/icon.png"));
 
     initVideoMode();
@@ -121,6 +118,7 @@ VideoAgent::initVideoMode()
         m_fullscreen = true;
         videoFlags |= SDL_FULLSCREEN;
     }
+    SDL_WM_SetCaption(options->getParam("caption", "A game").c_str(), NULL);
 
     //TODO: check VideoModeOK and available ListModes
     SDL_Surface *newScreen =

@@ -20,8 +20,6 @@ class PlannedDialog;
  */
 class DialogAgent : public BaseAgent {
     AGENT(DialogAgent, Name::DIALOG_NAME);
-    public:
-    static const std::string DEFAULT_LANG;
     private:
     ResDialogPack *m_dialogs;
 

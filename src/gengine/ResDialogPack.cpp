@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include "Dialog.h"
+#include "OptionAgent.h"
 
 //-----------------------------------------------------------------
     void
@@ -32,5 +33,27 @@ ResDialogPack::findDialog(const std::string &name, const std::string lang)
         }
     }
     return NULL;
+}
+//-----------------------------------------------------------------
+/**
+ * Try find dialog for this or default lang.
+ * @return dialog or NULL
+ */
+    Dialog *
+ResDialogPack::findDialogHard(const std::string &name)
+{
+    std::string lang = OptionAgent::agent()->getParam("lang");
+    Dialog *dialog = findDialog(name, lang);
+    if (NULL == dialog) {
+        dialog = findDialog(name, Dialog::DEFAULT_LANG);
+        if (NULL == dialog) {
+            LOG_WARNING(ExInfo("cannot find dialog")
+                    .addInfo("name", name)
+                    .addInfo("lang", lang)
+                    .addInfo("pack", toString()));
+        }
+    }
+
+    return dialog;
 }
 

@@ -23,11 +23,8 @@ class ViewEffect {
         void blitDisInt(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
         Uint8 getAlpha(Uint32 pixel, SDL_PixelFormat *fmt);
-        Uint32
-            ViewEffect::getPixel(SDL_Surface *surface, int x, int y);
-        void
-            ViewEffect::putPixel(SDL_Surface *surface, int x, int y,
-                    Uint32 pixel);
+        Uint32 getPixel(SDL_Surface *surface, int x, int y);
+        void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
     public:
         ViewEffect();
         void setEffect(eEffect effect);

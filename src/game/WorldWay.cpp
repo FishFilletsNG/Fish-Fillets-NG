@@ -12,10 +12,7 @@
 #include "LevelNode.h"
 #include "ScriptState.h"
 #include "LuaTable.h"
-
-extern "C" {
-#include "lauxlib.h"
-}
+#include "def-script.h"
 
 LevelNode *WorldWay::ms_startNode = NULL;
 //-----------------------------------------------------------------
@@ -86,19 +83,9 @@ WorldWay::parseNode(lua_State *L)
     int
 WorldWay::script_parseWay(lua_State *L) throw()
 {
-    try {
-        ms_startNode = WorldWay::parseNode(L);
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error"));
-        luaL_error(L, "unknown exception");
-    }
-
+    BEGIN_NOEXCEPTION;
+    ms_startNode = WorldWay::parseNode(L);
+    END_NOEXCEPTION;
     return 0;
 }
 //-----------------------------------------------------------------

@@ -11,6 +11,7 @@
 #include "Log.h"
 #include "LevelNode.h"
 #include "ResImageAgent.h"
+#include "ResFontPack.h"
 #include "Path.h"
 
 #include "SDL_gfxPrimitives.h"
@@ -28,6 +29,8 @@ NodeDrawer::NodeDrawer()
     m_dotSelected = ResImageAgent::agent()->loadImage(
             Path::dataReadPath("images/menu/n4.png"));
     m_dotRadius = m_dotOpen->w / 2;
+
+    m_font = ResFontPack::loadFont(Path::dataReadPath("font/font_menu.png"));
 }
 //-----------------------------------------------------------------
 NodeDrawer::~NodeDrawer()
@@ -36,6 +39,7 @@ NodeDrawer::~NodeDrawer()
     SDL_FreeSurface(m_dotOpen);
     SDL_FreeSurface(m_dotSolved);
     SDL_FreeSurface(m_dotSelected);
+    SFont_FreeFont(m_font);
 }
 //-----------------------------------------------------------------
 void
@@ -66,14 +70,11 @@ NodeDrawer::drawNode(const LevelNode *node) const
 }
 //-----------------------------------------------------------------
 void
-NodeDrawer::drawSelected(const LevelNode *node) const
+NodeDrawer::drawSelected(const std::string &levelname) const
 {
-    V2 loc = node->getLoc();
-    SDL_Rect rect;
-    rect.x = loc.getX() - m_dotRadius;
-    rect.y = loc.getY() - m_dotRadius;
-
-    SDL_BlitSurface(m_dotSelected, NULL, m_screen, &rect);
+    //TODO: draw deflected text
+    int y = m_screen->h - 50;
+    SFont_WriteCenter(m_screen, m_font, y, levelname.c_str());
 }
 //-----------------------------------------------------------------
 void

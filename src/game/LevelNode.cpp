@@ -101,9 +101,11 @@ LevelNode::findSelected(const V2 &cursor)
 }
 //-----------------------------------------------------------------
 Level *
-LevelNode::createLevel() const
+LevelNode::createLevel(const std::string &desc) const
 {
-    return new Level(m_codename, m_datafile);
+    Level *result = new Level(m_codename, m_datafile);
+    result->setDesc(desc);
+    return result;
 }
 //-----------------------------------------------------------------
 /**

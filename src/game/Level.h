@@ -26,6 +26,7 @@ class Level : public NoCopy {
         std::string m_loadedMoves;
         int m_loadSpeed;
         CommandQueue *m_plan;
+        std::string m_desc;
     private:
         void cleanRoom();
         bool nextPlayerAction();
@@ -37,6 +38,7 @@ class Level : public NoCopy {
     public:
         Level(const std::string &codename, const Path &datafile);
         ~Level();
+        void setDesc(const std::string &desc) { m_desc = desc; }
 
         int getRestartCounter() const { return m_restartCounter; }
         bool nextAction();

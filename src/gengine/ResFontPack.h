@@ -14,7 +14,7 @@ class ResFontPack : public ResourcePack<SFont_Font*> {
         virtual void unloadRes(SFont_Font *res);
     public:
         virtual const char *getName() const { return "font_pack"; }
-        SFont_Font *loadFont(const Path &file);
+        static SFont_Font *loadFont(const Path &file);
         void addFont(const std::string &name, const Path &file);
 };
 

@@ -10,7 +10,7 @@ class Unit;
 
 class ModelFactory {
     private:
-        static void ModelFactory::createParams(const std::string &kind,
+        static void createParams(const std::string &kind,
                 Cube::eWeight *out_weight, Cube::eWeight *out_power,
                 bool *out_alive);
     public:

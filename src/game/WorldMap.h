@@ -4,6 +4,8 @@
 class Level;
 class LevelNode;
 class NodeDrawer;
+class ResDialogPack;
+class LevelDesc;
 
 #include "Path.h"
 #include "NoCopy.h"
@@ -18,11 +20,13 @@ class WorldMap : public IDrawer, public NoCopy {
         LevelNode *m_startNode;
         NodeDrawer *m_drawer;
         LevelNode *m_selected;
+        ResDialogPack *m_descPack;
         bool m_active;
         SDL_Surface *m_bg;
     public:
-        WorldMap(const Path &way, const Path &bg);
+        WorldMap(const Path &bg);
         virtual ~WorldMap();
+        void initWay(const Path &way, const Path &desc);
         int getW() const { return m_bg->w; }
         int getH() const { return m_bg->h; }
 
@@ -33,6 +37,10 @@ class WorldMap : public IDrawer, public NoCopy {
         void watchCursor();
         Level *createSelected() const;
         virtual void draw();
+
+        void addDesc(const std::string &codename, LevelDesc *desc);
+        std::string findLevelName(const std::string &codename) const;
+        std::string findDesc(const std::string &codename) const;
 };
 
 #endif

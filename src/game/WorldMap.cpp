@@ -10,6 +10,7 @@
 
 #include "LevelNode.h"
 #include "NodeDrawer.h"
+#include "worldmap-script.h"
 
 #include "Log.h"
 #include "WorldWay.h"
@@ -18,13 +19,12 @@
 #include "OptionAgent.h"
 #include "SoundAgent.h"
 #include "LogicException.h"
+#include "ResDialogPack.h"
+#include "LevelDesc.h"
+#include "ScriptState.h"
 
 //-----------------------------------------------------------------
-/**
- * Read world map.
- * @throws LogicException when cannot parse data file
- */
-WorldMap::WorldMap(const Path &way, const Path &bg)
+WorldMap::WorldMap(const Path &bg)
 {
     VideoAgent::agent()->removeDrawer(this);
     m_active = false;
@@ -32,22 +32,43 @@ WorldMap::WorldMap(const Path &way, const Path &bg)
     m_startNode = NULL;
 
     m_bg = ResImageAgent::agent()->loadImage(bg);
-    m_startNode = WorldWay::createWay(way);
-    if (NULL == m_startNode) {
-        SDL_FreeSurface(m_bg);
-        throw LogicException(ExInfo("cannot create world way")
-                .addInfo("file", way.getNative()));
-    }
-
     m_drawer = new NodeDrawer();
-    //TODO: prepare localized room descriptions
+    m_descPack = new ResDialogPack();
 }
 //-----------------------------------------------------------------
 WorldMap::~WorldMap()
 {
+    if (m_startNode) {
+        delete m_startNode;
+    }
     SDL_FreeSurface(m_bg);
+    m_descPack->removeAll();
+    delete m_descPack;
     delete m_drawer;
-    delete m_startNode;
+}
+//-----------------------------------------------------------------
+void
+WorldMap::addDesc(const std::string &codename, LevelDesc *desc)
+{
+    m_descPack->addRes(codename, desc);
+}
+//-----------------------------------------------------------------
+/**
+ * Read dots postions and level descriptions.
+ * @throws LogicException when cannot parse data file
+ */
+void
+WorldMap::initWay(const Path &way, const Path &descfile)
+{
+    m_startNode = WorldWay::createWay(way);
+    if (NULL == m_startNode) {
+        throw LogicException(ExInfo("cannot create world way")
+                .addInfo("file", way.getNative()));
+    }
+
+    ScriptState script;
+    script.registerFunc("worldmap_addDesc", script_worldmap_addDesc);
+    script.doFile(descfile);
 }
 //-----------------------------------------------------------------
 void
@@ -61,6 +82,7 @@ WorldMap::activate()
                 Path::dataReadPath("music/menu.ogg"), NULL);
         //TODO: set with and height in one step
         OptionAgent *options = OptionAgent::agent();
+        options->setParam("caption", findDesc("menu"));
         options->setParam("screen_width", getW());
         options->setParam("screen_height", getH());
     }
@@ -96,7 +118,9 @@ WorldMap::createSelected() const
 {
     Level *result = NULL;
     if (m_selected) {
-        result = m_selected->createLevel();
+        std::string title = findDesc(m_selected->getCodeName());
+        title.append(": " + findLevelName(m_selected->getCodeName()));
+        result = m_selected->createLevel(title);
     }
     return result;
 }
@@ -120,8 +144,37 @@ WorldMap::draw()
     m_drawer->setScreen(m_screen);
     m_startNode->drawPath(m_drawer);
     if (m_selected) {
-        m_drawer->drawSelected(m_selected);
+        m_drawer->drawSelected(findLevelName(m_selected->getCodeName()));
     }
-    //TODO: draw name for node under cursor
+}
+//-----------------------------------------------------------------
+std::string
+WorldMap::findLevelName(const std::string &codename) const
+{
+    std::string result;
+    LevelDesc *desc =
+        dynamic_cast<LevelDesc*>(m_descPack->findDialogHard(codename));
+    if (desc) {
+        result = desc->getLevelName();
+    }
+    else {
+        result = "???";
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+std::string
+WorldMap::findDesc(const std::string &codename) const
+{
+    std::string result;
+    LevelDesc *desc =
+        dynamic_cast<LevelDesc*>(m_descPack->findDialogHard(codename));
+    if (desc) {
+        result = desc->getDesc();
+    }
+    else {
+        result = "???";
+    }
+    return result;
 }
 

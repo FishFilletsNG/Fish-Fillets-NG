@@ -4,8 +4,10 @@
 class LevelNode;
 
 #include "NoCopy.h"
+#include "SFont.h"
 
 #include "SDL.h"
+#include <string>
 
 /**
  * Drawer which know how to draw nodes on path.
@@ -18,6 +20,7 @@ class NodeDrawer : public NoCopy {
         SDL_Surface *m_dotSolved;
         SDL_Surface *m_dotSelected;
         int m_dotRadius;
+        SFont_Font *m_font;
     public:
         NodeDrawer();
         virtual ~NodeDrawer();
@@ -25,7 +28,7 @@ class NodeDrawer : public NoCopy {
 
         void drawNode(const LevelNode *node) const;
         void drawEdge(const LevelNode *start, const LevelNode *end) const;
-        void drawSelected(const LevelNode *node) const;
+        void drawSelected(const std::string &levelname) const;
 };
 
 #endif

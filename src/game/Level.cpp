@@ -150,6 +150,7 @@ Level::createRoom(int w, int h, const Path &picture)
 
     //TODO: set with and height in one step
     OptionAgent *options = OptionAgent::agent();
+    options->setParam("caption", m_desc);
     options->setParam("screen_width", w * View::SCALE);
     options->setParam("screen_height", h * View::SCALE);
 }

@@ -23,25 +23,7 @@
 #include "SoundAgent.h"
 #include "Level.h"
 #include "ModelFactory.h"
-
-extern "C" {
-#include "lualib.h"
-#include "lauxlib.h"
-}
-
-//NOTE: no one exception can be passed to "C" lua code
-#define BEGIN_NOEXCEPTION try {
-#define END_NOEXCEPTION \
-} \
-catch (std::exception &e) { \
-    LOG_WARNING(ExInfo("script error") \
-            .addInfo("what", e.what())); \
-        luaL_error(L, e.what()); \
-} \
-catch (...) { \
-    LOG_ERROR(ExInfo("script error")); \
-        luaL_error(L, "unknown exception"); \
-}
+#include "def-script.h"
 
 //-----------------------------------------------------------------
     inline Cube *

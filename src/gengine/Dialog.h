@@ -10,6 +10,8 @@
  * Dialog with sound and subtitle.
  */
 class Dialog: public NoCopy {
+    public:
+    static const std::string DEFAULT_LANG;
     private:
         Mix_Chunk *m_sound;
         std::string m_soundfile;

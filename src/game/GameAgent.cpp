@@ -36,9 +36,10 @@ GameAgent::own_init()
     m_lockPhases = 0;
 
     m_world = NULL;
-    m_world = new WorldMap(
+    m_world = new WorldMap(Path::dataReadPath("images/menu/mapa-0.png"));
+    m_world->initWay(
             Path::dataReadPath("script/worldmap.lua"),
-            Path::dataReadPath("images/menu/mapa-0.png"));
+            Path::dataReadPath("script/worlddesc.lua"));
 
     keyBinding();
     cleanLevel();

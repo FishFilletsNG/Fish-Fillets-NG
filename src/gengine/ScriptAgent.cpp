@@ -19,106 +19,70 @@
 #include "Path.h"
 #include "OptionAgent.h"
 #include "ScriptState.h"
-
-extern "C" {
-#include "lualib.h"
-#include "lauxlib.h"
-}
+#include "def-script.h"
 
 //-----------------------------------------------------------------
 // Lua function
 //-----------------------------------------------------------------
 /**
  * void sendMsg(listener, msg, [value])
+ * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_sendMsg(lua_State *L) throw()
 {
-    try {
-        BaseMsg *message = NULL;
-        const char *listener = luaL_checkstring(L, 1);
-        const char *msg = luaL_checkstring(L, 2);
-        if (lua_isstring(L, 3)) {
-            const char *string_value = luaL_checkstring(L, 3);
-            message = new StringMsg(listener, msg, string_value);
-        }
-        else if (lua_isnumber(L, 3)) {
-            int int_value = luaL_checkint(L, 3);
-            message = new IntMsg(listener, msg, int_value);
-        }
-        else {
-            message = new SimpleMsg(listener, msg);
-        }
-
-        MessagerAgent::agent()->forwardNewMsg(message);
+    BEGIN_NOEXCEPTION;
+    BaseMsg *message = NULL;
+    const char *listener = luaL_checkstring(L, 1);
+    const char *msg = luaL_checkstring(L, 2);
+    if (lua_isstring(L, 3)) {
+        const char *string_value = luaL_checkstring(L, 3);
+        message = new StringMsg(listener, msg, string_value);
     }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - sendMsg()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
+    else if (lua_isnumber(L, 3)) {
+        int int_value = luaL_checkint(L, 3);
+        message = new IntMsg(listener, msg, int_value);
     }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - sendMsg()"));
-        luaL_error(L, "unknown exception");
+    else {
+        message = new SimpleMsg(listener, msg);
     }
 
+    MessagerAgent::agent()->forwardNewMsg(message);
+
+    END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
 }
 //-----------------------------------------------------------------
 /**
  * void setParam(name, value)
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_setParam(lua_State *L) throw()
 {
-    try {
-        const char *name = luaL_checkstring(L, 1);
-        const char *value = luaL_checkstring(L, 2);
-        OptionAgent::agent()->setParam(name, value);
-    }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - setParam()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - setParam()"));
-        luaL_error(L, "unknown exception");
-    }
-
-    //NOTE: return how many values want to return to lua
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    const char *value = luaL_checkstring(L, 2);
+    OptionAgent::agent()->setParam(name, value);
+    END_NOEXCEPTION;
     return 0;
 }
 //-----------------------------------------------------------------
 /**
  * string getParam(name)
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_getParam(lua_State *L) throw()
 {
     int result_count = 0;
-    try {
-        const char *name = luaL_checkstring(L, 1);
-        std::string value = OptionAgent::agent()->getParam(name);
-        if (!value.empty()) {
-            lua_pushlstring(L, value.c_str(), value.size());
-            result_count = 1;
-        }
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    std::string value = OptionAgent::agent()->getParam(name);
+    if (!value.empty()) {
+        lua_pushlstring(L, value.c_str(), value.size());
+        result_count = 1;
     }
-    catch (std::exception &e) {
-        LOG_WARNING(ExInfo("script error - getParam()")
-                .addInfo("what", e.what()));
-        luaL_error(L, e.what());
-    }
-    catch (...) {
-        LOG_ERROR(ExInfo("script error - getParam()"));
-        luaL_error(L, "unknown exception");
-    }
-
-    //NOTE: return how many values want to return to lua
+    END_NOEXCEPTION;
     return result_count;
 }
 
