@@ -46,8 +46,10 @@ Dialog::~Dialog()
 Dialog::talk(int volume, int loops)
 {
     if (NULL == m_sound && !m_soundfile.empty()) {
-        m_sound = ResSoundPack::loadSound(
-                Path::dataReadPath(m_soundfile));
+        Path soundPath = Path::dataReadPath(m_soundfile);
+        if (soundPath.exists()) {
+            m_sound = ResSoundPack::loadSound(soundPath);
+        }
     }
 
     int channel = SoundAgent::agent()->playSound(m_sound, volume, loops);
