@@ -21,6 +21,7 @@
 #include "OptionAgent.h"
 #include "LoadException.h"
 #include "ScriptException.h"
+#include "LogicException.h"
 #include "DemoMode.h"
 #include "SoundAgent.h"
 #include "minmax.h"
@@ -61,10 +62,16 @@ Level::~Level()
 //-----------------------------------------------------------------
 /**
  * Start gameplay.
+ * fillStatus() must be called before.
  */
     void
 Level::own_initState()
 {
+    if (NULL == m_levelStatus) {
+        throw LogicException(ExInfo("level status is NULL")
+                .addInfo("codename", m_codename));
+    }
+    m_levelStatus->setRunning();
     SoundAgent::agent()->stopMusic();
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
@@ -226,9 +233,7 @@ Level::updateLevel()
     void
 Level::finishLevel()
 {
-    if (m_levelStatus) {
-        m_levelStatus->setComplete(true);
-    }
+    m_levelStatus->setComplete();
     saveSolution();
     quitState();
 }

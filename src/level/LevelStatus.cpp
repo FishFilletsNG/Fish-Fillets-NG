@@ -44,6 +44,16 @@ LevelStatus::readMoves(const std::string &savedMoves)
 
 
 //-----------------------------------------------------------------
+void
+LevelStatus::prepareRun(const std::string codename,
+                const std::string levelName)
+{
+    m_complete = false;
+    m_wasRunning = false;
+    m_codename = codename;
+    m_levelName = levelName;
+}
+//-----------------------------------------------------------------
 /**
  * Return new prepared script.
  */

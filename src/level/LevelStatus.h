@@ -15,6 +15,7 @@ extern "C" {
 class LevelStatus {
     private:
         bool m_complete;
+        bool m_wasRunning;
         std::string m_codename;
         std::string m_levelName;
         std::string m_savedMoves;
@@ -23,14 +24,15 @@ class LevelStatus {
         ScriptState *createScript();
         std::string getSolutionFilename();
     public:
-        LevelStatus() { m_complete = false; }
-        void setCodename(const std::string codename) { m_codename = codename; }
-        void setLevelName(const std::string levelName)
-        { m_levelName = levelName; }
+        LevelStatus() { m_complete = false; m_wasRunning = false; }
+        void prepareRun(const std::string codename,
+                const std::string levelName);
         std::string getLevelName() const { return m_levelName; }
 
-        void setComplete(bool complete) { m_complete = complete; }
+        void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }
+        void setRunning() { m_wasRunning = true; }
+        bool wasRunning() const { return m_wasRunning; }
 
         void readMoves(const std::string &moves);
         std::string readSolvedMoves();

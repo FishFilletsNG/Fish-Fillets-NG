@@ -110,16 +110,18 @@ WorldMap::own_pauseState()
 WorldMap::own_resumeState()
 {
     activate();
-    SoundAgent::agent()->playMusic(
-            Path::dataReadPath("music/menu.ogg"), NULL);
-    //TODO: set with and height in one step
-    OptionAgent *options = OptionAgent::agent();
-    options->setParam("caption", findDesc("menu"));
-    options->setParam("screen_width", getW());
-    options->setParam("screen_height", getH());
 
-    if (m_levelStatus->isComplete()) {
-        markSolved();
+    if (m_levelStatus->wasRunning()) {
+        if (m_levelStatus->isComplete()) {
+            markSolved();
+        }
+        SoundAgent::agent()->playMusic(
+                Path::dataReadPath("music/menu.ogg"), NULL);
+        //TODO: set with and height in one step
+        OptionAgent *options = OptionAgent::agent();
+        options->setParam("caption", findDesc("menu"));
+        options->setParam("screen_width", getW());
+        options->setParam("screen_height", getH());
     }
 }
 //-----------------------------------------------------------------
@@ -153,9 +155,8 @@ WorldMap::runSelected()
 {
     Level *level = createSelected();
     if (level && m_selected) {
-        m_levelStatus->setCodename(m_selected->getCodename());
-        m_levelStatus->setLevelName(findLevelName(m_selected->getCodename()));
-        m_levelStatus->setComplete(false);
+        m_levelStatus->prepareRun(m_selected->getCodename(),
+            findLevelName(m_selected->getCodename()));
         level->fillStatus(m_levelStatus);
 
         if (m_selected->getState() == LevelNode::STATE_SOLVED) {

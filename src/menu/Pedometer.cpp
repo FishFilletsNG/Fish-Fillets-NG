@@ -20,14 +20,14 @@
 #include "minmax.h"
 
 //-----------------------------------------------------------------
-Pedometer::Pedometer(LevelStatus *status, Level *level)
+Pedometer::Pedometer(LevelStatus *status, Level *new_level)
 {
-    deactivate();
-    m_level = level;
+    m_level = new_level;
     m_status = status;
     m_solution = m_status->readSolvedMoves();
     m_meterPhase = 0;
 
+    deactivate();
     prepareBg();
     prepareRack();
 
@@ -39,6 +39,9 @@ Pedometer::Pedometer(LevelStatus *status, Level *level)
 //-----------------------------------------------------------------
 Pedometer::~Pedometer()
 {
+    if (m_level) {
+        delete m_level;
+    }
     SDL_FreeSurface(m_numbers);
     delete m_rack;
     delete m_bg;
@@ -163,6 +166,7 @@ Pedometer::runSelected()
 Pedometer::runLevel()
 {
     m_manager->changeState(m_level);
+    m_level = NULL;
 }
 //-----------------------------------------------------------------
     void
@@ -170,6 +174,7 @@ Pedometer::runReplay()
 {
     m_manager->changeState(m_level);
     m_level->loadReplay(m_solution);
+    m_level = NULL;
 }
 
 //-----------------------------------------------------------------

@@ -46,12 +46,12 @@ LevelInput::keyEvent(const KeyStroke &stroke)
             m_level->quitState();
             break;
         case KEY_SWITCH:
-            if (!m_level->isShowing()) {
+            if (!m_level->isShowing() && !m_level->isLoading()) {
                 m_level->switchFish();
             }
             break;
         case KEY_SAVE:
-            if (!m_level->isShowing()) {
+            if (!m_level->isShowing() && !m_level->isLoading()) {
                 m_level->action_save();
             }
             break;
@@ -64,7 +64,7 @@ LevelInput::keyEvent(const KeyStroke &stroke)
             m_level->action_restart();
             break;
         case -1:
-            if (!m_level->isShowing()) {
+            if (!m_level->isShowing() && !m_level->isLoading()) {
                 m_level->controlEvent(stroke);
             }
             break;

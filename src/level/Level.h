@@ -46,7 +46,6 @@ class Level : public GameState {
         eRoomState m_roomState;
         LevelStatus *m_levelStatus;
     private:
-        bool isLoading() const;
         bool nextAction();
         void updateLevel();
         void finishLevel();
@@ -88,6 +87,7 @@ class Level : public GameState {
         void setRoomWaves(double amplitude, double periode, double speed);
         void newDemo(Picture *new_bg, const Path &demofile);
 
+        bool isLoading() const;
         bool isShowing() const;
         void interruptShow();
         void planShow(Command *new_command);
