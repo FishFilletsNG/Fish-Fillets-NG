@@ -8,10 +8,8 @@
  */
 #include "MenuHelp.h"
 
-#include "Log.h"
 #include "Path.h"
-#include "VBox.h"
-#include "WiLabel.h"
+#include "WiPara.h"
 
 #include "Labels.h"
 #include "Font.h"
@@ -22,8 +20,11 @@
 //-----------------------------------------------------------------
 MenuHelp::MenuHelp()
 {
-    m_help = new VBox();
-    prepareText();
+    Font usedFont(Path::dataReadPath("font/font_menu.ttf"), 14);
+    SDL_Color usedColor = {255, 255, 255, 255};
+
+    Labels labels(Path::dataReadPath("script/labels.lua"));
+    m_help = new WiPara(labels.getLabel("help"), usedFont, usedColor);
 
     takeHandler(new HelpInput(this));
     registerDrawable(this);
@@ -58,26 +59,6 @@ MenuHelp::own_resumeState()
 
     m_help->setShift(
             V2((screenW - contentW) / 2, (screenH - contentH) / 2));
-}
-//-----------------------------------------------------------------
-void
-MenuHelp::prepareText()
-{
-    Labels labels(Path::dataReadPath("script/labels.lua"));
-    std::string text = labels.getLabel("help");
-
-    Font usedFont(Path::dataReadPath("font/font_menu.ttf"), 14);
-    SDL_Color usedColor = {255, 255, 255, 255};
-
-    std::string space = " ";
-    StringTool::t_args lines = StringTool::split(text, '\n');
-    for (unsigned int i = 0; i < lines.size(); ++i) {
-        const std::string *line = &(lines[i]);
-        if (line->empty()) {
-            line = &space;
-        }
-        m_help->addWidget(new WiLabel(*line, usedFont, usedColor));
-    }
 }
 //-----------------------------------------------------------------
 void

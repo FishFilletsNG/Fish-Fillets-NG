@@ -12,9 +12,8 @@
 #include "Path.h"
 #include "Font.h"
 #include "Labels.h"
-#include "StringTool.h"
 #include "LevelStatus.h"
-#include "WiLabel.h"
+#include "WiPara.h"
 #include "BaseException.h"
 
 //-----------------------------------------------------------------
@@ -25,31 +24,28 @@
 SolverDrawer::SolverDrawer(LevelStatus *status)
 {
     try {
-        Labels labels(Path::dataReadPath("script/labels.lua"));
-
         Font usedFont(Path::dataReadPath("font/font_menu.ttf"), 14);
         SDL_Color usedColor = {255, 255, 255, 255};
 
+        Labels labels(Path::dataReadPath("script/labels.lua"));
+        const char *labelName = "solver_worse";
+        if (status->isBetter()) {
+            labelName = "solver_better";
+        }
+        else {
+            labelName = "solver_worse";
+        }
         StringTool::t_args args;
         args.push_back("");
         args.push_back(StringTool::toString(status->getBestMoves()));
         args.push_back(status->getBestAuthor());
 
-        std::string label1;
-        std::string label2;
-        if (status->isBetter()) {
-            label1 = labels.getFormatedLabel("solver_better1", args);
-            label2 = labels.getFormatedLabel("solver_better2", args);
-        }
-        else {
-            label1 = labels.getFormatedLabel("solver_worse1", args);
-            label2 = labels.getFormatedLabel("solver_worse2", args);
-        }
-
-        addWidget(new WiLabel(label1, usedFont, usedColor));
-        addWidget(new WiLabel(label2, usedFont, usedColor));
-        enableCentered();
-        recenter();
+        WiPara *para = new WiPara(
+                labels.getFormatedLabel(labelName, args),
+                usedFont, usedColor);
+        para->enableCentered();
+        para->recenter();
+        addWidget(para);
     }
     catch (BaseException &e) {
         LOG_WARNING(e.info());

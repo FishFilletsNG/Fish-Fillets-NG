@@ -8,6 +8,7 @@
  */
 #include "Font.h"
 
+#include "Log.h"
 #include "Path.h"
 #include "TTFException.h"
 #include "SDLException.h"
@@ -80,7 +81,16 @@ Font::calcTextWidth(const std::string &text)
 SDL_Surface *
 Font::renderText(const std::string &text, const SDL_Color &color) const
 {
-    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, text.c_str(),
+    const char *content = text.c_str();
+    if (text.empty()) {
+        content = " ";
+        LOG_WARNING(ExInfo("empty text to render")
+                .addInfo("r", color.r)
+                .addInfo("g", color.g)
+                .addInfo("b", color.b));
+    }
+
+    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, content,
             color, m_bg);
     if (!raw_surface) {
         throw TTFException(ExInfo("RenderUTF8")

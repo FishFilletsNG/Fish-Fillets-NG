@@ -1,7 +1,7 @@
 #ifndef HEADER_MENUHELP_H
 #define HEADER_MENUHELP_H
 
-class VBox;
+class IWidget;
 
 #include "GameState.h"
 #include "Drawable.h"
@@ -11,9 +11,7 @@ class VBox;
  */
 class MenuHelp : public GameState, public Drawable {
     private:
-        VBox *m_help;
-    private:
-        void prepareText();
+        IWidget *m_help;
     protected:
         virtual void own_initState();
         virtual void own_updateState() {}
