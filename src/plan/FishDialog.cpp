@@ -32,8 +32,9 @@ FishDialog::FishDialog(const std::string &lang,
 void
 FishDialog::runSubtitle() const
 {
-    if (!m_fontname.empty()) {
-        SubTitleAgent::agent()->newSubtitle(getSubtitle(), m_fontname);
+    std::string subtitle = getSubtitle();
+    if (!subtitle.empty() && !m_fontname.empty()) {
+        SubTitleAgent::agent()->newSubtitle(subtitle, m_fontname);
     }
 }
 

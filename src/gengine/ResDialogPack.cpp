@@ -73,9 +73,11 @@ ResDialogPack::findDialog(const std::string &name, const std::string lang)
  * @return dialog or NULL
  */
     Dialog *
-ResDialogPack::findDialogHard(const std::string &name)
+ResDialogPack::findDialogHard(const std::string &name,
+        const std::string &select)
 {
-    std::string lang = OptionAgent::agent()->getParam("lang");
+    std::string lang = OptionAgent::agent()->getParam(select,
+            OptionAgent::agent()->getParam("lang"));
     Dialog *dialog = findDialog(name, lang);
     if (NULL == dialog) {
         dialog = findDialog(name, Dialog::DEFAULT_LANG);

@@ -17,12 +17,13 @@
  * @param actor who will talk
  * @param dialog what will talk, shared resource
  */
-PlannedDialog::PlannedDialog(int actor, Dialog *dialog)
+PlannedDialog::PlannedDialog(int actor, Dialog *dialog, int minTime)
 {
     m_actor = actor;
     m_dialog = dialog;
     m_channel = -1;
     m_endtime = 0;
+    m_minTime = minTime;
 }
 //-----------------------------------------------------------------
 /**
@@ -34,7 +35,7 @@ void
 PlannedDialog::talk(int volume, int loops)
 {
     m_channel = m_dialog->talk(volume, loops);
-    m_endtime = m_dialog->getMinTime() + TimerAgent::agent()->getCycles();
+    m_endtime = m_minTime + TimerAgent::agent()->getCycles();
 }
 
 //-----------------------------------------------------------------

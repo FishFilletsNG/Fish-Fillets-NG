@@ -17,14 +17,13 @@ class Dialog: public NoCopy {
         std::string m_soundfile;
         std::string m_lang;
         std::string m_subtitle;
-    protected:
-        virtual void runSubtitle() const;
     public:
         Dialog(const std::string &lang,
                 const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
         int talk(int volume, int loops=0);
+        virtual void runSubtitle() const;
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }
         int getMinTime() const;

@@ -117,6 +117,8 @@ Application::prepareOptions(int argc, char *argv[])
             "Path to game data");
     params.addParam("lang", OptionParams::TYPE_STRING,
             "2‐letter code (en, cs, fr, de)");
+    params.addParam("speech", OptionParams::TYPE_STRING,
+            "Lang for speech");
     params.addParam("fullscreen", OptionParams::TYPE_BOOLEAN,
             "Turn fullscreen on/off");
     params.addParam("show_steps", OptionParams::TYPE_BOOLEAN,

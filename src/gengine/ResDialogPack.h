@@ -19,7 +19,8 @@ class ResDialogPack : public ResourcePack<Dialog*> {
     public:
         virtual const char *getName() const { return "dialog_pack"; }
         Dialog *findDialog(const std::string &name, const std::string lang);
-        Dialog *findDialogHard(const std::string &name);
+        Dialog *findDialogHard(const std::string &name,
+                const std::string &select="lang");
 };
 
 #endif

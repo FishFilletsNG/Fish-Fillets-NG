@@ -16,10 +16,11 @@ class PlannedDialog : public NoCopy {
         Dialog *m_dialog;
         int m_channel;
         int m_endtime;
+        int m_minTime;
     private:
         bool isPlaying();
     public:
-        PlannedDialog(int actor, Dialog *dialog);
+        PlannedDialog(int actor, Dialog *dialog, int minTime);
 
         void talk(int volume, int loops=0);
         void killTalk();

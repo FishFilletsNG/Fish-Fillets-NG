@@ -51,10 +51,6 @@ Dialog::talk(int volume, int loops)
     }
 
     int channel = SoundAgent::agent()->playSound(m_sound, volume, loops);
-    if (!m_subtitle.empty()) {
-        runSubtitle();
-    }
-
     return channel;
 }
 //-----------------------------------------------------------------
