@@ -8,6 +8,7 @@
  */
 #include "Font.h"
 
+#include "Path.h"
 #include "TTFException.h"
 #include "SDLException.h"
 #include "Outline.h"

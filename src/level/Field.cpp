@@ -8,6 +8,7 @@
  */
 #include "Field.h"
 
+#include "V2.h"
 #include "Cube.h"
 #include "ModelFactory.h"
 

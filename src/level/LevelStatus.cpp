@@ -8,6 +8,7 @@
  */
 #include "LevelStatus.h"
 
+#include "Path.h"
 #include "ScriptState.h"
 #include "ScriptException.h"
 #include "def-script.h"

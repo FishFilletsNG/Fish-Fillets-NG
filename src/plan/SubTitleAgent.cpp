@@ -12,6 +12,7 @@
 #include "Font.h"
 #include "ResColorPack.h"
 
+#include "Path.h"
 #include "OptionAgent.h"
 #include "minmax.h"
 

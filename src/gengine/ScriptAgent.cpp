@@ -9,14 +9,13 @@
 #include "ScriptAgent.h"
 
 #include "Log.h"
-#include "ExInfo.h"
+#include "Path.h"
 #include "SimpleMsg.h"
 #include "IntMsg.h"
 #include "StringMsg.h"
 #include "MessagerAgent.h"
 #include "UnknownMsgException.h"
 #include "ScriptException.h"
-#include "Path.h"
 #include "OptionAgent.h"
 #include "ScriptState.h"
 

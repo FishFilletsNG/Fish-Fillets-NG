@@ -12,6 +12,7 @@
 #include "RadioBox.h"
 
 #include "def-script.h"
+#include "Path.h"
 #include "ScriptState.h"
 
 //-----------------------------------------------------------------

@@ -1,8 +1,9 @@
 #ifndef HEADER_FONT_H
 #define HEADER_FONT_H
 
+class Path;
+
 #include "NoCopy.h"
-#include "Path.h"
 
 #include "SDL.h"
 #include "SDL_ttf.h"

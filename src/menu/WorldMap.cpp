@@ -17,6 +17,7 @@
 
 #include "worldmap-script.h"
 #include "Log.h"
+#include "Path.h"
 #include "WorldWay.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"

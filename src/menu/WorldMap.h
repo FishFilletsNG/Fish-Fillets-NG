@@ -1,6 +1,7 @@
 #ifndef HEADER_WORLDMAP_H
 #define HEADER_WORLDMAP_H
 
+class Path;
 class Level;
 class LevelNode;
 class NodeDrawer;
@@ -9,7 +10,6 @@ class LevelDesc;
 class LevelStatus;
 class LayeredPicture;
 
-#include "Path.h"
 #include "Drawable.h"
 #include "GameState.h"
 #include "DescFinder.h"

@@ -1,8 +1,9 @@
 #ifndef HEADER_RESSOUNDPACK_H
 #define HEADER_RESSOUNDPACK_H
 
+class Path;
+
 #include "ResourcePack.h"
-#include "Path.h"
 
 #include "SDL_mixer.h"
 

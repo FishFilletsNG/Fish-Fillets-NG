@@ -9,6 +9,7 @@
 #include "WorldWay.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "LevelNode.h"
 #include "ScriptState.h"
 #include "LuaTable.h"

@@ -1,8 +1,9 @@
 #ifndef HEADER_RESIMAGEPACK_H
 #define HEADER_RESIMAGEPACK_H
 
+class Path;
+
 #include "ResourcePack.h"
-#include "Path.h"
 
 #include "SDL.h"
 

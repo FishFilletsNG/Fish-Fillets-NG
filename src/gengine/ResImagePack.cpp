@@ -8,6 +8,7 @@
  */
 #include "ResImagePack.h"
 
+#include "Path.h"
 #include "ImgException.h"
 #include "SDLException.h"
 

@@ -9,9 +9,8 @@
 #include "ScriptState.h"
 
 #include "Log.h"
-#include "ExInfo.h"
-#include "ScriptException.h"
 #include "Path.h"
+#include "ScriptException.h"
 
 extern "C" {
 #include "lualib.h"

@@ -8,6 +8,7 @@
  */
 #include "LevelScript.h"
 
+#include "V2.h"
 #include "Room.h"
 #include "ScriptState.h"
 

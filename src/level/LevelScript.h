@@ -1,14 +1,14 @@
 #ifndef HEADER_LEVELSCRIPT_H
 #define HEADER_LEVELSCRIPT_H
 
+class V2;
+class Path;
 class Cube;
 class Unit;
 class Room;
 class Level;
 class Command;
 
-#include "V2.h"
-#include "Path.h"
 #include "Planner.h"
 
 #include <string>

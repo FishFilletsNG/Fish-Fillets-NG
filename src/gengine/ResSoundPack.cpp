@@ -8,6 +8,7 @@
  */
 #include "ResSoundPack.h"
 
+#include "Path.h"
 #include "OptionAgent.h"
 
 //-----------------------------------------------------------------

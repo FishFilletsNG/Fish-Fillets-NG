@@ -1,10 +1,10 @@
 #ifndef HEADER_FIELD_H
 #define HEADER_FIELD_H
 
+class V2;
 class Cube;
 
 #include "NoCopy.h"
-#include "V2.h"
 
 /**
  * Two dimensional game field.

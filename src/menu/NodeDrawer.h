@@ -1,12 +1,12 @@
 #ifndef HEADER_NODEDRAWER_H
 #define HEADER_NODEDRAWER_H
 
+class V2;
 class LevelNode;
 class ResImagePack;
 class Font;
 
 #include "NoCopy.h"
-#include "V2.h"
 
 #include "SDL.h"
 #include <string>

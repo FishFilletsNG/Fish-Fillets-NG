@@ -12,6 +12,7 @@
 #include "Font.h"
 
 #include "Log.h"
+#include "V2.h"
 #include "Path.h"
 #include "LevelNode.h"
 #include "TimerAgent.h"

@@ -7,7 +7,6 @@ class PlannedDialog;
 
 #include "BaseAgent.h"
 #include "Name.h"
-#include "Path.h"
 
 #include <list>
 

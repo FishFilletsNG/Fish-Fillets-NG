@@ -5,7 +5,6 @@ class Dialog;
 
 #include "ResourcePack.h"
 #include "Name.h"
-#include "Path.h"
 
 #include "SDL.h"
 

@@ -8,6 +8,7 @@
  */
 #include "ModelFactory.h"
 
+#include "V2.h"
 #include "Unit.h"
 #include "Shape.h"
 #include "LogicException.h"

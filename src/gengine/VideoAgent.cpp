@@ -9,6 +9,7 @@
 #include "VideoAgent.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "ImgException.h"
 #include "SDLException.h"
 #include "LogicException.h"

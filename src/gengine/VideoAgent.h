@@ -1,10 +1,11 @@
 #ifndef HEADER_VIDEOAGENT_H
 #define HEADER_VIDEOAGENT_H
 
+class Path;
+
 #include "BaseAgent.h"
 #include "MultiDrawer.h"
 #include "Name.h"
-#include "Path.h"
 
 #include "SDL.h"
 

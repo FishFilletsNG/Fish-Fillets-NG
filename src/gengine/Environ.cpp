@@ -9,6 +9,7 @@
 #include "Environ.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "BaseMsg.h"
 #include "NameException.h"
 #include "StringTool.h"

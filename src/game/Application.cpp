@@ -9,6 +9,7 @@
 #include "Application.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "Random.h"
 #include "AgentPack.h"
 #include "MessagerAgent.h"

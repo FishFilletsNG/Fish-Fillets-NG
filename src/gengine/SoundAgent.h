@@ -1,12 +1,12 @@
 #ifndef HEADER_SOUNDAGENT_H
 #define HEADER_SOUNDAGENT_H
 
+class Path;
 class BaseMsg;
 
 #include "BaseAgent.h"
 #include "Name.h"
 #include "IntMsg.h"
-#include "Path.h"
 
 #include "SDL.h"
 #include "SDL_mixer.h"

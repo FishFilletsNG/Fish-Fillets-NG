@@ -8,6 +8,7 @@
  */
 #include "LayeredPicture.h"
 
+#include "Path.h"
 #include "ResImagePack.h"
 #include "ResourceException.h"
 #include "SurfaceLock.h"

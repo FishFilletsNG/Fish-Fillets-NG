@@ -9,7 +9,6 @@ class Color;
 #include "BaseAgent.h"
 #include "Drawable.h"
 #include "Name.h"
-#include "Path.h"
 
 #include <string>
 #include <deque>

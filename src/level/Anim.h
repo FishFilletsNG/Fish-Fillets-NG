@@ -1,11 +1,11 @@
 #ifndef HEADER_ANIM_H
 #define HEADER_ANIM_H
 
+class Path;
 class ResImagePack;
 
 #include "ViewEffect.h"
 #include "NoCopy.h"
-#include "Path.h"
 #include "V2.h"
 
 #include "SDL.h"

@@ -1,12 +1,12 @@
 #ifndef HEADER_PLANNER_H
 #define HEADER_PLANNER_H
 
+class Path;
 class ScriptState;
 class CommandQueue;
 class Actor;
 
 #include "NoCopy.h"
-#include "Path.h"
 
 #include "SDL.h"
 #include <string>

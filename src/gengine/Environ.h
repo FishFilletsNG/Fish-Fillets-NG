@@ -1,10 +1,10 @@
 #ifndef HEADER_ENVIRON_H
 #define HEADER_ENVIRON_H
 
+class Path;
 class BaseMsg;
 
 #include "NoCopy.h"
-#include "Path.h"
 
 #include <string>
 #include <map>

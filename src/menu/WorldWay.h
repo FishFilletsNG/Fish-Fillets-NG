@@ -1,10 +1,10 @@
 #ifndef HEADER_WORLDWAY_H
 #define HEADER_WORLDWAY_H
 
+class Path;
 class LevelNode;
 
 #include "NoCopy.h"
-#include "Path.h"
 
 extern "C" {
 #include "lua.h"

@@ -9,6 +9,7 @@
 #include "SDLSoundAgent.h"
 
 #include "Log.h"
+#include "Path.h"
 #include "ExInfo.h"
 #include "SDLException.h"
 #include "MixException.h"

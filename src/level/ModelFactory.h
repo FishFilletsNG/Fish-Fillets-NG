@@ -1,9 +1,9 @@
 #ifndef HEADER_MODELFACTORY_H
 #define HEADER_MODELFACTORY_H
 
+class V2;
 class Unit;
 
-#include "V2.h"
 #include "Cube.h"
 
 #include <string>

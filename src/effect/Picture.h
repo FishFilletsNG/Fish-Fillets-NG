@@ -1,12 +1,10 @@
 #ifndef HEADER_PICTURE_H
 #define HEADER_PICTURE_H
 
-class CVideo;
+class Path;
 
 #include "Drawable.h"
-#include "Path.h"
 #include "V2.h"
-
 
 /**
  * Static picture at fixed screen position.

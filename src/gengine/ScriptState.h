@@ -1,8 +1,9 @@
 #ifndef HEADER_SCRIPTSTATE_H
 #define HEADER_SCRIPTSTATE_H
 
+class Path;
+
 #include "NoCopy.h"
-#include "Path.h"
 
 #include <string>
 

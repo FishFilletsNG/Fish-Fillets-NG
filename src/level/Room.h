@@ -1,6 +1,7 @@
 #ifndef HEADER_ROOM_H
 #define HEADER_ROOM_H
 
+class Path;
 class Field;
 class WavyPicture;
 class Controls;
@@ -14,7 +15,6 @@ class Decor;
 
 #include "NoCopy.h"
 #include "Drawable.h"
-#include "Path.h"
 #include "Cube.h"
 #include "StepCounter.h"
 
