@@ -216,7 +216,7 @@ WorldMap::runSelected()
 }
 //-----------------------------------------------------------------
 /**
- * Return selected level or NULL;
+ * Return selected level or NULL.
  */
 Level *
 WorldMap::createSelected() const

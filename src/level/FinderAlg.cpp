@@ -88,7 +88,8 @@ FinderAlg::isInRect(const V2 &rectLoc, int w, int h, const V2 &dest) const
     int rY = rectLoc.getY();
     int destX = dest.getX();
     int destY = dest.getY();
-    return rX <= destX and destX < rX + w and rY <= destY and destY < rY + h;
+    return (rX <= destX && destX < rX + w)
+        && (rY <= destY && destY < rY + h);
 }
 //-----------------------------------------------------------------
 bool
