@@ -163,7 +163,7 @@ ViewEffect::getPixel(SDL_Surface *surface, int x, int y)
         case 1: // 8bit
             return *p;
         case 2: // 16bit 
-            return (Uint16*)(p);
+            return *reinterpret_cast<Uint16*>(p);
         case 3: // 24bit 
             if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                 return p[0] << 16 | p[1] << 8 | p[2];
