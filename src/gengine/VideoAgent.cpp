@@ -309,7 +309,7 @@ VideoAgent::setCaption(const std::string &title)
             XSetWMName(info.info.x11.display, info.info.x11.wmwindow,
                     &titleprop);
             XFree(titleprop.value);
-            XSync(info.info.x11.display, False);
+
             info.info.x11.unlock_func();
             done = true;
         }
