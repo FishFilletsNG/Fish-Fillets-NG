@@ -52,6 +52,12 @@ ViewEffect::isDisintegrated() const
     return (m_effect == EFFECT_DISINTEGRATE && 0 == m_disint);
 }
 //-----------------------------------------------------------------
+bool
+ViewEffect::isInvisible() const
+{
+    return (m_effect == EFFECT_INVISIBLE) || isDisintegrated();
+}
+//-----------------------------------------------------------------
 void
 ViewEffect::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
 {
@@ -76,6 +82,9 @@ ViewEffect::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
     }
 }
 //-----------------------------------------------------------------
+/**
+ * Blit without special effect.
+ */
 void
 ViewEffect::blitNone(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
 {

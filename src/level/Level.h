@@ -81,6 +81,7 @@ class Level : public GameState {
         int getDepth() const { return m_depth; }
 
         void createRoom(int w, int h, const Path &picture);
+        void setRoomWaves(double amplitude, double periode, double speed);
         void newDemo(Picture *new_bg, const Path &demofile);
 
         bool isShowing() const;

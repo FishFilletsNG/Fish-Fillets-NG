@@ -204,6 +204,7 @@ LevelScript::registerLevelFuncs()
     m_script->registerFunc("level_action_restart", script_level_action_restart);
 
     m_script->registerFunc("level_createRoom", script_level_createRoom);
+    m_script->registerFunc("level_setRoomWaves", script_level_setRoomWaves);
     m_script->registerFunc("level_getRestartCounter",
             script_level_getRestartCounter);
     m_script->registerFunc("level_getDepth", script_level_getDepth);

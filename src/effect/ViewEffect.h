@@ -39,6 +39,7 @@ class ViewEffect {
         void setEffect(eEffect effect);
         void updateEffect();
         bool isDisintegrated() const;
+        bool isInvisible() const;
         void blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
 
         static Uint32 getPixel(SDL_Surface *surface, int x, int y);

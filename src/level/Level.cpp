@@ -461,6 +461,15 @@ Level::createRoom(int w, int h, const Path &picture)
     options->setParam("screen_height", h * View::SCALE);
 }
 //-----------------------------------------------------------------
+/**
+ * Set waves on background.
+ */
+    void
+Level::setRoomWaves(double amplitude, double periode, double speed)
+{
+    m_levelScript->room()->setWaves(amplitude, periode, speed);
+}
+//-----------------------------------------------------------------
     void
 Level::newDemo(Picture *new_bg, const Path &demofile)
 {

@@ -2,7 +2,7 @@
 #define HEADER_ROOM_H
 
 class Field;
-class Picture;
+class WavyPicture;
 class Controls;
 class KeyStroke;
 class Unit;
@@ -23,7 +23,7 @@ class View;
  */
 class Room : public NoCopy {
     private:
-        Picture *m_bg;
+        WavyPicture *m_bg;
         Field *m_field;
         ResSoundPack *m_soundPack;
         Controls *m_controls;
@@ -44,6 +44,7 @@ class Room : public NoCopy {
         Room(int w, int h, const Path &picture,
                 PhaseLocker *locker, Planner *levelScript);
         ~Room();
+        void setWaves(double amplitude, double periode, double speed);
         void activate();
         void deactivate();
 

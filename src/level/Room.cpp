@@ -8,7 +8,7 @@
  */
 #include "Room.h"
 
-#include "Picture.h"
+#include "WavyPicture.h"
 #include "Field.h"
 #include "ResSoundPack.h"
 #include "Controls.h"
@@ -39,7 +39,7 @@ Room::Room(int w, int h, const Path &picture,
 {
     m_locker = locker;
     m_levelScript = levelScript;
-    m_bg = new Picture(picture, V2(0, 0));
+    m_bg = new WavyPicture(picture, V2(0, 0));
     m_field = new Field(w, h);
     m_controls = new Controls(m_locker);
     m_view = new View(ModelList(&m_models));
@@ -68,6 +68,17 @@ Room::~Room()
 
     delete m_field;
     delete m_bg;
+}
+//-----------------------------------------------------------------
+/**
+ * Set waves on background.
+ */
+    void
+Room::setWaves(double amplitude, double periode, double speed)
+{
+    m_bg->setWamp(amplitude);
+    m_bg->setWperiode(periode);
+    m_bg->setWspeed(speed);
 }
 //-----------------------------------------------------------------
 void

@@ -12,7 +12,7 @@ class CVideo;
  * Static picture at fixed screen position.
  */
 class Picture : public IDrawer {
-    private:
+    protected:
         V2 m_loc;
         SDL_Surface *m_surface;
     public:
