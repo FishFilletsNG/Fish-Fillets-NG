@@ -97,7 +97,7 @@ GameState::resumeState()
 void
 GameState::cleanState()
 {
-    LOG_INFO(ExInfo("cleanState").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("cleanState").addInfo("name", getName()));
     own_cleanState();
 
     InputAgent::agent()->installHandler(NULL);

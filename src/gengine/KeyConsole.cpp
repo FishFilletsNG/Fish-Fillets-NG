@@ -79,6 +79,7 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
             }
             break;
         case SDLK_ESCAPE:
+        case SDLK_BACKQUOTE:
             deactivate();
             break;
         default:
