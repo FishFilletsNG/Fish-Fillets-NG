@@ -58,7 +58,7 @@ KeyDriver::drive(Cube *model)
             result = model->rules()->actionMoveDir(Rules::DIR_DOWN);
         }
 
-        speedup(model, result);
+        speedup(model);
     }
 
     return result;
@@ -75,7 +75,7 @@ KeyDriver::speedup(const Cube *model)
     static const int SPEED_WARP1 = 3;
     static const int SPEED_WARP2 = 10;
 
-    std::string action = model->rules()->getAction();
+    std::string action = model->const_rules()->getAction();
     if (action == "move_left" || action == "move_right"
             || action == "move_up" || action == "move_down")
     {

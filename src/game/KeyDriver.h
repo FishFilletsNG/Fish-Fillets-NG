@@ -15,7 +15,7 @@ class KeyDriver : public Driver {
         Uint8 *m_keys;
         int m_speedup;
     private:
-        void speedup(const Cube *model, bool moved);
+        void speedup(const Cube *model);
     public:
         KeyDriver(const KeyControl &control);
 
