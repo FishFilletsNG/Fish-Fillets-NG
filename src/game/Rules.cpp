@@ -640,11 +640,11 @@ Rules::getState() const
     if (false == m_model->isAlive()) {
         return "dead";
     }
-    else if (DialogAgent::agent()->isTalking(m_model)) {
-        return "talking";
-    }
     else if (m_pushing) {
         return "pushing";
+    }
+    else if (DialogAgent::agent()->isTalking(m_model)) {
+        return "talking";
     }
     else {
         return "normal";

@@ -15,9 +15,6 @@
 #include "InputAgent.h"
 #include "OptionAgent.h"
 #include "MessagerAgent.h"
-#include "SubTitleAgent.h"
-#include "DialogAgent.h"
-#include "Dialog.h"
 #include "ResSoundAgent.h"
 
 #include "KeyStroke.h"
@@ -104,9 +101,6 @@ void
 GameAgent::newLevel(bool restart)
 {
     clearRoom();
-    //NOTE: "pause" dialog is used to delay dialogs
-    DialogAgent::agent()->addDialog("pause",
-            new Dialog(DialogAgent::DEFAULT_LANG, "", ""));
 
     m_script = new ScriptState();
     registerGameFuncs();
@@ -117,15 +111,11 @@ GameAgent::newLevel(bool restart)
 //-----------------------------------------------------------------
 /**
  * Clear room after visit.
- * NOTE: clear all sound and dialogs too!
- * Dialogs must free because dialog points at Actor.
  */
 void
 GameAgent::clearRoom()
 {
     //TODO: remove only ResSoundPack used by room
-    SubTitleAgent::agent()->removeAll();
-    DialogAgent::agent()->removeAll();
     ResSoundAgent::agent()->removeAll();
 
     if (m_script) {

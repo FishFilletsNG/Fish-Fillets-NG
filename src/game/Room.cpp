@@ -14,6 +14,9 @@
 #include "Rules.h"
 #include "LogicException.h"
 #include "SoundAgent.h"
+#include "SubTitleAgent.h"
+#include "DialogAgent.h"
+#include "Dialog.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -21,6 +24,8 @@ Room::Room(int w, int h, const Path &picture)
     m_bg = new Picture(picture, 0, 0);
     m_field = new Field(w, h);
     m_impact = Cube::NONE;
+
+    killDialogs();
 }
 //-----------------------------------------------------------------
 /**
@@ -28,6 +33,8 @@ Room::Room(int w, int h, const Path &picture)
  */
 Room::~Room()
 {
+    killDialogs();
+
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         delete (*i);
@@ -35,6 +42,17 @@ Room::~Room()
 
     delete m_field;
     delete m_bg;
+}
+//-----------------------------------------------------------------
+void
+Room::killDialogs()
+{
+    SubTitleAgent::agent()->removeAll();
+    DialogAgent::agent()->removeAll();
+
+    //NOTE: "pause" dialog is used to delay dialogs
+    DialogAgent::agent()->addDialog("pause",
+            new Dialog(DialogAgent::DEFAULT_LANG, "", ""));
 }
 //-----------------------------------------------------------------
 /**
@@ -129,19 +147,25 @@ Room::playImpact()
 void
 Room::prepareRound()
 {
+    bool interrupt = false;
+
     //NOTE: we must call this functions sequential for all objects
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->rules()->occupyNewPos();
     }
     for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
-        (*j)->rules()->checkDead();
+        interrupt |= (*j)->rules()->checkDead();
     }
     for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
-        (*k)->rules()->checkOut();
+        interrupt |= (*k)->rules()->checkOut();
     }
     for (Cube::t_models::iterator l = m_models.begin(); l != end; ++l) {
         (*l)->rules()->prepareRound();
+    }
+
+    if (interrupt) {
+        killDialogs();
     }
 }
 //-----------------------------------------------------------------
