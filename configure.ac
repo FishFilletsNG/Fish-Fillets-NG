@@ -35,13 +35,13 @@ dnl Debian, and possibly other systems, include this script...
         AC_CHECK_LIB(lua, lua_getfenv, LUA_LIBS="$LUA_LIBS -llua",
         AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
         AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
-        [AC_MSG_ERROR([Lua5 is required.
+        [AC_MSG_ERROR([*** Lua5 is required.
          You can download lua from http://www.lua.org])],
          -lm), -lm), -lm)
           AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
           AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib50",
           AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib5.0"
-           [AC_MSG_ERROR([Lualib5 is required.
+           [AC_MSG_ERROR([*** Lualib5 is required.
             You can download lua from http://www.lua.org])],
             $LUA_LIBS -lm), $LUA_LIBS -lm),$LUA_LIBS -lm)
    fi
@@ -100,12 +100,18 @@ AC_CHECK_HEADER(boost/filesystem/path.hpp, [],
 )
 CPPFLAGS=$OLD_CPPFLAGS
 AC_CHECK_LIB(boost_filesystem, main,
-             [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem"],
-  AC_CHECK_LIB(boost_filesystem-gcc, main,
-               [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-gcc"],
+            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem"],
+AC_CHECK_LIB(boost_filesystem-gcc, main,
+            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-gcc"],
+AC_CHECK_LIB(boost_filesystem-mgw, main,
+            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-mgw"],
+AC_CHECK_LIB(boost_filesystem-vc, main,
+            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-vc"],
+AC_CHECK_LIB(boost_filesystem-osx, main,
+            [BOOST_LIBS="$BOOST_LIBS -lboost_filesystem-osx"],
     [AC_MSG_ERROR([*** boost_filesystem-devel library not found!
                    You can download boost from http://www.boost.org])],
-  $BOOST_LIBS), $BOOST_LIBS)
+    $BOOST_LIBS), $BOOST_LIBS) $BOOST_LIBS), $BOOST_LIBS), $BOOST_LIBS)
 AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
 
