@@ -258,13 +258,10 @@ WorldMap::checkEnding() const
 {
     bool result = false;
     if (m_ending && m_selected != m_ending) {
-        if (m_ending->getState() == LevelNode::STATE_SOLVED) {
-            if (m_selected->isLeaf()) {
+        if (m_selected->isLeaf()) {
+            if (m_startNode->areAllSolved()) {
                 result = true;
             }
-        }
-        else if (m_startNode->areAllSolved()) {
-            result = true;
         }
     }
     return result;
