@@ -61,6 +61,9 @@ GameAgent::own_shutdown()
 }
 
 //-----------------------------------------------------------------
+/**
+ * Global keystrokes.
+ */
     void
 GameAgent::keyBinding()
 {

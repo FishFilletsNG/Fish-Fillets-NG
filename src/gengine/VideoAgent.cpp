@@ -109,18 +109,18 @@ VideoAgent::initVideoMode()
 //-----------------------------------------------------------------
 /**
  * Init new video mode.
+ * NOTE: m_screen pointer will change
  */
     void
 VideoAgent::changeVideoMode(int screen_width, int screen_height)
 {
     OptionAgent *options = OptionAgent::agent();
     int screen_bpp = options->getAsInt("screen_bpp", 32);
-    int fullscreen = options->getAsInt("fullscreen", 0);
     int videoFlags = getVideoFlags();
-    if (fullscreen) {
+    m_fullscreen = options->getAsInt("fullscreen", 0);
+    if (m_fullscreen) {
         videoFlags |= SDL_FULLSCREEN;
     }
-    m_fullscreen = fullscreen;
 
     //TODO: check VideoModeOK and available ListModes
     SDL_Surface *newScreen =
@@ -165,7 +165,8 @@ VideoAgent::toggleFullScreen()
         m_fullscreen = !m_fullscreen;
     }
     else {
-        LOG_INFO(ExInfo("cannot toggle fullscreen"));
+        //NOTE: some platforms need reinit video
+        changeVideoMode(m_screen->w, m_screen->h);
     }
 }
 //-----------------------------------------------------------------
@@ -181,12 +182,8 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
 {
     if (msg->equalsName("fullscreen")) {
         OptionAgent *options = OptionAgent::agent();
-        if (options->getAsInt("fullscreen")) {
-            options->setPersistent("fullscreen", "0");
-        }
-        else {
-            options->setPersistent("fullscreen", "1");
-        }
+        bool toggle = !(options->getAsInt("fullscreen"));
+        options->setPersistent("fullscreen", toggle);
     }
     else {
         throw UnknownMsgException(msg);

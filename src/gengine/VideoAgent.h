@@ -31,7 +31,6 @@ class VideoAgent : public BaseAgent, public MultiDrawer {
         virtual void own_update();
         virtual void own_shutdown();
     public:
-        SDL_Surface *screen() { return m_screen; }
         virtual void receiveSimple(const SimpleMsg *msg);
         virtual void receiveString(const StringMsg *msg);
 
