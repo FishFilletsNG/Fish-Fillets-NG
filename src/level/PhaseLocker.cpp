@@ -11,6 +11,11 @@
 #include "minmax.h"
 
 //-----------------------------------------------------------------
+PhaseLocker::PhaseLocker()
+{
+    m_lockPhases = 0;
+}
+//-----------------------------------------------------------------
 /**
  * Reserve game cycle for blocking animation.
  * @param count how much phases we need

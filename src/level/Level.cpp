@@ -81,6 +81,7 @@ Level::own_initState()
     m_loadedMoves = "";
     m_loadSpeed = 1;
     m_replayMode = false;
+    m_locker->reset();
     m_levelScript->scriptInclude(m_datafile);
 }
 //-----------------------------------------------------------------
