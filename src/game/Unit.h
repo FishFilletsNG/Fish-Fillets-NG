@@ -16,6 +16,7 @@ class Unit {
         KeyControl m_buttons;
         ControlSym m_symbols;
         Cube *m_model;
+        bool m_startActive;
     private:
         bool canMove();
         char goLeft();
@@ -23,8 +24,10 @@ class Unit {
         char goUp();
         char goDown();
     public:
-        Unit(const KeyControl &buttons, const ControlSym &symbols);
+        Unit(const KeyControl &buttons, const ControlSym &symbols,
+                bool startActive=false);
         void takeModel(Cube *model) { m_model = model; }
+        bool startActive() { return m_startActive; }
 
         bool canDrive();
         char drive(Uint8 *pressed);

@@ -26,6 +26,7 @@ class Controls : public NoCopy {
     private:
         bool finishSwitch();
         void driveUnit();
+        void setActive(t_units::iterator active);
     public:
         Controls();
         ~Controls();

@@ -17,7 +17,6 @@
 Controls::Controls()
     : m_units(), m_moves()
 {
-    //TODO: activate small fish at start
     m_active = m_units.begin();
     m_speedup = 0;
     m_pressed = InputAgent::agent()->getKeys();
@@ -43,7 +42,15 @@ Controls::~Controls()
 Controls::addUnit(Unit *unit)
 {
     m_units.push_back(unit);
-    m_active = m_units.begin();
+    //NOTE: insertion invalidates m_active
+    t_units::iterator end = m_units.end();
+    for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+        if ((*i)->startActive()) {
+            setActive(i);
+            return;
+        }
+    }
+    setActive(m_units.begin());
 }
 //-----------------------------------------------------------------
 /**
@@ -66,7 +73,6 @@ Controls::finishSwitch()
 {
     bool result = false;
     if (m_switch && m_active != m_units.end()) {
-        m_speedup = 0;
         GameAgent::agent()->ensurePhases(3);
         (*m_active)->activate();
         result = true;
@@ -88,10 +94,7 @@ Controls::driveUnit()
         for (t_units::iterator i = m_units.begin(); i != end; ++i) {
             moved = (*i)->drive(m_pressed);
             if (moved > 0) {
-                if (i != m_active) {
-                    m_speedup = 0;
-                    m_active = i;
-                }
+                setActive(i);
                 break;
             }
         }
@@ -147,7 +150,8 @@ Controls::checkActive()
 }
 //-----------------------------------------------------------------
 /**
- * Switch active fish.
+ * Switch active unit.
+ * Activate next driveable unit.
  */
 void
 Controls::switchActive()
@@ -164,7 +168,20 @@ Controls::switchActive()
     } while (false == (*m_active)->canDrive() && m_active != start);
 
     if (start != m_active) {
+        m_speedup = 0;
         m_switch = true;
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Change active unit.
+ */
+void
+Controls::setActive(t_units::iterator active)
+{
+    if (m_active != active) {
+        m_speedup = 0;
+        m_active = active;
     }
 }
 //-----------------------------------------------------------------
@@ -178,10 +195,7 @@ Controls::makeMove(char move)
     t_units::iterator end = m_units.end();
     for (t_units::iterator i = m_units.begin(); i != end; ++i) {
         if ((*i)->driveOrder(move) == move) {
-            if (i != m_active) {
-                m_speedup = 0;
-                m_active = i;
-            }
+            setActive(i);
             m_moves.push_back(move);
             return true;
         }

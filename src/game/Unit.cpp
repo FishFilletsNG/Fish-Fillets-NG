@@ -13,10 +13,18 @@
 #include "Rules.h"
 
 //-----------------------------------------------------------------
-Unit::Unit(const KeyControl &buttons, const ControlSym &symbols)
+/**
+ * Create new driveable unit.
+ * @param buttons control buttons
+ * @param symbols move symbols stored in load/save
+ * @param a_startActive whether unit should be active at start
+ */
+Unit::Unit(const KeyControl &buttons, const ControlSym &symbols,
+        bool a_startActive)
     : m_buttons(buttons), m_symbols(symbols)
 {
     m_model = NULL;
+    m_startActive = a_startActive;
 }
 //-----------------------------------------------------------------
 bool

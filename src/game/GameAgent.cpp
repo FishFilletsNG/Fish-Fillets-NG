@@ -340,7 +340,7 @@ GameAgent::createUnit(const std::string &kind,
         smallfish.setDown(SDLK_k);
         smallfish.setLeft(SDLK_j);
         smallfish.setRight(SDLK_l);
-        result = new Unit(smallfish, ControlSym('u', 'd', 'l', 'r'));
+        result = new Unit(smallfish, ControlSym('u', 'd', 'l', 'r'), true);
         *out_weight = Cube::LIGHT;
         *out_power = Cube::LIGHT;
         *out_alive = true;
