@@ -160,11 +160,25 @@ DialogAgent::killOnePlanned(const Actor *actor)
     void
 DialogAgent::killPlan()
 {
-    t_planned::iterator plan_end = m_planned.end();
-    for (t_planned::iterator i = m_planned.begin(); i != plan_end; ++i) {
+    t_planned::iterator end = m_planned.end();
+    for (t_planned::iterator i = m_planned.begin(); i != end; ++i) {
         delete *i;
     }
     m_planned.clear();
+}
+//-----------------------------------------------------------------
+/**
+ * Kill all running dialogs from all actors.
+ */
+    void
+DialogAgent::killTalk()
+{
+    t_running::iterator end = m_running.end();
+    for (t_running::iterator i = m_running.begin(); i != end; ++i) {
+        (*i)->killTalk();
+        delete *i;
+    }
+    m_running.clear();
 }
 //-----------------------------------------------------------------
 /**
@@ -174,14 +188,7 @@ DialogAgent::killPlan()
 DialogAgent::removeAll()
 {
     killPlan();
-
-    t_running::iterator run_end = m_running.end();
-    for (t_running::iterator j = m_running.begin(); j != run_end; ++j) {
-        (*j)->killTalk();
-        delete *j;
-    }
-    m_running.clear();
-
+    killTalk();
     m_dialogs->removeAll();
 }
 //-----------------------------------------------------------------

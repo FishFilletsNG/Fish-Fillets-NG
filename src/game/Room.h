@@ -24,8 +24,8 @@ class Room : public NoCopy {
         Controls *m_controls;
         Cube::t_models m_models;
         Cube::eWeight m_impact;
-        bool m_fresh;
         int m_startTime;
+        bool m_fresh;
     private:
         void prepareRound();
         bool falldown();
@@ -34,6 +34,8 @@ class Room : public NoCopy {
     public:
         Room(int w, int h, const Path &picture);
         ~Room();
+        void activate();
+        void deactivate();
 
         int addModel(Cube *model, Unit *newUnit);
         Cube *getModel(int model_index);

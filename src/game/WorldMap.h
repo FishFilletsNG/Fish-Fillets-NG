@@ -8,20 +8,18 @@ class ResDialogPack;
 class LevelDesc;
 
 #include "Path.h"
-#include "NoCopy.h"
 #include "IDrawer.h"
 
 
 /**
  * Map with path from one level to another.
  */
-class WorldMap : public IDrawer, public NoCopy {
+class WorldMap : public IDrawer {
     private:
         LevelNode *m_startNode;
         NodeDrawer *m_drawer;
         LevelNode *m_selected;
         ResDialogPack *m_descPack;
-        bool m_active;
         SDL_Surface *m_bg;
     public:
         WorldMap(const Path &bg);
@@ -30,8 +28,7 @@ class WorldMap : public IDrawer, public NoCopy {
         int getW() const { return m_bg->w; }
         int getH() const { return m_bg->h; }
 
-        void activate();
-        void deactivate();
+        void runMenu();
 
         void markSolved();
         void watchCursor();

@@ -15,11 +15,9 @@
 /**
  * Load surface.
  */
-Picture::Picture(const Path &file, int x, int y)
+Picture::Picture(const Path &file, const V2 &loc)
+    : m_loc(loc)
 {
-    m_x = x;
-    m_y = y;
-
     m_surface = ResImageAgent::agent()->loadImage(file);
 }
 //-----------------------------------------------------------------
@@ -38,8 +36,8 @@ void
 Picture::draw()
 {
     SDL_Rect rect;
-    rect.x = m_x;
-    rect.y = m_y;
+    rect.x = m_loc.getX();
+    rect.y = m_loc.getY();
 
     SDL_BlitSurface(m_surface, NULL, m_screen, &rect);
 }

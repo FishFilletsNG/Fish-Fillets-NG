@@ -65,6 +65,8 @@ class Cube : public Actor {
 
         bool isInvisible();
         void refreshView();
+        void activate();
+        void deactivate();
         Anim *anim();
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };

@@ -118,6 +118,18 @@ Cube::refreshView()
     m_view->noteNewRound();
 }
 //-----------------------------------------------------------------
+void
+Cube::activate()
+{
+    return m_view->activate();
+}
+//-----------------------------------------------------------------
+void
+Cube::deactivate()
+{
+    return m_view->deactivate();
+}
+//-----------------------------------------------------------------
     Anim *
 Cube::anim()
 {

@@ -5,12 +5,11 @@ class Cube;
 class Anim;
 
 #include "IDrawer.h"
-#include "NoCopy.h"
 
 /**
  * View for model.
  */
-class View : public IDrawer, public NoCopy {
+class View : public IDrawer {
     public:
         static const int SCALE = 15;
     private:

@@ -1,11 +1,15 @@
 #ifndef HEADER_GAMEAGENT_H
 #define HEADER_GAMEAGENT_H
 
+class Planner;
 class Level;
 class WorldMap;
+class DemoMode;
+class Picture;
 
 #include "BaseAgent.h"
 #include "Name.h"
+#include "Path.h"
 
 #include <string>
 
@@ -17,9 +21,11 @@ class GameAgent : public BaseAgent {
     private:
         Level *m_level;
         WorldMap *m_world;
+        DemoMode *m_demo;
         int m_lockPhases;
     private:
         void cleanLevel();
+        void cleanDemo();
         void newLevel();
         void finishLevel();
 
@@ -31,7 +37,10 @@ class GameAgent : public BaseAgent {
     public:
         void ensurePhases(int count);
         int getEnsuredPhases() const { return m_lockPhases; }
+        void newDemo(Picture *bg, const Path &demofile);
 
+        Planner *leader();
+        DemoMode *demo();
         Level *level();
         WorldMap *world() { return m_world; }
 

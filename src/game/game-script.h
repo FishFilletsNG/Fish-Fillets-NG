@@ -5,20 +5,12 @@ extern "C" {
 #include "lua.h"
 }
 
-/**
- * Fuctions for script.
- */
-extern int script_file_include(lua_State *L) throw();
-extern int script_file_exists(lua_State *L) throw();
-
 extern int script_game_createRoom(lua_State *L) throw();
 extern int script_game_addModel(lua_State *L) throw();
 extern int script_game_getRestartCounter(lua_State *L) throw();
 extern int script_game_save(lua_State *L) throw();
 extern int script_game_load(lua_State *L) throw();
 
-extern int script_game_planAction(lua_State *L) throw();
-extern int script_game_isPlanning(lua_State *L) throw();
 extern int script_game_action_move(lua_State *L) throw();
 extern int script_game_action_save(lua_State *L) throw();
 extern int script_game_action_load(lua_State *L) throw();
@@ -41,14 +33,8 @@ extern int script_model_setGoal(lua_State *L) throw();
 extern int script_model_change_turnSide(lua_State *L) throw();
 extern int script_model_equals(lua_State *L) throw();
 
-extern int script_dialog_empty(lua_State *L) throw();
-extern int script_dialog_addFont(lua_State *L) throw();
-extern int script_dialog_addDialog(lua_State *L) throw();
-extern int script_model_isTalking(lua_State *L) throw();
-extern int script_model_planDialog(lua_State *L) throw();
-
-extern int script_game_getCycles(lua_State *L) throw();
-extern int script_sound_playMusic(lua_State *L) throw();
 extern int script_sound_addSound(lua_State *L) throw();
+extern int script_game_getCycles(lua_State *L) throw();
+extern int script_game_newDemo(lua_State *L) throw();
 
 #endif

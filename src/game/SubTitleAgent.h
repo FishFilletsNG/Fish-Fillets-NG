@@ -44,6 +44,7 @@ class SubTitleAgent : public BaseAgent {
     void addFont(const std::string &fontname, const Path &file);
     void newSubtitle(const std::string &subtitle, const std::string &fontname);
 
+    void killTalk();
     void removeAll();
 };
 

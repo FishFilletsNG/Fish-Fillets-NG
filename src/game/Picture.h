@@ -3,21 +3,20 @@
 
 class CVideo;
 
-#include "NoCopy.h"
 #include "IDrawer.h"
 #include "Path.h"
+#include "V2.h"
 
 
 /**
  * Static picture at fixed screen position.
  */
-class Picture : public IDrawer, public NoCopy {
+class Picture : public IDrawer {
     private:
-        int m_x;
-        int m_y;
+        V2 m_loc;
         SDL_Surface *m_surface;
     public:
-        Picture(const Path &file, int x, int y);
+        Picture(const Path &file, const V2 &loc);
         virtual ~Picture();
         virtual void draw();
 };

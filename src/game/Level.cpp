@@ -10,8 +10,6 @@
 
 #include "Room.h"
 #include "ScriptState.h"
-#include "CommandQueue.h"
-#include "ScriptCmd.h"
 
 #include "Log.h"
 #include "OptionAgent.h"
@@ -35,18 +33,12 @@ Level::Level(const std::string &codename, const Path &datafile)
     m_restartCounter = 0;
     m_loadedMoves = "";
     m_loadSpeed = 1;
-    m_plan = new CommandQueue();
-
-    m_script = new ScriptState();
     registerGameFuncs();
 }
 //-----------------------------------------------------------------
 Level::~Level()
 {
     cleanRoom();
-    m_plan->removeAll();
-    delete m_plan;
-    delete m_script;
 }
 //-----------------------------------------------------------------
 /**
@@ -62,6 +54,24 @@ Level::cleanRoom()
         m_room = NULL;
     }
 }
+//-----------------------------------------------------------------
+void
+Level::activate()
+{
+    LOG_DEBUG(ExInfo("TEST: level activate"));
+    if (m_room) {
+        m_room->activate();
+    }
+}
+//-----------------------------------------------------------------
+void
+Level::deactivate()
+{
+    LOG_DEBUG(ExInfo("TEST: level deactivate"));
+    if (m_room) {
+        m_room->deactivate();
+    }
+}
 
 //-----------------------------------------------------------------
 /**
@@ -73,11 +83,11 @@ Level::nextAction()
 {
     bool room_complete = false;
     if (m_loadedMoves.empty()) {
-        if (m_plan->empty()) {
-            room_complete = nextPlayerAction();
+        if (isPlanning()) {
+            room_complete = nextPlanAction();
         }
         else {
-            room_complete = nextPlanAction();
+            room_complete = nextPlayerAction();
         }
     }
     else {
@@ -127,15 +137,6 @@ Level::checkRoom()
 }
 //-----------------------------------------------------------------
 /**
- * Include this script file.
- */
-    void
-Level::scriptInclude(const Path &filename)
-{
-    m_script->doFile(filename);
-}
-//-----------------------------------------------------------------
-/**
  * Create new room
  * and change screen resolution.
  */
@@ -168,6 +169,12 @@ Level::addModel(Cube *model, Unit *newUnit)
         checkRoom();
     }
     return m_room->addModel(model, newUnit);
+}
+//-----------------------------------------------------------------
+    Actor *
+Level::getActor(int model_index)
+{
+    return getModel(model_index);
 }
 //-----------------------------------------------------------------
     Cube *
@@ -310,32 +317,11 @@ Level::nextPlanAction()
     bool room_complete = false;
     if (m_room) {
         m_room->beginFall();
-        m_plan->executeFirst();
+        finishPlan();
         room_complete = m_room->finishRound();
     }
 
     return room_complete;
-}
-//-----------------------------------------------------------------
-    void
-Level::planAction(int funcRef)
-{
-    m_plan->planCommand(new ScriptCmd(m_script, funcRef));
-}
-//-----------------------------------------------------------------
-void
-Level::interruptPlan()
-{
-    m_plan->removeAll();
-}
-//-----------------------------------------------------------------
-/**
- * Return true when there is a planned command in queue.
- */
-bool
-Level::isPlanning() const
-{
-    return !m_plan->empty();
 }
 //-----------------------------------------------------------------
 /**
@@ -423,9 +409,6 @@ Level::getCycles()
     void
 Level::registerGameFuncs()
 {
-    m_script->registerFunc("file_include", script_file_include);
-    m_script->registerFunc("file_exists", script_file_exists);
-
     m_script->registerFunc("game_createRoom", script_game_createRoom);
     m_script->registerFunc("game_addModel", script_game_addModel);
     m_script->registerFunc("game_getRestartCounter",
@@ -433,8 +416,6 @@ Level::registerGameFuncs()
     m_script->registerFunc("game_save", script_game_save);
     m_script->registerFunc("game_load", script_game_load);
 
-    m_script->registerFunc("game_planAction", script_game_planAction);
-    m_script->registerFunc("game_isPlanning", script_game_isPlanning);
     m_script->registerFunc("game_action_move", script_game_action_move);
     m_script->registerFunc("game_action_save", script_game_action_save);
     m_script->registerFunc("game_action_load", script_game_action_load);
@@ -458,13 +439,7 @@ Level::registerGameFuncs()
             script_model_change_turnSide);
     m_script->registerFunc("model_equals", script_model_equals);
 
-    m_script->registerFunc("dialog_empty", script_dialog_empty);
-    m_script->registerFunc("dialog_addFont", script_dialog_addFont);
-    m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
-    m_script->registerFunc("model_isTalking", script_model_isTalking);
-    m_script->registerFunc("model_planDialog", script_model_planDialog);
-
-    m_script->registerFunc("game_getCycles", script_game_getCycles);
-    m_script->registerFunc("sound_playMusic", script_sound_playMusic);
     m_script->registerFunc("sound_addSound", script_sound_addSound);
+    m_script->registerFunc("game_getCycles", script_game_getCycles);
+    m_script->registerFunc("game_newDemo", script_game_newDemo);
 }

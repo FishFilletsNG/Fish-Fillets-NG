@@ -29,6 +29,8 @@
     KeyConsole::KeyConsole()
 : m_history(), m_input(), m_handlerName()
 {
+    deactivate();
+
     Path file = Path::dataReadPath("font/console.png");
     SDL_Surface *font_face = ResImageAgent::agent()->loadImage(file);
 
@@ -37,8 +39,6 @@
         throw LogicException(ExInfo("cannot create font")
                 .addInfo("font", file.getNative()));
     }
-
-    deactivate();
 }
 //-----------------------------------------------------------------
 KeyConsole::~KeyConsole()
@@ -88,22 +88,6 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
                 m_input.push_back(c);
             }
     }
-}
-//-----------------------------------------------------------------
-void
-KeyConsole::activate()
-{
-    if (!m_active) {
-        VideoAgent::agent()->acceptDrawer(this);
-        m_active = true;
-    }
-}
-//-----------------------------------------------------------------
-void
-KeyConsole::deactivate()
-{
-    VideoAgent::agent()->removeDrawer(this);
-    m_active = false;
 }
 //-----------------------------------------------------------------
 /**

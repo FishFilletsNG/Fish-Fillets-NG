@@ -1,7 +1,6 @@
 #ifndef HEADER_TITLE_H
 #define HEADER_TITLE_H
 
-#include "NoCopy.h"
 #include "IDrawer.h"
 
 #include "SFont.h"
@@ -11,7 +10,7 @@
 /**
  * Subtitle.
  */
-class Title : public IDrawer, public NoCopy {
+class Title : public IDrawer {
     private:
         static const int TIME_PER_CHAR = 2;
         static const int TIME_MIN = 40;

@@ -176,14 +176,25 @@ SubTitleAgent::lowestY()
     return lowest;
 }
 //-----------------------------------------------------------------
-    void
-SubTitleAgent::removeAll()
+/**
+ * Kill all running subtitles.
+ */
+void
+SubTitleAgent::killTalk()
 {
     t_titles::iterator end = m_titles.end();
     for (t_titles::iterator i = m_titles.begin(); i != end; ++i) {
         delete *i;
     }
     m_titles.clear();
-
+}
+//-----------------------------------------------------------------
+/**
+ * Kill all subtitles and remove fonts.
+ */
+    void
+SubTitleAgent::removeAll()
+{
+    killTalk();
     m_fonts->removeAll();
 }

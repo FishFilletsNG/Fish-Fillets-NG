@@ -26,13 +26,15 @@
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
 {
-    m_bg = new Picture(picture, 0, 0);
+    m_bg = new Picture(picture, V2(0, 0));
     m_field = new Field(w, h);
     m_controls = new Controls();
     m_impact = Cube::NONE;
     m_fresh = true;
     m_soundPack = new ResSoundPack();
     m_startTime = TimerAgent::agent()->getCycles();
+
+    SoundAgent::agent()->stopMusic();
 }
 //-----------------------------------------------------------------
 /**
@@ -55,6 +57,37 @@ Room::~Room()
 
     delete m_field;
     delete m_bg;
+}
+//-----------------------------------------------------------------
+/**
+ * Activate all drawers.
+ */
+void
+Room::activate()
+{
+    //NOTE: order is significant, background must be drawed first
+    m_bg->activate();
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->activate();
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Dectivate all drawers.
+ */
+void
+Room::deactivate()
+{
+    DialogAgent::agent()->killPlan();
+    DialogAgent::agent()->killTalk();
+    SubTitleAgent::agent()->killTalk();
+
+    m_bg->deactivate();
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->deactivate();
+    }
 }
 //-----------------------------------------------------------------
 /**

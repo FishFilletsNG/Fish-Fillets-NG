@@ -12,18 +12,43 @@
 
 //-----------------------------------------------------------------
 /**
- * Register to drawers list.
+ * Activate self.
  */
 IDrawer::IDrawer()
 {
-    VideoAgent::agent()->acceptDrawer(this);
+    m_active = false;
+    activate();
+}
+//-----------------------------------------------------------------
+/**
+ * Deactivate self.
+ */
+IDrawer::~IDrawer()
+{
+    deactivate();
+}
+//-----------------------------------------------------------------
+/**
+ * Register to drawers list.
+ */
+void
+IDrawer::activate()
+{
+    if (!m_active) {
+        VideoAgent::agent()->acceptDrawer(this);
+        m_active = true;
+    }
 }
 //-----------------------------------------------------------------
 /**
  * Remove oneself from drawes list.
  */
-IDrawer::~IDrawer()
+void
+IDrawer::deactivate()
 {
-    VideoAgent::agent()->removeDrawer(this);
+    if (m_active) {
+        VideoAgent::agent()->removeDrawer(this);
+        m_active = false;
+    }
 }
 

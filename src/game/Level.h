@@ -4,29 +4,26 @@
 class Cube;
 class Unit;
 class Room;
-class ScriptState;
-class CommandQueue;
+class Actor;
 
 #include "V2.h"
 #include "Path.h"
-#include "NoCopy.h"
+#include "Planner.h"
 
 #include <string>
 
 /**
  * Game level with room.
  */
-class Level : public NoCopy {
+class Level : public Planner {
     private:
         std::string m_codename;
         Path m_datafile;
-        ScriptState *m_script;
         Room *m_room;
         int m_restartCounter;
+        std::string m_desc;
         std::string m_loadedMoves;
         int m_loadSpeed;
-        CommandQueue *m_plan;
-        std::string m_desc;
     private:
         void cleanRoom();
         bool nextPlayerAction();
@@ -39,14 +36,16 @@ class Level : public NoCopy {
         Level(const std::string &codename, const Path &datafile);
         ~Level();
         void setDesc(const std::string &desc) { m_desc = desc; }
+        void activate();
+        void deactivate();
 
         int getRestartCounter() const { return m_restartCounter; }
         bool nextAction();
         void updateLevel();
 
-        void scriptInclude(const Path &filename);
         void createRoom(int w, int h, const Path &picture);
         int addModel(Cube *model, Unit *newUnit);
+        virtual Actor *getActor(int model_index);
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
 
@@ -54,9 +53,6 @@ class Level : public NoCopy {
         void saveGame(const std::string &models);
         void loadGame(const std::string &moves);
 
-        void planAction(int funcRef);
-        void interruptPlan();
-        bool isPlanning() const;
         bool action_restart();
         bool action_move(char symbol);
         bool action_save();

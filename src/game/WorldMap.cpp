@@ -26,8 +26,7 @@
 //-----------------------------------------------------------------
 WorldMap::WorldMap(const Path &bg)
 {
-    VideoAgent::agent()->removeDrawer(this);
-    m_active = false;
+    deactivate();
     m_selected = NULL;
     m_startNode = NULL;
 
@@ -71,12 +70,14 @@ WorldMap::initWay(const Path &way, const Path &descfile)
     script.doFile(descfile);
 }
 //-----------------------------------------------------------------
+/**
+ * Display menu and play menu music.
+ */
 void
-WorldMap::activate()
+WorldMap::runMenu()
 {
-    if (!m_active) {
-        m_active = true;
-        VideoAgent::agent()->acceptDrawer(this);
+    if (!isActive()) {
+        activate();
 
         SoundAgent::agent()->playMusic(
                 Path::dataReadPath("music/menu.ogg"), NULL);
@@ -85,16 +86,6 @@ WorldMap::activate()
         options->setParam("caption", findDesc("menu"));
         options->setParam("screen_width", getW());
         options->setParam("screen_height", getH());
-    }
-}
-//-----------------------------------------------------------------
-void
-WorldMap::deactivate()
-{
-    if (m_active) {
-        m_active = false;
-        VideoAgent::agent()->removeDrawer(this);
-        SoundAgent::agent()->stopMusic();
     }
 }
 //-----------------------------------------------------------------

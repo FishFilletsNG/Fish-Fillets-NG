@@ -10,6 +10,7 @@
 
 #include "Level.h"
 #include "WorldMap.h"
+#include "DemoMode.h"
 
 #include "Log.h"
 #include "InputAgent.h"
@@ -34,8 +35,8 @@ GameAgent::own_init()
 {
     m_level = NULL;
     m_lockPhases = 0;
+    m_demo = NULL;
 
-    m_world = NULL;
     m_world = new WorldMap(Path::dataReadPath("images/menu/mapa-0.png"));
     m_world->initWay(
             Path::dataReadPath("script/worldmap.lua"),
@@ -52,22 +53,29 @@ GameAgent::own_init()
     void
 GameAgent::own_update()
 {
-    if (m_level) {
-        bool room_complete = false;
-        if (m_lockPhases == 0) {
-            room_complete = m_level->nextAction();
-        }
-        m_level->updateLevel();
-
-        if (m_lockPhases > 0) {
-            m_lockPhases--;
-        }
-        if (room_complete) {
-            finishLevel();
+    if (m_demo) {
+        if (m_demo->finishPlan()) {
+            cleanDemo();
         }
     }
     else {
-        m_world->watchCursor();
+        if (m_level) {
+            bool room_complete = false;
+            if (m_lockPhases == 0) {
+                room_complete = m_level->nextAction();
+            }
+            m_level->updateLevel();
+
+            if (m_lockPhases > 0) {
+                m_lockPhases--;
+            }
+            if (room_complete) {
+                finishLevel();
+            }
+        }
+        else {
+            m_world->watchCursor();
+        }
     }
 }
 //-----------------------------------------------------------------
@@ -77,13 +85,28 @@ GameAgent::own_update()
     void
 GameAgent::own_shutdown()
 {
-    if (m_world) {
-        delete m_world;
-        m_world = NULL;
+    if (m_demo) {
+        delete m_demo;
     }
-    cleanLevel();
+    if (m_level) {
+        delete m_level;
+    }
+    delete m_world;
 }
 
+//-----------------------------------------------------------------
+/**
+ * Return current leader.
+ * @throws LogicException when no planner is not ready
+ */
+Planner *
+GameAgent::leader()
+{
+    if (m_demo) {
+        return m_demo;
+    }
+    return level();
+}
 //-----------------------------------------------------------------
 /**
  * Return current level.
@@ -99,6 +122,19 @@ GameAgent::level()
 }
 //-----------------------------------------------------------------
 /**
+ * Return demo planner.
+ * @throws LogicException when demo is not ready
+ */
+DemoMode *
+GameAgent::demo()
+{
+    if (NULL == m_demo) {
+        throw LogicException(ExInfo("demo planner is not ready"));
+    }
+    return m_demo;
+}
+//-----------------------------------------------------------------
+/**
  * Leave level and activate menu.
  */
 void
@@ -109,8 +145,24 @@ GameAgent::cleanLevel()
         delete m_level;
         m_level = NULL;
     }
-    if (m_world) {
-        m_world->activate();
+    m_world->runMenu();
+}
+//-----------------------------------------------------------------
+/**
+ * Leave demo and activate level.
+ */
+void
+GameAgent::cleanDemo()
+{
+    if (m_demo) {
+        delete m_demo;
+        m_demo = NULL;
+    }
+    if (m_level) {
+        m_level->activate();
+    }
+    else {
+        m_world->runMenu();
     }
 }
 //-----------------------------------------------------------------
@@ -128,6 +180,23 @@ GameAgent::newLevel()
         }
     }
 }
+//-----------------------------------------------------------------
+void
+GameAgent::newDemo(Picture *bg, const Path &demofile)
+{
+    m_world->deactivate();
+    if (m_level) {
+        m_level->deactivate();
+    }
+
+    if (m_demo) {
+        delete m_demo;
+        m_demo = NULL;
+    }
+    m_demo = new DemoMode();
+    m_demo->runDemo(bg, demofile);
+}
+
 //-----------------------------------------------------------------
 /**
  * Remember best solution and show game menu.
@@ -220,6 +289,11 @@ GameAgent::keyBinding()
     void
 GameAgent::receiveSimple(const SimpleMsg *msg)
 {
+    if (m_demo) {
+        cleanDemo();
+        return;
+    }
+
     if (msg->equalsName("restart")) {
         if (m_level) {
             m_level->interruptPlan();

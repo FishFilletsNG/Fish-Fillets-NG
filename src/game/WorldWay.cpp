@@ -61,14 +61,6 @@ WorldWay::parseNode(lua_State *L)
     bool hidden = nodeTable.getBool("hidden");
     LuaTable children = nodeTable.pushTable("children");
 
-    LOG_DEBUG(ExInfo("TEST: node")
-            .addInfo("codename", codename)
-            .addInfo("datafile", datafile)
-            .addInfo("x", x)
-            .addInfo("y", y)
-            .addInfo("hidden", hidden)
-            .addInfo("childIndex", children.getStackIndex()));
-
     LevelNode *result = new LevelNode(codename,
             Path::dataReadPath(datafile), V2(x, y));
     addChildren(L, result, children.getStackIndex());
