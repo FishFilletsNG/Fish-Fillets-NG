@@ -13,7 +13,7 @@ class Path;
 
 /**
  * Video agent initializes video mode and
- * every cycle lets registered drawers to draw().
+ * every cycle lets registered drawers to drawOn(screen).
  */
 class VideoAgent : public BaseAgent, public MultiDrawer {
     AGENT(VideoAgent, Name::VIDEO_NAME);

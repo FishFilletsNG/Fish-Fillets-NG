@@ -17,18 +17,18 @@
  * 
  * AgentPack groups agents which have something to do. It inits agents, update them and shutdown them at the end.
  * 
- * Every agent has init(), update() and shutdown() method. These methods are empty by default.
+ * Every agent has init(), update() and shutdown() methods. These methods are empty by default.
  * 
  * Available agents:
- *  - MessagerAgent - allows sending messages to agent and other listeners.
- *  - ScriptAgent - makes scripting possible.
- *  - OptionAgent - contains global game options.
- *  - VideoAgent - inits video mode and calls drawers draw() method.
- *  - SoundAgent - plays music and sound.
+ *  - MessagerAgent - allows sending messages to agent and other listeners
+ *  - ScriptAgent - makes scripting possible
+ *  - OptionAgent - contains global game options
+ *  - VideoAgent - inits video mode and calls drawers drawOn() method
+ *  - SoundAgent - plays music and sound
+ *  - TimerAgent - sleeps constant delay = makes stable FPS
  *  - InputAgent - reads input events and handles keystrokes
  *  - SubTitleAgent - scrolls subtitles on display
  *  - GameAgent - updates game states
- *  - TimerAgent - sleeps constant delay = makes stable FPS
  * 
  * AgentPack will call agents ordered by their names. See Name.cpp for names.
  * AgentPack::init() calls init() on all agents. AgentPack::update() calls
@@ -76,7 +76,7 @@
  * 
  * \section Communication
  * 
- * Every agent has static method agent(). It ask AgentPack::getAgent()
+ * Every agent has static method agent(). It asks AgentPack::getAgent()
  * for agent instance.
  * 
  * agent() method is made by AGENT(TYPE, NAME) macro. This allows us
