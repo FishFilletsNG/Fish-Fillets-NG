@@ -17,11 +17,11 @@
 /**
  * Create slider for this param and optinaly specify min and max value.
  */
-Slider::Slider(const std::string &param, int min, int max)
+Slider::Slider(const std::string &param, int minValue, int maxValue)
     : m_param(param)
 {
-    m_min = min;
-    m_max = max;
+    m_min = minValue;
+    m_max = maxValue;
 }
 //-----------------------------------------------------------------
 /**
