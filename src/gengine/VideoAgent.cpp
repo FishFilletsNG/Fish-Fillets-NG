@@ -168,8 +168,6 @@ VideoAgent::getVideoFlags()
     videoFlags |= SDL_HWPALETTE;
     //NOTE: any bpp
     videoFlags |= SDL_ANYFORMAT;
-    //TODO: can we set RLE in videoMode? Is RLE used in IMG_Load?
-    //videoFlags |= SDL_RLEACCEL;
 
     // This checks to see if surfaces can be stored in memory
     if (videoInfo->hw_available) {
@@ -178,11 +176,6 @@ VideoAgent::getVideoFlags()
     }
     else {
         videoFlags |= SDL_SWSURFACE;
-    }
-
-    // This checks if hardware blits can be done
-    if (videoInfo->blit_hw) {
-        videoFlags |= SDL_HWACCEL;
     }
 
     return videoFlags;
