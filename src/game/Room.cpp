@@ -372,6 +372,21 @@ Room::cannotMove()
 {
     return m_controls->cannotMove();
 }
+//-----------------------------------------------------------------
+/**
+ * Returns true when all goals can be solved.
+ */
+bool
+Room::isSolvable()
+{
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        if ((*i)->isWrong()) {
+            return false;
+        }
+    }
+    return true;
+}
 
 //-----------------------------------------------------------------
 int

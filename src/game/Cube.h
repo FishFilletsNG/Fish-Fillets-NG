@@ -57,6 +57,7 @@ class Cube : public Actor {
         bool isOut() const { return m_out; }
         bool isLost() const { return m_lost; }
         bool isSatisfy() const { return m_goal.isSatisfy(this); }
+        bool isWrong() const { return m_goal.isWrong(this); }
         bool shouldGoOut() const { return m_goal.shouldGoOut(); }
 
         eWeight getWeight() const { return m_weight; }

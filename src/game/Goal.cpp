@@ -56,6 +56,25 @@ Goal::isSatisfy(const Cube *model) const
     return result;
 }
 //-----------------------------------------------------------------
+/**
+ * Return whether goal cannot by solved any more.
+ * Dead fish cannot be revived.
+ * Object out of room cannot go back.
+ */
+bool
+Goal::isWrong(const Cube *model) const
+{
+    bool wrong = false;
+    if (SATISFY_TRUE == m_alive) {
+        wrong |= !model->isAlive();
+    }
+
+    if (SATISFY_FALSE == m_out) {
+        wrong |= model->isOut(); 
+    }
+    return wrong;
+}
+//-----------------------------------------------------------------
 bool
 Goal::shouldGoOut() const
 {

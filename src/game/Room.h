@@ -51,6 +51,7 @@ class Room : public NoCopy {
         bool loadMove(char move);
         bool makeMove(char move);
         bool cannotMove();
+        bool isSolvable();
 
         int getW() const;
         int getH() const;

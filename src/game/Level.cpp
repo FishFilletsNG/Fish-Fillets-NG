@@ -116,7 +116,6 @@ Level::nextAction()
             m_roomState = ROOM_COMPLETE;
         }
         else if (m_room->cannotMove()) {
-            LOG_DEBUG(ExInfo("TEST: wrong"));
             m_roomState = ROOM_WRONG;
         }
     }
@@ -337,7 +336,7 @@ Level::saveGame(const std::string &models)
 }
 //-----------------------------------------------------------------
 /**
- * Load game.
+ * Start loading mode.
  * @param moves saved moves to load
  */
     void
@@ -427,7 +426,12 @@ Level::action_move(char symbol)
     bool
 Level::action_save()
 {
-    m_script->doString("script_save()");
+    if (m_room->isSolvable()) {
+        m_script->doString("script_save()");
+    }
+    else {
+        LOG_INFO(ExInfo("wrong way, no save is made"));
+    }
     return true;
 }
 //-----------------------------------------------------------------

@@ -90,6 +90,7 @@ Cube::change_goOut()
 Cube::change_remove()
 {
     m_lost = true;
+    m_weight = NONE;
     //NOTE: hack, object is moved out
     m_loc = V2(-1000, -1000);
     m_view->takeModel(NULL);
