@@ -4,5 +4,5 @@ INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/s
 
 noinst_LIBRARIES = liboption.a
 
-liboption_a_SOURCES = LangFlag.cpp LangFlag.h MenuOptions.cpp MenuOptions.h OptionsInput.cpp OptionsInput.h SelectLang.cpp SelectLang.h
+liboption_a_SOURCES = MenuOptions.cpp MenuOptions.h OptionsInput.cpp OptionsInput.h SelectLang.cpp SelectLang.h RadioBox.cpp RadioBox.h
 

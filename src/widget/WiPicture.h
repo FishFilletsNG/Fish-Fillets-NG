@@ -9,7 +9,7 @@ class Path;
  * Picture widget.
  */
 class WiPicture : public IWidget {
-    private:
+    protected:
         SDL_Surface *m_surface;
     public:
         WiPicture(const Path &picture);

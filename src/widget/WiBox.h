@@ -7,6 +7,7 @@
 
 /**
  * Box which care about subwidget layout.
+ * NOTE: soubwidgets should have constant size.
  */
 class WiBox : public IWidget {
     protected:
