@@ -12,7 +12,7 @@ class ResDialogPack;
  */
 class Labels : public Scripter {
     private:
-        ResDialogPack *m_labels;
+        mutable ResDialogPack *m_labels;
     public:
         Labels(const Path &source);
         virtual ~Labels();
@@ -20,9 +20,9 @@ class Labels : public Scripter {
         void addLabel(const std::string &name, const std::string &lang,
                 const std::string &text);
 
-        std::string getLabel(const std::string &name);
+        std::string getLabel(const std::string &name) const;
         std::string getFormatedLabel(const std::string &name,
-                const StringTool::t_args &args);
+                const StringTool::t_args &args) const;
 };
 
 #endif

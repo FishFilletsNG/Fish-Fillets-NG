@@ -13,14 +13,14 @@ class Dialog;
 class PlannedDialog : public NoCopy {
     private:
         int m_actor;
-        Dialog *m_dialog;
+        const Dialog *m_dialog;
         int m_channel;
         int m_endtime;
         int m_minTime;
     private:
         bool isPlaying() const;
     public:
-        PlannedDialog(int actor, Dialog *dialog, int minTime);
+        PlannedDialog(int actor, const Dialog *dialog, int minTime);
 
         void talk(int volume, int loops=0);
         void killTalk();

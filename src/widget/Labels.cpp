@@ -59,7 +59,7 @@ Labels::addLabel(const std::string &name, const std::string &lang,
 }
 //-----------------------------------------------------------------
 std::string
-Labels::getLabel(const std::string &name)
+Labels::getLabel(const std::string &name) const
 {
     std::string result;
     const Dialog *dialog = m_labels->findDialogHard(name);
@@ -74,7 +74,7 @@ Labels::getLabel(const std::string &name)
 //-----------------------------------------------------------------
 std::string
 Labels::getFormatedLabel(const std::string &name,
-        const StringTool::t_args &args)
+        const StringTool::t_args &args) const
 {
     std::string result;
     const Dialog *dialog = m_labels->findDialogHard(name);

@@ -33,6 +33,27 @@ WiBox::drawOn(SDL_Surface *screen)
 }
 //-----------------------------------------------------------------
 /**
+ * Returns tooltip for active subwidget.
+ */
+std::string
+WiBox::own_getTip(const V2 &loc)
+{
+    if (!m_tip.empty()) {
+        return m_tip;
+    }
+
+    std::string result;
+    t_widgets::iterator end = m_widgets.end();
+    for (t_widgets::iterator i = m_widgets.begin(); i != end; ++i) {
+        result = (*i)->getTip(loc);
+        if (!result.empty()) {
+            return result;
+        }
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
  * Let all subwidgets to react on button press.
  */
 void

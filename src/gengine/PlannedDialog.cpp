@@ -18,7 +18,7 @@
  * @param dialog what will talk, shared resource
  * @param minTime minimal time to talk when sound resource is not available
  */
-PlannedDialog::PlannedDialog(int actor, Dialog *dialog, int minTime)
+PlannedDialog::PlannedDialog(int actor, const Dialog *dialog, int minTime)
 {
     m_actor = actor;
     m_dialog = dialog;

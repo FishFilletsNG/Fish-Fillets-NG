@@ -270,8 +270,8 @@ std::string
 WorldMap::findLevelName(const std::string &codename) const
 {
     std::string result;
-    LevelDesc *desc =
-        dynamic_cast<LevelDesc*>(m_descPack->findDialogHard(codename));
+    const LevelDesc *desc =
+        dynamic_cast<const LevelDesc*>(m_descPack->findDialogHard(codename));
     if (desc) {
         result = desc->getLevelName();
     }
@@ -285,8 +285,8 @@ std::string
 WorldMap::findDesc(const std::string &codename) const
 {
     std::string result;
-    LevelDesc *desc =
-        dynamic_cast<LevelDesc*>(m_descPack->findDialogHard(codename));
+    const LevelDesc *desc =
+        dynamic_cast<const LevelDesc*>(m_descPack->findDialogHard(codename));
     if (desc) {
         result = desc->getDesc();
     }

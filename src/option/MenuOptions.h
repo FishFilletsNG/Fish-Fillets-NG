@@ -4,6 +4,8 @@
 class Picture;
 class MouseStroke;
 class IWidget;
+class WiStatusBar;
+class Labels;
 
 #include "GameState.h"
 #include "Drawable.h"
@@ -14,14 +16,17 @@ class IWidget;
 class MenuOptions : public GameState, public Drawable {
     private:
         IWidget *m_container;
+        WiStatusBar *m_statusBar;
     private:
-        IWidget *createSoundPanel();
-        IWidget *createMusicPanel();
-        IWidget *createSubtitlesPanel();
-        IWidget *createBackButton();
+        IWidget *createSoundPanel(const Labels &labels);
+        IWidget *createMusicPanel(const Labels &labels);
+        IWidget *createLangPanel(const Labels &labels);
+        IWidget *createSubtitlesPanel(const Labels &labels);
+        IWidget *createBackButton(const Labels &labels);
+        WiStatusBar *createStatusBar(int width);
     protected:
         virtual void own_initState();
-        virtual void own_updateState() {}
+        virtual void own_updateState();
         virtual void own_pauseState() {}
         virtual void own_resumeState();
         virtual void own_cleanState() {}

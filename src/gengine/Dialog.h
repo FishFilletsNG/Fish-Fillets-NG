@@ -9,12 +9,13 @@
 
 /**
  * Dialog with sound and subtitle.
+ * Dialog is const class only sound is lazy loaded.
  */
 class Dialog: public NoCopy {
     public:
         static const std::string DEFAULT_LANG;
     private:
-        Mix_Chunk *m_sound;
+        mutable Mix_Chunk *m_sound;
         std::string m_soundfile;
         std::string m_lang;
         std::string m_subtitle;
@@ -23,7 +24,7 @@ class Dialog: public NoCopy {
                 const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
-        int talk(int volume, int loops=0);
+        int talk(int volume, int loops=0) const;
         virtual void runSubtitle(const StringTool::t_args &args) const;
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }

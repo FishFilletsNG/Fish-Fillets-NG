@@ -9,6 +9,8 @@ class GameState;
  * Handle input for demo.
  */
 class DemoInput : public GameInput {
+    protected:
+        virtual void enableHelp() {}
     public:
         DemoInput(GameState *demo);
 

@@ -260,7 +260,7 @@ Controls::controlEvent(const KeyStroke &stroke)
 //-----------------------------------------------------------------
 /**
  * Activate fish under cursor.
- * @param cursor cursor location
+ * @param occupant model to activate
  * @return true when fish was selected
  */
 bool

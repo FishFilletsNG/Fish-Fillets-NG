@@ -20,6 +20,7 @@ class ResourcePack : public INamed {
     protected:
     typedef std::multimap<std::string,T> t_reses;
     typedef typename t_reses::iterator t_resIterator;
+    typedef typename t_reses::const_iterator t_constIterator;
     t_reses m_reses;
     virtual void unloadRes(T res) = 0;
 
@@ -135,13 +136,13 @@ class ResourcePack : public INamed {
         return m_reses.count(name);
     }
     //-----------------------------------------------------------------
-    std::string toString()
+    std::string toString() const
     {
             ExInfo available_res = ExInfo("resources")
                 .addInfo("name", getName());
 
-            t_resIterator end = m_reses.end();
-            for (t_resIterator item = m_reses.begin(); item != end; ++item) {
+            t_constIterator end = m_reses.end();
+            for (t_constIterator item = m_reses.begin(); item != end; ++item) {
                 available_res.addInfo("key", item->first);
             }
             return available_res.info();

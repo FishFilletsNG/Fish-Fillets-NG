@@ -9,6 +9,13 @@ class MouseStroke;
 
 /**
  * Handle input events.
+ * Events:
+ * - keyEvent() is called when new key is pressed.
+ * - mouseEvent() is called when there is a mouse click.
+ * - mouseState() is called every cycle to update mouse position
+ *
+ * Pressed keys are stored in m_pressed array, this array is shared
+ * and updated by InputAgent.
  */
 class InputHandler : public InputProvider, public NoCopy {
     private:

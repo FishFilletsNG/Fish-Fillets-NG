@@ -14,10 +14,13 @@
 #include "WiPicture.h"
 #include "WiSpace.h"
 #include "WiButton.h"
+#include "WiStatusBar.h"
 #include "Slider.h"
 #include "SelectLang.h"
 #include "RadioBox.h"
 
+#include "Font.h"
+#include "Labels.h"
 #include "SimpleMsg.h"
 #include "OptionsInput.h"
 #include "OptionAgent.h"
@@ -26,22 +29,23 @@
 //-----------------------------------------------------------------
 MenuOptions::MenuOptions()
 {
-    IWidget *soundBox = createSoundPanel();
-    IWidget *musicBox = createMusicPanel();
+    Labels labels(Path::dataReadPath("script/labels.lua"));
+    IWidget *soundBox = createSoundPanel(labels);
+    IWidget *musicBox = createMusicPanel(labels);
 
     VBox *vbox = new VBox();
     vbox->addWidget(soundBox);
     vbox->addWidget(new WiSpace(0, 10));
     vbox->addWidget(musicBox);
     vbox->addWidget(new WiSpace(0, 10));
-    vbox->addWidget(new SelectLang(
-                Path::dataReadPath("script/select_lang.lua")));
+    vbox->addWidget(createLangPanel(labels));
     vbox->addWidget(new WiSpace(0, 10));
-    vbox->addWidget(createSubtitlesPanel());
+    vbox->addWidget(createSubtitlesPanel(labels));
 
-    IWidget *backButton = createBackButton();
+    IWidget *backButton = createBackButton(labels);
+    m_statusBar = createStatusBar(musicBox->getW() - backButton->getW());
     HBox *backBox = new HBox();
-    backBox->addWidget(new WiSpace(musicBox->getW() - backButton->getW(), 0));
+    backBox->addWidget(m_statusBar);
     backBox->addWidget(backButton);
 
     vbox->addWidget(backBox);
@@ -83,45 +87,78 @@ MenuOptions::own_resumeState()
             V2((screenW - contentW) / 2, (screenH - contentH) / 2));
 }
 //-----------------------------------------------------------------
+/**
+ * Update statusbar.
+ */
+    void
+MenuOptions::own_updateState()
+{
+    std::string tooltip = m_container->getTip(getInput()->getMouseLoc());
+    m_statusBar->setLabel(tooltip);
+}
+
+//-----------------------------------------------------------------
 IWidget *
-MenuOptions::createSoundPanel()
+MenuOptions::createSoundPanel(const Labels &labels)
 {
     HBox *soundBox = new HBox();
     soundBox->addWidget(new WiPicture(
                 Path::dataReadPath("images/menu/volume_sound.png")));
     soundBox->addWidget(new WiSpace(10, 0));
     soundBox->addWidget(new Slider("volume_sound", 0, 100));
+    soundBox->setTip(labels.getLabel("menu_sound"));
     return soundBox;
 }
 //-----------------------------------------------------------------
 IWidget *
-MenuOptions::createMusicPanel()
+MenuOptions::createMusicPanel(const Labels &labels)
 {
     HBox *musicBox = new HBox();
     musicBox->addWidget(new WiPicture(
                 Path::dataReadPath("images/menu/volume_music.png")));
     musicBox->addWidget(new WiSpace(10, 0));
     musicBox->addWidget(new Slider("volume_music", 0, 100));
+    musicBox->setTip(labels.getLabel("menu_music"));
     return musicBox;
 }
 //-----------------------------------------------------------------
 IWidget *
-MenuOptions::createSubtitlesPanel()
+MenuOptions::createLangPanel(const Labels &labels)
+{
+    IWidget *panel = new SelectLang(
+            Path::dataReadPath("script/select_lang.lua"));
+    panel->setTip(labels.getLabel("menu_lang"));
+    return panel;
+}
+//-----------------------------------------------------------------
+IWidget *
+MenuOptions::createSubtitlesPanel(const Labels &labels)
 {
     HBox *chooseBox = new HBox();
     chooseBox->addWidget(new RadioBox("subtitles", "1",
                 Path::dataReadPath("images/menu/subtitles/yes.png")));
     chooseBox->addWidget(new RadioBox("subtitles", "0",
                 Path::dataReadPath("images/menu/subtitles/no.png")));
+    chooseBox->setTip(labels.getLabel("menu_subtitles"));
     return chooseBox;
 }
 //-----------------------------------------------------------------
 IWidget *
-MenuOptions::createBackButton()
+MenuOptions::createBackButton(const Labels &labels)
 {
-    return new WiButton(
+    IWidget *button = new WiButton(
             new WiPicture(Path::dataReadPath("images/menu/back.png")),
             new SimpleMsg(this, "quit"));
+    button->setTip(labels.getLabel("menu_back"));
+    return button;
+}
+//-----------------------------------------------------------------
+WiStatusBar *
+MenuOptions::createStatusBar(int width)
+{
+    SDL_Color color = {0, 255, 0, 255};
+    Font *new_font = new Font(Path::dataReadPath("font/font_menu.ttf"), 20);
+    return new WiStatusBar(new_font, color, width);
 }
 //-----------------------------------------------------------------
 /**

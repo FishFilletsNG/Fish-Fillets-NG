@@ -46,8 +46,9 @@ ResDialogPack::matchScore(const std::string &first,
  * Compare dialog names and lang codes.
  * The best lang match is selected, at least two characters must equals.
  */
-    Dialog *
-ResDialogPack::findDialog(const std::string &name, const std::string &lang)
+   const Dialog *
+ResDialogPack::findDialog(const std::string &name,
+        const std::string &lang)
 {
     int bestScore = 0;
     Dialog *bestDialog = NULL;
@@ -72,13 +73,13 @@ ResDialogPack::findDialog(const std::string &name, const std::string &lang)
  * Try find dialog for this or default lang.
  * @return dialog or NULL
  */
-    Dialog *
+    const Dialog *
 ResDialogPack::findDialogHard(const std::string &name,
         const std::string &select)
 {
     std::string lang = OptionAgent::agent()->getParam(select,
             OptionAgent::agent()->getParam("lang"));
-    Dialog *dialog = findDialog(name, lang);
+    const Dialog *dialog = findDialog(name, lang);
     if (NULL == dialog) {
         dialog = findDialog(name, Dialog::DEFAULT_LANG);
         if (NULL == dialog) {

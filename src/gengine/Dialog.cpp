@@ -43,7 +43,7 @@ Dialog::~Dialog()
  * @return channel number where the sound is played or -1
  */
     int
-Dialog::talk(int volume, int loops)
+Dialog::talk(int volume, int loops) const
 {
     if (NULL == m_sound && !m_soundfile.empty()) {
         Path soundPath = Path::dataReadPath(m_soundfile);

@@ -23,6 +23,19 @@ IWidget::mouseButton(const MouseStroke &stroke)
 }
 //-----------------------------------------------------------------
 /**
+ * Returns own_getTip when location is inside own body.
+ */
+std::string
+IWidget::getTip(const V2 &loc)
+{
+    std::string result;
+    if (isInside(loc)) {
+        result = own_getTip(loc);
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
  * Test whether location is inside this widget.
  * @param loc world location
  * @return true when location is inside widget body

@@ -64,11 +64,11 @@ DialogStack::actorTalk(int actor, const std::string &name,
 {
     StringTool::t_args args = StringTool::split(name, '@');
 
-    Dialog *subtitle = m_dialogs->findDialogHard(args[0]);
+    const Dialog *subtitle = m_dialogs->findDialogHard(args[0]);
     if (subtitle) {
         subtitle->runSubtitle(args);
 
-        Dialog *dialog = m_dialogs->findDialogHard(args[0], "speech");
+        const Dialog *dialog = m_dialogs->findDialogHard(args[0], "speech");
         PlannedDialog *talker = new PlannedDialog(actor, dialog,
             subtitle->getMinTime());
         talker->talk(volume, loops);
