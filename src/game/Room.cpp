@@ -14,7 +14,6 @@
 #include "Rules.h"
 #include "LogicException.h"
 #include "SoundAgent.h"
-#include "ResSoundAgent.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
@@ -29,9 +28,6 @@ Room::Room(int w, int h, const Path &picture)
  */
 Room::~Room()
 {
-    ResSoundAgent::agent()->removeRes("impact_light");
-    ResSoundAgent::agent()->removeRes("impact_heavy");
-
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         delete (*i);

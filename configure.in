@@ -5,7 +5,7 @@ AC_CANONICAL_TARGET
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
 # of the software package so it can generate rules for building a source
 # archive.
-AM_INIT_AUTOMAKE(fillets-ng, 0.1.1)
+AM_INIT_AUTOMAKE(fillets-ng, 0.1.2)
 
 # Checks for programs.
 AC_PROG_CXX

@@ -27,9 +27,9 @@ Library Boost - http://www.boost.org/
 How to run:
 1. Compile (./configure && make) OR (app)
 2. Download data from http://sf.net/projects/fillets
-3. cp src/game/game path_to_data
+3. cp src/game/fillets path_to_data
 4. cd path_to_data
-5. ./game
+5. ./fillets
 
 Alternative you can copy all game data to $HOME/fillets-ng
 

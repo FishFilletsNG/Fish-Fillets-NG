@@ -17,6 +17,7 @@
 #include "MessagerAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
+#include "ResSoundAgent.h"
 
 #include "KeyStroke.h"
 #include "KeyBinder.h"
@@ -112,12 +113,15 @@ GameAgent::newLevel(bool restart)
 //-----------------------------------------------------------------
 /**
  * Clear room after visit.
+ * NOTE: clear all sound and dialogs too!
  */
 void
 GameAgent::clearRoom()
 {
+    //TODO: remove only ResSoundPack used by room
     SubTitleAgent::agent()->removeAll();
     DialogAgent::agent()->removeAll();
+    ResSoundAgent::agent()->removeAll();
 
     if (m_script) {
         delete m_script;

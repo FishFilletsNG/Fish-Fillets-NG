@@ -8,6 +8,7 @@
  */
 #include "KeyDriver.h"
 
+#include "Log.h"
 #include "InputAgent.h"
 #include "GameAgent.h"
 #include "Cube.h"
@@ -18,7 +19,7 @@ KeyDriver::KeyDriver(const KeyControl &control)
     : m_control(control)
 {
     m_keys = InputAgent::agent()->getKeys();
-    m_lastResult = false;
+    m_speedup = 0;
 }
 //-----------------------------------------------------------------
 /**
@@ -57,18 +58,47 @@ KeyDriver::drive(Cube *model)
             result = model->rules()->actionMoveDir(Rules::DIR_DOWN);
         }
 
-        //TODO: draw nice animation
-        //TODO: speed up when the same direction and no pushing
-        if (result) {
-            int phases = 3;
-            if (m_lastResult) {
-                phases = 2;
-            }
-            GameAgent::agent()->ensurePhases(phases);
-        }
+        speedup(model, result);
     }
 
-    m_lastResult = result;
     return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Speed up fish move for long trace and fish is no pushing.
+ * @param moved whether fish has moved
+ */
+void
+KeyDriver::speedup(const Cube *model, bool moved)
+{
+    //NOTE: original limits were {6, 10}
+    static const int SPEED_WARP1 = 3;
+    static const int SPEED_WARP2 = 10;
+
+    if (moved) {
+        if (model->const_rules()->getState() == "pushing") {
+            m_speedup = 0;
+        }
+        else {
+            m_speedup++;
+        }
+
+
+        int phases = 3;
+        if (m_speedup > SPEED_WARP2) {
+            phases = 1;
+        }
+        else if (m_speedup > SPEED_WARP1) {
+            phases = 2;
+        }
+        else {
+            phases = 3;
+        }
+
+        GameAgent::agent()->ensurePhases(phases);
+    }
+    else {
+        m_speedup = 0;
+    }
 }
 
