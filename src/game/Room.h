@@ -40,12 +40,12 @@ class Room : public NoCopy {
 
         bool beginFall(bool sound=true);
         bool nextRound();
-        bool finishRound();
+        bool finishRound(bool anim=true);
 
         void switchFish();
         std::string getMoves() const;
         bool loadMove(char move);
-        bool makeMove(char move, bool anim=true);
+        bool makeMove(char move);
 
         int getW() const;
         int getH() const;

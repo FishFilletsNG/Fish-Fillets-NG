@@ -117,7 +117,6 @@ Room::nextRound()
     if (false == falling) {
         m_controls->driving();
     }
-    m_controls->lockPhases();
 
     return finishRound();
 }
@@ -232,12 +231,16 @@ Room::falldown()
 /**
  * Let models to release their old position.
  * Check complete room.
+ * @param anim whether ensure phases for motion animation
  * @return true when room is finished
  */
 bool
-Room::finishRound()
+Room::finishRound(bool anim)
 {
     bool room_complete = true;
+    if (anim) {
+        m_controls->lockPhases();
+    }
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
@@ -275,9 +278,9 @@ Room::loadMove(char move)
     bool falling = true;
     while (falling) {
         falling = beginFall(false);
-        makeMove(move, false);
+        makeMove(move);
 
-        complete = finishRound();
+        complete = finishRound(false);
         if (complete && falling) {
             throw LoadException(ExInfo("load error - early finished level")
                     .addInfo("move", std::string(1, move)));
@@ -300,7 +303,7 @@ Room::beginFall(bool sound)
     prepareRound();
 
     bool falling = falldown();
-    m_fresh = (false == falling);
+    m_fresh = !falling;
     if (sound) {
         playImpact();
     }
@@ -309,21 +312,17 @@ Room::beginFall(bool sound)
 //-----------------------------------------------------------------
 /**
  * Try make single move.
- * @param anim whether ensure phases for move animation
  * @return true for success or false when something has moved before
  * @throws LoadException for bad moves
  */
 bool
-Room::makeMove(char move, bool anim)
+Room::makeMove(char move)
 {
     bool result = false;
     if (m_fresh) {
         if (false == m_controls->makeMove(move)) {
             throw LoadException(ExInfo("load error - bad move")
                     .addInfo("move", std::string(1, move)));
-        }
-        if (anim) {
-            m_controls->lockPhases();
         }
         m_fresh = false;
         result = true;
