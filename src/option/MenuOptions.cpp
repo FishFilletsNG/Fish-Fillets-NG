@@ -41,7 +41,7 @@ MenuOptions::MenuOptions()
                     Path::dataReadPath("images/menu/back.png")),
             new SimpleMsg(this, "quit"));
     HBox *backBox = new HBox();
-    backBox->addWidget(new WiSpace(260, 0));
+    backBox->addWidget(new WiSpace(240 - backButton->getW(), 0));
     backBox->addWidget(backButton);
 
     //TODO: add "Back" button
