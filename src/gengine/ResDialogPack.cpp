@@ -47,7 +47,7 @@ ResDialogPack::matchScore(const std::string first,
  * The best lang match is selected, at least two characters must equals.
  */
     Dialog *
-ResDialogPack::findDialog(const std::string &name, const std::string lang)
+ResDialogPack::findDialog(const std::string &name, const std::string &lang)
 {
     int bestScore = 0;
     Dialog *bestDialog = NULL;

@@ -48,7 +48,6 @@ Room::Room(int w, int h, const Path &picture,
     m_field = new Field(w, h);
     m_controls = new Controls(m_locker);
     m_view = new View(ModelList(&m_models));
-    m_impact = Cube::NONE;
     m_lastAction = Cube::ACTION_NO;
     m_soundPack = new ResSoundPack();
     m_startTime = TimerAgent::agent()->getCycles();
@@ -174,9 +173,9 @@ Room::nextRound(const InputProvider *input)
  * NOTE: only one sound is played even more objects have fall
  */
     void
-Room::playImpact()
+Room::playImpact(Cube::eWeight impact)
 {
-    switch (m_impact) {
+    switch (impact) {
         case Cube::NONE:
             break;
         case Cube::LIGHT:
@@ -188,7 +187,6 @@ Room::playImpact()
         default:
             assert(!"unknown impact weight");
     }
-    m_impact = Cube::NONE;
 }
 //-----------------------------------------------------------------
 /**
@@ -278,13 +276,15 @@ Room::fallout(bool interactive)
  * @return true when something is falling.
  */
     bool
-Room::falldown()
+Room::falldown(bool interactive)
 {
     ModelList models(&m_models);
     Landslip slip(models);
 
     bool falling = slip.computeFall();
-    m_impact = slip.getImpact();
+    if (interactive) {
+        playImpact(slip.getImpact());
+    }
     return falling;
 }
 //-----------------------------------------------------------------
@@ -373,16 +373,12 @@ Room::beginFall(bool interactive)
     prepareRound();
     m_lastAction = Cube::ACTION_NO;
 
-    bool out = fallout(interactive);
-    if (out) {
+    if (fallout(interactive)) {
         m_lastAction = Cube::ACTION_MOVE;
     }
     else {
-        if (falldown()) {
+        if (falldown(interactive)) {
             m_lastAction = Cube::ACTION_FALL;
-        }
-        if (interactive) {
-            playImpact();
         }
     }
     return m_lastAction != Cube::ACTION_NO;
