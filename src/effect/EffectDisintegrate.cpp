@@ -18,7 +18,7 @@
  */
 EffectDisintegrate::EffectDisintegrate()
 {
-    m_disint = 0;
+    m_disint = DISINT_START;
 }
 //-----------------------------------------------------------------
 void
