@@ -70,7 +70,7 @@ LayeredPicture::getMaskAt(const V2 &loc)
     if ((0 <= loc.getX() && loc.getX() < m_colorMask->w)
             && (0 <= loc.getY() && loc.getY() < m_colorMask->h))
     {
-        SurfaceLock lock(m_colorMask);
+        SurfaceLock lock1(m_colorMask);
         result = PixelTool::getPixel(m_colorMask,
                 loc.getX(), loc.getY());
     }

@@ -37,7 +37,7 @@ Outline::drawOnColorKey(SDL_Surface *surface)
 void
 Outline::drawOn(SDL_Surface *surface, Uint32 bgKey)
 {
-    SurfaceLock lock(surface);
+    SurfaceLock lock1(surface);
 
     precomputePixel(surface->format);
     for (int i = 0; i < m_width; ++i) {
@@ -76,7 +76,7 @@ Outline::drawOneLayer(SDL_Surface *surface, Uint32 bgKey)
 void
 Outline::drawAlongCopy(SDL_Surface *surface, Uint32 bgKey, SDL_Surface *copy)
 {
-    SurfaceLock lock(copy);
+    SurfaceLock lock1(copy);
 
     for (int py = 0; py < surface->h; ++py) {
         for (int px = 0; px < surface->w; ++px) {

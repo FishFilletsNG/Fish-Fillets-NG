@@ -44,7 +44,7 @@ class Cube : public NoCopy {
                 Shape *shape);
         ~Cube();
         void setGoal(const Goal &goal) { m_goal = goal; }
-        void setIndex(int index) { m_index = index; }
+        void setIndex(int model_index) { m_index = model_index; }
         int getIndex() const { return m_index; }
         bool isBusy() const { return m_busy; }
         void setBusy(bool busy) { m_busy = busy; }
