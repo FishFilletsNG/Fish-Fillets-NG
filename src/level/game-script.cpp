@@ -577,6 +577,7 @@ script_model_setBusy(lua_State *L) throw()
  *
  * Returns whether object at location(x, y) is equal.
  * NOTE: model_index can be -1 for empty water.
+ * NOTE: boder is as wall (even thought border.index == -1)
  */
     int
 script_model_equals(lua_State *L) throw()
@@ -587,11 +588,20 @@ script_model_equals(lua_State *L) throw()
     int y = luaL_checkint(L, 3);
     Cube *other = getLevelScript(L)->askField(V2(x, y));
 
-    int other_index = -1;
+    bool equals = false;
     if (other) {
-        other_index = other->getIndex();
+        if (model_index == -1) {
+            equals = false;
+        }
+        else {
+            equals = (model_index == other->getIndex());
+        }
     }
-    bool equals = (other_index == model_index);
+    else {
+        if (model_index == -1) {
+            equals = true;
+        }
+    }
 
     lua_pushboolean(L, equals);
     END_NOEXCEPTION;
