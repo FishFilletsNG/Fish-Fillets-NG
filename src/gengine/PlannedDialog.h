@@ -21,7 +21,7 @@ class PlannedDialog : public NoCopy {
     public:
         PlannedDialog(int actor, Dialog *dialog);
 
-        void talk();
+        void talk(int volume, int loops=0);
         void killTalk();
 
         bool isTalking();

@@ -30,7 +30,8 @@ class DialogAgent : public BaseAgent {
     public:
     void addDialog(const std::string &name, Dialog *dialog);
 
-    void actorTalk(int actor, const std::string &name);
+    void actorTalk(int actor, const std::string &name,
+            int volume, int loops=0);
     bool isTalking(int actor);
     void killSound(int actor);
 

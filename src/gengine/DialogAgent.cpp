@@ -48,17 +48,19 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
 //-----------------------------------------------------------------
 /**
  * Run talk.
- * TODO: allow to set volume
  * @param actor actor index
  * @param name dialog name
+ * @param volume dialog volume
+ * @param loops number of loops, 0=play once, 1=play twice, -1=play infinite
  */
     void
-DialogAgent::actorTalk(int actor, const std::string &name)
+DialogAgent::actorTalk(int actor, const std::string &name,
+        int volume, int loops)
 {
     Dialog *dialog = m_dialogs->findDialogHard(name);
     if (dialog) {
         PlannedDialog *talker = new PlannedDialog(actor, dialog);
-        talker->talk();
+        talker->talk(volume, loops);
         m_running.push_back(talker);
     }
 }

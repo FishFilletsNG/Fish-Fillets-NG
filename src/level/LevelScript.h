@@ -43,7 +43,7 @@ class LevelScript : public Planner {
         int getCycles() const;
 
         void addSound(const std::string &name, const Path &file);
-        void playSound(const std::string &name, int priority);
+        void playSound(const std::string &name, int volume);
 };
 
 #endif

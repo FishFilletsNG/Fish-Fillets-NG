@@ -95,6 +95,18 @@ script_game_isPlanning(lua_State *L) throw()
     //NOTE: return planning
     return 1;
 }
+//-----------------------------------------------------------------
+/**
+ * bool game_killPlan()
+ */
+    int
+script_game_killPlan(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    getPlanner(L)->interruptPlan();
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**
@@ -167,7 +179,7 @@ script_model_isTalking(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_talk(model_index, name)
+ * void model_talk(model_index, name, volume, loops)
  */
     int
 script_model_talk(lua_State *L) throw()
@@ -175,8 +187,10 @@ script_model_talk(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
     const char *name = luaL_checkstring(L, 2);
+    int volume = luaL_optint(L, 3, 75);
+    int loops = luaL_optint(L, 4, 0);
 
-    DialogAgent::agent()->actorTalk(model_index, name);
+    DialogAgent::agent()->actorTalk(model_index, name, volume, loops);
     END_NOEXCEPTION;
     return 0;
 }

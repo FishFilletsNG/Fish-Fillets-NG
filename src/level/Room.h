@@ -14,6 +14,7 @@ class View;
 #include "NoCopy.h"
 #include "Path.h"
 #include "Cube.h"
+#include "SoundAgent.h"
 
 #include <string>
 
@@ -67,7 +68,7 @@ class Room : public NoCopy {
         int getH() const;
         int getCycles() const;
         void addSound(const std::string &name, const Path &file);
-        void playSound(const std::string &name, int priority);
+        void playSound(const std::string &name, int volume=100);
 };
 
 #endif

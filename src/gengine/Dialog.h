@@ -24,7 +24,7 @@ class Dialog: public NoCopy {
                 const std::string &soundfile, const std::string &subtitle);
         virtual ~Dialog();
 
-        int talk();
+        int talk(int volume, int loops=0);
         std::string getLang() const { return m_lang; }
         std::string getSubtitle() const { return m_subtitle; }
         int getMinTime() const;

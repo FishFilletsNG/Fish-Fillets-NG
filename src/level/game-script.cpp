@@ -16,7 +16,6 @@
 #include "Shape.h"
 #include "Cube.h"
 #include "Rules.h"
-#include "SoundAgent.h"
 #include "LevelScript.h"
 #include "ModelFactory.h"
 
@@ -496,16 +495,16 @@ script_sound_addSound(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void sound_playSound(name, priority=-1)
+ * void sound_playSound(name, volume)
  */
     int
 script_sound_playSound(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *name = luaL_checkstring(L, 1);
-    int priority = luaL_optint(L, 2, -1);
+    int volume = luaL_optint(L, 2, 100);
 
-    getLevelScript(L)->playSound(name, priority);
+    getLevelScript(L)->playSound(name, volume);
     END_NOEXCEPTION;
     return 0;
 }

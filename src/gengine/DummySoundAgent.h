@@ -8,7 +8,8 @@
  */
 class DummySoundAgent : public SoundAgent {
     public:
-        virtual int playSound(Mix_Chunk *, int) { return -1; }
+        virtual int playSound(Mix_Chunk *, int /*volume*/, int /*loops*/)
+        { return -1; }
         virtual void setSoundVolume(int ) {}
         virtual int getSoundVolume() { return 0; }
 

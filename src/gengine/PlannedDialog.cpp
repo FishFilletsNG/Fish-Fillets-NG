@@ -27,11 +27,13 @@ PlannedDialog::PlannedDialog(int actor, Dialog *dialog)
 //-----------------------------------------------------------------
 /**
  * Run talk.
+ * @param volume sound volume
+ * @param loops numer of loops. 0=play once, 1=play twice, -1=play infinite
  */
 void
-PlannedDialog::talk()
+PlannedDialog::talk(int volume, int loops)
 {
-    m_channel = m_dialog->talk();
+    m_channel = m_dialog->talk(volume, loops);
     m_endtime = m_dialog->getMinTime() + TimerAgent::agent()->getCycles();
 }
 

@@ -37,17 +37,20 @@ Dialog::~Dialog()
 /**
  * Run dialog.
  * Do lazy loading of sound.
+ *
+ * @param volume sound volume
+ * @param loops numer of loops. 0=play once, 1=play twice, -1=play infinite
  * @return channel number where the sound is played or -1
  */
     int
-Dialog::talk()
+Dialog::talk(int volume, int loops)
 {
     if (NULL == m_sound && !m_soundfile.empty()) {
         m_sound = ResSoundPack::loadSound(
                 Path::dataReadPath(m_soundfile));
     }
 
-    int channel = SoundAgent::agent()->playSound(m_sound);
+    int channel = SoundAgent::agent()->playSound(m_sound, volume, loops);
     if (!m_subtitle.empty()) {
         runSubtitle();
     }

@@ -38,8 +38,10 @@ SDLSoundAgent::own_init()
         throw MixException(ExInfo("Mix_OpenAudio"));
     }
 
-    m_soundVolume = MIX_MAX_VOLUME;
     Mix_AllocateChannels(8);
+
+    m_soundVolume = MIX_MAX_VOLUME;
+    setMusicVolume(50);
 }
 //-----------------------------------------------------------------
     void
@@ -53,25 +55,25 @@ SDLSoundAgent::own_shutdown()
 /**
  * Play this sound.
  * @param sound chunk to play
- * @param priority = how much channels can be used at once,
- * 0 is the lowest priority
- * -1 is absolute priority
+ * @param volume percentage sound volume
+ * @param loops numer of loops. 0=play once, 1=play twice, -1=play infinite
  *
  * @return channel number where the sound is played,
  * return -1 on error or when sound is NULL
  */
     int
-SDLSoundAgent::playSound(Mix_Chunk *sound, int priority)
+SDLSoundAgent::playSound(Mix_Chunk *sound, int volume, int loops)
 {
     int channel = -1;
     if (sound) {
-        if (priority == -1 || priority >= Mix_Playing(-1)) {
-            channel = Mix_PlayChannel(-1, sound, 0);
-            if (-1 == channel) {
-                //NOTE: maybe there are too few open channels
-                LOG_WARNING(ExInfo("cannot play sound")
-                        .addInfo("Mix", Mix_GetError()));
-            }
+        channel = Mix_PlayChannel(-1, sound, loops);
+        if (-1 == channel) {
+            //NOTE: maybe there are too few open channels
+            LOG_WARNING(ExInfo("cannot play sound")
+                    .addInfo("Mix", Mix_GetError()));
+        }
+        else {
+            Mix_Volume(channel, m_soundVolume * volume / 100);
         }
     }
 
@@ -92,7 +94,6 @@ SDLSoundAgent::setSoundVolume(int volume)
     else if (m_soundVolume < 0) {
         m_soundVolume = 0;
     }
-    Mix_Volume(-1, m_soundVolume);
 }
 //-----------------------------------------------------------------
     int

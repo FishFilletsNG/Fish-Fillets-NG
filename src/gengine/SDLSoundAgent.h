@@ -25,7 +25,7 @@ class SDLSoundAgent : public SoundAgent {
         virtual void own_init();
         virtual void own_shutdown();
     public:
-        virtual int playSound(Mix_Chunk *sound, int priority=-1);
+        virtual int playSound(Mix_Chunk *sound, int volume, int loops=0);
         virtual void setSoundVolume(int volume);
         virtual int getSoundVolume();
 

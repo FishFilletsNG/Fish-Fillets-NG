@@ -149,10 +149,10 @@ LevelScript::addSound(const std::string &name, const Path &file)
 }
 //-----------------------------------------------------------------
     void
-LevelScript::playSound(const std::string &name, int priority)
+LevelScript::playSound(const std::string &name, int volume)
 {
     checkRoom();
-    m_room->playSound(name, priority);
+    m_room->playSound(name, volume);
 }
 //-----------------------------------------------------------------
 /**

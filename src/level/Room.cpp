@@ -19,7 +19,6 @@
 #include "Log.h"
 #include "Rules.h"
 #include "LogicException.h"
-#include "SoundAgent.h"
 #include "LoadException.h"
 #include "Unit.h"
 #include "TimerAgent.h"
@@ -179,12 +178,10 @@ Room::playImpact()
         case Cube::NONE:
             break;
         case Cube::LIGHT:
-            SoundAgent::agent()->playSound(
-                    m_soundPack->getRandomRes("impact_light"));
+            playSound("impact_light", 50);
             break;
         case Cube::HEAVY:
-            SoundAgent::agent()->playSound(
-                    m_soundPack->getRandomRes("impact_heavy"));
+            playSound("impact_heavy", 50);
             break;
         default:
             assert(!"unknown impact weight");
@@ -202,12 +199,10 @@ Room::playDead(Cube *model)
     DialogAgent::agent()->killSound(model->getIndex());
     switch (model->getPower()) {
         case Cube::LIGHT:
-            SoundAgent::agent()->playSound(
-                    m_soundPack->getRandomRes("dead_small"));
+            playSound("dead_small");
             break;
         case Cube::HEAVY:
-            SoundAgent::agent()->playSound(
-                    m_soundPack->getRandomRes("dead_big"));
+            playSound("dead_big");
             break;
         default:
             LOG_WARNING(ExInfo("curious power of dead fish")
@@ -435,8 +430,8 @@ Room::addSound(const std::string &name, const Path &file)
 }
 //-----------------------------------------------------------------
 void
-Room::playSound(const std::string &name, int priority)
+Room::playSound(const std::string &name, int volume)
 {
     SoundAgent::agent()->playSound(
-            m_soundPack->getRandomRes(name), priority);
+            m_soundPack->getRandomRes(name), volume);
 }
