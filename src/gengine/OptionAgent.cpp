@@ -56,14 +56,14 @@ OptionAgent::own_init()
                 Path::dataSystemPath(CONFIG_FILE));
     }
     catch (ScriptException &e) {
-        LOG_INFO(e.info());
+        LOG_WARNING(e.info());
     }
     try {
         ScriptAgent::agent()->doFile(
                 Path::dataUserPath(CONFIG_FILE));
     }
     catch (ScriptException &e) {
-        LOG_INFO(e.info());
+        LOG_DEBUG(e.info());
     }
 
     ScriptAgent::agent()->doFile(Path::dataReadPath("script/init.lua"));

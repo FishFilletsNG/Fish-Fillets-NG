@@ -60,7 +60,7 @@ SDLSoundAgent::playSound(Mix_Chunk *sound, int priority)
 {
     int channel = -1;
     if (sound) {
-        if (priority == -1 or priority >= Mix_Playing(-1)) {
+        if (priority == -1 || priority >= Mix_Playing(-1)) {
             channel = Mix_PlayChannel(-1, sound, 0);
             if (-1 == channel) {
                 //NOTE: maybe there are too few open channels
