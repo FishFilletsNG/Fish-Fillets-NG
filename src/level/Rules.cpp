@@ -396,8 +396,8 @@ Rules::whoIsFalling()
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        //NOTE: falling is propagated over fish
-        if (!(*i)->isWall()) {
+        //NOTE: falling is not propagated over fish
+        if (!(*i)->isWall() && !(*i)->isAlive()) {
             if ((*i)->rules()->isFalling()) {
                 result.push_back(*i);
             }
