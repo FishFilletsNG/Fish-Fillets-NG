@@ -424,6 +424,9 @@ script_model_setGoal(lua_State *L) throw()
     else if ("goal_escape" == goalname) {
         goal = Goal::escapeGoal();
     }
+    else if ("goal_alive" == goalname) {
+        goal = Goal::aliveGoal();
+    }
     else {
         ExInfo error = ExInfo("unknown goal")
             .addInfo("goal", goalname);

@@ -11,7 +11,6 @@
 #include "WorldMap.h"
 #include "Keymap.h"
 
-#include "Log.h"
 #include "KeyStroke.h"
 #include "MouseStroke.h"
 

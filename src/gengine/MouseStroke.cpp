@@ -21,19 +21,6 @@ MouseStroke::MouseStroke(const SDL_MouseButtonEvent &event)
 }
 //-----------------------------------------------------------------
 /**
- * Create manualy MouseStroke.
- * @param button the mouse button index
- * (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT)
- * @param x x coordinate of press
- * @param y y coordinate of press
- */
-MouseStroke::MouseStroke(Uint8 button, int x, int y)
-    : m_loc(x, y)
-{
-    m_button = button;
-}
-//-----------------------------------------------------------------
-/**
  * Return text fashion.
  */
 std::string

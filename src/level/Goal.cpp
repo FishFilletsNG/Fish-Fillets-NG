@@ -35,6 +35,12 @@ Goal::escapeGoal()
     return Goal(SATISFY_TRUE, SATISFY_TRUE);
 }
 //-----------------------------------------------------------------
+    Goal
+Goal::aliveGoal()
+{
+    return Goal(SATISFY_IGNORE, SATISFY_TRUE);
+}
+//-----------------------------------------------------------------
 bool
 Goal::isSatisfy(const Cube *model) const
 {
@@ -70,7 +76,7 @@ Goal::isWrong(const Cube *model) const
     }
 
     if (SATISFY_FALSE == m_out) {
-        wrong |= model->isOut(); 
+        wrong |= model->isOut();
     }
     return wrong;
 }

@@ -22,6 +22,7 @@ class Goal {
         static Goal noGoal();
         static Goal outGoal();
         static Goal escapeGoal();
+        static Goal aliveGoal();
 
         bool isSatisfy(const Cube *model) const;
         bool isWrong(const Cube *model) const;
