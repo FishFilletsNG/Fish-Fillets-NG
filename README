@@ -35,7 +35,7 @@ I. Compile
 ----------
 
 - compile the game
-$ tar xzf fillets-ng-x.y.tar.gz
+$ tar xzf fillets-ng.tar.gz
 $ cd fillets-ng
 $ ./configure
 $ make
@@ -45,7 +45,8 @@ $ make install
 II. Install data
 ----------------
 
-- extract fillets-data.x.y.tar.gz to $(datadir)/games/fillets-ng/
+- download fillets-ng-data from http://fillets.sourceforge.net/download.php
+- extract fillets-ng-data.tar.gz to $(datadir)/games/fillets-ng/
   default: /usr/local/share/games/fillets-ng/
 
 
@@ -53,7 +54,7 @@ III. Install czech dialogs
 --------------------------
 
 - this step is OPTIONAL, useful only for czech speaking people
-- extract fillets-data-cs.x.y.tar.gz to $(datadir)/games/fillets-ng/
+- extract fillets-ng-data-cs.tar.gz to $(datadir)/games/fillets-ng/
   default: /usr/local/share/games/fillets-ng/
 
 
