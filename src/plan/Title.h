@@ -29,7 +29,7 @@ class Title : public Drawable {
         Title(int baseY, int finalY, int bonusTime, int limitY,
                 const std::string &content,
                 Font *font, const Color *color);
-        virtual Title::~Title();
+        virtual ~Title();
 
         void shiftUp(int rate);
         void shiftFinalUp(int rate);
