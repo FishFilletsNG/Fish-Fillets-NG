@@ -163,9 +163,9 @@ ViewEffect::getPixel(SDL_Surface *surface, int x, int y)
         case 1: // 8bit
             return *p;
         case 2: // 16bit 
-            return *reinterpret_cast<Uint16*>(p);
+            return (Uint16*)(p);
         case 3: // 24bit 
-            if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                 return p[0] << 16 | p[1] << 8 | p[2];
             }
             else {
@@ -199,7 +199,7 @@ ViewEffect::putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
                 *reinterpret_cast<Uint16*>(p) = pixel;
                 break;
             case 3:
-                if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                     p[0] = (pixel >> 16) & 0xff;
                     p[1] = (pixel >> 8) & 0xff;
                     p[2] = pixel & 0xff;

@@ -23,10 +23,10 @@
     void
 GameAgent::own_init()
 {
-    //TODO: allow set different worldmap the picture
     keyBinding();
 
     m_manager = new StateManager();
+    //TODO: allow set different worldmap picture
     WorldMap *worldmap = new WorldMap(
             Path::dataReadPath("images/menu/mapa-0.png"));
     worldmap->initWay(

@@ -177,6 +177,20 @@ script_model_talk(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void model_killSound(model_index)
+ */
+    int
+script_model_killSound(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+
+    DialogAgent::agent()->killSound(model_index);
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**

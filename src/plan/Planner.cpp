@@ -37,6 +37,7 @@ Planner::registerScriptFuncs()
     m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
     m_script->registerFunc("model_isTalking", script_model_isTalking);
     m_script->registerFunc("model_talk", script_model_talk);
+    m_script->registerFunc("model_killSound", script_model_killSound);
 
     m_script->registerFunc("sound_playMusic", script_sound_playMusic);
     m_script->registerFunc("sound_stopMusic", script_sound_stopMusic);

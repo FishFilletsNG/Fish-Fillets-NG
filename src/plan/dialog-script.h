@@ -16,6 +16,7 @@ extern int script_dialog_addFont(lua_State *L) throw();
 extern int script_dialog_addDialog(lua_State *L) throw();
 extern int script_model_isTalking(lua_State *L) throw();
 extern int script_model_talk(lua_State *L) throw();
+extern int script_model_killSound(lua_State *L) throw();
 
 extern int script_sound_playMusic(lua_State *L) throw();
 extern int script_sound_stopMusic(lua_State *L) throw();
