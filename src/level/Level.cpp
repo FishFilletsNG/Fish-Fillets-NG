@@ -162,6 +162,8 @@ Level::own_noteFg()
     if (m_loading->isLoading() && m_loading->isPaused()) {
         m_loading->togglePause();
     }
+    //NOTE: ensure that unwanted mouse press will not move a fish
+    m_locker->ensurePhases(3);
 }
 
 //-----------------------------------------------------------------
