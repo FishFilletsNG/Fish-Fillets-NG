@@ -68,6 +68,7 @@ class Room : public StepCounter, public NoCopy, public Drawable {
         bool isSolvable();
         int getStepCount() const;
         std::string getMoves() const;
+        void unBusyUnits();
 
         int getW() const;
         int getH() const;

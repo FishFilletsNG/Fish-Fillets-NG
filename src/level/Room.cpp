@@ -253,16 +253,18 @@ Room::fallout(bool interactive)
     bool wentOut = false;
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        int outDepth = (*i)->rules()->actionOut();
-        if (outDepth > 0) {
-            wentOut = true;
-            if (interactive) {
-                m_locker->ensurePhases(3);
+        if (!(*i)->isLost()) {
+            int outDepth = (*i)->rules()->actionOut();
+            if (outDepth > 0) {
+                wentOut = true;
+                if (interactive) {
+                    m_locker->ensurePhases(3);
+                }
             }
-        }
-        else if (outDepth == -1) {
-            m_levelScript->interruptPlan();
-            m_controls->checkActive();
+            else if (outDepth == -1) {
+                m_levelScript->interruptPlan();
+                m_controls->checkActive();
+            }
         }
     }
 
@@ -343,6 +345,15 @@ std::string
 Room::getMoves() const
 {
     return m_controls->getMoves();
+}
+//-----------------------------------------------------------------
+void
+Room::unBusyUnits()
+{
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->setBusy(false);
+    }
 }
 //-----------------------------------------------------------------
 /**

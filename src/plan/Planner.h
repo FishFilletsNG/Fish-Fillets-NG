@@ -28,7 +28,7 @@ class Planner : public NoCopy {
         void scriptInclude(const Path &filename);
         void scriptDo(const std::string &input);
         bool satisfyPlan();
-        void interruptPlan();
+        virtual void interruptPlan();
 
         void planAction(int funcRef);
         bool isPlanning() const;

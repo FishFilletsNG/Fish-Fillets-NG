@@ -31,6 +31,7 @@ class LevelScript : public Planner {
 
         void updateScript();
         void cleanRoom();
+        virtual void interruptPlan();
 
         bool isRoom() const { return NULL != m_room; }
         Room *room();

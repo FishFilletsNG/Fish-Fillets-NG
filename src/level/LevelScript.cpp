@@ -85,6 +85,13 @@ LevelScript::updateScript()
     satisfyPlan();
 }
 //-----------------------------------------------------------------
+void
+LevelScript::interruptPlan()
+{
+    Planner::interruptPlan();
+    m_room->unBusyUnits();
+}
+//-----------------------------------------------------------------
 /**
  * Check whether room is ready.
  * @throws LogicException when room is not ready

@@ -265,4 +265,3 @@ Controls::cannotMove()
     return true;
 }
 
-

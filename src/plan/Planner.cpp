@@ -80,7 +80,7 @@ Planner::satisfyPlan()
     return m_plan->empty();
 }
 //-----------------------------------------------------------------
-void
+    void
 Planner::interruptPlan()
 {
     m_plan->removeAll();
