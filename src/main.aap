@@ -19,7 +19,7 @@ CXXFLAGS += -W -Wpointer-arith -Wcast-qual
             -Wunused-parameter -Wconversion -Wshadow
             -Wstrict-prototypes
 
-LIBS = -lSDL_mixer -lSDL_image -lboost_filesystem -lm
+LIBS = -lSDL_mixer -lSDL_image -lSDL_ttf -lboost_filesystem -lm
 LIBS += $Sdl_libs $Lua_libs $Lualib_libs
 
 all: game/fillets
