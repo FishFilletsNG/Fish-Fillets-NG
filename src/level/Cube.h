@@ -39,7 +39,6 @@ class Cube : public NoCopy {
         Rules *m_rules;
         Goal m_goal;
     public:
-        static Cube *createBorder();
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
                 Shape *shape);

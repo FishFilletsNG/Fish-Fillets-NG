@@ -17,6 +17,7 @@ class ModelFactory {
         static Cube *createModel(const std::string &kind, const V2 &loc,
                 const std::string &shape);
         static Unit *createUnit(const std::string &kind);
+        static Cube *createBorder();
 };
 
 #endif

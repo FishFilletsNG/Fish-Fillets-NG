@@ -24,6 +24,7 @@
 #include "DemoMode.h"
 #include "minmax.h"
 
+#include <stdio.h>
 #include <assert.h>
 
 //-----------------------------------------------------------------
@@ -247,37 +248,7 @@ Level::nextPlayerAction()
 Level::saveSolution()
 {
     std::string current_moves = m_levelScript->room()->getMoves();
-
-    m_loadedMoves = "";
-    Path oldSolution = Path::dataReadPath("solved/" + m_codename + ".lua");
-    if (oldSolution.exists()) {
-        try {
-            //NOTE: hack, loads old solution to the m_loadedMoves
-            m_levelScript->scriptDo("saved_moves=nil");
-            m_levelScript->scriptInclude(oldSolution);
-            m_levelScript->scriptDo("script_load()");
-        }
-        catch (ScriptException &e) {
-            LOG_WARNING(e.info());
-        }
-    }
-
-    if (m_loadedMoves.empty() || current_moves.size() < m_loadedMoves.size()) {
-        Path file = Path::dataWritePath("solved/" + m_codename + ".lua");
-        FILE *saveFile = fopen(file.getNative().c_str(), "w");
-        if (saveFile) {
-            fputs("\nsaved_moves = '", saveFile);
-            fputs(current_moves.c_str(), saveFile);
-            fputs("'\n", saveFile);
-            fclose(saveFile);
-        }
-        else {
-            LOG_WARNING(ExInfo("cannot save solution")
-                    .addInfo("file", file.getNative()));
-        }
-    }
-
-    m_loadedMoves = "";
+    m_levelStatus->writeSolvedMoves(m_codename, current_moves);
 }
 //-----------------------------------------------------------------
 /**

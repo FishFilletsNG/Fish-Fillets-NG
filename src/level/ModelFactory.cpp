@@ -116,3 +116,15 @@ ModelFactory::createUnit(const std::string &kind)
     }
     return result;
 }
+//-----------------------------------------------------------------
+/**
+ * Create special model, which will be used for outher space.
+ * NOTE: hack border around field
+ */
+    Cube *
+ModelFactory::createBorder()
+{
+    Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::NONE, false,
+            new Shape("X\n"));
+    return border;
+}

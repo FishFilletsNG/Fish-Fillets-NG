@@ -1,6 +1,7 @@
 #ifndef HEADER_SCRIPTSTATE_H
 #define HEADER_SCRIPTSTATE_H
 
+#include "NoCopy.h"
 #include "Path.h"
 
 #include <string>
@@ -12,7 +13,7 @@ extern "C" {
 /**
  * Independent script state.
  */
-class ScriptState {
+class ScriptState : public NoCopy {
     private:
         lua_State *m_state;
     private:

@@ -20,7 +20,7 @@
  */
 Cube::Cube(const V2 &location,
         eWeight weight, eWeight power, bool alive,
-        Shape *ashape)
+        Shape *new_shape)
 : m_loc(location), m_goal(Goal::noGoal())
 {
     m_index = -1;
@@ -33,7 +33,7 @@ Cube::Cube(const V2 &location,
     m_lookLeft = true;
     m_lost = false;
 
-    m_shape = ashape;
+    m_shape = new_shape;
     m_rules = new Rules(this);
     m_anim = new Anim();
 }
@@ -47,18 +47,6 @@ Cube::~Cube()
     delete m_rules;
     delete m_shape;
     delete m_anim;
-}
-//-----------------------------------------------------------------
-/**
- * Create special model, which will be used for outher space.
- * NOTE: hack border around field
- */
-    Cube *
-Cube::createBorder()
-{
-    Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::NONE, false,
-            new Shape("X\n"));
-    return border;
 }
 //-----------------------------------------------------------------
 /**
