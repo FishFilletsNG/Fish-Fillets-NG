@@ -331,6 +331,12 @@ Room::getMoves() const
 }
 //-----------------------------------------------------------------
     void
+Room::checkActive()
+{
+    return m_controls->checkActive();
+}
+//-----------------------------------------------------------------
+    void
 Room::unBusyUnits()
 {
     Cube::t_models::iterator end = m_models.end();

@@ -172,13 +172,13 @@ Controls::getNeededPhases(int speedup) const
         phases = (*m_active)->countAnimPhases("turn");
     }
     else if (speedup > SPEED_WARP2) {
-        phases = 1;
+        phases = (*m_active)->countAnimPhases("swam") / 6;
     }
     else if (speedup > SPEED_WARP1) {
-        phases = 2;
+        phases = (*m_active)->countAnimPhases("swam") / 3;
     }
     else {
-        phases = 3;
+        phases = (*m_active)->countAnimPhases("swam") / 2;
     }
     return phases;
 }

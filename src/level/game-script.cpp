@@ -163,6 +163,19 @@ script_game_changeBg(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * void game_checkActive()
+ * Check active fish, switch to non busy alive fish.
+ */
+    int
+script_game_checkActive(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    getLevelScript(L)->room()->checkActive();
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**
