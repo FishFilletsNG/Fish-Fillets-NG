@@ -14,7 +14,7 @@
 /**
  * Return new empty surface with the same format.
  * @param surface surface to ask for pixel format
- * @param widht width or 0 for the same width
+ * @param width width or 0 for the same width
  * @param height height or 0 for the same height
  * @throws SDLException when function fails
  */

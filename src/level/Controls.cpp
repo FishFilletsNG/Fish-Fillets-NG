@@ -61,7 +61,7 @@ Controls::addUnit(Unit *unit)
 /**
  * Let drivers to drive.
  * Only one driver can drive at the same time.
- * @param pressed array of pressed keys
+ * @param input wrapped input
  */
     void
 Controls::driving(const InputProvider *input)
