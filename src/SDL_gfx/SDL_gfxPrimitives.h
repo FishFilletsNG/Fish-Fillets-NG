@@ -153,14 +153,6 @@ extern "C" {
     extern int bezierRGBA(SDL_Surface * dst, Sint16 * vx, Sint16 * vy,
 				 int n, int s, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
-
-/* 8x8 Characters/Strings */
-
-    extern int characterColor(SDL_Surface * dst, Sint16 x, Sint16 y, char c, Uint32 color);
-    extern int characterRGBA(SDL_Surface * dst, Sint16 x, Sint16 y, char c, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-    extern int stringColor(SDL_Surface * dst, Sint16 x, Sint16 y, char *c, Uint32 color);
-    extern int stringRGBA(SDL_Surface * dst, Sint16 x, Sint16 y, char *c, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus
 };
