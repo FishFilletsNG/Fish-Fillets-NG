@@ -63,8 +63,7 @@ ViewEffect::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
             blitDisInt(screen, surface, x, y);
             break;
         case EFFECT_MIRROR:
-            //TODO: implement mirror effect
-            blitNone(screen, surface, x, y);
+            blitMirror(screen, surface, x, y);
             break;
         default:
             assert(!"unknown effect");
@@ -103,6 +102,38 @@ ViewEffect::blitDisInt(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
         }
     }
 }
+//-----------------------------------------------------------------
+/**
+ * Mirror effect. Draw left side inside.
+ * The pixel in the middle will be used as a mask.
+ * NOTE: mirror object should be draw as the last
+ */
+void
+ViewEffect::blitMirror(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
+{
+    SurfaceLock lock1(screen);
+    SurfaceLock lock2(surface);
+
+    Uint32 mask = getPixel(surface, surface->w / 2, surface->h / 2);
+
+    for (int py = 0; py < surface->h; ++py) {
+        for (int px = 0; px < surface->w; ++px) {
+            Uint32 pixel = getPixel(surface, px, py);
+            if (px > MIRROR_BORDER && mask == pixel) {
+                Uint32 sample = getPixel(screen,
+                        x - px + MIRROR_BORDER, y + py);
+                putPixel(screen, x + px, y + py, sample);
+            }
+            else {
+                Uint8 alpha = getAlpha(pixel, surface->format);
+                if (alpha == 255) {
+                    putPixel(screen, x + px, y + py, pixel);
+                }
+            }
+        }
+    }
+}
+
 //-----------------------------------------------------------------
 /**
  * Get Alpha component.

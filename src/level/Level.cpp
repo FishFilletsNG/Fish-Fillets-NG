@@ -555,6 +555,7 @@ Level::registerGameFuncs()
     m_script->registerFunc("model_runAnim", script_model_runAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
     m_script->registerFunc("model_useSpecialAnim", script_model_useSpecialAnim);
+    m_script->registerFunc("model_setEffect", script_model_setEffect);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
     m_script->registerFunc("model_getAction", script_model_getAction);
     m_script->registerFunc("model_getState", script_model_getState);

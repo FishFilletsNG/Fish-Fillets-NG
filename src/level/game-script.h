@@ -20,6 +20,7 @@ extern int script_model_addDuplexAnim(lua_State *L) throw();
 extern int script_model_runAnim(lua_State *L) throw();
 extern int script_model_setAnim(lua_State *L) throw();
 extern int script_model_useSpecialAnim(lua_State *L) throw();
+extern int script_model_setEffect(lua_State *L) throw();
 extern int script_model_getLoc(lua_State *L) throw();
 extern int script_model_getAction(lua_State *L) throw();
 extern int script_model_getState(lua_State *L) throw();

@@ -16,11 +16,14 @@ class ViewEffect {
     private:
         static const int DISINT_START = 400;
         static const int DISINT_SPEED = 30;
+        static const int MIRROR_BORDER = 3;
         eEffect m_effect;
         int m_disint;
     private:
         void blitNone(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
         void blitDisInt(SDL_Surface *screen, SDL_Surface *surface,
+                int x, int y);
+        void blitMirror(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
         Uint8 getAlpha(Uint32 pixel, SDL_PixelFormat *fmt);
         Uint32 getPixel(SDL_Surface *surface, int x, int y);

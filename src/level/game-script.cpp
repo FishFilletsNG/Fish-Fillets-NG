@@ -269,6 +269,36 @@ script_model_useSpecialAnim(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * void model_setEffect(model_index, effect_name)
+ *
+ * Set special view effect.
+ * available effects: "none", "mirror"
+ */
+    int
+script_model_setEffect(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    std::string effect_name = luaL_checkstring(L, 2);
+
+    Cube *model = getModel(L, model_index);
+    if ("none" == effect_name) {
+        model->anim()->setEffect(ViewEffect::EFFECT_NONE);
+    }
+    else if ("mirror" == effect_name) {
+        model->anim()->setEffect(ViewEffect::EFFECT_MIRROR);
+    }
+    else {
+        ExInfo error = ExInfo("unknown view effect")
+            .addInfo("effect", effect_name);
+        LOG_WARNING(error);
+        luaL_error(L, error.what());
+    }
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
  * (x, y) model_getLoc(model_index)
  */
     int
