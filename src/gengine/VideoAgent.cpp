@@ -146,21 +146,15 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     int
 VideoAgent::getVideoFlags()
 {
-    int videoFlags;
-    const SDL_VideoInfo *videoInfo;
-
-    videoInfo = SDL_GetVideoInfo();
-    if (NULL == videoInfo) {
+    const SDL_VideoInfo *videoInfo = SDL_GetVideoInfo();
+    if (!videoInfo) {
         throw SDLException(ExInfo("GetVideoInfo"));
     }
 
-    // the flags to pass to SDL_SetVideoMode
-    videoFlags  = 0;
+    int videoFlags  = 0;
     videoFlags |= SDL_HWPALETTE;
-    //NOTE: any bpp
     videoFlags |= SDL_ANYFORMAT;
 
-    // This checks to see if surfaces can be stored in memory
     if (videoInfo->hw_available) {
         videoFlags |= SDL_HWSURFACE;
         videoFlags |= SDL_DOUBLEBUF;
