@@ -446,22 +446,39 @@ script_model_change_turnSide(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_change_setLocation(model_index, x, y)
- *
- * Change X,Y.
+ * void model_setViewShift(model_index, shift_x, shift_y)
+ * Shift view (used for obsolete animation effects).
  */
     int
-script_model_change_setLocation(lua_State *L) throw()
+script_model_setViewShift(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    int x = luaL_checkint(L, 2);
-    int y = luaL_checkint(L, 3);
+    int shift_x = luaL_checkint(L, 2);
+    int shift_y = luaL_checkint(L, 3);
     Cube *model = getModel(L, model_index);
-    model->change_setLocation(V2(x, y));
+    model->anim()->setViewShift(V2(shift_x, shift_y));
 
     END_NOEXCEPTION;
     return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * shift_x, shift_y model_getViewShift(model_index)
+ */
+    int
+script_model_getViewShift(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = getModel(L, model_index);
+    V2 shift = model->anim()->getViewShift();
+
+    lua_pushnumber(L, shift.getX());
+    lua_pushnumber(L, shift.getY());
+    END_NOEXCEPTION;
+    //NOTE: return shift_x, shift_y
+    return 2;
 }
 //-----------------------------------------------------------------
 /**

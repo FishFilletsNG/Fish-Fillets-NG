@@ -101,12 +101,6 @@ Cube::isInvisible()
     return m_anim->isInvisible();
 }
 //-----------------------------------------------------------------
-    Anim *
-Cube::anim()
-{
-    return m_anim;
-}
-//-----------------------------------------------------------------
 std::string
 Cube::toString() const
 {

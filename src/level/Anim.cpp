@@ -16,6 +16,7 @@
  * Create new animation sprite.
  */
 Anim::Anim()
+    : m_viewShift(0, 0)
 {
     m_animPack[SIDE_LEFT] = new ResImagePack();
     m_animPack[SIDE_RIGHT] = new ResImagePack();

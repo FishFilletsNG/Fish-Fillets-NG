@@ -71,7 +71,8 @@ class Cube : public NoCopy {
 
         bool isDisintegrated();
         bool isInvisible();
-        Anim *anim();
+        Anim *anim() { return m_anim; }
+        const Anim *const_anim() const { return m_anim; }
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; }
 

@@ -6,6 +6,7 @@ class ResImagePack;
 #include "NoCopy.h"
 #include "Path.h"
 #include "ViewEffect.h"
+#include "V2.h"
 
 #include "SDL.h"
 
@@ -20,6 +21,7 @@ class Anim : public NoCopy {
         };
     private:
         ViewEffect m_effect;
+        V2 m_viewShift;
         ResImagePack *m_animPack[2];
         std::string m_animName;
         int m_animPhase;
@@ -41,10 +43,12 @@ class Anim : public NoCopy {
         void setAnim(const std::string &name, int phase);
         void useSpecialAnim(const std::string &name, int phase);
 
-        void setEffect(ViewEffect::eEffect effect)
-        { m_effect.setEffect(effect); }
         bool isDisintegrated() const { return m_effect.isDisintegrated(); }
         bool isInvisible() const { return m_effect.isInvisible(); }
+        void setEffect(ViewEffect::eEffect effect)
+        { m_effect.setEffect(effect); }
+        void setViewShift(const V2 &shift) { m_viewShift = shift; }
+        V2 getViewShift() const { return m_viewShift; };
 };
 
 #endif

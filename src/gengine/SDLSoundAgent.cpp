@@ -127,9 +127,6 @@ SDLSoundAgent::playMusic(const Path &file,
     m_music = Mix_LoadMUS(file.getNative().c_str());
     if (m_music && (0 == Mix_PlayMusic(m_music, loops))) {
         Mix_HookMusicFinished(musicFinished);
-        LOG_DEBUG(ExInfo("playing music")
-                .addInfo("music", file.getNative())
-                .addInfo("loops", loops));
     }
     else {
         LOG_WARNING(ExInfo("cannot play music")

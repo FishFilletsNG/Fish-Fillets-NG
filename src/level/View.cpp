@@ -116,5 +116,6 @@ View::getScreenPos(const Cube *model) const
         shift = shift.scale(m_animShift * m_shiftSize);
     }
 
-    return model->getLocation().scale(SCALE).plus(shift);
+    V2 view_shift = model->const_anim()->getViewShift();
+    return model->getLocation().plus(view_shift).scale(SCALE).plus(shift);
 }

@@ -63,8 +63,8 @@ Application::init(int argc, char *argv[])
 {
     MessagerAgent::agent()->addListener(this);
     m_agents->init(Name::VIDEO_NAME);
-    OptionAgent::agent()->parseCmdOpt(argc, argv);
     prepareLogLevel();
+    OptionAgent::agent()->parseCmdOpt(argc, argv);
     customizeGame();
 
     m_agents->init(Name::INPUT_NAME);

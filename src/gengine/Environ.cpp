@@ -63,11 +63,11 @@ Environ::store(const Path &file)
     void
 Environ::setParam(const std::string &name, const std::string &value)
 {
-    LOG_DEBUG(ExInfo("setParam")
-            .addInfo("param", name)
-            .addInfo("value", value));
     if (m_values[name] != value) {
         m_values[name] = value;
+        LOG_DEBUG(ExInfo("setParam")
+                .addInfo("param", name)
+                .addInfo("value", value));
 
         t_watchers::iterator it = m_watchers.find(name);
         if (m_watchers.end() != it) {

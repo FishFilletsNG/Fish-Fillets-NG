@@ -25,7 +25,8 @@ extern int script_model_getW(lua_State *L) throw();
 extern int script_model_getH(lua_State *L) throw();
 extern int script_model_setGoal(lua_State *L) throw();
 extern int script_model_change_turnSide(lua_State *L) throw();
-extern int script_model_change_setLocation(lua_State *L) throw();
+extern int script_model_setViewShift(lua_State *L) throw();
+extern int script_model_getViewShift(lua_State *L) throw();
 extern int script_model_setBusy(lua_State *L) throw();
 extern int script_model_equals(lua_State *L) throw();
 

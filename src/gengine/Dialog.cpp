@@ -58,10 +58,12 @@ Dialog::talk(int volume, int loops)
     return channel;
 }
 //-----------------------------------------------------------------
+/**
+ * Override this method to run subtitles.
+ */
     void
 Dialog::runSubtitle() const
 {
-    //NOTE: override this method to run subtitles
     LOG_INFO(ExInfo("subtitle")
             .addInfo("content", m_subtitle));
 }
