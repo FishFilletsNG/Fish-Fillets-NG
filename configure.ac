@@ -5,7 +5,7 @@ AC_CANONICAL_TARGET
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
 # of the software package so it can generate rules for building a source
 # archive.
-AM_INIT_AUTOMAKE(fillets-ng, 0.1.0)
+AM_INIT_AUTOMAKE(fillets-ng, 0.1.1)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -14,18 +14,44 @@ AC_PROG_INSTALL
 AC_PROG_RANLIB
 
 ###################################################
-# Check for lua50, and define LUA_CFLAGS and LUA_LIBS
-PKG_CHECK_MODULES(LUA, lua50)
+# Check for lua and define LUA_CFLAGS and LUA_LIBS
+
+dnl ---- lua check ------------- (stolen from Stratagus)
+AC_ARG_WITH(lua-libs, 
+    AC_HELP_STRING([--with-lua=PFX], [Prefix where Lua is installed]),
+    LUAPFX="$withval", LUAPFX="")
+if test x$LUAPFX != x ; then
+    LUA_CFLAGS="-I$LUAPFX"
+    LUA_LIBS="-L$LUAPFX -llua -llualib"
+else
+dnl Debian, and possibly other systems, include this script...
+    AC_CHECK_PROGS(LUACONFIG, [lua-config lua-config50 lua-config5.0], "")
+    if test x$LUACONFIG != x; then
+        LUA_CFLAGS="`[$LUACONFIG --include]`"
+        LUA_LIBS="`[$LUACONFIG --libs]`"
+    else dnl ...otherwise, attempt to guess
+        LUA_CFLAGS="$CFLAGS -I/usr/include -I/usr/local/include"
+        LUA_LIBS="$LIBS -L/usr/lib -L/usr/local/lib"
+        AC_CHECK_LIB(lua, lua_getfenv, LUA_LIBS="$LUA_LIBS -llua",
+        AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
+        AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
+        [AC_MSG_ERROR(Lua5 is required)], -lm), -lm), -lm)
+           AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
+           AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS 
+-llualib50",
+           AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS 
+-llualib5.0",
+           [AC_MSG_ERROR(Lualib5 is required)], $LUA_LIBS -lm), $LUA_LIBS 
+-lm),$LUA_LIBS -lm)
+       fi
+fi
 AC_SUBST(LUA_CFLAGS)
 AC_SUBST(LUA_LIBS)
+dnl ---- end of lua check ------
 
-# Check for lualib50, and define LUALIB_CFLAGS and LUALIB_LIBS
-PKG_CHECK_MODULES(LUALIB, lualib50)
-AC_SUBST(LUALIB_CFLAGS)
-AC_SUBST(LUALIB_LIBS)
 
 ###################################################
-# Check for XML, and define SDL_CFLAGS and SDL_LIBS
+# Check for SDL, and define SDL_CFLAGS and SDL_LIBS
 SDL_VERSION=1.2.0
 AM_PATH_SDL($SDL_VERSION,
         :,
@@ -35,12 +61,12 @@ AM_PATH_SDL($SDL_VERSION,
 ###################################################
 # Checks for C libraries.
 # SDL_mixer
-AC_CHECK_LIB([SDL_mixer], [main],
+AC_CHECK_LIB([SDL_mixer], [Mix_OpenAudio],
              LIBS="-lSDL_mixer $LIBS",
              AC_MSG_ERROR([*** SDL_mixer-devel library not found!])
 )
 # SDL_image
-AC_CHECK_LIB([SDL_image], [main],
+AC_CHECK_LIB([SDL_image], [IMG_Load],
              LIBS="-lSDL_image $LIBS",
              AC_MSG_ERROR([*** SDL_image-devel library not found!])
 )
@@ -59,7 +85,8 @@ AC_LANG(C++)
 # boost_filesystem
 AC_CHECK_LIB([boost_filesystem], [main],
              LIBS="-lboost_filesystem $LIBS",
-             AC_MSG_ERROR([*** boost_filesystem-devel library not found!])
+             AC_MSG_ERROR([*** boost_filesystem-devel library not found!
+                   You can download boost from http://www.boost.org])
  )
 
 ###################################################
