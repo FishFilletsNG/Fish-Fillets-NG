@@ -156,9 +156,7 @@ script_model_isTalking(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    Actor *model = getPlanner(L)->getActor(model_index);
-    bool talking = DialogAgent::agent()->isTalking(model);
-
+    bool talking = DialogAgent::agent()->isTalking(model_index);
     lua_pushboolean(L, talking);
     END_NOEXCEPTION;
     //NOTE: return talking
@@ -166,20 +164,16 @@ script_model_isTalking(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_planDialog(model_index, delay, name, busy=false)
+ * void model_talk(model_index, name)
  */
     int
-script_model_planDialog(lua_State *L) throw()
+script_model_talk(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    int delay = luaL_checkint(L, 2);
-    const char *name = luaL_checkstring(L, 3);
-    bool busy = lua_toboolean(L, 4);
+    const char *name = luaL_checkstring(L, 2);
 
-    Actor *model = getPlanner(L)->getActor(model_index);
-    DialogAgent::agent()->planDialog(name, delay, model, busy);
-
+    DialogAgent::agent()->actorTalk(model_index, name);
     END_NOEXCEPTION;
     return 0;
 }

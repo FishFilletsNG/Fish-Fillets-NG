@@ -9,34 +9,20 @@
 #include "PlannedDialog.h"
 
 #include "Dialog.h"
-#include "Actor.h"
 #include "TimerAgent.h"
 
 //-----------------------------------------------------------------
 /**
  * Structure to store planned dialog.
  * @param actor who will talk
- * @param delay when will talk
  * @param dialog what will talk, shared resource
- * @param busy whether actor will be set to busy during talk
  */
-PlannedDialog::PlannedDialog(Actor *actor, int delay, Dialog *dialog,
-        bool busy)
+PlannedDialog::PlannedDialog(int actor, Dialog *dialog)
 {
     m_actor = actor;
-    m_delay = delay;
     m_dialog = dialog;
     m_channel = -1;
-    m_busy = busy;
-    m_running = false;
     m_endtime = 0;
-}
-//-----------------------------------------------------------------
-PlannedDialog::~PlannedDialog()
-{
-    if (m_running && m_busy) {
-        m_actor->setBusy(false);
-    }
 }
 //-----------------------------------------------------------------
 /**
@@ -46,20 +32,14 @@ void
 PlannedDialog::talk()
 {
     m_channel = m_dialog->talk();
-
-    m_running = true;
     m_endtime = m_dialog->getMinTime() + TimerAgent::agent()->getCycles();
-
-    if (m_busy) {
-        m_actor->setBusy(true);
-    }
 }
 
 //-----------------------------------------------------------------
 bool
-PlannedDialog::equalsActor(const Actor *other) const
+PlannedDialog::equalsActor(int other) const
 {
-    return m_actor->equals(other);
+    return m_actor == other;
 }
 //-----------------------------------------------------------------
 /**

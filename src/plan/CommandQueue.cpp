@@ -28,9 +28,9 @@ CommandQueue::~CommandQueue()
  * Add new command at the end of queue.
  */
 void
-CommandQueue::planCommand(Command *command)
+CommandQueue::planCommand(Command *new_command)
 {
-    m_commands.push_back(command);
+    m_commands.push_back(new_command);
 }
 //-----------------------------------------------------------------
 /**

@@ -180,7 +180,7 @@ SubTitleAgent::lowestY()
  * Kill all running subtitles.
  */
 void
-SubTitleAgent::killTalk()
+SubTitleAgent::killTalks()
 {
     t_titles::iterator end = m_titles.end();
     for (t_titles::iterator i = m_titles.begin(); i != end; ++i) {
@@ -195,6 +195,6 @@ SubTitleAgent::killTalk()
     void
 SubTitleAgent::removeAll()
 {
-    killTalk();
+    killTalks();
     m_fonts->removeAll();
 }

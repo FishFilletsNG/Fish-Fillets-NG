@@ -119,16 +119,10 @@ void
 OptionAgent::prepareLang()
 {
     setlocale(LC_ALL, "");
-    LOG_DEBUG(ExInfo("TEST: lang")
-            .addInfo("lang", getParam("lang")));
     if (getParam("lang").empty()) {
         char *form = setlocale(LC_MESSAGES, NULL);
-        LOG_DEBUG(ExInfo("TEST: form")
-            .addInfo("form", form || "(null)"));
         if (form && strlen(form) >= 2) {
             setParam("lang", std::string(form, 2));
-            LOG_DEBUG(ExInfo("TEST: setParam")
-                .addInfo("lang", getParam("lang")));
         }
     }
 }

@@ -53,7 +53,7 @@ SDLSoundAgent::own_shutdown()
 /**
  * Play this sound.
  * @param sound chunk to play
- * @param priority = how much channels can be used at one,
+ * @param priority = how much channels can be used at once,
  * 0 is the lowest priority
  * -1 is absolute priority
  *

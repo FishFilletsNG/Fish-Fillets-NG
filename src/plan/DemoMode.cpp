@@ -8,7 +8,6 @@
  */
 #include "DemoMode.h"
 
-#include "Actor.h"
 #include "Picture.h"
 #include "StateManager.h"
 #include "DemoInput.h"
@@ -33,12 +32,12 @@ DemoMode::~DemoMode()
 }
 //-----------------------------------------------------------------
     void
-DemoMode::runDemo(Picture *bg, const Path &demoscript)
+DemoMode::runDemo(Picture *new_bg, const Path &demoscript)
 {
     if (m_bg) {
         delete m_bg;
     }
-    m_bg = bg;
+    m_bg = new_bg;
     m_script->doFile(demoscript);
 }
 
@@ -46,7 +45,7 @@ DemoMode::runDemo(Picture *bg, const Path &demoscript)
 void
 DemoMode::own_updateState()
 {
-    if (finishPlan()) {
+    if (satisfyPlan()) {
         quitState();
     }
 }
@@ -64,32 +63,8 @@ DemoMode::own_cleanState()
         m_display = NULL;
     }
 
-    DialogAgent::agent()->killPlan();
-    DialogAgent::agent()->killTalk();
-    t_actors::iterator end = m_actors.end();
-    for (t_actors::iterator i = m_actors.begin(); i != end; ++i) {
-        delete i->second;
-    }
-    m_actors.clear();
-}
-//-----------------------------------------------------------------
-/**
- * Return existing or create new actor.
- */
-    Actor *
-DemoMode::getActor(int model_index)
-{
-    Actor *result = NULL;
-    t_actors::iterator it = m_actors.find(model_index);
-    if (m_actors.end() == it) {
-        result = new Actor();
-        result->setIndex(model_index);
-        m_actors[model_index] = result;
-    }
-    else {
-        result = it->second;
-    }
-    return result;
+    interruptPlan();
+    DialogAgent::agent()->killTalks();
 }
 //-----------------------------------------------------------------
 /**

@@ -2,7 +2,7 @@
 #define HEADER_PLANNEDDIALOG_H
 
 class Dialog;
-class Actor;
+
 #include "NoCopy.h"
 
 #include <string>
@@ -10,29 +10,22 @@ class Actor;
 /**
  * Active dialog.
  */
-class PlannedDialog: public NoCopy {
+class PlannedDialog : public NoCopy {
     private:
-        Actor *m_actor;
-        int m_delay;
+        int m_actor;
         Dialog *m_dialog;
         int m_channel;
-        bool m_busy;
-        bool m_running;
         int m_endtime;
     private:
         bool isPlaying();
     public:
-        PlannedDialog(Actor *actor, int delay, Dialog *dialog,
-                bool busy);
-        ~PlannedDialog();
+        PlannedDialog(int actor, Dialog *dialog);
 
         void talk();
         void killTalk();
 
         bool isTalking();
-        bool equalsActor(const Actor *other) const;
-        int getDelay() const { return m_delay; }
-        void decDelay() { m_delay--; }
+        bool equalsActor(int other) const;
 };
 
 #endif

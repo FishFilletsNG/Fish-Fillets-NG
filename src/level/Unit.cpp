@@ -127,17 +127,19 @@ Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons)
 char
 Unit::driveOrder(char move)
 {
-    if (m_symbols.getLeft() == move) {
-        return goLeft();
-    }
-    if (m_symbols.getRight() == move) {
-        return goRight();
-    }
-    if (m_symbols.getUp() == move) {
-        return goUp();
-    }
-    if (m_symbols.getDown() == move) {
-        return goDown();
+    if (canDrive()) {
+        if (m_symbols.getLeft() == move) {
+            return goLeft();
+        }
+        if (m_symbols.getRight() == move) {
+            return goRight();
+        }
+        if (m_symbols.getUp() == move) {
+            return goUp();
+        }
+        if (m_symbols.getDown() == move) {
+            return goDown();
+        }
     }
     return ControlSym::SYM_NONE;
 }

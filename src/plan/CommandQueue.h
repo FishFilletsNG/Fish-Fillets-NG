@@ -19,7 +19,7 @@ class CommandQueue : public NoCopy {
         CommandQueue();
         virtual ~CommandQueue();
 
-        void planCommand(Command *command);
+        void planCommand(Command *new_command);
         bool executeFirst();
         void removeAll();
         bool empty() const { return m_commands.empty(); }

@@ -36,7 +36,7 @@ Planner::registerScriptFuncs()
     m_script->registerFunc("dialog_addFont", script_dialog_addFont);
     m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
     m_script->registerFunc("model_isTalking", script_model_isTalking);
-    m_script->registerFunc("model_planDialog", script_model_planDialog);
+    m_script->registerFunc("model_talk", script_model_talk);
 
     m_script->registerFunc("sound_playMusic", script_sound_playMusic);
     m_script->registerFunc("sound_stopMusic", script_sound_stopMusic);
@@ -59,11 +59,20 @@ Planner::scriptInclude(const Path &filename)
 }
 //-----------------------------------------------------------------
 /**
+ * Run this command.
+ */
+    void
+Planner::scriptDo(const std::string &input)
+{
+    m_script->doString(input);
+}
+//-----------------------------------------------------------------
+/**
  * Execute next action.
  * @return true for finished plan
  */
     bool
-Planner::finishPlan()
+Planner::satisfyPlan()
 {
     m_plan->executeFirst();
     return m_plan->empty();

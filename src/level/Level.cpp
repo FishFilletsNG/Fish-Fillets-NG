@@ -8,24 +8,21 @@
  */
 #include "Level.h"
 
-#include "Room.h"
-#include "ScriptState.h"
 #include "StateManager.h"
 #include "PhaseLocker.h"
 #include "LevelInput.h"
 #include "LevelStatus.h"
+#include "LevelScript.h"
+#include "CommandQueue.h"
 
 #include "Log.h"
+#include "Room.h"
+#include "View.h"
 #include "OptionAgent.h"
-#include "LogicException.h"
 #include "LoadException.h"
 #include "ScriptException.h"
-#include "SoundAgent.h"
 #include "DemoMode.h"
-#include "View.h"
 #include "minmax.h"
-
-#include "game-script.h"
 
 #include <assert.h>
 
@@ -37,15 +34,15 @@
 : m_codename(codename), m_datafile(datafile)
 {
     m_levelStatus = NULL;
-    m_room = NULL;
-    m_restartCounter = 0;
+    m_restartCounter = 1;
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
     m_loadedMoves = "";
     m_loadSpeed = 1;
     m_depth = depth;
     m_locker = new PhaseLocker();
-    registerGameFuncs();
+    m_levelScript = new LevelScript(this);
+    m_show = new CommandQueue();
     takeHandler(new LevelInput(this));
 }
 //-----------------------------------------------------------------
@@ -53,6 +50,9 @@ Level::~Level()
 {
     own_cleanState();
     delete m_locker;
+    //NOTE: m_show must be removed before levelScript
+    delete m_show;
+    delete m_levelScript;
 }
 
 //-----------------------------------------------------------------
@@ -66,7 +66,7 @@ Level::own_initState()
     m_roomState = ROOM_RUNNING;
     m_loadedMoves = "";
     m_loadSpeed = 1;
-    m_script->doFile(m_datafile);
+    m_levelScript->scriptInclude(m_datafile);
 }
 //-----------------------------------------------------------------
     void
@@ -87,16 +87,16 @@ Level::own_updateState()
     void
 Level::own_pauseState()
 {
-    if (m_room) {
-        m_room->deactivate();
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->deactivate();
     }
 }
 //-----------------------------------------------------------------
     void
 Level::own_resumeState()
 {
-    if (m_room) {
-        m_room->activate();
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->activate();
     }
 }
 //-----------------------------------------------------------------
@@ -106,10 +106,7 @@ Level::own_resumeState()
     void
 Level::own_cleanState()
 {
-    if (m_room) {
-        delete m_room;
-        m_room = NULL;
-    }
+    m_levelScript->cleanRoom();
 }
 
 //-----------------------------------------------------------------
@@ -122,8 +119,8 @@ Level::nextAction()
 {
     bool room_complete = false;
     if (m_loadedMoves.empty()) {
-        if (isPlanning()) {
-            room_complete = nextPlanAction();
+        if (isShowing()) {
+            room_complete = nextShowAction();
         }
         else {
             room_complete = nextPlayerAction();
@@ -133,12 +130,22 @@ Level::nextAction()
         room_complete = nextLoadAction();
     }
 
+    return satisfyRoom(room_complete);
+}
+//-----------------------------------------------------------------
+/**
+ * Update room goal state.
+ * @return true for finished room (solved or wrong)
+ */
+    bool
+Level::satisfyRoom(bool room_complete)
+{
     bool finished = false;
     if (m_roomState == ROOM_RUNNING) {
         if (room_complete) {
             m_roomState = ROOM_COMPLETE;
         }
-        else if (m_room->cannotMove()) {
+        else if (m_levelScript->room()->cannotMove()) {
             m_roomState = ROOM_WRONG;
         }
     }
@@ -163,7 +170,7 @@ Level::countDown()
                 m_countdown = 5;
                 break;
             case ROOM_WRONG:
-                //NOTE: don't forget change briefcase_help_demo too
+                //NOTE: don't forget to change briefcase_help_demo too
                 m_countdown = 70;
                 break;
             default:
@@ -197,7 +204,7 @@ Level::countDown()
 Level::updateLevel()
 {
     if (m_loadedMoves.empty()) {
-        m_script->doString("script_update()");
+        m_levelScript->updateScript();
     }
 }
 //-----------------------------------------------------------------
@@ -224,81 +231,11 @@ Level::finishLevel()
 Level::nextPlayerAction()
 {
     bool room_complete = false;
-    if (m_room) {
-        room_complete = m_room->nextRound();
+    if (m_levelScript->isRoom()) {
+        room_complete = m_levelScript->room()->nextRound();
     }
 
     return room_complete;
-}
-//-----------------------------------------------------------------
-/**
- * Check whether room is ready.
- * @throws LogicException when room is not ready
- */
-    void
-Level::checkRoom()
-{
-    if (NULL == m_room) {
-        throw LogicException(ExInfo("room is not ready"));
-    }
-}
-//-----------------------------------------------------------------
-/**
- * Create new room
- * and change screen resolution.
- */
-    void
-Level::createRoom(int w, int h, const Path &picture)
-{
-    if (m_room) {
-        delete m_room;
-        m_room = NULL;
-    }
-    m_room = new Room(w, h, picture, m_locker);
-
-    //TODO: set with and height in one step
-    OptionAgent *options = OptionAgent::agent();
-    options->setParam("caption", m_desc);
-    options->setParam("screen_width", w * View::SCALE);
-    options->setParam("screen_height", h * View::SCALE);
-}
-//-----------------------------------------------------------------
-/**
- * Add model at scene.
- * @return model index
- * @throws LogicException when room is not created yet
- */
-    int
-Level::addModel(Cube *model, Unit *newUnit)
-{
-    if (NULL == m_room) {
-        delete model;
-        checkRoom();
-    }
-    return m_room->addModel(model, newUnit);
-}
-//-----------------------------------------------------------------
-    Actor *
-Level::getActor(int model_index)
-{
-    return getModel(model_index);
-}
-//-----------------------------------------------------------------
-    Cube *
-Level::getModel(int model_index)
-{
-    checkRoom();
-    return m_room->getModel(model_index);
-}
-//-----------------------------------------------------------------
-/**
- * Returns model at location.
- */
-    Cube *
-Level::askField(const V2 &loc)
-{
-    checkRoom();
-    return m_room->askField(loc);
 }
 
 //-----------------------------------------------------------------
@@ -309,17 +246,16 @@ Level::askField(const V2 &loc)
     void
 Level::saveSolution()
 {
-    checkRoom();
-    std::string current_moves = m_room->getMoves();
+    std::string current_moves = m_levelScript->room()->getMoves();
 
     m_loadedMoves = "";
     Path oldSolution = Path::dataReadPath("solved/" + m_codename + ".lua");
     if (oldSolution.exists()) {
         try {
             //NOTE: hack, loads old solution to the m_loadedMoves
-            m_script->doString("saved_moves=nil");
-            m_script->doFile(oldSolution);
-            m_script->doString("script_load()");
+            m_levelScript->scriptDo("saved_moves=nil");
+            m_levelScript->scriptInclude(oldSolution);
+            m_levelScript->scriptDo("script_load()");
         }
         catch (ScriptException &e) {
             LOG_WARNING(e.info());
@@ -352,11 +288,11 @@ Level::saveSolution()
     void
 Level::saveGame(const std::string &models)
 {
-    if (m_room) {
+    if (m_levelScript->isRoom()) {
         Path file = Path::dataWritePath("saves/" + m_codename + ".lua");
         FILE *saveFile = fopen(file.getNative().c_str(), "w");
         if (saveFile) {
-            std::string moves = m_room->getMoves();
+            std::string moves = m_levelScript->room()->getMoves();
             fputs("\nsaved_moves = '", saveFile);
             fputs(moves.c_str(), saveFile);
             fputs("'\n", saveFile);
@@ -399,7 +335,7 @@ Level::nextLoadAction()
             char symbol = m_loadedMoves[0];
             m_loadedMoves.erase(0, 1);
 
-            room_complete = m_room->loadMove(symbol);
+            room_complete = m_levelScript->room()->loadMove(symbol);
         }
         catch (LoadException &e) {
             throw LoadException(ExInfo(e.info())
@@ -408,24 +344,24 @@ Level::nextLoadAction()
     }
 
     if (m_loadedMoves.empty()) {
-        m_script->doString("script_loadState()");
+        m_levelScript->scriptDo("script_loadState()");
     }
     return room_complete;
 }
 
 //-----------------------------------------------------------------
 /**
- * Let plan execute.
+ * Let show execute.
  * @return true for finished level
  */
     bool
-Level::nextPlanAction()
+Level::nextShowAction()
 {
     bool room_complete = false;
-    if (m_room) {
-        m_room->beginFall();
-        finishPlan();
-        room_complete = m_room->finishRound();
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->beginFall();
+        m_show->executeFirst();
+        room_complete = m_levelScript->room()->finishRound();
     }
 
     return room_complete;
@@ -453,8 +389,7 @@ Level::action_restart()
     bool
 Level::action_move(char symbol)
 {
-    checkRoom();
-    return m_room->makeMove(symbol);
+    return m_levelScript->room()->makeMove(symbol);
 }
 //-----------------------------------------------------------------
 /**
@@ -464,8 +399,8 @@ Level::action_move(char symbol)
     bool
 Level::action_save()
 {
-    if (m_room->isSolvable()) {
-        m_script->doString("script_save()");
+    if (m_levelScript->room()->isSolvable()) {
+        m_levelScript->scriptDo("script_save()");
     }
     else {
         LOG_INFO(ExInfo("wrong way, no save is made"));
@@ -483,8 +418,8 @@ Level::action_load()
     Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
     if (file.exists()) {
         action_restart();
-        m_script->doFile(file);
-        m_script->doString("script_load()");
+        m_levelScript->scriptInclude(file);
+        m_levelScript->scriptDo("script_load()");
     }
     else {
         LOG_INFO(ExInfo("there is no file to load")
@@ -497,89 +432,59 @@ Level::action_load()
     void
 Level::switchFish()
 {
-    if (m_room) {
-        m_room->switchFish();
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->switchFish();
     }
 }
 //-----------------------------------------------------------------
     void
 Level::controlEvent(const KeyStroke &stroke)
 {
-    if (m_room) {
-        m_room->controlEvent(stroke);
+    if (m_levelScript->isRoom()) {
+        m_levelScript->room()->controlEvent(stroke);
     }
 }
 //-----------------------------------------------------------------
-    int
-Level::getCycles()
+/**
+ * Create new room
+ * and change screen resolution.
+ */
+    void
+Level::createRoom(int w, int h, const Path &picture)
 {
-    checkRoom();
-    return m_room->getCycles();
+    m_levelScript->takeRoom(new Room(w, h, picture, m_locker, m_levelScript));
+
+    //TODO: set with and height in one step
+    OptionAgent *options = OptionAgent::agent();
+    options->setParam("caption", m_desc);
+    options->setParam("screen_width", w * View::SCALE);
+    options->setParam("screen_height", h * View::SCALE);
 }
 //-----------------------------------------------------------------
     void
-Level::addSound(const std::string &name, const Path &file)
-{
-    checkRoom();
-    m_room->addSound(name, file);
-}
-//-----------------------------------------------------------------
-    void
-Level::playSound(const std::string &name, int priority)
-{
-    checkRoom();
-    m_room->playSound(name, priority);
-}
-//-----------------------------------------------------------------
-    void
-Level::newDemo(Picture *bg, const Path &demofile)
+Level::newDemo(Picture *new_bg, const Path &demofile)
 {
     DemoMode *demo = new DemoMode();
     m_manager->pushState(demo);
-    demo->runDemo(bg, demofile);
+    demo->runDemo(new_bg, demofile);
+}
+
+//-----------------------------------------------------------------
+bool
+Level::isShowing() const
+{
+    return !m_show->empty();
 }
 //-----------------------------------------------------------------
-/**
- * Register functions usable from script.
- */
-    void
-Level::registerGameFuncs()
+void
+Level::interruptShow()
 {
-    m_script->registerFunc("game_createRoom", script_game_createRoom);
-    m_script->registerFunc("game_addModel", script_game_addModel);
-    m_script->registerFunc("game_save", script_game_save);
-    m_script->registerFunc("game_load", script_game_load);
-
-    m_script->registerFunc("game_action_move", script_game_action_move);
-    m_script->registerFunc("game_action_save", script_game_action_save);
-    m_script->registerFunc("game_action_load", script_game_action_load);
-    m_script->registerFunc("game_action_restart", script_game_action_restart);
-
-    m_script->registerFunc("model_addAnim", script_model_addAnim);
-    m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
-    m_script->registerFunc("model_runAnim", script_model_runAnim);
-    m_script->registerFunc("model_setAnim", script_model_setAnim);
-    m_script->registerFunc("model_useSpecialAnim", script_model_useSpecialAnim);
-    m_script->registerFunc("model_setEffect", script_model_setEffect);
-    m_script->registerFunc("model_getLoc", script_model_getLoc);
-    m_script->registerFunc("model_getAction", script_model_getAction);
-    m_script->registerFunc("model_getState", script_model_getState);
-    m_script->registerFunc("model_isAlive", script_model_isAlive);
-    m_script->registerFunc("model_isOut", script_model_isOut);
-    m_script->registerFunc("model_isLeft", script_model_isLeft);
-    m_script->registerFunc("model_getW", script_model_getW);
-    m_script->registerFunc("model_getH", script_model_getH);
-    m_script->registerFunc("model_setGoal", script_model_setGoal);
-    m_script->registerFunc("model_change_turnSide",
-            script_model_change_turnSide);
-    m_script->registerFunc("model_equals", script_model_equals);
-
-    m_script->registerFunc("game_getRestartCounter",
-            script_game_getRestartCounter);
-    m_script->registerFunc("game_getCycles", script_game_getCycles);
-    m_script->registerFunc("game_getDepth", script_game_getDepth);
-    m_script->registerFunc("game_newDemo", script_game_newDemo);
-
-    m_script->registerFunc("sound_addSound", script_sound_addSound);
-    m_script->registerFunc("sound_playSound", script_sound_playSound);
+    m_show->removeAll();
 }
+//-----------------------------------------------------------------
+void
+Level::planShow(Command *new_command)
+{
+    m_show->planCommand(new_command);
+}
+

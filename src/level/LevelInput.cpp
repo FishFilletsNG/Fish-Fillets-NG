@@ -46,25 +46,25 @@ LevelInput::keyEvent(const KeyStroke &stroke)
             m_level->quitState();
             break;
         case KEY_SWITCH:
-            if (!m_level->isPlanning()) {
+            if (!m_level->isShowing()) {
                 m_level->switchFish();
             }
             break;
         case KEY_SAVE:
-            if (!m_level->isPlanning()) {
+            if (!m_level->isShowing()) {
                 m_level->action_save();
             }
             break;
         case KEY_LOAD:
-            m_level->interruptPlan();
+            m_level->interruptShow();
             m_level->action_load();
             break;
         case KEY_RESTART:
-            m_level->interruptPlan();
+            m_level->interruptShow();
             m_level->action_restart();
             break;
         case -1:
-            if (!m_level->isPlanning()) {
+            if (!m_level->isShowing()) {
                 m_level->controlEvent(stroke);
             }
             break;

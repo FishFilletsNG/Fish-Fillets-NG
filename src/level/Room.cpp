@@ -13,17 +13,18 @@
 #include "ResSoundPack.h"
 #include "Controls.h"
 #include "PhaseLocker.h"
+#include "Planner.h"
 #include "View.h"
 
 #include "Log.h"
 #include "Rules.h"
 #include "LogicException.h"
 #include "SoundAgent.h"
-#include "SubTitleAgent.h"
-#include "DialogAgent.h"
 #include "LoadException.h"
 #include "Unit.h"
 #include "TimerAgent.h"
+#include "SubTitleAgent.h"
+#include "DialogAgent.h"
 #include "ModelList.h"
 
 //-----------------------------------------------------------------
@@ -34,9 +35,11 @@
  * @param picture room background
  * @param locker shared locker for anim
  */
-Room::Room(int w, int h, const Path &picture, PhaseLocker *locker)
+Room::Room(int w, int h, const Path &picture,
+        PhaseLocker *locker, Planner *levelScript)
 {
     m_locker = locker;
+    m_levelScript = levelScript;
     m_bg = new Picture(picture, V2(0, 0));
     m_field = new Field(w, h);
     m_controls = new Controls(m_locker);
@@ -52,9 +55,7 @@ Room::Room(int w, int h, const Path &picture, PhaseLocker *locker)
  */
 Room::~Room()
 {
-    //NOTE: dialogs must be killed because pointer to the actors
-    SubTitleAgent::agent()->removeAll();
-    DialogAgent::agent()->removeAll();
+    killPlan();
     m_soundPack->removeAll();
     delete m_soundPack;
     delete m_controls;
@@ -68,6 +69,14 @@ Room::~Room()
 
     delete m_field;
     delete m_bg;
+}
+//-----------------------------------------------------------------
+void
+Room::killPlan()
+{
+    DialogAgent::agent()->killTalks();
+    SubTitleAgent::agent()->killTalks();
+    m_levelScript->interruptPlan();
 }
 //-----------------------------------------------------------------
 /**
@@ -87,9 +96,7 @@ Room::activate()
 void
 Room::deactivate()
 {
-    DialogAgent::agent()->killPlan();
-    DialogAgent::agent()->killTalk();
-    SubTitleAgent::agent()->killTalk();
+    killPlan();
 
     m_bg->deactivate();
     m_view->deactivate();
@@ -102,18 +109,18 @@ Room::deactivate()
  * @return model index
  */
     int
-Room::addModel(Cube *model, Unit *newUnit)
+Room::addModel(Cube *new_model, Unit *new_unit)
 {
-    model->rules()->takeField(m_field);
-    m_models.push_back(model);
+    new_model->rules()->takeField(m_field);
+    m_models.push_back(new_model);
 
-    if (newUnit) {
-        newUnit->takeModel(model);
-        m_controls->addUnit(newUnit);
+    if (new_unit) {
+        new_unit->takeModel(new_model);
+        m_controls->addUnit(new_unit);
     }
 
     int model_index = m_models.size() - 1;
-    model->setIndex(model_index);
+    new_model->setIndex(model_index);
     return model_index;
 }
 //-----------------------------------------------------------------
@@ -192,7 +199,7 @@ Room::playImpact()
 void
 Room::playDead(Cube *model)
 {
-    DialogAgent::agent()->killSound(model);
+    DialogAgent::agent()->killSound(model->getIndex());
     switch (model->getPower()) {
         case Cube::LIGHT:
             SoundAgent::agent()->playSound(
@@ -238,7 +245,7 @@ Room::prepareRound()
     }
 
     if (interrupt) {
-        DialogAgent::agent()->killPlan();
+        m_levelScript->interruptPlan();
         m_controls->checkActive();
     }
 }
@@ -404,17 +411,19 @@ Room::isSolvable()
 
 //-----------------------------------------------------------------
 int
-Room::getW() const {
+Room::getW() const
+{
     return m_field->getW();
 }
 //-----------------------------------------------------------------
 int
-Room::getH() const {
+Room::getH() const
+{
     return m_field->getH();
 }
 //-----------------------------------------------------------------
 int
-Room::getCycles()
+Room::getCycles() const
 {
     return TimerAgent::agent()->getCycles() - m_startTime;
 }

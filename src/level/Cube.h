@@ -6,15 +6,15 @@ class Rules;
 class Anim;
 
 #include "V2.h"
-#include "Actor.h"
 #include "Goal.h"
+#include "NoCopy.h"
 
 #include <vector>
 
 /**
  * A object in game.
  */
-class Cube : public Actor {
+class Cube : public NoCopy {
     public:
         typedef std::vector<Cube*> t_models;
         enum eWeight {
@@ -24,6 +24,8 @@ class Cube : public Actor {
             FIXED
         };
     private:
+        int m_index;
+        bool m_busy;
         V2 m_loc;
         bool m_alive;
         bool m_out;
@@ -43,6 +45,10 @@ class Cube : public Actor {
                 Shape *shape);
         ~Cube();
         void setGoal(const Goal &goal) { m_goal = goal; }
+        void setIndex(int index) { m_index = index; }
+        int getIndex() const { return m_index; }
+        bool isBusy() const { return m_busy; }
+        void setBusy(bool busy) { m_busy = busy; }
 
         void change_die();
         void change_goOut();

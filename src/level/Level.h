@@ -3,17 +3,17 @@
 
 class Cube;
 class Unit;
-class Room;
-class Actor;
 class PhaseLocker;
 class Picture;
 class DemoMode;
 class LevelStatus;
 class KeyStroke;
+class LevelStatus;
+class LevelScript;
+class CommandQueue;
+class Command;
 
-#include "V2.h"
 #include "Path.h"
-#include "Planner.h"
 #include "GameState.h"
 
 #include <string>
@@ -21,7 +21,7 @@ class KeyStroke;
 /**
  * Game level with room.
  */
-class Level : public Planner, public GameState {
+class Level : public GameState {
     private:
         enum eRoomState {
             ROOM_RUNNING,
@@ -29,30 +29,30 @@ class Level : public Planner, public GameState {
             ROOM_WRONG
         };
 
+        int m_depth;
+        std::string m_desc;
         std::string m_codename;
         Path m_datafile;
-        int m_depth;
-        Room *m_room;
         PhaseLocker *m_locker;
+        LevelScript *m_levelScript;
+        CommandQueue *m_show;
         int m_restartCounter;
-        std::string m_desc;
-        std::string m_loadedMoves;
         int m_loadSpeed;
-        eRoomState m_roomState;
+        std::string m_loadedMoves;
         int m_countdown;
+        //TODO: move eRoomState, satisfyRoom(), countDown() to the LevelStatus
+        eRoomState m_roomState;
         LevelStatus *m_levelStatus;
     private:
         bool nextAction();
         void updateLevel();
         void finishLevel();
+        bool satisfyRoom(bool room_complete);
         bool countDown();
         bool nextPlayerAction();
-        bool nextPlanAction();
+        bool nextShowAction();
         bool nextLoadAction();
-
-        void cannotMove();
-        void checkRoom();
-        void registerGameFuncs();
+        void saveSolution();
     protected:
         virtual void own_initState();
         virtual void own_updateState();
@@ -66,13 +66,6 @@ class Level : public Planner, public GameState {
         void setDesc(const std::string &desc) { m_desc = desc; }
         void fillStatus(LevelStatus *status) { m_levelStatus = status; }
 
-        void createRoom(int w, int h, const Path &picture);
-        int addModel(Cube *model, Unit *newUnit);
-        virtual Actor *getActor(int model_index);
-        Cube *getModel(int model_index);
-        Cube *askField(const V2 &loc);
-
-        void saveSolution();
         void saveGame(const std::string &models);
         void loadGame(const std::string &moves);
 
@@ -84,13 +77,15 @@ class Level : public Planner, public GameState {
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
 
-        int getCycles();
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
-        void addSound(const std::string &name, const Path &file);
-        void playSound(const std::string &name, int priority);
 
-        void newDemo(Picture *bg, const Path &demofile);
+        void createRoom(int w, int h, const Path &picture);
+        void newDemo(Picture *new_bg, const Path &demofile);
+
+        bool isShowing() const;
+        void interruptShow();
+        void planShow(Command *new_command);
 };
 
 #endif

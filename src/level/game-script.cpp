@@ -17,43 +17,24 @@
 #include "Cube.h"
 #include "Rules.h"
 #include "SoundAgent.h"
-#include "Level.h"
+#include "LevelScript.h"
 #include "ModelFactory.h"
-#include "Picture.h"
 
 #include "def-script.h"
 
 //-----------------------------------------------------------------
-    inline Level *
-getLevel(lua_State *L)
+    inline LevelScript *
+getLevelScript(lua_State *L)
 {
-    return static_cast<Level*>(script_getLeader(L));
+    return static_cast<LevelScript*>(script_getLeader(L));
 }
 //-----------------------------------------------------------------
     inline Cube *
 getModel(lua_State *L, int model_index)
 {
-    return getLevel(L)->getModel(model_index);
+    return getLevelScript(L)->getModel(model_index);
 }
 
-//-----------------------------------------------------------------
-/**
- * void game_createRoom(width, height, picture)
- * Example:
- *  createRoom(40, 50, "kitchen-bg.png")
- */
-    int
-script_game_createRoom(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int w = luaL_checkint(L, 1);
-    int h = luaL_checkint(L, 2);
-    const char *picture = luaL_checkstring(L, 3);
-
-    getLevel(L)->createRoom(w, h, Path::dataReadPath(picture));
-    END_NOEXCEPTION;
-    return 0;
-}
 //-----------------------------------------------------------------
 /**
  * int game_addModel(kind, x, y, shape)
@@ -77,7 +58,7 @@ script_game_addModel(lua_State *L) throw()
 
     Cube *model = ModelFactory::createModel(kind, V2(x, y), shape);
     Unit *unit = ModelFactory::createUnit(kind);
-    int model_index = getLevel(L)->addModel(model, unit);
+    int model_index = getLevelScript(L)->addModel(model, unit);
     lua_pushnumber(L, model_index);
     END_NOEXCEPTION;
     //NOTE: return model_index
@@ -85,95 +66,16 @@ script_game_addModel(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void game_save(serialized)
+ * int game_getCycles()
  */
     int
-script_game_save(lua_State *L) throw()
+script_game_getCycles(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    const char *serialized = luaL_checkstring(L, 1);
-    getLevel(L)->saveGame(serialized);
+    int cycles = getLevelScript(L)->getCycles();
+    lua_pushnumber(L, cycles);
     END_NOEXCEPTION;
-    return 0;
-}
-//-----------------------------------------------------------------
-/**
- * void game_load(moves)
- */
-    int
-script_game_load(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    const char *moves = luaL_checkstring(L, 1);
-    getLevel(L)->loadGame(moves);
-    END_NOEXCEPTION;
-    return 0;
-}
-
-//-----------------------------------------------------------------
-/**
- * bool game_action_move(symbol)
- */
-    int
-script_game_action_move(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    size_t size;
-    const char *symbol = luaL_checklstring(L, 1, &size);
-    if (size != 1) {
-        ExInfo error = ExInfo("bad symbol length")
-            .addInfo("length", size)
-            .addInfo("symbol", symbol);
-        LOG_WARNING(error);
-        luaL_error(L, error.what());
-    }
-
-    bool sucess = getLevel(L)->action_move(symbol[0]);
-    lua_pushboolean(L, sucess);
-    END_NOEXCEPTION;
-    //NOTE: return sucess
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * bool game_action_save()
- */
-    int
-script_game_action_save(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    bool sucess = getLevel(L)->action_save();
-    lua_pushboolean(L, sucess);
-    END_NOEXCEPTION;
-    //NOTE: return sucess
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * bool game_action_load()
- */
-    int
-script_game_action_load(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    bool sucess = getLevel(L)->action_load();
-    lua_pushboolean(L, sucess);
-    END_NOEXCEPTION;
-    //NOTE: return sucess
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * bool game_action_restart()
- */
-    int
-script_game_action_restart(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    bool sucess = getLevel(L)->action_restart();
-    lua_pushboolean(L, sucess);
-    END_NOEXCEPTION;
-    //NOTE: return sucess
+    //NOTE: return cycles
     return 1;
 }
 
@@ -506,6 +408,23 @@ script_model_change_turnSide(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * void model_setBusy(model_index, value)
+ */
+    int
+script_model_setBusy(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    bool busy = luaL_checkint(L, 2);
+    Cube *model = getModel(L, model_index);
+    model->setBusy(busy);
+
+    END_NOEXCEPTION;
+    return 0;
+}
+
+//-----------------------------------------------------------------
+/**
  * void model_equals(model_index, x, y)
  *
  * Returns whether object at location(x, y) is equal.
@@ -518,7 +437,7 @@ script_model_equals(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     int x = luaL_checkint(L, 2);
     int y = luaL_checkint(L, 3);
-    Cube *other = getLevel(L)->askField(V2(x, y));
+    Cube *other = getLevelScript(L)->askField(V2(x, y));
 
     int other_index = -1;
     if (other) {
@@ -532,68 +451,6 @@ script_model_equals(lua_State *L) throw()
     return 1;
 }
 
-//-----------------------------------------------------------------
-/**
- * int game_getRestartCounter()
- * 
- */
-    int
-script_game_getRestartCounter(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int counter = getLevel(L)->getRestartCounter();
-    lua_pushnumber(L, counter);
-    END_NOEXCEPTION;
-    //NOTE: return counter
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * int game_getDepth()
- * 
- */
-    int
-script_game_getDepth(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int depth = getLevel(L)->getDepth();
-    lua_pushnumber(L, depth);
-    END_NOEXCEPTION;
-    //NOTE: return depth
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * int game_getCycles()
- */
-    int
-script_game_getCycles(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    int cycles = getLevel(L)->getCycles();
-    lua_pushnumber(L, cycles);
-    END_NOEXCEPTION;
-    //NOTE: return cycles
-    return 1;
-}
-//-----------------------------------------------------------------
-/**
- * void game_newDemo(demofile, bg, bg_x, bg_y)
- */
-    int
-script_game_newDemo(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    const char *demofile = luaL_checkstring(L, 1);
-    const char *bgname = luaL_checkstring(L, 2);
-    int bg_x = luaL_checkint(L, 3);
-    int bg_y = luaL_checkint(L, 4);
-
-    Picture *bg = new Picture(Path::dataReadPath(bgname), V2(bg_x, bg_y));
-    getLevel(L)->newDemo(bg, Path::dataReadPath(demofile));
-    END_NOEXCEPTION;
-    return 0;
-}
 
 //-----------------------------------------------------------------
 /**
@@ -608,7 +465,7 @@ script_sound_addSound(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 1);
     const char *file = luaL_checkstring(L, 2);
 
-    getLevel(L)->addSound(name, Path::dataReadPath(file));
+    getLevelScript(L)->addSound(name, Path::dataReadPath(file));
     END_NOEXCEPTION;
     return 0;
 }
@@ -623,7 +480,7 @@ script_sound_playSound(lua_State *L) throw()
     const char *name = luaL_checkstring(L, 1);
     int priority = luaL_optint(L, 2, -1);
 
-    getLevel(L)->playSound(name, priority);
+    getLevelScript(L)->playSound(name, priority);
     END_NOEXCEPTION;
     return 0;
 }

@@ -26,12 +26,12 @@ class Planner : public NoCopy {
         virtual ~Planner();
 
         void scriptInclude(const Path &filename);
-        bool finishPlan();
+        void scriptDo(const std::string &input);
+        bool satisfyPlan();
         void interruptPlan();
 
         void planAction(int funcRef);
         bool isPlanning() const;
-        virtual Actor *getActor(int model_index) = 0;
 };
 
 #endif

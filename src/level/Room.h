@@ -8,6 +8,7 @@ class KeyStroke;
 class Unit;
 class ResSoundPack;
 class PhaseLocker;
+class Planner;
 class View;
 
 #include "NoCopy.h"
@@ -26,23 +27,26 @@ class Room : public NoCopy {
         ResSoundPack *m_soundPack;
         Controls *m_controls;
         PhaseLocker *m_locker;
+        Planner *m_levelScript;
         View *m_view;
         Cube::t_models m_models;
         Cube::eWeight m_impact;
         int m_startTime;
         bool m_fresh;
     private:
+        void killPlan();
         void prepareRound();
         bool falldown();
         void playImpact();
         void playDead(Cube *model);
     public:
-        Room(int w, int h, const Path &picture, PhaseLocker *locker);
+        Room(int w, int h, const Path &picture,
+                PhaseLocker *locker, Planner *levelScript);
         ~Room();
         void activate();
         void deactivate();
 
-        int addModel(Cube *model, Unit *newUnit);
+        int addModel(Cube *new_model, Unit *new_unit);
         Cube *getModel(int model_index);
         Cube *askField(const V2 &loc);
 
@@ -61,7 +65,7 @@ class Room : public NoCopy {
 
         int getW() const;
         int getH() const;
-        int getCycles();
+        int getCycles() const;
         void addSound(const std::string &name, const Path &file);
         void playSound(const std::string &name, int priority);
 };

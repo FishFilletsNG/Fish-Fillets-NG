@@ -23,6 +23,9 @@ Cube::Cube(const V2 &location,
         Shape *ashape)
 : m_loc(location), m_goal(Goal::noGoal())
 {
+    m_index = -1;
+    m_busy = false;
+
     m_weight = weight;
     m_power = power;
     m_alive = alive;

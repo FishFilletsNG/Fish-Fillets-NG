@@ -657,7 +657,7 @@ Rules::getState() const
     else if (m_pushing) {
         return "pushing";
     }
-    else if (DialogAgent::agent()->isTalking(m_model)) {
+    else if (DialogAgent::agent()->isTalking(m_model->getIndex())) {
         return "talking";
     }
     else {
