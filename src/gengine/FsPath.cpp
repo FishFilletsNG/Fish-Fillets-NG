@@ -93,7 +93,11 @@ createDir(const std::string &dir)
         return;
     }
 
+#ifdef WIN32
+    int error = mkdir(dir.c_str());
+#else
     int error = mkdir(dir.c_str(), 0777);
+#endif
     if (error) {
         throw PathException(ExInfo("cannot create dir")
             .addInfo("errno", errno)
