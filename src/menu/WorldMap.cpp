@@ -28,7 +28,7 @@
 #include "Pedometer.h"
 #include "LayeredPicture.h"
 #include "MenuOptions.h"
-#include "PosterState.h"
+#include "DemoMode.h"
 #include "PosterScroller.h"
 
 //-----------------------------------------------------------------
@@ -300,7 +300,7 @@ WorldMap::findDesc(const std::string &codename) const
 WorldMap::runIntro()
 {
     //TODO: intro as video
-    pushState(new PosterState(Path::dataReadPath("images/menu/intro.png")));
+    pushState(new DemoMode(Path::dataReadPath("script/share/demo_intro.lua")));
 }
 //-----------------------------------------------------------------
     void
