@@ -8,8 +8,9 @@
  */
 #include "SysVideo.h"
 
-#include "SDL.h"
+#include "Log.h"
 
+#include "SDL.h"
 #ifdef HAVE_X11
 #include "SDL_syswm.h"
 #include <X11/Xutil.h>
@@ -35,15 +36,21 @@ SysVideo::setCaption(const std::string &title)
 
             XTextProperty titleprop;
             char *text_list = const_cast<char*>(title.c_str());
-
-            Xutf8TextListToTextProperty(info.info.x11.display, &text_list, 1,
-                    XUTF8StringStyle, &titleprop);
-            XSetWMName(info.info.x11.display, info.info.x11.wmwindow,
-                    &titleprop);
-            XFree(titleprop.value);
+            int error = Xutf8TextListToTextProperty(info.info.x11.display,
+                        &text_list, 1, XUTF8StringStyle, &titleprop);
+            if (!error) {
+                XSetWMName(info.info.x11.display, info.info.x11.wmwindow,
+                        &titleprop);
+                XFree(titleprop.value);
+                done = true;
+            }
+            else {
+                LOG_DEBUG(ExInfo("not supported conversion")
+                        .addInfo("error", error)
+                        .addInfo("title", title));
+            }
 
             info.info.x11.unlock_func();
-            done = true;
         }
     }
 #endif
