@@ -2,6 +2,7 @@ Fish Fillets NG - 0.6.0
 * 24 new levels + final level
 * better mouse support - see How to Play (http://fillets.sourceforge.net/manual.php#mouse)
 * menu tooltips
+* level help on F1
 * hall of fame integration for pedometer
 * intro.avi as a separate file (http://fillets.sourceforge.net/intro.avi)
 * complete French translation
