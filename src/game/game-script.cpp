@@ -14,7 +14,7 @@
 #include "KeyDriver.h"
 #include "KeyControl.h"
 #include "Path.h"
-#include "View.h"
+#include "Anim.h"
 #include "Cube.h"
 
 extern "C" {
@@ -22,6 +22,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+//NOTE: no one exception can be passed to "C" lua code
 #define BEGIN_NOEXCEPTION try {
 #define END_NOEXCEPTION \
 } \
@@ -38,10 +39,8 @@ catch (...) { \
 //-----------------------------------------------------------------
 /**
  * void createRoom(width, height, picture)
- *
+ * Example:
  *  createRoom(40, 50, "kitchen-bg.png")
- *
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_createRoom(lua_State *L) throw()
@@ -63,11 +62,11 @@ script_createRoom(lua_State *L) throw()
  * Return model index.
  *
  *  table = addModel("light", 10, 30, "table.bmp",
- *  "XXXXX\n"..
- *  "  X  \n"..
- *  "  X  \n")
- *
- * NOTE: no one exception can be passed to "C" lua code
+ *  [[
+ *  XXXXX
+ *  ..X
+ *  ..X
+ *  ]])
  */
     int
 script_addModel(lua_State *L) throw()
@@ -90,8 +89,6 @@ script_addModel(lua_State *L) throw()
 //-----------------------------------------------------------------
 /**
  * void model_addAnim(model_index, anim_name, picture)
- *
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_model_addAnim(lua_State *L) throw()
@@ -102,7 +99,28 @@ script_model_addAnim(lua_State *L) throw()
     const char *picture = luaL_checkstring(L, 3);
 
     Cube *model = GameAgent::agent()->getModel(model_index);
-    model->view()->addAnim(anim_name, Path::dataReadPath(picture));
+    model->anim()->addAnim(anim_name, Path::dataReadPath(picture));
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_addDuplexAnim(model_index, anim_name, left_picture, right_picture)
+ */
+    int
+script_model_addDuplexAnim(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+    const char *left_picture = luaL_checkstring(L, 3);
+    const char *right_picture = luaL_checkstring(L, 4);
+
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    model->anim()->addDuplexAnim(anim_name,
+            Path::dataReadPath(left_picture),
+            Path::dataReadPath(right_picture));
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
@@ -110,8 +128,6 @@ script_model_addAnim(lua_State *L) throw()
 //-----------------------------------------------------------------
 /**
  * void model_setAnim(model_index, anim_name, phase=0)
- *
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_model_setAnim(lua_State *L) throw()
@@ -122,7 +138,7 @@ script_model_setAnim(lua_State *L) throw()
     int phase = luaL_optint(L, 3, 0);
 
     Cube *model = GameAgent::agent()->getModel(model_index);
-    model->view()->setAnim(anim_name, phase);
+    model->anim()->setAnim(anim_name, phase);
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;
@@ -130,8 +146,6 @@ script_model_setAnim(lua_State *L) throw()
 //-----------------------------------------------------------------
 /**
  * (x, y) model_getLoc(model_index)
- *
- * NOTE: no one exception can be passed to "C" lua code
  */
     int
 script_model_getLoc(lua_State *L) throw()
@@ -151,20 +165,35 @@ script_model_getLoc(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
- * eDir model_getDir(model_index)
- *
- * NOTE: no one exception can be passed to "C" lua code
+ * string model_getAction(model_index)
  */
     int
-script_model_getDir(lua_State *L) throw()
+script_model_getAction(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
     Cube *model = GameAgent::agent()->getModel(model_index);
-    Cube::eDir dir = model->getDir();
+    std::string action = model->getAction();
 
-    lua_pushnumber(L, dir);
+    lua_pushlstring(L, action.c_str(), action.size());
     END_NOEXCEPTION;
-    //NOTE: return dir
+    //NOTE: return action
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * bool model_isAlive(model_index)
+ */
+    int
+script_model_isAlive(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    bool alive = model->isAlive();
+
+    lua_pushboolean(L, alive);
+    END_NOEXCEPTION;
+    //NOTE: return alive
     return 1;
 }

@@ -12,7 +12,7 @@
 class TimerAgent : public BaseAgent {
     AGENT(TimerAgent, Name::TIMER_NAME);
     private:
-        static const int TIMEINTERVAL = 50;
+        static const int TIMEINTERVAL = 80;
 
         Uint32 m_lastTime;
         Uint32 m_nextTime;

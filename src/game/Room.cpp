@@ -100,7 +100,7 @@ Room::prepareRound()
         (*j)->checkDead();
     }
     for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
-        (*k)->applyDead();
+        (*k)->prepareRound();
     }
 }
 //-----------------------------------------------------------------

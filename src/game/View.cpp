@@ -8,12 +8,9 @@
  */
 #include "View.h"
 
-#include "Log.h"
-#include "ResImagePack.h"
-#include "GameAgent.h"
+#include "Anim.h"
 #include "Cube.h"
-
-#include <assert.h>
+#include "GameAgent.h"
 
 //-----------------------------------------------------------------
 /**
@@ -22,23 +19,25 @@
 View::View(const Path &picture)
 {
     try {
-        m_anim = new ResImagePack();
-        m_anim->addImage("default", picture);
-        setAnim("default");
+        m_anim = NULL;
+        m_anim = new Anim();
+        m_anim->addAnim("default", picture);
+        m_anim->setAnim("default");
 
         m_model = NULL;
         m_animShift = 0;
         m_shiftSize = SCALE;
     }
     catch (...) {
-        delete m_anim;
+        if (m_anim) {
+            delete m_anim;
+        }
         throw;
     }
 }
 //-----------------------------------------------------------------
 View::~View()
 {
-    m_anim->removeAll();
     delete m_anim;
 }
 //-----------------------------------------------------------------
@@ -76,7 +75,11 @@ View::draw()
         int x = loc.getX() * SCALE + shiftX;
         int y = loc.getY() * SCALE + shiftY;
 
-        drawAt(x, y);
+        Anim::eSide side = Anim::SIDE_LEFT;
+        if (false == m_model->lookLeft()) {
+            side = Anim::SIDE_RIGHT;
+        }
+        m_anim->drawAt(m_screen, x, y, side);
     }
 }
 //-----------------------------------------------------------------
@@ -93,37 +96,5 @@ View::computeShiftSize()
     else {
         m_shiftSize = SCALE;
     }
-}
-//-----------------------------------------------------------------
-/**
- * Draw model at screen position.
- */
-    void
-View::drawAt(int x, int y)
-{
-    SDL_Rect rect;
-    rect.x = x;
-    rect.y = y;
-
-    SDL_BlitSurface(m_surface, NULL, m_screen, &rect);
-}
-//-----------------------------------------------------------------
-/**
- * Add picture to anim.
- */
-    void
-View::addAnim(const std::string &name, const Path &picture)
-{
-    m_anim->addImage(name, picture);
-}
-//-----------------------------------------------------------------
-/**
- * Set visage.
- * Set m_surface to actual animation picture.
- */
-    void
-View::setAnim(const std::string &name, int phase)
-{
-    m_surface = m_anim->getRes(name, phase);
 }
 

@@ -33,7 +33,10 @@ Cube::Cube(const V2 &location,
     m_power = power;
     m_alive = alive;
     m_readyToDie = false;
+    m_readyToTurn = false;
     m_dir = DIR_NO;
+    //TODO: set look side according a level
+    m_lookLeft = true;
 
     m_shape = shape;
     m_driver = driver;
@@ -152,7 +155,7 @@ Cube::checkDeadMove()
     Cube::t_models::iterator end = resist.end();
     for (t_models::iterator i = resist.begin(); i != end; ++i) {
         if (false == (*i)->isAlive()) {
-            eDir resist_dir = (*i)->getDir();
+            eDir resist_dir = (*i)->m_dir;
             if (resist_dir != DIR_NO && resist_dir != DIR_UP) {
                 if (false == (*i)->isOnStack()) {
                     return true;
@@ -205,12 +208,19 @@ Cube::checkDeadStress(eWeight power)
 
 //-----------------------------------------------------------------
 /**
- * Make skeletons.
+ * Finish events from last round.
+ * - make skeletons
+ * - turn side
  */
     void
-Cube::applyDead()
+Cube::prepareRound()
 {
     m_dir = DIR_NO;
+
+    if (m_readyToTurn) {
+        m_readyToTurn = false;
+        m_lookLeft = !m_lookLeft;
+    }
 
     if (m_readyToDie) {
         //TODO: nice dead
@@ -218,7 +228,7 @@ Cube::applyDead()
                 .addInfo("fish", toString()));
         m_readyToDie = false;
         m_alive = false;
-        m_view->setAnim("skeleton");
+        //anim()->setAnim("skeleton");
         SoundAgent::agent()->playSound("xplo");
     }
 }
@@ -509,12 +519,46 @@ Cube::dir2xy(eDir dir, int *out_x, int *out_y) const
         case DIR_NO:
             break;
         default:
-            assert(NULL == "unkown dir");
+            assert(NULL == "unknown dir");
             break;
     }
 
     *out_x = x;
     *out_y = y;
+}
+//-----------------------------------------------------------------
+    void
+Cube::turnSide()
+{
+    m_readyToTurn = true;
+}
+//-----------------------------------------------------------------
+    Anim *
+Cube::anim()
+{
+    return m_view->anim();
+}
+//-----------------------------------------------------------------
+/**
+ * Return what we do the last round.
+ * NOTE: dead is not action
+ */
+std::string
+Cube::getAction() const
+{
+    if (m_readyToTurn) {
+        return "turn";
+    }
+    switch (m_dir) {
+        case DIR_LEFT: return "move_left";
+        case DIR_RIGHT: return "move_right";
+        case DIR_UP: return "move_up";
+        case DIR_DOWN: return "move_down";
+        case DIR_NO: return "rest";
+        default: assert(NULL == "unknown dir"); break;
+    }
+
+    return "rest";
 }
 //-----------------------------------------------------------------
 std::string

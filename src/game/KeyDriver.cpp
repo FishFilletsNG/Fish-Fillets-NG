@@ -11,7 +11,6 @@
 #include "InputAgent.h"
 #include "GameAgent.h"
 #include "Cube.h"
-#include "Log.h"
 
 //-----------------------------------------------------------------
 KeyDriver::KeyDriver(const KeyControl &control)
@@ -24,6 +23,8 @@ KeyDriver::KeyDriver(const KeyControl &control)
 /**
  * Alive models are drived by player.
  * NOTE: it is allowed to move only in one direction at the same time
+ *
+ * @return whether we have moved
  */
 bool
 KeyDriver::drive(Cube *model)
@@ -31,10 +32,22 @@ KeyDriver::drive(Cube *model)
     bool result = false;
     if (model->isAlive()) {
         if (false == result && m_keys[m_control.getLeft()]) {
-            result = model->moveDir(Cube::DIR_LEFT);
+            if (model->lookLeft()) {
+                result = model->moveDir(Cube::DIR_LEFT);
+            }
+            else {
+                model->turnSide();
+                result = true;
+            }
         }
         if (false == result && m_keys[m_control.getRight()]) {
-            result = model->moveDir(Cube::DIR_RIGHT);
+            if (false == model->lookLeft()) {
+                result = model->moveDir(Cube::DIR_RIGHT);
+            }
+            else {
+                model->turnSide();
+                result = true;
+            }
         }
         if (false == result && m_keys[m_control.getUp()]) {
             result = model->moveDir(Cube::DIR_UP);
@@ -44,8 +57,7 @@ KeyDriver::drive(Cube *model)
         }
 
         //TODO: draw nice animation
-        //TODO: speed up when still the same driver and direction
-        //TEST: animation
+        //TODO: speed up when the same direction and no pushing
         if (result) {
             int phases = 3;
             if (m_lastResult) {

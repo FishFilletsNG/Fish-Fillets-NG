@@ -56,13 +56,16 @@ GameAgent::own_init()
 GameAgent::own_update()
 {
     if (m_script) {
-        //TODO: prepare data for new level format
         m_script->doString("update()");
     }
 
     if (0 == m_lockPhases) {
         if (m_room) {
             m_room->nextRound();
+            if (m_script) {
+                //TODO: prepare data for new level format
+                m_script->doString("nextRound()");
+            }
         }
     }
 
@@ -115,9 +118,11 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("createRoom", script_createRoom);
     m_script->registerFunc("addModel", script_addModel);
     m_script->registerFunc("model_addAnim", script_model_addAnim);
+    m_script->registerFunc("model_addDuplexAnim", script_model_addDuplexAnim);
     m_script->registerFunc("model_setAnim", script_model_setAnim);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
-    m_script->registerFunc("model_getDir", script_model_getDir);
+    m_script->registerFunc("model_getAction", script_model_getAction);
+    m_script->registerFunc("model_isAlive", script_model_isAlive);
 }
 //-----------------------------------------------------------------
 /**

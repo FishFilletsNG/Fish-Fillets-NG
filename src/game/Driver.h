@@ -5,6 +5,9 @@ class Cube;
 
 #include "NoCopy.h"
 
+/**
+ * Driver drive object moves.
+ */
 class Driver : public NoCopy {
     public:
         virtual ~Driver() {}

@@ -73,7 +73,7 @@ class ResourcePack {
         for (int i = 0; i < rank && range.first != range.second; ++i) {
             ++(range.first);
         }
-        if (m_reses.end() == range.first) {
+        if (range.second == range.first) {
             throw ResourceException(ExInfo("no such resource at index")
                     .addInfo("name", name)
                     .addInfo("index", rank));
