@@ -204,7 +204,7 @@ Controls::getNeededPhases(int speedup) const
 void
 Controls::checkActive()
 {
-    if (m_active != m_units.end() || !(*m_active)->canDrive()) {
+    if (m_active == m_units.end() || !(*m_active)->canDrive()) {
         switchActive();
     }
 }
