@@ -133,7 +133,13 @@ Anim::useSpecialAnim(const std::string &name, int phase)
 
     int count = m_animPack[SIDE_LEFT]->countRes(name);
     if (m_specialAnimPhase >= count) {
-        m_specialAnimPhase %= count;
+        if (count == 0) {
+            m_specialAnimName = "";
+            m_specialAnimPhase = 0;
+        }
+        else {
+            m_specialAnimPhase %= count;
+        }
         LOG_WARNING(ExInfo("special anim phase over-flow")
                 .addInfo("anim", name)
                 .addInfo("phase", phase)
