@@ -18,5 +18,4 @@ ICON_LIBS =
 endif
 
 
-fillets_LDADD = ../menu/libmenu.a ../level/liblevel.a ../state/libstate.a ../option/liboption.a ../plan/libplan.a ../widget/libwidget.a ../effect/libeffect.a ../gengine/libgengine.a $(SDL_GFX_LIBS) $(SDL_LIBS) $(LUA_LIBS) $(BOOST_LIBS) $(ICON_LIBS)
-
+fillets_LDADD = $(ICON_LIBS) ../menu/libmenu.a ../level/liblevel.a ../state/libstate.a ../option/liboption.a ../plan/libplan.a ../widget/libwidget.a ../effect/libeffect.a ../gengine/libgengine.a $(SDL_GFX_LIBS) $(SDL_LIBS) $(LUA_LIBS) $(BOOST_LIBS)
