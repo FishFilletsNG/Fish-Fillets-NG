@@ -24,14 +24,17 @@ RopeDecor::RopeDecor(const Cube *model1, const Cube *model2,
     m_model2 = model2;
 }
 //-----------------------------------------------------------------
+/**
+ * Draw line from one model to second model.
+ */
 void
 RopeDecor::drawOnScreen(const View *view, SDL_Surface *screen)
 {
     V2 loc1 = view->getScreenPos(m_model1).plus(m_shift1);
     V2 loc2 = view->getScreenPos(m_model2).plus(m_shift2);
 
-    //Uint32 colorRGBA = 0xffff00ff;
-    Uint32 colorRGBA = 0x000000ff;
+    //NOTE: steel color
+    Uint32 colorRGBA = 0x30404eff;
     lineColor(screen, loc1.getX(), loc1.getY(),
             loc2.getX(), loc2.getY(), colorRGBA);
 }
