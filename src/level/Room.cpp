@@ -59,6 +59,8 @@ Room::~Room()
     killPlan();
     m_soundPack->removeAll();
     delete m_soundPack;
+    DialogAgent::agent()->removeAll();
+    SubTitleAgent::agent()->removeAll();
     delete m_controls;
     delete m_view;
 
