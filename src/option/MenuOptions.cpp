@@ -149,10 +149,14 @@ MenuOptions::createMusicPanel(const Labels &labels)
 IWidget *
 MenuOptions::createLangPanel(const Labels &labels)
 {
-    IWidget *panel = new SelectLang("lang", 
-            Path::dataReadPath("script/select_lang.lua"));
-    panel->setTip(labels.getLabel("menu_lang"));
-    return panel;
+    HBox *langBox = new HBox();
+    langBox->addWidget(new WiPicture(
+                Path::dataReadPath("images/menu/lang.png")));
+    langBox->addWidget(new WiSpace(10, 0));
+    langBox->addWidget(new SelectLang("lang",
+                Path::dataReadPath("script/select_lang.lua")));
+    langBox->setTip(labels.getLabel("menu_lang"));
+    return langBox;
 }
 //-----------------------------------------------------------------
 /**
@@ -163,16 +167,23 @@ IWidget *
 MenuOptions::createSpeechPanel(const Labels &labels)
 {
     OptionAgent::agent()->setDefault("speech", "cs");
-    IWidget *panel = new SelectLang("speech",
-            Path::dataReadPath("script/select_speech.lua"));
-    panel->setTip(labels.getLabel("menu_speech"));
-    return panel;
+    HBox *speechBox = new HBox();
+    speechBox->addWidget(new WiPicture(
+                Path::dataReadPath("images/menu/speech.png")));
+    speechBox->addWidget(new WiSpace(10, 0));
+    speechBox->addWidget(new SelectLang("speech",
+            Path::dataReadPath("script/select_speech.lua")));
+    speechBox->setTip(labels.getLabel("menu_speech"));
+    return speechBox;
 }
 //-----------------------------------------------------------------
 IWidget *
 MenuOptions::createSubtitlesPanel(const Labels &labels)
 {
     HBox *chooseBox = new HBox();
+    chooseBox->addWidget(new WiPicture(
+                Path::dataReadPath("images/menu/subtitle.png")));
+    chooseBox->addWidget(new WiSpace(10, 0));
     chooseBox->addWidget(new RadioBox("subtitles", "1",
                 Path::dataReadPath("images/menu/subtitles/yes.png")));
     chooseBox->addWidget(new RadioBox("subtitles", "0",

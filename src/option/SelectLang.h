@@ -11,7 +11,7 @@ class Path;
  */
 class SelectLang : public VBox, public Scripter {
     private:
-        static const int MAX_WIDTH = 260;
+        static const int MAX_WIDTH = 200;
         std::string m_option;
         WiBox *m_activeRow;
     public:
