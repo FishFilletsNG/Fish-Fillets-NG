@@ -25,6 +25,7 @@
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
 #include "SoundAgent.h"
+#include "OptionAgent.h"
 #include "ModelList.h"
 #include "Landslip.h"
 
@@ -480,8 +481,10 @@ Room::addSound(const std::string &name, const Path &file)
     void
 Room::playSound(const std::string &name, int volume)
 {
-    SoundAgent::agent()->playSound(
+    if (OptionAgent::agent()->getAsInt("sound", 1)) {
+        SoundAgent::agent()->playSound(
             m_soundPack->getRandomRes(name), volume);
+    }
 }
 //-----------------------------------------------------------------
 /**

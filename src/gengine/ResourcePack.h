@@ -113,6 +113,11 @@ class ResourcePack : public INamed {
         if (count > 0) {
             result = getRes(name, Random::randomInt(count));
         }
+        else {
+            LOG_WARNING(ExInfo("no such resource")
+                    .addInfo("name", name)
+                    .addInfo("pack", toString()));
+        }
         return result;
     }
     //-----------------------------------------------------------------
