@@ -4,14 +4,12 @@ priority - 1-High, 2-Medium, 3-Low
 
 
 GAME SPECIFIC
-2 - video playback
-3 - level editor
-3 - add support for extra levels
+2 - level editor
+3 - video playback
 
 
 INPUT
-2 - mouse control - select fish by left-clicking on it, 
-    left-click in level to go there without touching anything
+- all done
 
 
 STATISTICS
@@ -19,9 +17,7 @@ STATISTICS
 
 
 LEVEL SPECIFIC
-1 - convert all animation of objects in levels to lua
-1 - convert all triggered dialogs to lua
-1 - prepare translated version of final posters
+- all done
 
 
 GRAPHICS

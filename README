@@ -72,11 +72,12 @@ Use space bar to switch between the fish.
 See also "How to Play" data/doc/html/manual.html
 
 restart level - Backspace
+help - F1
 save game - F2
 load game - F3
-show/hide level move counter - F5
+show/hide move counter - F5
 show/hide subtitles - F6
 game menu - F10
-toggle fullscreen - F11
-hold down to increase game speed - Shift
+fullscreen - F11
+faster game - Shift
 
