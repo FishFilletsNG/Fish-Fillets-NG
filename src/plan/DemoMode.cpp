@@ -38,13 +38,19 @@ DemoMode::runDemo(Picture *new_bg, const Path &demoscript)
         delete m_bg;
     }
     m_bg = new_bg;
+    m_bg->deactivate();
     m_script->doFile(demoscript);
 }
 
 //-----------------------------------------------------------------
+/**
+ * Run demo.
+ * NOTE: activate bg at first time
+ */
 void
 DemoMode::own_updateState()
 {
+    m_bg->activate();
     if (satisfyPlan()) {
         quitState();
     }
