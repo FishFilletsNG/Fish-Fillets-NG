@@ -241,7 +241,7 @@ Rules::canFall()
 }
 
 //-----------------------------------------------------------------
-    bool
+bool
 Rules::isWall() const
 {
     return m_model->getWeight() >= Cube::FIXED;
@@ -273,6 +273,9 @@ Rules::isOnWall()
     bool result = false;
     if (isWall()) {
         result = true;
+    }
+    else if (m_model->isAlive()) {
+        result = false;
     }
     else {
         m_mask->unmask();
@@ -354,14 +357,16 @@ Rules::whoIsFalling()
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        //TODO: wall is not need to test
-        if ((*i)->rules()->isFalling()) {
-            result.push_back(*i);
-        }
-        else {
-            Cube::t_models distance_killers = (*i)->rules()->whoIsFalling();
-            result.insert(result.end(), distance_killers.begin(),
-                    distance_killers.end());
+        //NOTE: falling is propagated over fish
+        if (false == (*i)->rules()->isWall()) {
+            if ((*i)->rules()->isFalling()) {
+                result.push_back(*i);
+            }
+            else {
+                Cube::t_models distance_killers = (*i)->rules()->whoIsFalling();
+                result.insert(result.end(), distance_killers.begin(),
+                        distance_killers.end());
+            }
         }
     }
 
@@ -401,15 +406,16 @@ Rules::whoIsHeavier(Cube::eWeight power)
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        //TODO: wall is not need to test
-        if ((*i)->rules()->isHeavier(power)) {
-            result.push_back(*i);
-        }
-        else {
-            Cube::t_models distance_killers =
-                (*i)->rules()->whoIsHeavier(power);
-            result.insert(result.end(), distance_killers.begin(),
-                    distance_killers.end());
+        if (false == (*i)->rules()->isWall()) {
+            if ((*i)->rules()->isHeavier(power)) {
+                result.push_back(*i);
+            }
+            else {
+                Cube::t_models distance_killers =
+                    (*i)->rules()->whoIsHeavier(power);
+                result.insert(result.end(), distance_killers.begin(),
+                        distance_killers.end());
+            }
         }
     }
 
