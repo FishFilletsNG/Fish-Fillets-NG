@@ -71,7 +71,7 @@ Cube::~Cube()
     Cube *
 Cube::createBorder()
 {
-    Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::LIGHT, false,
+    Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::NONE, false,
             new Driver(), new View(), new Shape("X\n"));
     border->m_view->takeModel(NULL);
     return border;

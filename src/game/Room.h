@@ -17,9 +17,11 @@ class Room : public NoCopy {
         Picture *m_bg;
         Field *m_field;
         Cube::t_models m_models;
+        Cube::eWeight m_impact;
     private:
         void prepareRound();
         bool falldown();
+        void playImpact();
         void driving();
         bool finishRound();
     public:

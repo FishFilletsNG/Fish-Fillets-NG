@@ -13,12 +13,15 @@
 #include "Field.h"
 #include "Rules.h"
 #include "LogicException.h"
+#include "SoundAgent.h"
+#include "ResSoundAgent.h"
 
 //-----------------------------------------------------------------
 Room::Room(int w, int h, const Path &picture)
 {
     m_bg = new Picture(picture, 0, 0);
     m_field = new Field(w, h);
+    m_impact = Cube::NONE;
 }
 //-----------------------------------------------------------------
 /**
@@ -26,6 +29,9 @@ Room::Room(int w, int h, const Path &picture)
  */
 Room::~Room()
 {
+    ResSoundAgent::agent()->removeRes("impact_light");
+    ResSoundAgent::agent()->removeRes("impact_heavy");
+
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         delete (*i);
@@ -79,11 +85,36 @@ Room::nextRound()
 {
     prepareRound();
 
-    if (false == falldown()) {
+    bool falling = falldown();
+    playImpact();
+
+    if (false == falling) {
         driving();
     }
 
     return finishRound();
+}
+//-----------------------------------------------------------------
+/**
+ * Play sound when some object has fall.
+ * NOTE: only one sound is played even more objects have fall
+ */
+void
+Room::playImpact()
+{
+    switch (m_impact) {
+        case Cube::NONE:
+            break;
+        case Cube::LIGHT:
+            SoundAgent::agent()->playRandomSound("impact_light");
+            break;
+        case Cube::HEAVY:
+            SoundAgent::agent()->playRandomSound("impact_heavy");
+            break;
+        default:
+            assert("unknown impact weight" == NULL);
+    }
+    m_impact = Cube::NONE;
 }
 //-----------------------------------------------------------------
 /**
@@ -119,7 +150,15 @@ Room::falldown()
     bool result = false;
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        result |= (*i)->rules()->actionFall();
+        Rules::eFall fall = (*i)->rules()->actionFall();
+        if (Rules::FALL_NOW == fall) {
+            result = true;
+        }
+        else if (Rules::FALL_LAST == fall) {
+            if (m_impact < (*i)->getWeight()) {
+                m_impact = (*i)->getWeight();
+            }
+        }
     }
 
     return result;

@@ -109,6 +109,12 @@ class ResourcePack : public INamed {
     T getRandomRes(const std::string &name)
     {
         typename t_reses::size_type count = m_reses.count(name);
+        if (count == 0) {
+            throw ResourceException(ExInfo("no such resource")
+                    .addInfo("name", name)
+                    .addInfo("pack", toString()));
+        }
+
         return getRes(name, Random::randomInt(count));
     }
     //-----------------------------------------------------------------

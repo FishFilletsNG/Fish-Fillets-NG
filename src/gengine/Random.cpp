@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 
 //----------------------------------------------------------
 /**
@@ -27,6 +28,7 @@ Random::init() {
     int
 Random::randomInt(int bound)
 {
+    assert(bound != 0);
     return rand() % bound;
 }
 //-----------------------------------------------------------------

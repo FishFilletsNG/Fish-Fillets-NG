@@ -183,6 +183,7 @@ GameAgent::registerGameFuncs()
 
     m_script->registerFunc("timer_getCycles", script_timer_getCycles);
     m_script->registerFunc("sound_playMusic", script_sound_playMusic);
+    m_script->registerFunc("sound_addSound", script_sound_addSound);
 }
 //-----------------------------------------------------------------
 /**
@@ -266,7 +267,7 @@ GameAgent::createDriver(const std::string &kind,
     if ("fish_small" == kind) {
         KeyControl smallfish;
         result = new KeyDriver(smallfish);
-        *out_weight = Cube::LIGHT;
+        *out_weight = Cube::NONE;
         *out_power = Cube::LIGHT;
         *out_alive = true;
     }
@@ -277,13 +278,13 @@ GameAgent::createDriver(const std::string &kind,
         bigfish.setLeft(SDLK_KP4);
         bigfish.setRight(SDLK_KP6);
         result = new KeyDriver(bigfish);
-        *out_weight = Cube::LIGHT;
+        *out_weight = Cube::NONE;
         *out_power = Cube::HEAVY;
         *out_alive = true;
     }
     else {
         result = new Driver();
-        *out_power = Cube::LIGHT;
+        *out_power = Cube::NONE;
         *out_alive = false;
         if ("item_light" == kind) {
             *out_weight = Cube::LIGHT;

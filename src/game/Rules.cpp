@@ -30,6 +30,7 @@ Rules::Rules(Cube *model)
 
     m_model = model;
     m_mask = NULL;
+    m_lastFall = false;
 }
 //-----------------------------------------------------------------
 /**
@@ -241,16 +242,25 @@ Rules::prepareRound()
 //-----------------------------------------------------------------
 /**
  * Let model fall.
- * Return true when we have fall.
+ * Return whether we have fall now or in last round.
  */
-    bool
+    Rules::eFall
 Rules::actionFall()
 {
-    bool result = false;
+    eFall result = FALL_NO;
+
     if (canFall()) {
         m_dir = DIR_DOWN;
-        result = true;
+        result = FALL_NOW;
+        m_lastFall = true;
     }
+    else {
+        if (m_lastFall) {
+            result = FALL_LAST;
+        }
+        m_lastFall = false;
+    }
+
     return result;
 }
 //-----------------------------------------------------------------

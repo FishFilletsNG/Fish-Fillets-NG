@@ -23,6 +23,7 @@
 #include "Shape.h"
 #include "TimerAgent.h"
 #include "SoundAgent.h"
+#include "ResSoundAgent.h"
 
 extern "C" {
 #include "lualib.h"
@@ -549,6 +550,24 @@ script_sound_playMusic(lua_State *L) throw()
     const char *music_name = luaL_checkstring(L, 1);
 
     SoundAgent::agent()->playMusic(Path::dataReadPath(music_name), NULL);
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void sound_addSound(name, file)
+ * 
+ * Store this sound resource under this name.
+ */
+    int
+script_sound_addSound(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    const char *file = luaL_checkstring(L, 2);
+
+    ResSoundAgent::agent()->addSound(name, Path::dataReadPath(file));
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua
     return 0;

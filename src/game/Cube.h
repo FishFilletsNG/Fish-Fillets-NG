@@ -20,6 +20,7 @@ class Cube : public Actor {
     public:
         typedef std::vector<Cube*> t_models;
         enum eWeight {
+            NONE,
             LIGHT,
             HEAVY,
             FIXED

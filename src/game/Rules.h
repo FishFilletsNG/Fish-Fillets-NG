@@ -19,12 +19,18 @@ class Rules : public NoCopy {
             DIR_LEFT,
             DIR_RIGHT
         };
+        enum eFall {
+            FALL_NO,
+            FALL_NOW,
+            FALL_LAST
+        };
     private:
         eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
         bool m_readyToGoout;
         bool m_pushing;
+        bool m_lastFall;
 
         Cube *m_model;
         MarkMask *m_mask;
@@ -59,7 +65,7 @@ class Rules : public NoCopy {
         void prepareRound();
         void freeOldPos();
 
-        bool actionFall();
+        eFall actionFall();
         bool actionMoveDir(eDir dir);
         void actionTurnSide();
 
