@@ -14,7 +14,11 @@ AC_PROG_INSTALL
 AC_PROG_RANLIB
 
 CPPFLAGS="-I/usr/local/include $CPPFLAGS"
-LIBS="-L/usr/local/lib -lm $LIBS"
+LIBS="-L/usr/local/lib $LIBS"
+
+###################################################
+# Check for libm
+AC_CHECK_LIB(m, sin, LIBS="$LIBS -lm")
 
 ###################################################
 # Check for lua and define LUA_CFLAGS and LUA_LIBS
