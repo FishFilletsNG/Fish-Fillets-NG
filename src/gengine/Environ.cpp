@@ -109,11 +109,11 @@ Environ::setParam(const std::string &name, long value)
  */
     std::string
 Environ::getParam(const std::string &name,
-                const std::string &implicit)
+                const std::string &implicit) const
 {
     std::string result = implicit;
 
-    t_values::iterator it = m_values.find(name);
+    t_values::const_iterator it = m_values.find(name);
     if (m_values.end() != it) {
         result = it->second;
     }
@@ -130,7 +130,7 @@ Environ::getParam(const std::string &name,
  */
     int
 Environ::getAsInt(const std::string &name,
-                int implicit)
+                int implicit) const
 {
     std::string value = getParam(name);
     bool ok;
@@ -165,5 +165,15 @@ Environ::toString() const
     }
     return info.info();
 }
-
+//-----------------------------------------------------------------
+std::string
+Environ::getHelpInfo() const
+{
+    std::string help;
+    t_values::const_iterator end = m_values.end();
+    for (t_values::const_iterator i = m_values.begin(); i != end; ++i) {
+        help += "  " + i->first + "='" + i->second + "'\n";
+    }
+    return help;
+}
 

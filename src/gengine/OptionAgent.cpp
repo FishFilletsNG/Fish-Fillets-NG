@@ -15,6 +15,7 @@
 #include "FsPath.h"
 #include "ScriptAgent.h"
 #include "StringTool.h"
+#include "HelpException.h"
 #include "LogicException.h"
 #include "ScriptException.h"
 #include "minmax.h"
@@ -47,6 +48,7 @@ const char *OptionAgent::CONFIG_FILE = "script/options.lua";
 OptionAgent::own_init()
 {
     m_environ = new Environ();
+    prepareVersion();
     prepareDataPaths();
     prepareLang();
 
@@ -78,6 +80,24 @@ OptionAgent::own_init()
 OptionAgent::own_shutdown()
 {
     delete m_environ;
+}
+//-----------------------------------------------------------------
+/**
+ * Set program version.
+ */
+    void
+OptionAgent::prepareVersion()
+{
+#ifdef VERSION
+    setParam("version", VERSION);
+#else
+    setParam("version", "0.0.1");
+#endif
+#ifdef PACKAGE
+    setParam("package", PACKAGE);
+#else
+    setParam("package", "A game");
+#endif
 }
 //-----------------------------------------------------------------
 /**
@@ -130,16 +150,48 @@ OptionAgent::parseCmdOpt(int argc, char *argv[])
     }
 
     for (int i = 1; i < argc; ++i) {
-        std::string name;
-        std::string value;
-        if (splitOpt(argv[i], &name, &value)) {
-            setParam(name, value);
+        if (argv[i][0] == '-') {
+            parseDashOpt(argv[i]);
         }
         else {
-            throw LogicException(ExInfo("wrong options format")
-                    .addInfo("wrong", argv[i])
-                    .addInfo("usage", "$0 [name=value ...]"));
+            parseParamOpt(argv[i]);
         }
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Supported options are '-h', '-v'.
+ * @throws HelpException when only help is need
+ * @throws LogicException when used option is unknown
+ */
+    void
+OptionAgent::parseDashOpt(const std::string &arg)
+{
+    if ("-h" == arg || "--help" == arg) {
+        throw HelpException(ExInfo(getHelpInfo()));
+    }
+    else if ("-v" == arg || "--version" == arg) {
+        throw HelpException(ExInfo(getVersionInfo()));
+    }
+    else {
+        throw LogicException(ExInfo("unknown option")
+                .addInfo("arg", arg)
+                .addInfo("usage", "$0 [-hv] [name=value ...]"));
+    }
+}
+//-----------------------------------------------------------------
+    void
+OptionAgent::parseParamOpt(const std::string &arg)
+{
+    std::string name;
+    std::string value;
+    if (splitOpt(arg, &name, &value)) {
+        setParam(name, value);
+    }
+    else {
+        throw LogicException(ExInfo("wrong options format")
+                .addInfo("arg", arg)
+                .addInfo("usage", "$0 [-hv] [name=value ...]"));
     }
 }
 //-----------------------------------------------------------------
@@ -197,7 +249,7 @@ OptionAgent::setParam(const std::string &name, long value)
  */
     std::string
 OptionAgent::getParam(const std::string &name,
-        const std::string &implicit)
+        const std::string &implicit) const
 {
     return m_environ->getParam(name, implicit);
 }
@@ -212,7 +264,7 @@ OptionAgent::getParam(const std::string &name,
  */
     int
 OptionAgent::getAsInt(const std::string &name,
-        int implicit)
+        int implicit) const
 {
     return m_environ->getAsInt(name, implicit);
 }
@@ -271,5 +323,24 @@ OptionAgent::setDefault(const std::string &name, int value)
 OptionAgent::addWatcher(const std::string &name, BaseMsg *msg)
 {
     m_environ->addWatcher(name, msg);
+}
+//-----------------------------------------------------------------
+std::string
+OptionAgent::getHelpInfo() const
+{
+    std::string help = "Usage: "
+        + getParam("program") + "[-hv] [name=value ...]\n";
+    help += "  -h, --help               Show this help\n";
+    help += "  -v, --version            Show version\n";
+    help += "\n";
+    help += "Options:\n";
+    help += m_environ->getHelpInfo();
+    return help;
+}
+//-----------------------------------------------------------------
+std::string
+OptionAgent::getVersionInfo() const
+{
+    return getParam("package") + " " + getParam("version");
 }
 

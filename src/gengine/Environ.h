@@ -26,12 +26,13 @@ class Environ : public NoCopy {
         void setParam(const std::string &name, long value);
 
         std::string getParam(const std::string &name,
-                const std::string &implicit="");
+                const std::string &implicit="") const;
         int getAsInt(const std::string &name,
-                int implicit=0);
+                int implicit=0) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
         std::string toString() const;
+        std::string getHelpInfo() const;
 };
 
 #endif

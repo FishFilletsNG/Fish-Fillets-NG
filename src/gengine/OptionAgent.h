@@ -18,10 +18,15 @@ class OptionAgent : public BaseAgent {
         static const char *CONFIG_FILE;
         Environ *m_environ;
     private:
+        void prepareVersion();
         void prepareDataPaths();
         void prepareLang();
+        void parseDashOpt(const std::string &arg);
+        void parseParamOpt(const std::string &arg);
         bool splitOpt(const std::string &option,
                 std::string *out_name, std::string *out_value);
+        std::string getHelpInfo() const;
+        std::string getVersionInfo() const;
     protected:
         virtual void own_init();
         virtual void own_shutdown();
@@ -35,9 +40,9 @@ class OptionAgent : public BaseAgent {
         void setDefault(const std::string &name, int value);
 
         std::string getParam(const std::string &name,
-                const std::string &implicit="");
+                const std::string &implicit="") const;
         int getAsInt(const std::string &name,
-                int implicit=0);
+                int implicit=0) const;
 
         void addWatcher(const std::string &name, BaseMsg *msg);
 };

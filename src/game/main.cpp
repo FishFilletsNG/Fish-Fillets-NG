@@ -95,9 +95,12 @@
 
 #include "Log.h"
 #include "Application.h"
+#include "HelpException.h"
 #include "BaseException.h"
 
+#include <stdio.h> //printf
 
+//-----------------------------------------------------------------
     int
 main(int argc, char *argv[])
 {
@@ -107,13 +110,15 @@ main(int argc, char *argv[])
         try {
             app.init(argc, argv);
             app.run();
-            app.shutdown();
-            return 0;
+        }
+        catch (HelpException &e) {
+            printf("%s\n", e.what());
         }
         catch (BaseException &e) {
             LOG_ERROR(e.info());
-            app.shutdown();
         }
+        app.shutdown();
+        return 0;
     }
     catch (BaseException &e) {
         LOG_ERROR(e.info());

@@ -20,7 +20,7 @@ BaseAgent::BaseAgent()
     void
 BaseAgent::init()
 {
-    LOG_INFO(ExInfo("init").addInfo("name", getName()));
+    LOG_DEBUG(ExInfo("init").addInfo("name", getName()));
     //NOTE: agent can call oneself in init()
     m_initialized = true;
     own_init();

@@ -13,13 +13,13 @@ class Name {
 
         static const char *VIDEO_NAME;
         static const char *SOUND_NAME;
+        static const char *TIMER_NAME;
 
         static const char *INPUT_NAME;
         static const char *DIALOG_NAME;
         static const char *SUBTITLE_NAME;
 
         static const char *GAME_NAME;
-        static const char *TIMER_NAME;
 };
 
 #endif
