@@ -38,7 +38,7 @@ SDLSoundAgent::own_init()
         throw MixException(ExInfo("Mix_OpenAudio"));
     }
 
-    Mix_AllocateChannels(8);
+    Mix_AllocateChannels(16);
 
     m_soundVolume = MIX_MAX_VOLUME;
     setMusicVolume(50);
