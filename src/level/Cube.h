@@ -2,12 +2,13 @@
 #define HEADER_CUBE_H
 
 class Shape;
-class Rules;
 class Anim;
+class Rules;
 
 #include "V2.h"
 #include "Goal.h"
 #include "NoCopy.h"
+#include "Dir.h"
 
 #include <vector>
 
@@ -43,6 +44,8 @@ class Cube : public NoCopy {
         Anim *m_anim;
         Rules *m_rules;
         Goal m_goal;
+        Dir::eDir m_outDir;
+        int m_outCapacity;
     public:
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
@@ -73,6 +76,11 @@ class Cube : public NoCopy {
         eWeight getWeight() const { return m_weight; }
         eWeight getPower() const { return m_power; }
         const Shape *shape() const { return m_shape; }
+        Dir::eDir getLastMoveDir() const;
+
+        bool isOutDir(Dir::eDir dir) const { return m_outDir == dir; }
+        void setOutDir(Dir::eDir outDir);
+        void decOutCapacity();
 
         bool isDisintegrated();
         bool isInvisible();

@@ -28,10 +28,10 @@ MarkMask::MarkMask(Cube *model, Field *field)
  * @return unique pointers, not NULL
  */
 Cube::t_models
-MarkMask::getResist(Rules::eDir dir) const
+MarkMask::getResist(Dir::eDir dir) const
 {
     Cube::t_models models;
-    V2 shift = Rules::dir2xy(dir);
+    V2 shift = Dir::dir2xy(dir);
     V2 shift_loc = shift.plus(m_model->getLocation());
 
     const Shape *shape = m_model->shape();
@@ -88,7 +88,7 @@ MarkMask::writeModel(Cube *model)
  * The direction must be without resist.
  * @return return dir or DIR_NO when model is not at the border.
  */
-    Rules::eDir
+    Dir::eDir
 MarkMask::getBorderDir() const
 {
     V2 loc = m_model->getLocation();
@@ -96,32 +96,32 @@ MarkMask::getBorderDir() const
     Shape::const_iterator end = shape->marksEnd();
     for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
-        if (mark.getX() == 0 && isBorderDir(Rules::DIR_LEFT)) {
-            return Rules::DIR_LEFT;
+        if (mark.getX() == 0 && isBorderDir(Dir::DIR_LEFT)) {
+            return Dir::DIR_LEFT;
         }
         else if (mark.getX() == m_field->getW() - 1 &&
-                isBorderDir(Rules::DIR_RIGHT))
+                isBorderDir(Dir::DIR_RIGHT))
         {
-            return Rules::DIR_RIGHT;
+            return Dir::DIR_RIGHT;
         }
-        else if (mark.getY() == 0 && isBorderDir(Rules::DIR_UP)) {
-            return Rules::DIR_UP;
+        else if (mark.getY() == 0 && isBorderDir(Dir::DIR_UP)) {
+            return Dir::DIR_UP;
         }
         else if (mark.getY() == m_field->getH() - 1 &&
-                isBorderDir(Rules::DIR_DOWN))
+                isBorderDir(Dir::DIR_DOWN))
         {
-            return Rules::DIR_DOWN;
+            return Dir::DIR_DOWN;
         }
     }
 
-    return Rules::DIR_NO;
+    return Dir::DIR_NO;
 }
 //-----------------------------------------------------------------
 /**
  * Test whether there is only border in this direction.
  */
     bool
-MarkMask::isBorderDir(Rules::eDir dir) const
+MarkMask::isBorderDir(Dir::eDir dir) const
 {
     bool result = false;
     Cube::t_models resist = getResist(dir);

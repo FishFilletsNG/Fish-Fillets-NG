@@ -7,21 +7,14 @@ class OnCondition;
 
 #include "NoCopy.h"
 #include "Cube.h"
+#include "Dir.h"
 
 /**
  * Game rules.
  */
 class Rules : public NoCopy {
-    public:
-        enum eDir {
-            DIR_NO,
-            DIR_UP,
-            DIR_DOWN,
-            DIR_LEFT,
-            DIR_RIGHT
-        };
     private:
-        eDir m_dir;
+        Dir::eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
         bool m_readyToActive;
@@ -46,9 +39,10 @@ class Rules : public NoCopy {
         bool isHeavier(Cube::eWeight power) const;
         Cube::t_models whoIsHeavier(Cube::eWeight power);
 
-        bool canDir(eDir dir, Cube::eWeight power);
-        bool canMoveOthers(eDir dir, Cube::eWeight weight);
-        void moveDirBrute(eDir dir);
+        bool canDir(Dir::eDir dir, Cube::eWeight power);
+        bool canMoveOthers(Dir::eDir dir, Cube::eWeight weight);
+        bool touchSpec(Dir::eDir dir);
+        void moveDirBrute(Dir::eDir dir);
 
         void freeOldPos();
     public:
@@ -64,18 +58,16 @@ class Rules : public NoCopy {
         int actionOut();
         void actionFall();
         bool clearLastFall();
-        bool actionMoveDir(eDir dir);
+        bool actionMoveDir(Dir::eDir dir);
         void actionTurnSide() { m_readyToTurn = true; }
         void actionActivate() { m_readyToActive = true; }
 
-        eDir getDir() const { return m_dir; }
+        Dir::eDir getDir() const { return m_dir; }
         std::string getAction() const;
         std::string getState() const;
         bool isOnStrongPad(Cube::eWeight weight);
         bool isAtBorder() const;
-        const Cube::t_models getResist(eDir dir) const;
-
-        static V2 dir2xy(eDir dir);
+        const Cube::t_models getResist(Dir::eDir dir) const;
 };
 
 #endif

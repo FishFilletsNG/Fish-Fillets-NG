@@ -150,7 +150,7 @@ Unit::goLeft()
 {
     char symbol = ControlSym::SYM_NONE;
     if (m_model->isLeft()) {
-        if (m_model->rules()->actionMoveDir(Rules::DIR_LEFT)) {
+        if (m_model->rules()->actionMoveDir(Dir::DIR_LEFT)) {
             symbol = m_symbols.getLeft();
         }
     }
@@ -166,7 +166,7 @@ Unit::goRight()
 {
     char symbol = ControlSym::SYM_NONE;
     if (!m_model->isLeft()) {
-        if (m_model->rules()->actionMoveDir(Rules::DIR_RIGHT)) {
+        if (m_model->rules()->actionMoveDir(Dir::DIR_RIGHT)) {
             symbol = m_symbols.getRight();
         }
     }
@@ -181,7 +181,7 @@ char
 Unit::goUp()
 {
     char symbol = ControlSym::SYM_NONE;
-    if (m_model->rules()->actionMoveDir(Rules::DIR_UP)) {
+    if (m_model->rules()->actionMoveDir(Dir::DIR_UP)) {
         symbol = m_symbols.getUp();
     }
     return symbol;
@@ -191,7 +191,7 @@ char
 Unit::goDown()
 {
     char symbol = ControlSym::SYM_NONE;
-    if (m_model->rules()->actionMoveDir(Rules::DIR_DOWN)) {
+    if (m_model->rules()->actionMoveDir(Dir::DIR_DOWN)) {
         symbol = m_symbols.getDown();
     }
     return symbol;

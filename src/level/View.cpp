@@ -14,7 +14,7 @@
 
 #include "Cube.h"
 #include "Anim.h"
-#include "Rules.h"
+#include "Dir.h"
 #include "minmax.h"
 
 //-----------------------------------------------------------------
@@ -111,9 +111,9 @@ V2
 View::getScreenPos(const Cube *model) const
 {
     V2 shift(0, 0);
-    Rules::eDir dir = model->const_rules()->getDir();
-    if (dir != Rules::DIR_NO) {
-        shift = Rules::dir2xy(dir);
+    Dir::eDir dir = model->getLastMoveDir();
+    if (dir != Dir::DIR_NO) {
+        shift = Dir::dir2xy(dir);
         shift = shift.scale(m_animShift);
     }
     shift = shift.plus(m_screenShift);

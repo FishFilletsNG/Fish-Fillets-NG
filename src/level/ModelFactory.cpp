@@ -29,6 +29,10 @@ Cube *
 ModelFactory::createModel(const std::string &kind, const V2 &loc,
         const std::string &shape)
 {
+    if (StringTool::startsWith(kind, "output_")) {
+        return createOutputItem(kind, loc, shape);
+    }
+
     Cube::eWeight weight;
     Cube::eWeight power;
     bool alive;
@@ -136,6 +140,38 @@ ModelFactory::createBorder()
     Cube *border = new Cube(V2(-1,-1), Cube::FIXED, Cube::NONE, false,
             new Shape("X\n"));
     return border;
+}
+//-----------------------------------------------------------------
+/**
+ * Create one way output out of room.
+ * @throws LogicException when output_DIR is not known
+ */
+Cube *
+ModelFactory::createOutputItem(const std::string &kind, const V2 &loc,
+        const std::string &shape)
+{
+    Dir::eDir outDir = Dir::DIR_NO;
+    if ("output_left" == kind) {
+        outDir = Dir::DIR_LEFT;
+    }
+    else if ("output_right" == kind) {
+        outDir = Dir::DIR_RIGHT;
+    }
+    else if ("output_up" == kind) {
+        outDir = Dir::DIR_UP;
+    }
+    else if ("output_down" == kind) {
+        outDir = Dir::DIR_DOWN;
+    }
+    else {
+        throw LogicException(ExInfo("unknown border dir")
+                .addInfo("kind", kind));
+    }
+
+    Cube *model = new Cube(loc,
+            Cube::FIXED, Cube::NONE, false, new Shape(shape));
+    model->setOutDir(outDir);
+    return model;
 }
 //-----------------------------------------------------------------
 /**

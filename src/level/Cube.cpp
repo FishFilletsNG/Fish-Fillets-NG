@@ -33,6 +33,8 @@ Cube::Cube(const V2 &location,
     m_out = false;
     m_lookLeft = true;
     m_lost = false;
+    m_outDir = Dir::DIR_NO;
+    m_outCapacity = 0;
 
     m_shape = new_shape;
     m_rules = new Rules(this);
@@ -87,7 +89,35 @@ Cube::change_turnSide()
 {
     m_lookLeft = !m_lookLeft;
 }
-
+//-----------------------------------------------------------------
+Dir::eDir
+Cube::getLastMoveDir() const
+{
+    return m_rules->getDir();
+}
+//-----------------------------------------------------------------
+void
+Cube::setOutDir(Dir::eDir dir)
+{
+    m_outCapacity = 2;
+    m_outDir = dir;
+}
+//-----------------------------------------------------------------
+/**
+ * Special model 'output_DIR' has capacity to absorb two fishes,
+ * then it changes to normal 'item_light'.
+ */
+void
+Cube::decOutCapacity()
+{
+    if (m_outCapacity > 0) {
+        m_outCapacity--;
+        if (m_outCapacity == 0) {
+            m_outDir = Dir::DIR_NO;
+            m_weight = LIGHT;
+        }
+    }
+}
 //-----------------------------------------------------------------
 bool
 Cube::isDisintegrated()

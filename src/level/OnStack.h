@@ -14,7 +14,7 @@ class OnStack : public OnCondition {
         {
             bool result = false;
             if (!model->isAlive()) {
-                if (model->rules()->getDir() == Rules::DIR_NO
+                if (model->rules()->getDir() == Dir::DIR_NO
                         && model->rules()->isOnStrongPad(Cube::LIGHT))
                 {
                         result = true;

@@ -238,7 +238,6 @@ Room::prepareRound()
 
     if (interrupt) {
         m_levelScript->interruptPlan();
-        m_controls->checkActive();
     }
 }
 //-----------------------------------------------------------------
@@ -263,7 +262,6 @@ Room::fallout(bool interactive)
             }
             else if (outDepth == -1) {
                 m_levelScript->interruptPlan();
-                m_controls->checkActive();
             }
         }
     }

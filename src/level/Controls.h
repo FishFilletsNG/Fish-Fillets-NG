@@ -28,6 +28,7 @@ class Controls : public StepCounter, public NoCopy {
         PhaseLocker *m_locker;
         char m_strokeSymbol;
     private:
+        void checkActive();
         bool useSwitch();
         bool useStroke();
         bool driveUnit(const InputProvider *input);
@@ -41,7 +42,6 @@ class Controls : public StepCounter, public NoCopy {
         bool driving(const InputProvider *input);
         void lockPhases();
 
-        void checkActive();
         void switchActive();
         void controlEvent(const KeyStroke &stroke);
         bool makeMove(char move);

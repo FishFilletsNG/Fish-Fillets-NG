@@ -48,21 +48,23 @@ Anim::~Anim()
     void
 Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
 {
-    SDL_Surface *surface =
-        m_animPack[side]->getRes(m_animName, m_animPhase);
-    m_effect->blit(screen, surface, x, y);
-    if (m_run) {
-        m_animPhase++;
-        if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
-            m_animPhase = 0;
-        }
-    }
-
-    if (!m_specialAnimName.empty()) {
-        surface =
-            m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
+    if (!m_effect->isInvisible()) {
+        SDL_Surface *surface =
+            m_animPack[side]->getRes(m_animName, m_animPhase);
         m_effect->blit(screen, surface, x, y);
-        m_specialAnimName = "";
+        if (m_run) {
+            m_animPhase++;
+            if (m_animPhase >= m_animPack[side]->countRes(m_animName)) {
+                m_animPhase = 0;
+            }
+        }
+
+        if (!m_specialAnimName.empty()) {
+            surface =
+                m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
+            m_effect->blit(screen, surface, x, y);
+            m_specialAnimName = "";
+        }
     }
 
     m_effect->updateEffect();

@@ -86,10 +86,16 @@ bool
 Controls::useSwitch()
 {
     bool result = false;
-    if (m_switch && m_active != m_units.end()) {
-        m_locker->ensurePhases(3);
-        (*m_active)->activate();
-        result = true;
+    if (m_active != m_units.end()) {
+        if (!(*m_active)->willMove()) {
+            checkActive();
+        }
+
+        if (m_switch && m_active != m_units.end()) {
+            m_locker->ensurePhases(3);
+            (*m_active)->activate();
+            result = true;
+        }
     }
     m_switch = false;
     return result;
@@ -184,7 +190,7 @@ Controls::getNeededPhases(int speedup) const
 void
 Controls::checkActive()
 {
-    if (!(*m_active)->canDrive()) {
+    if (m_active != m_units.end() || !(*m_active)->canDrive()) {
         switchActive();
     }
 }
@@ -222,7 +228,10 @@ Controls::controlEvent(const KeyStroke &stroke)
     SDLKey key = stroke.getKey();
 
     if (m_strokeSymbol == ControlSym::SYM_NONE) {
-        m_strokeSymbol = (*m_active)->mySymbolBorrowed(key, m_arrows);
+        if (m_active != m_units.end()) {
+            m_strokeSymbol = (*m_active)->mySymbolBorrowed(key, m_arrows);
+        }
+
         if (m_strokeSymbol == ControlSym::SYM_NONE) {
             t_units::iterator end = m_units.end();
             for (t_units::iterator i = m_units.begin(); i != end; ++i) {

@@ -4,7 +4,7 @@
 class Field;
 
 #include "NoCopy.h"
-#include "Rules.h"
+#include "Dir.h"
 #include "Cube.h"
 
 /**
@@ -16,15 +16,16 @@ class MarkMask : public NoCopy {
         Field *m_field;
     private:
         void writeModel(Cube *model);
-        bool isBorderDir(Rules::eDir dir) const;
+        bool isBorderDir(Dir::eDir dir) const;
+        bool isInRoom() const;
     public:
         MarkMask(Cube *model, Field *field);
 
-        Cube::t_models getResist(Rules::eDir dir) const;
+        Cube::t_models getResist(Dir::eDir dir) const;
         void mask();
         void unmask();
 
-        Rules::eDir getBorderDir() const;
+        Dir::eDir getBorderDir() const;
 };
 
 #endif
