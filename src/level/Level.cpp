@@ -14,6 +14,7 @@
 #include "LevelInput.h"
 #include "LevelStatus.h"
 #include "LevelScript.h"
+#include "LevelLoading.h"
 #include "CommandQueue.h"
 #include "MultiDrawer.h"
 
@@ -22,7 +23,6 @@
 #include "View.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"
-#include "LoadException.h"
 #include "ScriptException.h"
 #include "LogicException.h"
 #include "DemoMode.h"
@@ -32,7 +32,6 @@
 #include "PosterState.h"
 #include "StatusDisplay.h"
 #include "Picture.h"
-#include "minmax.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -49,13 +48,11 @@
     m_restartCounter = 1;
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
-    m_loadedMoves = "";
-    m_replayMode = false;
-    m_loadSpeed = 1;
     m_depth = depth;
     m_newRound = false;
     m_locker = new PhaseLocker();
     m_levelScript = new LevelScript(this);
+    m_loading = new LevelLoading(m_levelScript);
     m_show = new CommandQueue();
     m_background = new MultiDrawer();
     m_statusDisplay = new StatusDisplay();
@@ -71,6 +68,7 @@ Level::~Level()
     delete m_locker;
     //NOTE: m_show must be removed before levelScript
     delete m_show;
+    delete m_loading;
     delete m_levelScript;
     delete m_background;
     delete m_statusDisplay;
@@ -96,9 +94,6 @@ Level::own_initState()
     SoundAgent::agent()->stopMusic();
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
-    m_loadedMoves = "";
-    m_loadSpeed = 1;
-    m_replayMode = false;
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
@@ -152,7 +147,7 @@ Level::own_noteFg()
 bool
 Level::isLoading() const
 {
-    return !m_loadedMoves.empty() || m_replayMode;
+    return m_loading->isLoading();
 }
 //-----------------------------------------------------------------
 /**
@@ -204,7 +199,7 @@ Level::setCountDown()
     if (m_countdown == -1) {
         switch (m_roomState) {
             case ROOM_SOLVED:
-                if (m_replayMode) {
+                if (isLoading()) {
                     m_countdown = 0;
                 }
                 else {
@@ -351,8 +346,7 @@ Level::displaySaveStatus()
     void
 Level::loadGame(const std::string &moves)
 {
-    m_loadedMoves = moves;
-    m_loadSpeed = min(50, max(5, m_loadedMoves.size() / 150));
+    m_loading->loadGame(moves);
 }
 //-----------------------------------------------------------------
 /**
@@ -362,46 +356,21 @@ Level::loadGame(const std::string &moves)
     void
 Level::loadReplay(const std::string &moves)
 {
-    m_loadedMoves = moves;
-    m_loadSpeed = 1;
-    m_replayMode = true;
+    m_loading->loadReplay(moves);
 }
+
 //-----------------------------------------------------------------
 /**
- * Load a few moves.
- * @throws LoadException for bad load
+ * Load next move.
  */
     void
 Level::nextLoadAction()
 {
-    if (m_loadedMoves.empty()) {
-        m_levelScript->room()->beginFall(false);
-        m_levelScript->room()->finishRound(false);
-    }
-    else {
-        for (int i = 0; i < m_loadSpeed
-                && !m_loadedMoves.empty(); ++i)
-        {
-            try {
-                char symbol = m_loadedMoves[0];
-                m_loadedMoves.erase(0, 1);
-
-                m_levelScript->room()->loadMove(symbol);
-            }
-            catch (LoadException &e) {
-                throw LoadException(ExInfo(e.info())
-                        .addInfo("remain", m_loadedMoves));
-            }
-        }
-
-        if (m_loadedMoves.empty()) {
-            if (!m_replayMode) {
-                m_levelScript->scriptDo("script_loadState()");
-            }
-        }
+    m_loading->nextLoadAction();
+    if (!isLoading()) {
+        m_levelScript->scriptDo("script_loadState()");
     }
 }
-
 //-----------------------------------------------------------------
 /**
  * Let show execute.

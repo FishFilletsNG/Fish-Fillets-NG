@@ -5,36 +5,29 @@ class V2;
 class Path;
 class Cube;
 class Unit;
-class Room;
 class Level;
 class Command;
 
 #include "Planner.h"
+#include "RoomAccess.h"
 
 #include <string>
 
 /**
  * Handle plan for dialogs and planned actions.
  */
-class LevelScript : public Planner {
+class LevelScript : public Planner, public RoomAccess {
     private:
         Level *m_level;
-        Room *m_room;
     private:
-        void checkRoom() const;
         void registerGameFuncs();
         void registerLevelFuncs();
     public:
         LevelScript(Level *aLevel);
-        ~LevelScript();
-        void takeRoom(Room *new_room);
 
         void updateScript();
-        void cleanRoom();
         virtual void interruptPlan();
 
-        bool isRoom() const { return NULL != m_room; }
-        Room *room();
         Level *level() { return m_level; }
         Command *createCommand(int funcRef);
 

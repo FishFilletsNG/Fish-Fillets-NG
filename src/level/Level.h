@@ -11,6 +11,7 @@ class LevelStatus;
 class KeyStroke;
 class LevelStatus;
 class LevelScript;
+class LevelLoading;
 class CommandQueue;
 class Command;
 class MultiDrawer;
@@ -40,11 +41,9 @@ class Level : public GameState {
         PhaseLocker *m_locker;
         bool m_newRound;
         LevelScript *m_levelScript;
+        LevelLoading *m_loading;
         CommandQueue *m_show;
         int m_restartCounter;
-        int m_loadSpeed;
-        bool m_replayMode;
-        std::string m_loadedMoves;
         int m_countdown;
         //TODO: move eRoomState, satisfyRoom(), countDown() to the LevelStatus
         eRoomState m_roomState;
@@ -59,9 +58,9 @@ class Level : public GameState {
         bool satisfyRoom();
         void setCountDown();
         bool countDown();
-        void nextPlayerAction();
-        void nextShowAction();
         void nextLoadAction();
+        void nextShowAction();
+        void nextPlayerAction();
         void saveSolution();
         void displaySaveStatus();
     protected:
@@ -99,6 +98,7 @@ class Level : public GameState {
         void newDemo(const Path &demofile);
 
         bool isLoading() const;
+        void togglePause() const;
         bool isShowing() const;
         void interruptShow();
         void planShow(Command *new_command);

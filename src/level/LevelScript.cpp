@@ -26,40 +26,8 @@
  */
 LevelScript::LevelScript(Level *aLevel)
 {
-    m_room = NULL;
     m_level = aLevel;
     registerGameFuncs();
-}
-//-----------------------------------------------------------------
-LevelScript::~LevelScript()
-{
-    cleanRoom();
-}
-//-----------------------------------------------------------------
-void
-LevelScript::takeRoom(Room *new_room)
-{
-    cleanRoom();
-    m_room = new_room;
-}
-//-----------------------------------------------------------------
-/**
- * Remove old room.
- */
-void
-LevelScript::cleanRoom()
-{
-    if (m_room) {
-        delete m_room;
-        m_room = NULL;
-    }
-}
-//-----------------------------------------------------------------
-Room *
-LevelScript::room()
-{
-    checkRoom();
-    return m_room;
 }
 //-----------------------------------------------------------------
 /**
@@ -89,19 +57,7 @@ void
 LevelScript::interruptPlan()
 {
     Planner::interruptPlan();
-    m_room->unBusyUnits();
-}
-//-----------------------------------------------------------------
-/**
- * Check whether room is ready.
- * @throws LogicException when room is not ready
- */
-    void
-LevelScript::checkRoom() const
-{
-    if (NULL == m_room) {
-        throw LogicException(ExInfo("room is not ready"));
-    }
+    room()->unBusyUnits();
 }
 //-----------------------------------------------------------------
 /**
@@ -114,14 +70,16 @@ LevelScript::checkRoom() const
     int
 LevelScript::addModel(Cube *new_model, Unit *new_unit)
 {
-    if (NULL == m_room) {
+    try {
+        return room()->addModel(new_model, new_unit);
+    }
+    catch (...) {
         delete new_model;
         if (new_unit) {
             delete new_unit;
         }
-        checkRoom();
+        throw;
     }
-    return m_room->addModel(new_model, new_unit);
 }
 //-----------------------------------------------------------------
     Cube *
