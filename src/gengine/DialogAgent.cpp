@@ -58,8 +58,9 @@ DialogAgent::actorTalk(int actor, const std::string &name,
         int volume, int loops)
 {
     Dialog *subtitle = m_dialogs->findDialogHard(name);
-    subtitle->runSubtitle();
     if (subtitle) {
+        subtitle->runSubtitle();
+
         Dialog *dialog = m_dialogs->findDialogHard(name, "speech");
         PlannedDialog *talker = new PlannedDialog(actor, dialog,
             subtitle->getMinTime());
