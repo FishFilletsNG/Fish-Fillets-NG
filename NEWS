@@ -1,1 +1,69 @@
-See http://fillets.sf.net
+
+
+Fish Fillets NG - 0.6.0
+* 24 new levels + final level
+* better mouse support - see How to Play (http://fillets.sourceforge.net/manual.php#mouse)
+* menu tooltips
+* hall of fame integration for pedometer
+* intro.avi as a separate file (http://fillets.sourceforge.net/intro.avi)
+* complete French translation
+* complete German translation
+* fbcon support 
+* win32 binary package
+
+
+Fish Fillets NG - 0.5.1
+* fixed crash in level 'corals'
+
+
+Fish Fillets NG - 0.5.0
+* removed libboost dependence
+* options menu on F10
+* 19 new levels
+* credits
+* initial German translation
+* some new options, see man page
+
+
+Fish Fillets NG - 0.4.1
+*  fixed level wreck crash
+* fixed pyramid animation, level music music ;)
+* added man page
+
+
+Fish Fillets NG - 0.4.0
+* 19 new levels
+* French translation
+* pedometer counts moves
+* reworked font rendering
+* F5 key to show/hide level move counter
+* Shift key for faster game
+* wavy background
+* changed install method, see README
+
+
+Fish Fillets NG - 0.3.0
+* game world map
+* save/load (F2/F3)
+* two new levels
+* two animated videos
+* optional controls with spacebar and arrow keys
+* How to Play manual (http://fillets.sourceforge.net/manual.php)
+
+
+Fish Fillets NG - 0.2.1
+* fixed crash on random(0)
+* changed config directory from $HOME/fillets-ng to $HOME/.fillets-ng
+
+
+Fish Fillets NG - 0.2.0
+* 6 playable levels
+* use keys A, S, D, W to control the small fish and keys J, K, L, I to control the bigger fish
+* object animations in level
+* english/czech subtitles, czech dialogs
+* level music
+
+
+Fish Fillets NG - 0.1.0
+* first public release
+* one playable level
