@@ -36,7 +36,13 @@
 </li><li>
      ResSoundAgent - stores shared sound
 </li><li>
+const char *Name::DIALOG_NAME = "70input";
+const char *Name::SUBTITLE_NAME = "75input";
      InputAgent - reads input event and handles keystrokes and in game console.
+</li><li>
+     DialogAgent - plans NPC dialogs
+</li><li>
+     SubTitleAgent - scrolls subtitles on display
 </li><li>
      GameAgent - it is on you
 </li><li>

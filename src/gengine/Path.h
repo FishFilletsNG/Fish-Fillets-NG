@@ -21,9 +21,12 @@ class Path {
         static Path dataSystemPath(const std::string &file);
         static Path dataUserPath(const std::string &file);
 
+        static bool isValid(const std::string &file);
+
         std::string getNative() const;
         std::string getBasename() const;
         bool exists() const;
+
 };
 
 #endif

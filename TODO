@@ -1,25 +1,47 @@
-Game:
-- animation
-- dialogs
-- game menu
-- load and save
-- player statistics
-- intro
-- better controls
-- fish heads animation when they are pushing something
-...
+TODO
 
-- How are heads 'mrk', 'sklebi', 'shocking' used in zrc.rum room?
+priority - 1-High, 2-Medium, 3-Low
 
 
-Engine:
-- NOTE: SDL_RLEACCEL may speedup transparent bliting
-- NOTE: SDL_WarpMouse() may be enough instead moving window
+GAME SPECIFIC
+2 - game map
+3 - game menu - select language for subtitles, sound on/off
+3 - video playback
+3 - documentation - rules, how to play, story
+3 - software packages - rpm, deb, tar.gz
 
-- make nice aap build
 
-- define SYSTEM_DATA_DIR and USER_DATA_DIR in build
+INPUT
+1 - keyboard control - arrow keys & space bar to switch between fishes
+2 - mouse control - select fish by left-clicking on it, left-click in level to go there without touching anything
+2 - key to load/save position
+------
+OK: 1 - key to restart level
+OK: 2 - keyboard control - 'asdw' keys and 'jkli' keys
+OK: 2 - fish move acceleration
 
-- make the engine independent on Name, app developer should not
-  need to edit Name.h
+STATISTICS
+2 - implement load/save position
+2 - count steps after finishing level
+
+
+LEVEL SPECIFIC
+1 - implement animation of objects in levels
+1 - convert all animation of objects in levels to lua
+1 - implement triggered dialogs
+1 - convert all triggered dialogs to lua
+2 - in final levels you have to get some object out of screen to win
+
+
+GRAPHICS
+3 - waves in level background
+3 - waves in text dialogs
+
+
+SOUND
+------
+OK: 1 - convert all sound and music to ogg
+OK: 2 - sound playback
+OK: 2 - music playback
+
 

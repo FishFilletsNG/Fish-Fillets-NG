@@ -20,8 +20,6 @@ const std::string DialogAgent::DEFAULT_LANG = "en";
 DialogAgent::own_init()
 {
     m_dialogs = new ResDialogPack();
-    //NOTE: "pause" dialog is used to delay dialogs
-    addDialog("pause", new Dialog(DEFAULT_LANG, "", ""));
 }
 //-----------------------------------------------------------------
 /**

@@ -22,15 +22,21 @@
 #include <string.h>
 #include <locale.h>
 
+#ifndef LC_MESSAGES
+#define LC_MESSAGES LC_CTYPE
+#endif
+
 //TODO: set system datadir
 #ifndef SYSTEM_DATA_DIR
 #define SYSTEM_DATA_DIR ""
 #endif
 
 //NOTE: userdir = $HOME + USER_DATA_DIR
-//NOTE: ".fillets-ng" is not portable
 #ifndef USER_DATA_DIR
-#define USER_DATA_DIR "/fillets-ng"
+#define USER_DATA_DIR "/.fillets-ng"
+#endif
+#ifndef USER_DATA_DIR_ALTERNATIVE
+#define USER_DATA_DIR_ALTERNATIVE "/fillets-ng"
 #endif
 
 //-----------------------------------------------------------------
@@ -105,6 +111,16 @@ OptionAgent::prepareDataPaths()
     if (home) {
         userdir = home;
         userdir += USER_DATA_DIR;
+        if (false == Path::isValid(userdir)) {
+            userdir = home;
+            userdir += USER_DATA_DIR_ALTERNATIVE;
+            if (false == Path::isValid(userdir)) {
+                userdir = "";
+            }
+            LOG_INFO(ExInfo("using alternative userdir path")
+                    .addInfo("userdir", userdir)
+                    .addInfo("origdir", std::string(home) + USER_DATA_DIR));
+        }
     }
     OptionAgent::agent()->setParam("userdir", userdir);
 }
@@ -119,7 +135,7 @@ OptionAgent::prepareLang()
 {
     setlocale(LC_ALL, "");
     if (getParam("lang").empty()) {
-        char *form = setlocale(LC_ALL, NULL);
+        char *form = setlocale(LC_MESSAGES, NULL);
         if (form && strlen(form) >= 2) {
             setParam("lang", std::string(form, 2));
         }
@@ -135,7 +151,7 @@ OptionAgent::prepareLang()
 void
 OptionAgent::parseCmdOpt(int argc, char *argv[])
 {
-    if (argc > 1) {
+    if (argc >= 1) {
         setParam("program", argv[0]);
     }
 

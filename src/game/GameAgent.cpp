@@ -17,6 +17,7 @@
 #include "MessagerAgent.h"
 #include "SubTitleAgent.h"
 #include "DialogAgent.h"
+#include "Dialog.h"
 #include "ResSoundAgent.h"
 
 #include "KeyStroke.h"
@@ -103,6 +104,9 @@ void
 GameAgent::newLevel(bool restart)
 {
     clearRoom();
+    //NOTE: "pause" dialog is used to delay dialogs
+    DialogAgent::agent()->addDialog("pause",
+            new Dialog(DialogAgent::DEFAULT_LANG, "", ""));
 
     m_script = new ScriptState();
     registerGameFuncs();

@@ -13,6 +13,7 @@
 
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/convenience.hpp"
+#include "boost/filesystem/exception.hpp"
 #include <stdio.h>
 
 //-----------------------------------------------------------------
@@ -79,8 +80,9 @@ Path::dataWritePath(const std::string &file)
     Path
 Path::dataSystemPath(const std::string &file)
 {
-    boost::filesystem::path datafile =
-        OptionAgent::agent()->getParam("systemdir");
+    boost::filesystem::path datafile(
+            OptionAgent::agent()->getParam("systemdir"),
+            boost::filesystem::portable_posix_name);
     datafile /= file;
     return Path(datafile);
 }
@@ -92,11 +94,31 @@ Path::dataSystemPath(const std::string &file)
     Path
 Path::dataUserPath(const std::string &file)
 {
-    boost::filesystem::path datafile =
-        OptionAgent::agent()->getParam("userdir");
+    boost::filesystem::path datafile(
+            OptionAgent::agent()->getParam("userdir"),
+            boost::filesystem::portable_posix_name);
     datafile /= file;
     return Path(datafile);
 }
+//-----------------------------------------------------------------
+/**
+ * Return true for valid path on POSIX and native filesystem.
+ */
+    bool
+Path::isValid(const std::string &file)
+{
+    bool result = false;
+    try {
+        boost::filesystem::path ignore(file,
+                boost::filesystem::portable_posix_name);
+        result = true;
+    }
+    catch (boost::filesystem::filesystem_error &e) {
+        result = false;
+    }
+    return result;
+}
+
 //-----------------------------------------------------------------
 std::string
 Path::getNative() const

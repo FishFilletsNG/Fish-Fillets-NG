@@ -3,9 +3,6 @@ http://fillets.sf.net
 ------------------------------
 
 Compile requirements:
-- (autoconf, automake) OR aap
-- pkg-config
-
 
 Library SDL = Simple DirectMedia Layer (video, input, sound)
 - libSDL >= 1.2, www.libsdl.org
@@ -25,7 +22,7 @@ Library Boost - http://www.boost.org/
 
 //-----------------------------------------------------------------
 How to run:
-1. Compile (./configure && make) OR (app)
+1. Compile ./configure && make
 2. Download data from http://sf.net/projects/fillets
 3. cp src/game/fillets path_to_data
 4. cd path_to_data
@@ -34,6 +31,6 @@ How to run:
 Alternative you can copy all game data to $HOME/fillets-ng
 
 Controls:
-small fish ... arrows
-big fish ... keypad (4568)
+small fish ... ijkl
+big fish   ... wasd
 

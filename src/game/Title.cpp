@@ -21,6 +21,8 @@
  * @param finalY final position, it change when next subtitle is added
  * @param bonusTime bonus time for subtitle under bottom border
  * @param limitY max Y distance from bottom border
+ * @param content subtitle content
+ * @param font subtitle font
  */
 Title::Title(int baseY, int finalY, int bonusTime, int limitY,
         const std::string &content, const SFont_Font *font)
