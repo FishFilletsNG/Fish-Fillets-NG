@@ -254,6 +254,24 @@ script_model_useSpecialAnim(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * int model_countAnims(model_index, anim_name)
+ */
+    int
+script_model_countAnims(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *anim_name = luaL_checkstring(L, 2);
+
+    Cube *model = getModel(L, model_index);
+    int anims = model->anim()->countAnimPhases(anim_name);
+    lua_pushnumber(L, anims);
+    END_NOEXCEPTION;
+    //NOTE: return anims
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * void model_setEffect(model_index, effect_name)
  *
  * Set special view effect.
@@ -343,6 +361,23 @@ script_model_getState(lua_State *L) throw()
     lua_pushlstring(L, state.c_str(), state.size());
     END_NOEXCEPTION;
     //NOTE: return state
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * Dir::eDir model_getDir(model_index)
+ */
+    int
+script_model_getDir(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = getModel(L, model_index);
+    Dir::eDir dir = model->getLastMoveDir();
+
+    lua_pushnumber(L, dir);
+    END_NOEXCEPTION;
+    //NOTE: return dir
     return 1;
 }
 //-----------------------------------------------------------------
