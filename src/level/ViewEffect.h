@@ -25,7 +25,11 @@ class ViewEffect {
                 int x, int y);
         void blitMirror(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
-        Uint8 getAlpha(Uint32 pixel, SDL_PixelFormat *fmt);
+
+        bool colorEquals(const SDL_Color &color1, const SDL_Color &color2);
+        SDL_Color getColor(SDL_Surface *surface, int x, int y);
+        void putColor(SDL_Surface *surface, int x, int y,
+                const SDL_Color &color);
         Uint32 getPixel(SDL_Surface *surface, int x, int y);
         void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
     public:

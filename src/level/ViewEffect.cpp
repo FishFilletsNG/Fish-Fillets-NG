@@ -93,10 +93,9 @@ ViewEffect::blitDisInt(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
     for (int py = 0; py < surface->h; ++py) {
         for (int px = 0; px < surface->w; ++px) {
             if (Random::aByte(py * surface->w + px) < m_disint) {
-                Uint32 pixel = getPixel(surface, px, py);
-                Uint8 alpha = getAlpha(pixel, surface->format);
-                if (alpha == 255) {
-                    putPixel(screen, x + px, y + py, pixel);
+                SDL_Color pixel = getColor(surface, px, py);
+                if (pixel.unused == 255) {
+                    putColor(screen, x + px, y + py, pixel);
                 }
             }
         }
@@ -114,20 +113,19 @@ ViewEffect::blitMirror(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
     SurfaceLock lock1(screen);
     SurfaceLock lock2(surface);
 
-    Uint32 mask = getPixel(surface, surface->w / 2, surface->h / 2);
+    SDL_Color mask = getColor(surface, surface->w / 2, surface->h / 2);
 
     for (int py = 0; py < surface->h; ++py) {
         for (int px = 0; px < surface->w; ++px) {
-            Uint32 pixel = getPixel(surface, px, py);
-            if (px > MIRROR_BORDER && mask == pixel) {
-                Uint32 sample = getPixel(screen,
+            SDL_Color pixel = getColor(surface, px, py);
+            if (px > MIRROR_BORDER && colorEquals(pixel, mask)) {
+                SDL_Color sample = getColor(screen,
                         x - px + MIRROR_BORDER, y + py);
-                putPixel(screen, x + px, y + py, sample);
+                putColor(screen, x + px, y + py, sample);
             }
             else {
-                Uint8 alpha = getAlpha(pixel, surface->format);
-                if (alpha == 255) {
-                    putPixel(screen, x + px, y + py, pixel);
+                if (pixel.unused == 255) {
+                    putColor(screen, x + px, y + py, pixel);
                 }
             }
         }
@@ -135,16 +133,40 @@ ViewEffect::blitMirror(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
 }
 
 //-----------------------------------------------------------------
-/**
- * Get Alpha component.
- */
-Uint8
-ViewEffect::getAlpha(Uint32 pixel, SDL_PixelFormat *fmt)
+bool
+ViewEffect::colorEquals(const SDL_Color &color1, const SDL_Color &color2)
 {
-    Uint32 temp = pixel & fmt->Amask; // Isolate alpha component
-    temp = temp >> fmt->Ashift; // Shift it down to 8-bit
-    temp = temp << fmt->Aloss; // Expand to a full 8-bit number
-    return temp;
+    return color1.r == color2.r
+        && color1.g == color2.g
+        && color1.b == color2.b
+        && color1.unused == color2.unused;
+}
+//-----------------------------------------------------------------
+/**
+ * Get color at x, y.
+ * Surface must be locked.
+ * @return color
+ */
+SDL_Color
+ViewEffect::getColor(SDL_Surface *surface, int x, int y)
+{
+    SDL_Color color;
+    SDL_GetRGBA(getPixel(surface, x, y), surface->format,
+            &color.r, &color.g, &color.b, &color.unused);
+    return color;
+}
+//-----------------------------------------------------------------
+/**
+ * Put color at x, y.
+ * Surface must be locked.
+ */
+void
+ViewEffect::putColor(SDL_Surface *surface, int x, int y,
+        const SDL_Color &color)
+{
+    Uint32 pixel = SDL_MapRGBA(surface->format,
+            color.r, color.g, color.b, color.unused);
+    putPixel(surface, x, y, pixel);
 }
 //-----------------------------------------------------------------
 /**
