@@ -111,6 +111,8 @@ Path::isValid(const std::string &file)
     try {
         boost::filesystem::path ignore(file,
                 boost::filesystem::portable_posix_name);
+        ignore = boost::filesystem::path(ignore.native_file_string(),
+                boost::filesystem::native);
         result = true;
     }
     catch (boost::filesystem::filesystem_error &e) {
