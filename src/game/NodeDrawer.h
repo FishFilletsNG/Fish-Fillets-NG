@@ -2,9 +2,11 @@
 #define HEADER_NODEDRAWER_H
 
 class LevelNode;
+class ResImagePack;
 
 #include "NoCopy.h"
 #include "SFont.h"
+#include "V2.h"
 
 #include "SDL.h"
 #include <string>
@@ -14,13 +16,11 @@ class LevelNode;
  */
 class NodeDrawer : public NoCopy {
     private:
+        ResImagePack *m_imagePack;
         SDL_Surface *m_screen;
-        SDL_Surface *m_dotOpen;
-        SDL_Surface *m_dotFar;
-        SDL_Surface *m_dotSolved;
-        SDL_Surface *m_dotSelected;
-        int m_dotRadius;
         SFont_Font *m_font;
+    private:
+        void drawDot(SDL_Surface *dot, const V2 &loc) const;
     public:
         NodeDrawer();
         virtual ~NodeDrawer();

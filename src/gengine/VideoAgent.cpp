@@ -198,10 +198,10 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
     if (msg->equalsName("fullscreen")) {
         OptionAgent *options = OptionAgent::agent();
         if (options->getAsInt("fullscreen")) {
-            options->setParam("fullscreen", "0");
+            options->setPersistent("fullscreen", "0");
         }
         else {
-            options->setParam("fullscreen", "1");
+            options->setPersistent("fullscreen", "1");
         }
     }
     else {

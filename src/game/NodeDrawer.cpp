@@ -8,64 +8,89 @@
  */
 #include "NodeDrawer.h"
 
+#include "ResImagePack.h"
+
 #include "Log.h"
-#include "LevelNode.h"
-#include "ResImageAgent.h"
-#include "ResFontPack.h"
 #include "Path.h"
+#include "LevelNode.h"
+#include "ResFontPack.h"
+#include "TimerAgent.h"
 
 #include "SDL_gfxPrimitives.h"
 
 //-----------------------------------------------------------------
 NodeDrawer::NodeDrawer()
 {
-    //TODO: blinking dots
-    m_dotFar = ResImageAgent::agent()->loadImage(
-            Path::dataReadPath("images/menu/n1.png"));
-    m_dotOpen = ResImageAgent::agent()->loadImage(
-            Path::dataReadPath("images/menu/n3.png"));
-    m_dotSolved = ResImageAgent::agent()->loadImage(
+    m_imagePack = new ResImagePack();
+    m_imagePack->addImage("solved",
             Path::dataReadPath("images/menu/n0.png"));
-    m_dotSelected = ResImageAgent::agent()->loadImage(
+
+    m_imagePack->addImage("open",
+            Path::dataReadPath("images/menu/n1.png"));
+    m_imagePack->addImage("open",
+            Path::dataReadPath("images/menu/n2.png"));
+    m_imagePack->addImage("open",
+            Path::dataReadPath("images/menu/n3.png"));
+    m_imagePack->addImage("open",
             Path::dataReadPath("images/menu/n4.png"));
-    m_dotRadius = m_dotOpen->w / 2;
+
+    m_imagePack->addImage("far",
+            Path::dataReadPath("images/menu/n_far.png"));
 
     m_font = ResFontPack::loadFont(Path::dataReadPath("font/font_menu.png"));
 }
 //-----------------------------------------------------------------
 NodeDrawer::~NodeDrawer()
 {
-    SDL_FreeSurface(m_dotFar);
-    SDL_FreeSurface(m_dotOpen);
-    SDL_FreeSurface(m_dotSolved);
-    SDL_FreeSurface(m_dotSelected);
+    m_imagePack->removeAll();
+    delete m_imagePack;
     SFont_FreeFont(m_font);
 }
 //-----------------------------------------------------------------
+/**
+ * Draw blinking dot centred on node position.
+ */
 void
 NodeDrawer::drawNode(const LevelNode *node) const
 {
     V2 loc = node->getLoc();
-    SDL_Rect rect;
-    rect.x = loc.getX() - m_dotRadius;
-    rect.y = loc.getY() - m_dotRadius;
+    drawDot(m_imagePack->getRes("far"), loc);
 
     SDL_Surface *dot = NULL;
     switch (node->getState()) {
         case LevelNode::STATE_FAR:
-            dot = m_dotFar;
-            break;
+            return;
         case LevelNode::STATE_OPEN:
-            dot = m_dotOpen;
+            {
+                int phase = TimerAgent::agent()->getCycles() % 8;
+                if (phase >= 4) {
+                    phase = 7 - phase;
+                }
+                dot = m_imagePack->getRes("open", phase);
+            }
             break;
         case LevelNode::STATE_SOLVED:
-            dot = m_dotSolved;
+            dot = m_imagePack->getRes("solved");
             break;
         default:
             LOG_WARNING(ExInfo("don't know how to draw node")
                     .addInfo("state", node->getState()));
             return;
     }
+    drawDot(dot, loc);
+}
+//-----------------------------------------------------------------
+/**
+ * Draw centred.
+ * @param x x cord. or centre
+ * @param x y cord. or centre
+ */
+void
+NodeDrawer::drawDot(SDL_Surface *dot, const V2 &loc) const
+{
+    SDL_Rect rect;
+    rect.x = loc.getX() - dot->w / 2;
+    rect.y = loc.getY() - dot->h / 2;
     SDL_BlitSurface(dot, NULL, m_screen, &rect);
 }
 //-----------------------------------------------------------------
@@ -85,10 +110,12 @@ NodeDrawer::drawEdge(const LevelNode *start, const LevelNode *end) const
     Sint16 y1 = start->getLoc().getY();
     Sint16 x2 = end->getLoc().getX();
     Sint16 y2 = end->getLoc().getY();
-    aalineRGBA(m_screen, x1, y1, x2, y2, 255, 255, 0, 255);
-    aalineRGBA(m_screen, x1 - 1, y1 - 1 , x2 - 1, y2 - 1, 255, 255, 0, 255);
-    aalineRGBA(m_screen, x1 + 1, y1 + 1 , x2 + 1, y2 + 1, 255, 255, 0, 255);
-    aalineRGBA(m_screen, x1 - 1, y1 + 1 , x2 - 1, y2 + 1, 255, 255, 0, 255);
-    aalineRGBA(m_screen, x1 + 1, y1 - 1 , x2 + 1, y2 - 1, 255, 255, 0, 255);
+
+    Uint32 colorRGBA = 0xffff00ff;
+    aalineColor(m_screen, x1, y1, x2, y2, colorRGBA);
+    aalineColor(m_screen, x1 - 1, y1 - 1 , x2 - 1, y2 - 1, colorRGBA);
+    aalineColor(m_screen, x1 + 1, y1 + 1 , x2 + 1, y2 + 1, colorRGBA);
+    aalineColor(m_screen, x1 - 1, y1 + 1 , x2 - 1, y2 + 1, colorRGBA);
+    aalineColor(m_screen, x1 + 1, y1 - 1 , x2 + 1, y2 - 1, colorRGBA);
 }
 
