@@ -133,6 +133,10 @@ MenuOptions::createLangPanel(const Labels &labels)
     return panel;
 }
 //-----------------------------------------------------------------
+/**
+ * Creates menu to select 'speech'.
+ * NOTE: default speech is "cs".
+ */
 IWidget *
 MenuOptions::createSpeechPanel(const Labels &labels)
 {
