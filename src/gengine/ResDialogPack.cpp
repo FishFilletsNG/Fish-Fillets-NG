@@ -31,10 +31,6 @@ ResDialogPack::findDialog(const std::string &name, const std::string lang)
             return *i;
         }
     }
-
-    LOG_WARNING(ExInfo("cannot find dialog")
-            .addInfo("name", name)
-            .addInfo("lang", lang));
     return NULL;
 }
 

@@ -73,7 +73,7 @@ Cube::createBorder()
     void
 Cube::change_die()
 {
-    //TODO: nice dead
+    //TODO: nice dead with disintegration
     LOG_INFO(ExInfo("dead")
             .addInfo("fish", toString()));
     m_alive = false;
@@ -99,7 +99,7 @@ Cube::change_goOut()
     //TODO: nice anim
     LOG_INFO(ExInfo("out of room")
             .addInfo("object", toString()));
-    //NOTE: hack, moved out
+    //NOTE: hack, object is moved out
     m_loc = V2(-1000, -1000);
     m_out = true;
 }

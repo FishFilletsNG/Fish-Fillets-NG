@@ -39,8 +39,7 @@ InputAgent::own_init()
     SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
     m_keys = SDL_GetKeyState(NULL);
 
-    //NOTE: debug LUA script console
-    //TODO: print lua result to window, it is now printed to the text console
+    //TODO: print lua output to window, it is now printed to the text console
     m_console->setHandler(Name::SCRIPT_NAME);
     KeyStroke tilde = KeyStroke(SDLK_BACKQUOTE, KMOD_NONE);
     SimpleMsg *console = new SimpleMsg(this, "console");

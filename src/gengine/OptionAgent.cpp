@@ -19,6 +19,8 @@
 #include "LogicException.h"
 
 #include <stdio.h>
+#include <string.h>
+#include <locale.h>
 
 //TODO: set system datadir
 #ifndef SYSTEM_DATA_DIR
@@ -52,6 +54,7 @@ OptionAgent::~OptionAgent()
 OptionAgent::own_init()
 {
     prepareDataPaths();
+    prepareLang();
 
     //NOTE: process system_dir options first,
     // user options will overwrite them later
@@ -62,23 +65,6 @@ OptionAgent::own_init()
     msg = new StringMsg(Name::SCRIPT_NAME,
             "dofile", "script/init.lua");
     MessagerAgent::agent()->forwardNewMsg(msg);
-}
-//-----------------------------------------------------------------
-/**
- * Set user and sytem dir.
- */
-void
-OptionAgent::prepareDataPaths()
-{
-    OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
-
-    std::string userdir = "";
-    const char *home = getenv("HOME");
-    if (home) {
-        userdir = home;
-        userdir += USER_DATA_DIR;
-    }
-    OptionAgent::agent()->setParam("userdir", userdir);
 }
 //-----------------------------------------------------------------
 /**
@@ -103,6 +89,40 @@ OptionAgent::own_shutdown()
     else {
         LOG_WARNING(ExInfo("cannot save config")
                 .addInfo("file", file.getNative()));
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Set user and sytem dir options.
+ */
+void
+OptionAgent::prepareDataPaths()
+{
+    OptionAgent::agent()->setParam("systemdir", SYSTEM_DATA_DIR);
+
+    std::string userdir = "";
+    const char *home = getenv("HOME");
+    if (home) {
+        userdir = home;
+        userdir += USER_DATA_DIR;
+    }
+    OptionAgent::agent()->setParam("userdir", userdir);
+}
+//-----------------------------------------------------------------
+/**
+ * Prepare user lang option.
+ * For 2-letter lang codes lang
+ * see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
+ */
+void
+OptionAgent::prepareLang()
+{
+    setlocale(LC_ALL, "");
+    if (getParam("lang").empty()) {
+        char *form = setlocale(LC_MESSAGES, "");
+        if (form && strlen(form) >= 2) {
+            setParam("lang", std::string(form, 2));
+        }
     }
 }
 //-----------------------------------------------------------------

@@ -59,7 +59,6 @@ void
 SubTitleAgent::newSubtitle(const std::string &original,
         const std::string &fontname)
 {
-    //TODO: split long subtitle to more rows
     SFont_Font *font = m_fonts->getRes(fontname);
 
     std::string subtitle = original;

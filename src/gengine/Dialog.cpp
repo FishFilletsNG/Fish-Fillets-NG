@@ -42,7 +42,6 @@ Dialog::~Dialog()
     int
 Dialog::talk() const
 {
-    //TODO: play default silence when m_sound is NULL
     int channel = SoundAgent::agent()->playSound(m_sound);
     runSubtitle();
 

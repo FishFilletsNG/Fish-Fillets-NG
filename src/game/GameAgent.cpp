@@ -114,6 +114,7 @@ GameAgent::newLevel(bool restart)
 /**
  * Clear room after visit.
  * NOTE: clear all sound and dialogs too!
+ * Dialogs must free because dialog points at Actor.
  */
 void
 GameAgent::clearRoom()
