@@ -58,6 +58,12 @@ III. Install czech dialogs
 - extract fillets-ng-data-cs.tar.gz to $(datadir)/games/fillets-ng/
   default: /usr/local/share/games/fillets-ng/
 
+To run the game with specific language change locales (you must have
+generated that locales) or use parameter "lang".
+For example to use czech dialogs run
+$ LANG=cs_CZ fillets
+or
+$ fillets lang=cs
 
 
 Controls
