@@ -96,7 +96,7 @@ DemoMode::action_display(Picture *picture)
         options->setParam("screen_height", m_display->getH());
         VideoAgent::agent()->initVideoMode();
 
-        SubTitleAgent::agent()->setLimitY(m_display->getH());
+        SubTitleAgent::agent()->setLimitY(2 * m_display->getH());
     }
     return true;
 }
