@@ -18,7 +18,6 @@ class LevelStatus {
         bool m_complete;
         bool m_wasRunning;
         std::string m_codename;
-        std::string m_levelName;
         std::string m_poster;
         std::string m_savedMoves;
     private:
@@ -28,8 +27,7 @@ class LevelStatus {
     public:
         LevelStatus() { m_complete = false; m_wasRunning = false; }
         void prepareRun(const std::string &codename,
-                const std::string &levelName, const std::string &poster);
-        std::string getLevelName() const { return m_levelName; }
+                const std::string &poster);
         PosterState *createPoster() const;
 
         void setComplete() { m_complete = true; }

@@ -46,11 +46,12 @@ WavyPicture::drawOn(SDL_Surface *screen)
     SDL_Rect pad;
     pad.h = 1;
 
-    double shift = TimerAgent::agent()->getCycles() * m_speed;
+    float shift = TimerAgent::agent()->getCycles() * m_speed;
 
     for (int py = 0; py < m_surface->h; ++py) {
-        double wave = m_amp * sin(py / m_periode + shift);
-        Sint16 shiftX = static_cast<int>(0.5 + wave);
+        //NOTE: C99 has lrintf and sinf
+        Sint16 shiftX = static_cast<Sint16>(0.5 +
+                m_amp * sin(py / m_periode + shift));
         line_rect.x = shiftX;
         line_rect.y = py;
         dest_rect.x = m_loc.getX();

@@ -186,7 +186,6 @@ WorldMap::runSelected()
     Level *level = createSelected();
     if (level && m_selected) {
         m_levelStatus->prepareRun(m_selected->getCodename(),
-                findLevelName(m_selected->getCodename()),
                 m_selected->getPoster());
         level->fillStatus(m_levelStatus);
 

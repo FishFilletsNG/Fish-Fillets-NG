@@ -38,16 +38,18 @@ StateManager::emptyTrash()
 /**
  * Update current state and states on background
  * and empty trash.
- * The states at top will be updated as first.
+ * The states at bottom will be updated as first.
  */
 void
 StateManager::updateGame()
 {
-    t_states::reverse_iterator rend = m_states.rend();
-    for (t_states::reverse_iterator i = m_states.rbegin();
-            i != rend && (*i)->isRunning(); ++i)
-    {
-        (*i)->updateState();
+    t_states::iterator end = m_states.end();
+    for (t_states::iterator i = m_states.begin(); i != end; /* empty */) {
+        //NOTE: state can remove self and thus invalide current iterator
+        GameState *cur = *(i++);
+        if (cur->isRunning()) {
+            cur->updateState();
+        }
     }
 
     emptyTrash();

@@ -47,13 +47,11 @@ LevelStatus::readMoves(const std::string &savedMoves)
 
 //-----------------------------------------------------------------
 void
-LevelStatus::prepareRun(const std::string &codename,
-                const std::string &levelName, const std::string &poster)
+LevelStatus::prepareRun(const std::string &codename, const std::string &poster)
 {
     m_complete = false;
     m_wasRunning = false;
     m_codename = codename;
-    m_levelName = levelName;
     m_poster = poster;
 }
 //-----------------------------------------------------------------

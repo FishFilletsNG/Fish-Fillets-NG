@@ -8,14 +8,14 @@
  */
 class WavyPicture : public Picture {
     private:
-        double m_amp;
-        double m_periode;
-        double m_speed;
+        float m_amp;
+        float m_periode;
+        float m_speed;
     public:
         WavyPicture(const Path &file, const V2 &loc);
-        void setWamp(double amplitude) { m_amp = amplitude; }
-        void setWperiode(double periode) { m_periode = periode; }
-        void setWspeed(double speed) { m_speed = speed; }
+        void setWamp(float amplitude) { m_amp = amplitude; }
+        void setWperiode(float periode) { m_periode = periode; }
+        void setWspeed(float speed) { m_speed = speed; }
 
         virtual void drawOn(SDL_Surface *screen);
 };

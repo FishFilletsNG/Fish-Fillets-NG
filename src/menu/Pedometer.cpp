@@ -61,7 +61,7 @@ Pedometer::prepareBg()
             Path::dataReadPath("images/menu/map.png"));
     NodeDrawer drawer;
     drawer.setScreen(bgSurface);
-    drawer.drawSelected(m_status->getLevelName());
+    drawer.drawSelected(m_level->getLevelName());
     m_bg = new Picture(bgSurface, V2(0, 0));
 }
 //-----------------------------------------------------------------

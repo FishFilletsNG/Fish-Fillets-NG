@@ -19,15 +19,19 @@
 #include "IntMsg.h"
 #include "Path.h"
 
+#include "OptionAgent.h"
+
 //-----------------------------------------------------------------
     void
 GameAgent::own_init()
 {
     m_manager = new StateManager();
+    Path pathMap = Path::dataReadPath(OptionAgent::agent()->getParam(
+                "worlmap", "script/worldmap.lua"));
+    Path pathDesc = Path::dataReadPath(OptionAgent::agent()->getParam(
+                "worlddesc", "script/worlddesc.lua"));
     WorldMap *worldmap = new WorldMap();
-    worldmap->initMap(
-            Path::dataReadPath("script/worldmap.lua"),
-            Path::dataReadPath("script/worlddesc.lua"));
+    worldmap->initMap(pathMap, pathDesc);
     m_manager->pushState(NULL, worldmap);
 
     keyBinding();

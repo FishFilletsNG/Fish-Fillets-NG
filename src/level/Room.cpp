@@ -80,7 +80,7 @@ Room::~Room()
  * Set waves on background.
  */
     void
-Room::setWaves(double amplitude, double periode, double speed)
+Room::setWaves(float amplitude, float periode, float speed)
 {
     m_bg->setWamp(amplitude);
     m_bg->setWperiode(periode);

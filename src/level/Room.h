@@ -47,7 +47,7 @@ class Room : public StepCounter, public Drawable {
         Room(int w, int h, const Path &picture,
                 PhaseLocker *locker, Planner *levelScript);
         ~Room();
-        void setWaves(double amplitude, double periode, double speed);
+        void setWaves(float amplitude, float periode, float speed);
         void addDecor(Decor *new_decor);
 
         int addModel(Cube *new_model, Unit *new_unit);

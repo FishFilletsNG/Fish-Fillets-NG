@@ -73,7 +73,7 @@ class Level : public GameState {
         virtual void own_noteFg();
     public:
         Level(const std::string &codename, const Path &datafile, int depth);
-        ~Level();
+        virtual ~Level();
         virtual const char *getName() const { return "state_level"; };
         void fillDesc(const DescFinder *desc) { m_desc = desc; }
         void fillStatus(LevelStatus *status) { m_levelStatus = status; }
@@ -90,6 +90,7 @@ class Level : public GameState {
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
 
+        std::string getLevelName() const;
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
         bool isNewRound() const { return m_newRound; }

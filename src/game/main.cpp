@@ -25,7 +25,7 @@
  *  - OptionAgent - contains global game options.
  *  - VideoAgent - inits video mode and calls drawers draw() method.
  *  - SoundAgent - plays music and sound.
- *  - InputAgent - reads input event and handles keystrokes and in game console.
+ *  - InputAgent - reads input events and handles keystrokes
  *  - DialogAgent - plans NPC dialogs
  *  - SubTitleAgent - scrolls subtitles on display
  *  - GameAgent - updates game states
