@@ -3,11 +3,11 @@ Ivo Danihelka <ivo@danihelka.net>
 - developed new game engine
 
 Pavel Danihelka <fillets@danihelka.net>
-- convert level data, documentation, webmaster
+- webmaster, level data, documentation
+
+Frederic Panico <fratloev@yahoo.fr>
+- French translation
 
 ALTAR interactive <info@altarinteractive.com>
 - developed original game in 1998 (for Win32)
 - released code and data under GNU/GPL in 03/2004
-
-Frederic Panico <fratloev@yahoo.fr>
-- French translation
