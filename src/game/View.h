@@ -13,7 +13,7 @@ class ResImagePack;
 class View : public IDrawer, public NoCopy {
     public:
         static const int SCALE = 15;
-
+    private:
         SDL_Surface *m_surface;
         const Cube *m_model;
         int m_animShift;

@@ -78,8 +78,6 @@ CXXFLAGS="$CXXFLAGS -Wall -W -Wpointer-arith -Wcast-qual \
 -Wstrict-prototypes"
 if test "x$debug" = "xtrue"; then
     CXXFLAGS="$CXXFLAGS -pipe -g3"
-else
-    CXXFLAGS="$CXXFLAGS -pipe -O2"
 fi
 
 ###################################################
