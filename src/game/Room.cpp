@@ -72,8 +72,9 @@ Room::getModel(int model_index)
 /**
  * Update all models.
  * Prepare new move, let models fall, let models drive, release old position.
+ * @return true when room is finished
  */
-    void
+    bool
 Room::nextRound()
 {
     prepareRound();
@@ -82,10 +83,7 @@ Room::nextRound()
         driving();
     }
 
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->finishRound();
-    }
+    return finishRound();
 }
 //-----------------------------------------------------------------
 /**
@@ -104,7 +102,10 @@ Room::prepareRound()
         (*j)->rules()->checkDead();
     }
     for (Cube::t_models::iterator k = m_models.begin(); k != end; ++k) {
-        (*k)->rules()->prepareRound();
+        (*k)->rules()->checkOut();
+    }
+    for (Cube::t_models::iterator l = m_models.begin(); l != end; ++l) {
+        (*l)->rules()->prepareRound();
     }
 }
 //-----------------------------------------------------------------
@@ -137,6 +138,25 @@ Room::driving()
             return;
         }
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Let models to release their old position.
+ * Check complete room.
+ * @return true when room is finished
+ */
+bool
+Room::finishRound()
+{
+    bool room_complete = true;
+
+    Cube::t_models::iterator end = m_models.end();
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->finishRound();
+        room_complete &= (*i)->isSatisfy();
+    }
+
+    return room_complete;
 }
 
 

@@ -295,6 +295,50 @@ script_model_isLeft(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * void model_setGoal(model_index, goalname)
+ * Choose:
+ * - "goal_no" .. no goal
+ * - "goal_out" ... go out
+ * - "goal_escape" ... go alive out
+ */
+    int
+script_model_setGoal(lua_State *L) throw()
+{
+    //NOTE: (const char*)== does not compare string equality
+    static const std::string GOAL_NO = "goal_no";
+    static const std::string GOAL_OUT = "goal_out";
+    static const std::string GOAL_ESCAPE = "goal_escape";
+
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    const char *goalname = luaL_checkstring(L, 2);
+
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    Goal goal = Goal::noGoal();
+    if (GOAL_NO == goalname) {
+        goal = Goal::noGoal();
+    }
+    else if (GOAL_OUT == goalname) {
+        goal = Goal::outGoal();
+    }
+    else if (GOAL_ESCAPE == goalname) {
+        goal = Goal::escapeGoal();
+    }
+    else {
+        ExInfo error = ExInfo("unknown goal")
+            .addInfo("goal", goalname);
+        LOG_WARNING(error);
+        luaL_error(L, error.what());
+    }
+
+    model->setGoal(goal);
+
+    END_NOEXCEPTION;
+    //NOTE: return how many values want to return to lua
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
  * void model_change_turnSide(model_index)
  *
  * Change look side.

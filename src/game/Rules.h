@@ -23,6 +23,8 @@ class Rules : public NoCopy {
         eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
+        bool m_readyToGoout;
+        bool m_pushing;
 
         Cube *m_model;
         MarkMask *m_mask;
@@ -42,6 +44,8 @@ class Rules : public NoCopy {
         bool isHeavier(Cube::eWeight power) const;
         Cube::t_models whoIsHeavier(Cube::eWeight power);
 
+        bool canFall();
+        bool canDir(eDir dir, Cube::eWeight power);
         bool canMoveOthers(eDir dir, Cube::eWeight weight);
         void moveDirBrute(eDir dir);
     public:
@@ -50,7 +54,8 @@ class Rules : public NoCopy {
         void takeField(Field *field);
 
         void occupyNewPos();
-        void checkDead();
+        bool checkDead();
+        bool checkOut();
         void prepareRound();
         void freeOldPos();
 
@@ -58,11 +63,9 @@ class Rules : public NoCopy {
         bool actionMoveDir(eDir dir);
         void actionTurnSide();
 
-        bool canFall();
-        bool canDir(eDir dir, Cube::eWeight power);
-
         eDir getDir() const { return m_dir; }
         std::string getAction() const;
+        std::string getState() const;
 
         V2 dir2xy(eDir dir) const;
 };

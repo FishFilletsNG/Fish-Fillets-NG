@@ -6,7 +6,6 @@ class Anim;
 
 #include "IDrawer.h"
 #include "NoCopy.h"
-#include "Path.h"
 
 /**
  * View for model.

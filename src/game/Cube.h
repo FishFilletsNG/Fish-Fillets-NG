@@ -9,6 +9,7 @@ class Anim;
 
 #include "V2.h"
 #include "NoCopy.h"
+#include "Goal.h"
 
 #include <vector>
 
@@ -26,6 +27,7 @@ class Cube : public NoCopy {
     private:
         V2 m_loc;
         bool m_alive;
+        bool m_out;
         eWeight m_weight;
         eWeight m_power;
         bool m_lookLeft;
@@ -35,31 +37,36 @@ class Cube : public NoCopy {
         Driver *m_driver;
         View *m_view;
         Rules *m_rules;
+        Goal m_goal;
     public:
         Cube(const V2 &location,
                 eWeight weight, eWeight power, bool alive,
                 Driver *driver, View *view, Shape *shape);
         ~Cube();
+        void setIndex(int model_index) { m_index = model_index; }
+        void setGoal(const Goal &goal) { m_goal = goal; }
 
         bool drive();
         void finishRound();
 
         void change_die();
+        void change_goOut();
         void change_turnSide();
         void change_setLocation(V2 loc) { m_loc = loc; }
 
         V2 getLocation() const { return m_loc; }
         bool isAlive() const { return m_alive; }
+        bool isLeft() const { return m_lookLeft; }
+        bool isOut() const { return m_out; }
+        bool isSatisfy() const { return m_goal.isSatisfy(this); }
+
+        eWeight getWeight() const { return m_weight; }
+        eWeight getPower() const { return m_power; }
         const Shape *getShape() const { return m_shape; }
 
-        bool isLeft() const { return m_lookLeft; }
         Anim *anim();
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };
-
-        void setIndex(int model_index) { m_index = model_index; }
-        eWeight getWeight() const { return m_weight; }
-        eWeight getPower() const { return m_power; }
 
         std::string toString() const;
 };

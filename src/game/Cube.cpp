@@ -10,7 +10,6 @@
 
 #include "Log.h"
 #include "View.h"
-#include "MarkMask.h"
 #include "Shape.h"
 #include "Driver.h"
 #include "Rules.h"
@@ -24,17 +23,16 @@
 //-----------------------------------------------------------------
 /**
  * Create new model.
- * Set the mask later with takeField().
  */
 Cube::Cube(const V2 &location,
         eWeight weight, eWeight power, bool alive,
         Driver *driver, View *a_view, Shape *shape)
-: m_loc(location)
+: m_loc(location), m_goal(Goal::noGoal())
 {
     m_weight = weight;
     m_power = power;
     m_alive = alive;
-    //TODO: set look side according a level
+    m_out = false;
     m_lookLeft = true;
     m_index = -1;
 
@@ -82,6 +80,20 @@ Cube::change_die()
     SoundAgent::agent()->playRandomSound("xplo");
 }
 //-----------------------------------------------------------------
+/**
+ * Go out of room.
+ */
+    void
+Cube::change_goOut()
+{
+    //TODO: nice anim
+    LOG_INFO(ExInfo("out of room")
+            .addInfo("object", toString()));
+    //FIXME: where to move outher object
+    m_loc = V2(-1000, -1000);
+    m_out = true;
+}
+//-----------------------------------------------------------------
     void
 Cube::change_turnSide()
 {
@@ -109,7 +121,6 @@ Cube::finishRound()
     m_rules->freeOldPos();
     m_view->noteNewRound();
 }
-
 //-----------------------------------------------------------------
     Anim *
 Cube::anim()

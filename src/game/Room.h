@@ -21,13 +21,14 @@ class Room : public NoCopy {
         void prepareRound();
         bool falldown();
         void driving();
+        bool finishRound();
     public:
         Room(int w, int h, const Path &picture);
         ~Room();
 
         int addModel(Cube *model);
         Cube *getModel(int model_index);
-        void nextRound();
+        bool nextRound();
 
         int getW() const { return m_field->getW(); }
         int getH() const { return m_field->getH(); }

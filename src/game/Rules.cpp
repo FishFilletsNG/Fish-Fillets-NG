@@ -22,7 +22,9 @@ Rules::Rules(Cube *model)
 {
     m_readyToDie = false;
     m_readyToTurn = false;
+    m_readyToGoout = false;
     m_dir = DIR_NO;
+    m_pushing = false;
 
     m_model = model;
     m_mask = NULL;
@@ -60,6 +62,7 @@ Rules::takeField(Field *field)
 
     m_mask->mask();
 }
+
 //-----------------------------------------------------------------
 /**
  * Accomplish last move in m_dir direction.
@@ -69,6 +72,8 @@ Rules::takeField(Field *field)
 Rules::occupyNewPos()
 {
     if (m_dir != DIR_NO) {
+        m_pushing = false;
+
         V2 shift = dir2xy(m_dir);
         V2 oldLoc = m_model->getLocation();
         m_model->change_setLocation(oldLoc.composition(shift));
@@ -87,13 +92,15 @@ Rules::occupyNewPos()
  * - when any model rests SOLELY on models SOLELY on a fish
  *   with fish.power < model.weight
  * 
+ * @return true when fish is dead
  */
-    void
+    bool
 Rules::checkDead()
 {
     //TODO: after falling phase is sufficient to check only DeadFall
+    bool dead = false;
+
     if (m_model->isAlive()) {
-        bool dead = false;
         if (checkDeadMove()) {
             dead = true;
         }
@@ -110,7 +117,28 @@ Rules::checkDead()
             m_readyToDie = true;
         }
     }
+
+    return dead;
 }
+//-----------------------------------------------------------------
+/**
+ * Check out of room objects.
+ * @return true when object is out
+ */
+bool
+Rules::checkOut()
+{
+    bool result = false;
+    if (false == isWall() && false == m_model->isOut()) {
+        if (m_mask->isAtBorder()) {
+            m_readyToGoout = true;
+            result = true;
+        }
+    }
+
+    return result;
+}
+
 //-----------------------------------------------------------------
 /**
  * Return true when any model moves in dir != DIR_UP
@@ -189,6 +217,12 @@ Rules::prepareRound()
 {
     m_dir = DIR_NO;
 
+    if (m_readyToGoout) {
+        m_readyToGoout = false;
+        m_mask->unmask();
+        m_model->change_goOut();
+    }
+
     if (m_readyToTurn) {
         m_readyToTurn = false;
         m_model->change_turnSide();
@@ -235,8 +269,12 @@ Rules::freeOldPos()
     bool
 Rules::canFall()
 {
-    //NOTE: hack with heavy power
-    return canDir(DIR_DOWN, Cube::HEAVY);
+    bool result = false;
+    if (false == m_model->isOut()) {
+        //NOTE: hack with heavy power
+        result = canDir(DIR_DOWN, Cube::HEAVY);
+    }
+    return result;
 }
 
 //-----------------------------------------------------------------
@@ -490,7 +528,7 @@ Rules::actionMoveDir(eDir dir)
 /**
  * Irrespective move.
  * Set m_dir to this dir and do the same for all resist.
- * Only m_dir will be set.
+ * Only m_dir and m_pushing will be set.
  */
     void
 Rules::moveDirBrute(eDir dir)
@@ -500,6 +538,9 @@ Rules::moveDirBrute(eDir dir)
 
     Cube::t_models resist = m_mask->getResist(dir);
     Cube::t_models::iterator end = resist.end();
+    if (end != resist.begin()) {
+        m_pushing = true;
+    }
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
         (*i)->rules()->moveDirBrute(dir);
     }
@@ -553,6 +594,9 @@ Rules::actionTurnSide()
 std::string
 Rules::getAction() const
 {
+    if (m_readyToGoout) {
+        return "goout";
+    }
     if (m_readyToTurn) {
         return "turn";
     }
@@ -566,6 +610,20 @@ Rules::getAction() const
     }
 
     return "rest";
+}
+//-----------------------------------------------------------------
+/**
+ * Return how we have feel the last round.
+ * NOTE: dead is not action
+ */
+std::string
+Rules::getState() const
+{
+    if (m_pushing) {
+        return "pushing";
+    }
+
+    return "normal";
 }
 
 

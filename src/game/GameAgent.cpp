@@ -61,9 +61,10 @@ GameAgent::own_update()
         m_script->doString("update()");
     }
 
+    bool room_complete = false;
     if (0 == m_lockPhases) {
         if (m_room) {
-            m_room->nextRound();
+            room_complete = m_room->nextRound();
             if (m_script) {
                 m_script->doString("nextRound()");
             }
@@ -72,6 +73,12 @@ GameAgent::own_update()
 
     if (m_lockPhases > 0) {
         --m_lockPhases;
+    }
+
+    if (room_complete) {
+        //TODO: game menu
+        LOG_INFO(ExInfo("gratulation, room is complete"));
+        newLevel();
     }
 }
 //-----------------------------------------------------------------
@@ -102,6 +109,8 @@ GameAgent::newLevel()
         delete m_script;
         m_script = NULL;
     }
+
+    m_lockPhases = 0;
     m_script = new ScriptState();
     registerGameFuncs();
 
@@ -131,6 +140,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_getAction", script_model_getAction);
     m_script->registerFunc("model_isAlive", script_model_isAlive);
     m_script->registerFunc("model_isLeft", script_model_isLeft);
+    m_script->registerFunc("model_setGoal", script_model_setGoal);
     m_script->registerFunc("model_change_turnSide",
             script_model_change_turnSide);
 

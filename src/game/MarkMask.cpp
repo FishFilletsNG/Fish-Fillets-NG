@@ -82,4 +82,26 @@ MarkMask::writeModel(Cube *model)
     }
 }
 
+//-----------------------------------------------------------------
+/**
+ * Returns true when object is at [0,.] or [.,0] or [w-1,.] or [.,h-1].
+ * @return true when object go out
+ */
+    bool
+MarkMask::isAtBorder()
+{
+    V2 loc = m_model->getLocation();
+    const Shape *shape = m_model->getShape();
+    Shape::const_iterator end = shape->end();
+    for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
+        V2 mark = loc.composition(*i);
+        if ((mark.getX() == 0 || mark.getX() == m_field->getW() - 1)
+                || (mark.getY() == 0 || mark.getY() == m_field->getH() - 1))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 

@@ -20,6 +20,7 @@ class MarkMask : public NoCopy {
         void mask();
         void unmask();
 
+        bool isAtBorder();
 };
 
 #endif

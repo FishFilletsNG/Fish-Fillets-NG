@@ -31,7 +31,7 @@ bool
 KeyDriver::drive(Cube *model)
 {
     bool result = false;
-    if (model->isAlive()) {
+    if (model->isAlive() && false == model->isOut()) {
         if (false == result && m_keys[m_control.getLeft()]) {
             if (model->isLeft()) {
                 result = model->rules()->actionMoveDir(Rules::DIR_LEFT);

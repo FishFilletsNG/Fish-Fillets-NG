@@ -83,7 +83,7 @@ ScriptState::doString(const std::string &input)
     void
 ScriptState::registerFunc(const char *name, lua_CFunction func)
 {
-    LOG_INFO(ExInfo("register script func")
+    LOG_DEBUG(ExInfo("register script func")
             .addInfo("name", name));
     lua_register(m_state, name, func);
 }
