@@ -340,16 +340,10 @@ Room::controlMouse(const MouseStroke &button)
 }
 
 //-----------------------------------------------------------------
-int
-Room::getStepCount() const
+const StepCounter *
+Room::stepCounter() const
 {
-    return m_controls->getStepCount();
-}
-//-----------------------------------------------------------------
-std::string
-Room::getMoves() const
-{
-    return m_controls->getMoves();
+    return m_controls;
 }
 //-----------------------------------------------------------------
     void

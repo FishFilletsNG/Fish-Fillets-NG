@@ -54,6 +54,7 @@ class Unit {
         bool isFreePlace(const V2 &loc) const;
 
         int countAnimPhases(const std::string &anim) const;
+        bool isPowerful() const;
 };
 
 #endif

@@ -20,6 +20,7 @@
 
 #include "Log.h"
 #include "Room.h"
+#include "StepCounter.h"
 #include "View.h"
 #include "OptionAgent.h"
 #include "VideoAgent.h"
@@ -256,7 +257,8 @@ Level::saveGame(const std::string &models)
         Path file = Path::dataWritePath("saves/" + m_codename + ".lua");
         FILE *saveFile = fopen(file.getNative().c_str(), "w");
         if (saveFile) {
-            std::string moves = m_levelScript->room()->getMoves();
+            std::string moves =
+                m_levelScript->room()->stepCounter()->getMoves();
             fputs("\nsaved_moves = '", saveFile);
             fputs(moves.c_str(), saveFile);
             fputs("'\n", saveFile);
@@ -427,7 +429,7 @@ Level::controlMouse(const MouseStroke &button)
 Level::createRoom(int w, int h, const Path &picture)
 {
     Room *room = new Room(w, h, picture, m_locker, m_levelScript);
-    room->addDecor(new StepDecor(room));
+    room->addDecor(new StepDecor(room->stepCounter()));
     m_levelScript->takeRoom(room);
     m_background->removeAll();
     m_background->acceptDrawer(room);

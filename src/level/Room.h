@@ -15,17 +15,17 @@ class Planner;
 class View;
 class Decor;
 class InputProvider;
+class StepCounter;
 
 #include "Drawable.h"
 #include "Cube.h"
-#include "StepCounter.h"
 
 #include <string>
 
 /**
  * Room with level.
  */
-class Room : public StepCounter, public Drawable {
+class Room : public Drawable {
     private:
         WavyPicture *m_bg;
         Field *m_field;
@@ -72,10 +72,9 @@ class Room : public StepCounter, public Drawable {
         bool cannotMove() const;
         bool isSolvable() const;
         bool isSolved() const;
-        int getStepCount() const;
-        std::string getMoves() const;
         void checkActive();
         void unBusyUnits();
+        const StepCounter *stepCounter() const;
 
         int getW() const;
         int getH() const;

@@ -11,6 +11,7 @@
 #include "LevelStatus.h"
 #include "RoomAccess.h"
 #include "Room.h"
+#include "StepCounter.h"
 #include "LogicException.h"
 #include "CountAdvisor.h"
 
@@ -95,7 +96,8 @@ LevelCountDown::isWrongEnough() const
 LevelCountDown::saveSolution()
 {
     m_levelStatus->setComplete();
-    std::string current_moves = m_access->const_room()->getMoves();
+    std::string current_moves =
+        m_access->const_room()->stepCounter()->getMoves();
     m_levelStatus->writeSolvedMoves(current_moves);
 }
 //-----------------------------------------------------------------

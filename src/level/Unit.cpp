@@ -286,5 +286,9 @@ Unit::countAnimPhases(const std::string &anim) const
 {
     return m_model->anim()->countAnimPhases(anim);
 }
-
+//-----------------------------------------------------------------
+bool
+Unit::isPowerful() const {
+    return m_model->getPower() >= Cube::HEAVY;
+}
 

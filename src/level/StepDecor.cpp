@@ -27,14 +27,23 @@ StepDecor::StepDecor(const StepCounter *counter)
 void
 StepDecor::drawOnScreen(const View * /*view*/, SDL_Surface *screen)
 {
+    static const SDL_Color COLOR_ORANGE = {255, 197, 102, 255};
+    static const SDL_Color COLOR_BLUE = {162, 244, 255, 255};
+
     if (OptionAgent::agent()->getAsInt("show_steps")) {
-        SDL_Color white = {255, 255, 255, 255};
+        SDL_Color color;
+        if (m_counter->isPowerful()) {
+            color = COLOR_BLUE;
+        }
+        else {
+            color = COLOR_ORANGE;
+        }
+
         std::string steps = StringTool::toString(m_counter->getStepCount());
-        int text_width = m_font.calcTextWidth(steps);
-        SDL_Surface *text_surface = m_font.renderTextOutlined(steps, white);
+        SDL_Surface *text_surface = m_font.renderTextOutlined(steps, color);
 
         SDL_Rect rect;
-        rect.x = screen->w - text_width - 10;
+        rect.x = screen->w - text_surface->w;
         rect.y = 10;
         SDL_BlitSurface(text_surface, NULL, screen, &rect);
         SDL_FreeSurface(text_surface);
