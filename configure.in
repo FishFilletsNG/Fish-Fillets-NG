@@ -14,7 +14,7 @@ AC_PROG_INSTALL
 AC_PROG_RANLIB
 
 CPPFLAGS="-I/usr/local/include $CPPFLAGS"
-LIBS="-L/usr/local/lib -pthread -lm $LIBS"
+LIBS="-L/usr/local/lib -lm $LIBS"
 
 ###################################################
 # Check for lua and define LUA_CFLAGS and LUA_LIBS
@@ -86,8 +86,11 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 
 ###################################################
 # Test X11
+OLD_CPPFLAGS="$CPPFLAGS"
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 AC_TRY_COMPILE([#include <X11/Xutil.h>], ,
         AC_DEFINE(HAVE_X11))
+CPPFLAGS="$OLD_CPPFLAGS"
 
 ###################################################
 # enable C++ language
