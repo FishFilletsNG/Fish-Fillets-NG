@@ -13,7 +13,7 @@
 #include "BaseListener.h"
 #include "NameException.h"
 
-#include <memory>
+#include <memory> // for auto_ptr
 
 //-----------------------------------------------------------------
 /**

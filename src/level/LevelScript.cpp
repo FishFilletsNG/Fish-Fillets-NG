@@ -16,10 +16,11 @@
 #include "LogicException.h"
 #include "Cube.h"
 #include "Unit.h"
-#include "NewPtr.h"
 
 #include "game-script.h"
 #include "level-script.h"
+
+#include <memory> // for auto_ptr
 
 //-----------------------------------------------------------------
 /**
@@ -74,14 +75,11 @@ LevelScript::interruptPlan()
     int
 LevelScript::addModel(Cube *new_model, Unit *new_unit)
 {
-    NewPtr ptrModel(new_model);
-    NewPtr ptrUnit(new_unit);
-    room();
-    ptrModel.ok();
-    ptrUnit.ok();
+    std::auto_ptr<Cube> ptr_model(new_model);
+    std::auto_ptr<Unit> ptr_unit(new_unit);
 
-    new_model->takeDialogs(dialogs());
-    return room()->addModel(new_model, new_unit);
+    ptr_model->takeDialogs(dialogs());
+    return room()->addModel(ptr_model.release(), ptr_unit.release());
 }
 //-----------------------------------------------------------------
     Cube *
