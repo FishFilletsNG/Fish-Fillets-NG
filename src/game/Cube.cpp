@@ -15,6 +15,7 @@
 #include "Rules.h"
 #include "LayoutException.h"
 #include "DialogAgent.h"
+#include "SoundAgent.h"
 
 #include <assert.h>
 
@@ -77,6 +78,16 @@ Cube::change_die()
             .addInfo("fish", toString()));
     m_alive = false;
     DialogAgent::agent()->killSound(this);
+    switch (m_power) {
+        case LIGHT:
+            SoundAgent::agent()->playRandomSound("dead_small");
+            break;
+        case HEAVY:
+            SoundAgent::agent()->playRandomSound("dead_big");
+            break;
+        default:
+            assert("curious power of dead fish" == NULL);
+    }
 }
 //-----------------------------------------------------------------
 /**
