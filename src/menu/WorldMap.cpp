@@ -19,6 +19,7 @@
 #include "Log.h"
 #include "WorldWay.h"
 #include "OptionAgent.h"
+#include "VideoAgent.h"
 #include "SoundAgent.h"
 #include "LogicException.h"
 #include "ResDialogPack.h"
@@ -122,6 +123,7 @@ WorldMap::own_resumeState()
         options->setParam("caption", findDesc("menu"));
         options->setParam("screen_width", getW());
         options->setParam("screen_height", getH());
+        VideoAgent::agent()->initVideoMode();
     }
 }
 //-----------------------------------------------------------------

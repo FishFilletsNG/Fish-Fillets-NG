@@ -38,13 +38,9 @@ VideoAgent::own_init()
     }
     atexit(SDL_Quit);
 
-    registerWatcher("fullscreen");
-    registerWatcher("screen_width");
-    registerWatcher("screen_height");
-    registerWatcher("screen_bpp");
-
     setIcon(Path::dataReadPath("images/icon.png"));
 
+    registerWatcher("fullscreen");
     initVideoMode();
 }
 //-----------------------------------------------------------------
@@ -101,24 +97,41 @@ VideoAgent::setIcon(const Path &file)
 //-----------------------------------------------------------------
 /**
  * Init video mode along options.
+ * Change window only when necessary.
+ *
  * @throws SDLException when video mode cannot be made,
  * the old video mode remain usable
  */
     void
 VideoAgent::initVideoMode()
 {
-    int videoFlags = getVideoFlags();
-
     OptionAgent *options = OptionAgent::agent();
     int screen_width = options->getAsInt("screen_width", 640);
     int screen_height = options->getAsInt("screen_height", 480);
+
+    SDL_WM_SetCaption(options->getParam("caption", "A game").c_str(), NULL);
+    if (NULL == m_screen
+            || m_screen->w != screen_width
+            || m_screen->h != screen_height)
+    {
+        changeVideoMode(screen_width, screen_height);
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Init new video mode.
+ */
+    void
+VideoAgent::changeVideoMode(int screen_width, int screen_height)
+{
+    OptionAgent *options = OptionAgent::agent();
     int screen_bpp = options->getAsInt("screen_bpp", 32);
     int fullscreen = options->getAsInt("fullscreen", 0);
+    int videoFlags = getVideoFlags();
     if (fullscreen) {
         m_fullscreen = true;
         videoFlags |= SDL_FULLSCREEN;
     }
-    SDL_WM_SetCaption(options->getParam("caption", "A game").c_str(), NULL);
 
     //TODO: check VideoModeOK and available ListModes
     SDL_Surface *newScreen =
@@ -213,9 +226,6 @@ VideoAgent::receiveSimple(const SimpleMsg *msg)
  * Handle incoming message.
  * Messages:
  * - param_changed(fullscreen) ... handle fullscreen
- * - param_changed(screen_width) ... handle screen_width
- * - param_changed(screen_height) ... handle screen_height
- * - param_changed(screen_bpp) ... handle screen_bpp
  *
  * @throws UnknownMsgException
  */
@@ -229,12 +239,6 @@ VideoAgent::receiveString(const StringMsg *msg)
             if (fs != m_fullscreen) {
                 toggleFullScreen();
             }
-        }
-        else if ("screen_width" == param
-                || "screen_height" == param
-                || "screen_bpp" == param)
-        {
-            initVideoMode();
         }
     }
     else {

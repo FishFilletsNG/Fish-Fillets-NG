@@ -26,7 +26,7 @@ class VideoAgent : public BaseAgent {
     private:
         void registerWatcher(const std::string &param);
         void setIcon(const Path &file);
-        void initVideoMode();
+        void changeVideoMode(int screen_width, int screen_height);
         int getVideoFlags();
         void toggleFullScreen();
         static void setTransparent(SDL_Surface *surface);
@@ -41,6 +41,7 @@ class VideoAgent : public BaseAgent {
         virtual void receiveSimple(const SimpleMsg *msg);
         virtual void receiveString(const StringMsg *msg);
 
+        void initVideoMode();
         void acceptDrawer(IDrawer *drawer);
         void removeDrawer(const IDrawer *drawer);
 };

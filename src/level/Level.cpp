@@ -19,6 +19,7 @@
 #include "Room.h"
 #include "View.h"
 #include "OptionAgent.h"
+#include "VideoAgent.h"
 #include "LoadException.h"
 #include "ScriptException.h"
 #include "LogicException.h"
@@ -466,6 +467,7 @@ Level::createRoom(int w, int h, const Path &picture)
     options->setParam("caption", m_desc);
     options->setParam("screen_width", w * View::SCALE);
     options->setParam("screen_height", h * View::SCALE);
+    VideoAgent::agent()->initVideoMode();
 }
 //-----------------------------------------------------------------
 /**

@@ -63,23 +63,25 @@ Environ::store(const Path &file)
     void
 Environ::setParam(const std::string &name, const std::string &value)
 {
-    m_values[name] = value;
     LOG_DEBUG(ExInfo("setParam")
             .addInfo("param", name)
             .addInfo("value", value));
+    if (m_values[name] != value) {
+        m_values[name] = value;
 
-    t_watchers::iterator it = m_watchers.find(name);
-    if (m_watchers.end() != it) {
-        t_watchers::size_type count = m_watchers.count(name);
-        for (t_watchers::size_type i = 0; i < count; ++i) {
-            t_watchers::iterator cur_it = it++;
-            try {
-                cur_it->second->sendClone();
-            }
-            catch (NameException &e) {
-                LOG_WARNING(e.info());
-                delete cur_it->second;
-                m_watchers.erase(cur_it);
+        t_watchers::iterator it = m_watchers.find(name);
+        if (m_watchers.end() != it) {
+            t_watchers::size_type count = m_watchers.count(name);
+            for (t_watchers::size_type i = 0; i < count; ++i) {
+                t_watchers::iterator cur_it = it++;
+                try {
+                    cur_it->second->sendClone();
+                }
+                catch (NameException &e) {
+                    LOG_WARNING(e.info());
+                    delete cur_it->second;
+                    m_watchers.erase(cur_it);
+                }
             }
         }
     }
