@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH fillets 6 "July 14, 2004"
+.TH fillets 6 "August 7, 2004"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -33,16 +33,60 @@ There is an excellent in game tutorial available, so you can start
 playing right away.
 .PP
 .SH OPTIONS
-.PP
-So far the commandline options are undocumented. This is a known bug
-which will hopefully be fixed in the next release.
-.\"OPTIONS
-.\".TP
-.\".B \-h, \-\-help
-.\"Show summary of options.
-.\".TP
-.\".B \-v, \-\-version
-.\"Show version of program.
+.TP
+.B \-h, \-\-help
+Show summary of options.
+.TP
+.B \-v, \-\-version
+Show version of program.
+.TP
+.B loglevel=<number>
+Loglevel uses same numbers as syslog.
+.br
+for ex.: 3 for ERROR, 4 for WARNING, 6 for INFO, 7 for DEBUG
+.br
+Default: loglevel=6
+.TP
+.B systemdir=<path>
+Path to game data.
+.TP
+.B userdir=<path>
+Path to game data.
+.br
+Default: userdir=$HOME/.fillets-ng
+.TP
+.B lang=<code>
+ISO 639 2-letter code (for ex.: en, cs, fr, de)
+.br
+see http://www.w3.org/WAI/ER/IG/ert/iso639.htm
+.br
+Default: lang=LC_MESSAGES
+.TP
+.B fullscreen=<boolean>
+Turn fullscreen on/off.
+.br
+Default: fullscreen=0
+.TP
+.B sound=<boolean>
+Turn sound on/off.
+.br
+Default: sound=1
+.TP
+.B show_steps=<boolean>
+Show step counter in level.
+.br
+Default: show_steps=0
+.TP
+.B volume_sound=<number>
+Sound volume in percentage.
+.br
+Default: volume_sound=90
+.TP
+.B volume_music=<number>
+Music volume in percentage.
+.br
+Default: volume_music=50
+
 .PP
 .SH USAGE
 Up, down, left and right arrow keys control the current fish.
@@ -50,6 +94,8 @@ Up, down, left and right arrow keys control the current fish.
 Use space bar to switch between the fish.
 .PP
 restart level - Backspace
+.br
+game menu - F10
 .br
 toggle fullscreen - F11
 .br
@@ -85,6 +131,10 @@ Pavel Danihelka <fillets@danihelka.net>
 Frederic Panico <fratloev@yahoo.fr>
 .br
 - French translation
+.PP
+Ronny Standtke <Ronny.Standtke@gmx.de>
+.br
+- German translation
 .PP
 ALTAR interactive <info@altarinteractive.com>
 .br
