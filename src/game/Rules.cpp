@@ -12,6 +12,7 @@
 #include "Cube.h"
 #include "MarkMask.h"
 #include "LayoutException.h"
+#include "DialogAgent.h"
 
 #include <assert.h>
 
@@ -601,9 +602,13 @@ Rules::getAction() const
     if (m_readyToGoout) {
         return "goout";
     }
-    if (m_readyToTurn) {
+    else if (m_readyToTurn) {
         return "turn";
     }
+    else if (m_model->isBusy()) {
+        return "busy";
+    }
+
     switch (m_dir) {
         case DIR_LEFT: return "move_left";
         case DIR_RIGHT: return "move_right";
@@ -618,16 +623,22 @@ Rules::getAction() const
 //-----------------------------------------------------------------
 /**
  * Return how we have feel the last round.
- * NOTE: dead is not action
  */
 std::string
 Rules::getState() const
 {
-    if (m_pushing) {
+    if (false == m_model->isAlive()) {
+        return "dead";
+    }
+    else if (DialogAgent::agent()->isTalking(m_model)) {
+        return "talking";
+    }
+    else if (m_pushing) {
         return "pushing";
     }
-
-    return "normal";
+    else {
+        return "normal";
+    }
 }
 
 

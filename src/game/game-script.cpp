@@ -262,6 +262,23 @@ script_model_getAction(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * string model_getState(model_index)
+ */
+    int
+script_model_getState(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    std::string state = model->rules()->getState();
+
+    lua_pushlstring(L, state.c_str(), state.size());
+    END_NOEXCEPTION;
+    //NOTE: return state
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * bool model_isAlive(model_index)
  */
     int
@@ -418,6 +435,20 @@ script_model_change_turnSide(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
+ * bool dialog_empty()
+ */
+    int
+script_dialog_empty(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    bool empty = DialogAgent::agent()->empty();
+    lua_pushboolean(L, empty);
+    END_NOEXCEPTION;
+    //NOTE: return empty
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
  * void dialog_addFont(fontname, file)
  */
     int
@@ -464,7 +495,9 @@ script_model_isTalking(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
-    bool talking = DialogAgent::agent()->isTalking(model_index);
+
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    bool talking = DialogAgent::agent()->isTalking(model);
 
     lua_pushboolean(L, talking);
     END_NOEXCEPTION;
@@ -473,7 +506,7 @@ script_model_isTalking(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
- * void model_planDialog(model_index, delay, name)
+ * void model_planDialog(model_index, delay, name, busy=false)
  */
     int
 script_model_planDialog(lua_State *L) throw()
@@ -482,9 +515,10 @@ script_model_planDialog(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     int delay = luaL_checkint(L, 2);
     const char *name = luaL_checkstring(L, 3);
+    bool busy = static_cast<bool>(luaL_optnumber(L, 4, 0));
 
-    //TODO: set dialog font (or color)
-    DialogAgent::agent()->planDialog(name, delay, model_index);
+    Cube *model = GameAgent::agent()->getModel(model_index);
+    DialogAgent::agent()->planDialog(name, delay, model, busy);
 
     END_NOEXCEPTION;
     //NOTE: return how many values want to return to lua

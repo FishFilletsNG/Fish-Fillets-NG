@@ -21,6 +21,7 @@ extern int script_model_setAnim(lua_State *L) throw();
 extern int script_model_useSpecialAnim(lua_State *L) throw();
 extern int script_model_getLoc(lua_State *L) throw();
 extern int script_model_getAction(lua_State *L) throw();
+extern int script_model_getState(lua_State *L) throw();
 extern int script_model_isAlive(lua_State *L) throw();
 extern int script_model_isOut(lua_State *L) throw();
 extern int script_model_isLeft(lua_State *L) throw();
@@ -29,6 +30,7 @@ extern int script_model_getH(lua_State *L) throw();
 extern int script_model_setGoal(lua_State *L) throw();
 extern int script_model_change_turnSide(lua_State *L) throw();
 
+extern int script_dialog_empty(lua_State *L) throw();
 extern int script_dialog_addFont(lua_State *L) throw();
 extern int script_dialog_addDialog(lua_State *L) throw();
 extern int script_model_isTalking(lua_State *L) throw();

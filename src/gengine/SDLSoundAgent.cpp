@@ -117,18 +117,9 @@ void
 SDLSoundAgent::playMusic(const Path &file,
         BaseMsg *finished)
 {
-    if (m_music) {
-        Mix_FreeMusic(m_music);
-        m_music = NULL;
-    }
+    stopMusic();
 
     int loops = -1;
-    //TODO: is musicFinished callback called from different thread?
-    // this code is not thread safe
-    if (ms_finished) {
-        delete ms_finished;
-        ms_finished = NULL;
-    }
     if (finished) {
         ms_finished = finished;
         loops = 1;
@@ -174,9 +165,11 @@ SDLSoundAgent::stopMusic()
     }
     if (m_music) {
         Mix_FreeMusic(m_music);
+        m_music = NULL;
     }
     if (ms_finished) {
         delete ms_finished;
+        ms_finished = NULL;
     }
 }
 //-----------------------------------------------------------------

@@ -2,6 +2,7 @@
 #define HEADER_DIALOGAGENT_H
 
 class Dialog;
+class Actor;
 class ResDialogPack;
 class PlannedDialog;
 
@@ -28,17 +29,20 @@ class DialogAgent : public BaseAgent {
     t_running m_running;
     private:
     void removeFirstNotTalking();
-    bool killOnePlanned(int actor);
+    bool killOnePlanned(const Actor *actor);
     protected:
     virtual void own_init();
     virtual void own_update();
     virtual void own_shutdown();
     public:
     void addDialog(const std::string &name, Dialog *dialog);
-    void planDialog(const std::string &name, int delay, int actor);
-    bool isTalking(int actor);
+    void planDialog(const std::string &name, int delay, Actor *actor,
+            bool busy=false);
+    bool isTalking(const Actor *actor);
 
-    void killSound(int actor);
+    bool empty();
+
+    void killSound(const Actor *actor);
     void removeAll();
 };
 

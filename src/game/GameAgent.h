@@ -24,6 +24,8 @@ class GameAgent : public BaseAgent {
         int m_lockPhases;
     private:
         void newLevel();
+        void clearRoom();
+        std::string getNextLevel();
         void registerGameFuncs();
         void checkRoom();
 

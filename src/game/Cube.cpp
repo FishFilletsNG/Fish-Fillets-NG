@@ -34,7 +34,6 @@ Cube::Cube(const V2 &location,
     m_alive = alive;
     m_out = false;
     m_lookLeft = true;
-    m_index = -1;
 
     m_shape = ashape;
     m_driver = driver;
@@ -88,7 +87,7 @@ Cube::change_die()
     LOG_INFO(ExInfo("dead")
             .addInfo("fish", toString()));
     m_alive = false;
-    DialogAgent::agent()->killSound(m_index);
+    DialogAgent::agent()->killSound(this);
     SoundAgent::agent()->playRandomSound("xplo");
 }
 //-----------------------------------------------------------------

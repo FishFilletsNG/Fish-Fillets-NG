@@ -33,8 +33,8 @@ TimerAgent::own_update()
 
     now = SDL_GetTicks();
     //NOTE: there are two posibilities
-    m_nextTime += TIMEINTERVAL;
-    //mNextTime = now + TIMEINTERVAL;
+    //m_nextTime += TIMEINTERVAL;
+    m_nextTime = now + TIMEINTERVAL;
 
     m_deltaTime = now - m_lastTime;
     m_lastTime = now;

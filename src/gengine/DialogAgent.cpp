@@ -8,9 +8,9 @@
  */
 #include "DialogAgent.h"
 
+#include "Dialog.h"
 #include "OptionAgent.h"
 #include "ResDialogPack.h"
-#include "Dialog.h"
 #include "PlannedDialog.h"
 
 
@@ -67,29 +67,30 @@ DialogAgent::addDialog(const std::string &name, Dialog *dialog)
  * @param name dialog name
  * @param delay delay in cycles after last dialog
  * @param actor who is talking
+ * @param busy whether actor will be busy during the talk
  */
     void
-DialogAgent::planDialog(const std::string &name, int delay, int actor)
+DialogAgent::planDialog(const std::string &name, int delay, Actor *actor,
+        bool busy)
 {
-    std::string lang = OptionAgent::agent()->getParam("lang", "english");
+    std::string lang = OptionAgent::agent()->getParam("lang", "en");
     Dialog *dialog = m_dialogs->findDialog(name, lang);
     if (dialog) {
-        PlannedDialog *plan = new PlannedDialog(actor, delay, dialog);
+        PlannedDialog *plan = new PlannedDialog(actor, delay, dialog, busy);
         m_planned.push_back(plan);
 
         LOG_DEBUG(ExInfo("planned dialog")
                 .addInfo("name", name)
-                .addInfo("delay", delay)
-                .addInfo("actor", actor));
+                .addInfo("delay", delay));
     }
 }
 //-----------------------------------------------------------------
     bool
-DialogAgent::isTalking(int actor)
+DialogAgent::isTalking(const Actor *actor)
 {
     t_running::iterator end = m_running.end();
     for (t_running::iterator i = m_running.begin(); i != end; ++i) {
-        if ((*i)->getActor() == actor && (*i)->isTalking()) {
+        if ((*i)->equalsActor(actor) && (*i)->isTalking()) {
             return true;
         }
     }
@@ -116,7 +117,7 @@ DialogAgent::removeFirstNotTalking()
  * Delete all planned and running dialogs from this actor.
  */
     void
-DialogAgent::killSound(int actor)
+DialogAgent::killSound(const Actor *actor)
 {
     //NOTE: erase on list invalidates only the erased iterator
     t_running::iterator run_end = m_running.end();
@@ -124,7 +125,7 @@ DialogAgent::killSound(int actor)
         t_running::iterator toKill = i;
         ++i;
 
-        if ((*toKill)->getActor() == actor) {
+        if ((*toKill)->equalsActor(actor)) {
             (*toKill)->killTalk();
             delete *toKill;
             m_running.erase(toKill);
@@ -141,12 +142,12 @@ DialogAgent::killSound(int actor)
  * @return true when some dialog was killed
  */
     bool
-DialogAgent::killOnePlanned(int actor)
+DialogAgent::killOnePlanned(const Actor *actor)
 {
     //NOTE: erase on deque invalidates all iterators
     t_planned::iterator end = m_planned.end();
     for (t_planned::iterator i = m_planned.begin(); i != end; ++i) {
-        if ((*i)->getActor() == actor) {
+        if ((*i)->equalsActor(actor)) {
             delete *i;
             m_planned.erase(i);
             return true;
@@ -170,10 +171,20 @@ DialogAgent::removeAll()
 
     t_running::iterator run_end = m_running.end();
     for (t_running::iterator j = m_running.begin(); j != run_end; ++j) {
+        (*j)->killTalk();
         delete *j;
     }
     m_running.clear();
 
     m_dialogs->removeAll();
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true when there is no planned or running dialog.
+ */
+bool
+DialogAgent::empty()
+{
+    return m_planned.empty() && m_running.empty();
 }
 

@@ -8,7 +8,7 @@ class View;
 class Anim;
 
 #include "V2.h"
-#include "NoCopy.h"
+#include "Actor.h"
 #include "Goal.h"
 
 #include <vector>
@@ -16,7 +16,7 @@ class Anim;
 /**
  * A object in game.
  */
-class Cube : public NoCopy {
+class Cube : public Actor {
     public:
         typedef std::vector<Cube*> t_models;
         enum eWeight {
@@ -31,7 +31,6 @@ class Cube : public NoCopy {
         eWeight m_weight;
         eWeight m_power;
         bool m_lookLeft;
-        int m_index;
 
         Shape *m_shape;
         Driver *m_driver;
@@ -44,7 +43,6 @@ class Cube : public NoCopy {
                 eWeight weight, eWeight power, bool alive,
                 Driver *driver, View *view, Shape *shape);
         ~Cube();
-        void setIndex(int model_index) { m_index = model_index; }
         void setGoal(const Goal &goal) { m_goal = goal; }
 
         bool drive();
@@ -70,7 +68,7 @@ class Cube : public NoCopy {
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };
 
-        std::string toString() const;
+        virtual std::string toString() const;
 };
 
 #endif

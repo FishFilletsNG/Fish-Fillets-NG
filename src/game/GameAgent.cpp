@@ -15,6 +15,8 @@
 #include "InputAgent.h"
 #include "OptionAgent.h"
 #include "MessagerAgent.h"
+#include "SubTitleAgent.h"
+#include "DialogAgent.h"
 
 #include "KeyStroke.h"
 #include "KeyBinder.h"
@@ -84,14 +86,8 @@ GameAgent::own_update()
     void
 GameAgent::own_shutdown()
 {
-    if (m_room) {
-        delete m_room;
-    }
-    if (m_script) {
-        delete m_script;
-    }
+    clearRoom();
 }
-
 
 //-----------------------------------------------------------------
 /**
@@ -101,16 +97,43 @@ GameAgent::own_shutdown()
 void
 GameAgent::newLevel()
 {
+    clearRoom();
+
+    m_script = new ScriptState();
+    registerGameFuncs();
+
+    std::string level = getNextLevel();
+    m_script->doFile(Path::dataReadPath(level));
+}
+//-----------------------------------------------------------------
+/**
+ * Clear room after visit.
+ */
+void
+GameAgent::clearRoom()
+{
+    SubTitleAgent::agent()->removeAll();
+    DialogAgent::agent()->removeAll();
+
     if (m_script) {
         delete m_script;
         m_script = NULL;
     }
+    if (m_room) {
+        delete m_room;
+        m_room = NULL;
+    }
 
     m_lockPhases = 0;
-    m_script = new ScriptState();
-    registerGameFuncs();
-
-    //TODO: game menu with level list
+}
+//-----------------------------------------------------------------
+/**
+ * Returns next level name.
+ */
+std::string
+GameAgent::getNextLevel()
+{
+    //TODO: make game menu with level list
     StringMsg *msg = new StringMsg(Name::SCRIPT_NAME,
                 "dostring", "nextLevel()");
     try {
@@ -119,9 +142,8 @@ GameAgent::newLevel()
     catch (ScriptException &e) {
         LOG_WARNING(e.info());
     }
-    std::string level = OptionAgent::agent()->getParam("level",
-            "script/level.lua");
-    m_script->doFile(Path::dataReadPath(level));
+
+    return OptionAgent::agent()->getParam("level", "script/level.lua");
 }
 //-----------------------------------------------------------------
 /**
@@ -143,6 +165,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_useSpecialAnim", script_model_useSpecialAnim);
     m_script->registerFunc("model_getLoc", script_model_getLoc);
     m_script->registerFunc("model_getAction", script_model_getAction);
+    m_script->registerFunc("model_getState", script_model_getState);
     m_script->registerFunc("model_isAlive", script_model_isAlive);
     m_script->registerFunc("model_isOut", script_model_isOut);
     m_script->registerFunc("model_isLeft", script_model_isLeft);
@@ -152,6 +175,7 @@ GameAgent::registerGameFuncs()
     m_script->registerFunc("model_change_turnSide",
             script_model_change_turnSide);
 
+    m_script->registerFunc("dialog_empty", script_dialog_empty);
     m_script->registerFunc("dialog_addFont", script_dialog_addFont);
     m_script->registerFunc("dialog_addDialog", script_dialog_addDialog);
     m_script->registerFunc("model_isTalking", script_model_isTalking);
