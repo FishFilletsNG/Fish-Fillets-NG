@@ -52,8 +52,9 @@ class Room : public NoCopy {
 
         int getW() const;
         int getH() const;
-        void addSound(const std::string &name, const Path &file);
         int getCycles();
+        void addSound(const std::string &name, const Path &file);
+        void playSound(const std::string &name, int priority);
 };
 
 #endif

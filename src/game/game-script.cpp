@@ -499,23 +499,6 @@ script_model_equals(lua_State *L) throw()
 
 //-----------------------------------------------------------------
 /**
- * void sound_addSound(name, file)
- * 
- * Store this sound resource under this name.
- */
-    int
-script_sound_addSound(lua_State *L) throw()
-{
-    BEGIN_NOEXCEPTION;
-    const char *name = luaL_checkstring(L, 1);
-    const char *file = luaL_checkstring(L, 2);
-
-    GameAgent::agent()->level()->addSound(name, Path::dataReadPath(file));
-    END_NOEXCEPTION;
-    return 0;
-}
-//-----------------------------------------------------------------
-/**
  * int game_getRestartCounter()
  * 
  */
@@ -573,6 +556,39 @@ script_game_newDemo(lua_State *L) throw()
 
     Picture *bg = new Picture(Path::dataReadPath(bgname), V2(bg_x, bg_y));
     GameAgent::agent()->newDemo(bg, Path::dataReadPath(demofile));
+    END_NOEXCEPTION;
+    return 0;
+}
+
+//-----------------------------------------------------------------
+/**
+ * void sound_addSound(name, file)
+ * 
+ * Store this sound resource under this name.
+ */
+    int
+script_sound_addSound(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    const char *file = luaL_checkstring(L, 2);
+
+    GameAgent::agent()->level()->addSound(name, Path::dataReadPath(file));
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * void sound_playSound(name, priority=-1)
+ */
+    int
+script_sound_playSound(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    const char *name = luaL_checkstring(L, 1);
+    int priority = luaL_optint(L, 2, -1);
+
+    GameAgent::agent()->level()->playSound(name, priority);
     END_NOEXCEPTION;
     return 0;
 }

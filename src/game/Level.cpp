@@ -392,13 +392,6 @@ Level::action_load()
 
 //-----------------------------------------------------------------
 void
-Level::addSound(const std::string &name, const Path &file)
-{
-    checkRoom();
-    m_room->addSound(name, file);
-}
-//-----------------------------------------------------------------
-void
 Level::switchFish()
 {
     if (m_room) {
@@ -411,6 +404,20 @@ Level::getCycles()
 {
     checkRoom();
     return m_room->getCycles();
+}
+//-----------------------------------------------------------------
+void
+Level::addSound(const std::string &name, const Path &file)
+{
+    checkRoom();
+    m_room->addSound(name, file);
+}
+//-----------------------------------------------------------------
+void
+Level::playSound(const std::string &name, int priority)
+{
+    checkRoom();
+    m_room->playSound(name, priority);
 }
 //-----------------------------------------------------------------
 /**
@@ -447,10 +454,12 @@ Level::registerGameFuncs()
             script_model_change_turnSide);
     m_script->registerFunc("model_equals", script_model_equals);
 
-    m_script->registerFunc("sound_addSound", script_sound_addSound);
     m_script->registerFunc("game_getRestartCounter",
             script_game_getRestartCounter);
     m_script->registerFunc("game_getCycles", script_game_getCycles);
     m_script->registerFunc("game_getDepth", script_game_getDepth);
     m_script->registerFunc("game_newDemo", script_game_newDemo);
+
+    m_script->registerFunc("sound_addSound", script_sound_addSound);
+    m_script->registerFunc("sound_playSound", script_sound_playSound);
 }

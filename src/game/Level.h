@@ -59,11 +59,12 @@ class Level : public Planner {
         bool action_save();
         bool action_load();
 
-        void addSound(const std::string &name, const Path &file);
         void switchFish();
         int getCycles();
         int getRestartCounter() const { return m_restartCounter; }
         int getDepth() const { return m_depth; }
+        void addSound(const std::string &name, const Path &file);
+        void playSound(const std::string &name, int priority);
 };
 
 #endif

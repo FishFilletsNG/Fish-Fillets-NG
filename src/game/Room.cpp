@@ -375,15 +375,21 @@ Room::getH() const {
     return m_field->getH();
 }
 //-----------------------------------------------------------------
+int
+Room::getCycles()
+{
+    return TimerAgent::agent()->getCycles() - m_startTime;
+}
+//-----------------------------------------------------------------
 void
 Room::addSound(const std::string &name, const Path &file)
 {
     m_soundPack->addSound(name, file);
 }
 //-----------------------------------------------------------------
-int
-Room::getCycles()
+void
+Room::playSound(const std::string &name, int priority)
 {
-    return TimerAgent::agent()->getCycles() - m_startTime;
+    SoundAgent::agent()->playSound(
+            m_soundPack->getRandomRes(name), priority);
 }
-

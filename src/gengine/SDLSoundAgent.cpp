@@ -47,20 +47,26 @@ SDLSoundAgent::own_shutdown()
 //-----------------------------------------------------------------
 /**
  * Play this sound.
+ * @param sound chunk to play
+ * @param priority = how much channels can be used at one,
+ * 0 is the lowest priority
+ * -1 is absolute priority
  *
  * @return channel number where the sound is played,
  * return -1 on error or when sound is NULL
  */
     int
-SDLSoundAgent::playSound(Mix_Chunk *sound)
+SDLSoundAgent::playSound(Mix_Chunk *sound, int priority)
 {
     int channel = -1;
     if (sound) {
-        channel = Mix_PlayChannel(-1, sound, 0);
-        if (-1 == channel) {
-            //NOTE: maybe there are too few open channels
-            LOG_WARNING(ExInfo("cannot play sound")
-                    .addInfo("Mix", Mix_GetError()));
+        if (priority == -1 or priority >= Mix_Playing(-1)) {
+            channel = Mix_PlayChannel(-1, sound, 0);
+            if (-1 == channel) {
+                //NOTE: maybe there are too few open channels
+                LOG_WARNING(ExInfo("cannot play sound")
+                        .addInfo("Mix", Mix_GetError()));
+            }
         }
     }
 

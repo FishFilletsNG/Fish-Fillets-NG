@@ -168,7 +168,7 @@ script_model_planDialog(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     int delay = luaL_checkint(L, 2);
     const char *name = luaL_checkstring(L, 3);
-    bool busy = static_cast<bool>(luaL_optnumber(L, 4, 0));
+    bool busy = lua_toboolean(L, 4);
 
     Actor *model = GameAgent::agent()->leader()->getActor(model_index);
     DialogAgent::agent()->planDialog(name, delay, model, busy);
