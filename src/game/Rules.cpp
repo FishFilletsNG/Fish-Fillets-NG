@@ -13,6 +13,8 @@
 #include "MarkMask.h"
 #include "LayoutException.h"
 #include "DialogAgent.h"
+#include "Anim.h"
+#include "minmax.h"
 
 #include <assert.h>
 
@@ -26,11 +28,13 @@ Rules::Rules(Cube *model)
     m_readyToTurn = false;
     m_readyToGoout = false;
     m_readyToActive = false;
+    m_readyToRemove = false;
     m_dir = DIR_NO;
     m_pushing = false;
 
     m_model = model;
     m_mask = NULL;
+    m_skeleton = false;
     m_lastFall = false;
 }
 //-----------------------------------------------------------------
@@ -71,6 +75,7 @@ Rules::takeField(Field *field)
 /**
  * Accomplish last move in m_dir direction.
  * Mask to a new position.
+ * Change model position.
  */
     void
 Rules::occupyNewPos()
@@ -216,16 +221,20 @@ Rules::checkDeadStress()
 //-----------------------------------------------------------------
 /**
  * Finish events from last round.
- * - make skeletons
- * - turn side
+ * Change model state.
  */
     void
-Rules::prepareRound()
+Rules::changeState()
 {
     m_dir = DIR_NO;
 
     if (m_readyToGoout) {
         m_readyToGoout = false;
+        m_mask->unmask();
+        m_model->change_goOut();
+    }
+    if (m_readyToRemove) {
+        m_readyToRemove = false;
         m_mask->unmask();
         m_model->change_goOut();
     }
@@ -240,6 +249,9 @@ Rules::prepareRound()
     if (m_readyToDie) {
         m_readyToDie = false;
         m_model->change_die();
+        m_skeleton = true;
+        m_model->anim()->setEffect(ViewEffect::EFFECT_DISINTEGRATE);
+        m_model->anim()->setDisInt(DISINT_START);
     }
 }
 //-----------------------------------------------------------------
@@ -272,6 +284,26 @@ Rules::actionFall()
  * And prepare do draw.
  */
     void
+Rules::finishRound()
+{
+    freeOldPos();
+
+    if (m_skeleton) {
+        int disint = m_model->anim()->getDisInt();
+        if (disint > 0) {
+            m_model->anim()->setDisInt(max(0, disint - DISINT_SPEED));
+        }
+        else {
+            m_skeleton = false;
+            m_readyToRemove = true;
+        }
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Unmask from old position.
+ */
+    void
 Rules::freeOldPos()
 {
     if (m_dir != DIR_NO) {
@@ -289,7 +321,7 @@ Rules::canFall()
 {
     bool result = false;
     if (false == m_model->isOut()) {
-        //NOTE: hack with heavy power
+        //NOTE: hack, apply heavy power on self
         result = canDir(DIR_DOWN, Cube::HEAVY);
     }
     return result;

@@ -40,7 +40,7 @@ Cube::Cube(const V2 &location,
  */
 Cube::~Cube()
 {
-    //NOTE: rules must be destroyed before shape
+    //NOTE: rules must be destroyed before shape because they unmask self
     delete m_rules;
 
     delete m_view;
@@ -61,12 +61,11 @@ Cube::createBorder()
 }
 //-----------------------------------------------------------------
 /**
- * Make skeleton.
+ * Die.
  */
     void
 Cube::change_die()
 {
-    //TODO: nice dead with disintegration
     LOG_INFO(ExInfo("dead")
             .addInfo("fish", toString()));
     m_alive = false;
@@ -78,12 +77,13 @@ Cube::change_die()
     void
 Cube::change_goOut()
 {
-    //TODO: nice anim
+    //TODO: nice anim for alive object
     LOG_INFO(ExInfo("out of room")
             .addInfo("object", toString()));
+    m_out = true;
     //NOTE: hack, object is moved out
     m_loc = V2(-1000, -1000);
-    m_out = true;
+    m_view->takeModel(NULL);
 }
 //-----------------------------------------------------------------
     void
@@ -93,14 +93,9 @@ Cube::change_turnSide()
 }
 
 //-----------------------------------------------------------------
-/**
- * Unmask from old position.
- * And prepare do draw.
- */
-    void
-Cube::finishRound()
+void
+Cube::refreshView()
 {
-    m_rules->freeOldPos();
     m_view->noteNewRound();
 }
 //-----------------------------------------------------------------

@@ -25,12 +25,16 @@ class Rules : public NoCopy {
             FALL_LAST
         };
     private:
+        static const int DISINT_START = 400;
+        static const int DISINT_SPEED = 30;
         eDir m_dir;
         bool m_readyToDie;
         bool m_readyToTurn;
         bool m_readyToGoout;
         bool m_readyToActive;
+        bool m_readyToRemove;
         bool m_pushing;
+        bool m_skeleton;
         bool m_lastFall;
 
         Cube *m_model;
@@ -55,6 +59,8 @@ class Rules : public NoCopy {
         bool canDir(eDir dir, Cube::eWeight power);
         bool canMoveOthers(eDir dir, Cube::eWeight weight);
         void moveDirBrute(eDir dir);
+
+        void freeOldPos();
     public:
         Rules(Cube *model);
         ~Rules();
@@ -63,8 +69,8 @@ class Rules : public NoCopy {
         void occupyNewPos();
         bool checkDead();
         bool checkOut();
-        void prepareRound();
-        void freeOldPos();
+        void changeState();
+        void finishRound();
 
         eFall actionFall();
         bool actionMoveDir(eDir dir);

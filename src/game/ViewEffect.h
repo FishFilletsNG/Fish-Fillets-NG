@@ -32,6 +32,7 @@ class ViewEffect {
 
         void setEffect(eEffect effect) { m_effect = effect; }
         void setDisInt(int disint) { m_disint = disint; }
+        int getDisInt() { return m_disint; }
 };
 
 #endif

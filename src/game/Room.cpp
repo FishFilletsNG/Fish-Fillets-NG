@@ -194,7 +194,7 @@ Room::prepareRound()
         interrupt |= (*k)->rules()->checkOut();
     }
     for (Cube::t_models::iterator l = m_models.begin(); l != end; ++l) {
-        (*l)->rules()->prepareRound();
+        (*l)->rules()->changeState();
     }
 
     if (interrupt) {
@@ -244,7 +244,8 @@ Room::finishRound(bool anim)
 
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->finishRound();
+        (*i)->rules()->finishRound();
+        (*i)->refreshView();
         room_complete &= (*i)->isSatisfy();
     }
 

@@ -44,8 +44,6 @@ class Cube : public Actor {
         ~Cube();
         void setGoal(const Goal &goal) { m_goal = goal; }
 
-        void finishRound();
-
         void change_die();
         void change_goOut();
         void change_turnSide();
@@ -62,6 +60,7 @@ class Cube : public Actor {
         eWeight getPower() const { return m_power; }
         const Shape *shape() const { return m_shape; }
 
+        void refreshView();
         Anim *anim();
         Rules *rules() { return m_rules; }
         const Rules *const_rules() const { return m_rules; };

@@ -52,7 +52,7 @@ View::noteNewRound()
 }
 //-----------------------------------------------------------------
 /**
- * Draw model.
+ * Draw model (when a model is taken).
  * Care about model shift during move.
  */
     void

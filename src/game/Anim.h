@@ -44,6 +44,7 @@ class Anim : public NoCopy {
         void setEffect(ViewEffect::eEffect effect)
         { m_effect.setEffect(effect); }
         void setDisInt(int disint) { m_effect.setDisInt(disint); }
+        int getDisInt() { return m_effect.getDisInt(); }
 };
 
 #endif
