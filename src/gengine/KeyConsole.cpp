@@ -54,13 +54,13 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
             m_input = m_history;
             break;
         case SDLK_BACKSPACE:
-            if (false == m_input.empty()) {
+            if (!m_input.empty()) {
                 m_input.erase(m_input.end() - 1);
             }
             break;
         case SDLK_RETURN:
-            if (false == m_input.empty()) {
-                if (false == m_handlerName.empty()) {
+            if (!m_input.empty()) {
+                if (!m_handlerName.empty()) {
                     try {
                         StringMsg *msg = new StringMsg(m_handlerName,
                                 "dostring", m_input);
@@ -93,7 +93,7 @@ KeyConsole::keyDown(const SDL_keysym &keysym)
 void
 KeyConsole::activate()
 {
-    if (false == m_active) {
+    if (!m_active) {
         VideoAgent::agent()->acceptDrawer(this);
         m_active = true;
     }

@@ -116,7 +116,7 @@ Room::askField(const V2 &loc)
 Room::nextRound()
 {
     bool falling = beginFall();
-    if (false == falling) {
+    if (!falling) {
         m_controls->driving();
     }
 
@@ -323,7 +323,7 @@ Room::makeMove(char move)
 {
     bool result = false;
     if (m_fresh) {
-        if (false == m_controls->makeMove(move)) {
+        if (!m_controls->makeMove(move)) {
             throw LoadException(ExInfo("load error - bad move")
                     .addInfo("move", std::string(1, move)));
         }

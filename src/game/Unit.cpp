@@ -31,8 +31,8 @@ bool
 Unit::canDrive()
 {
     return m_model->isAlive()
-        && false == m_model->isLost()
-        && false == m_model->isBusy();
+        && !m_model->isLost()
+        && !m_model->isBusy();
 }
 //-----------------------------------------------------------------
 /**
@@ -120,7 +120,7 @@ char
 Unit::goRight()
 {
     char symbol = 0;
-    if (false == m_model->isLeft()) {
+    if (!m_model->isLeft()) {
         if (m_model->rules()->actionMoveDir(Rules::DIR_RIGHT)) {
             symbol = m_symbols.getRight();
         }

@@ -103,7 +103,7 @@ script_getParam(lua_State *L) throw()
     try {
         const char *name = luaL_checkstring(L, 1);
         std::string value = OptionAgent::agent()->getParam(name);
-        if (false == value.empty()) {
+        if (!value.empty()) {
             lua_pushlstring(L, value.c_str(), value.size());
             result_count = 1;
         }

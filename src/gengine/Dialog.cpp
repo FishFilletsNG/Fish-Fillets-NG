@@ -40,13 +40,13 @@ Dialog::~Dialog()
     int
 Dialog::talk()
 {
-    if (NULL == m_sound && false == m_soundfile.empty()) {
+    if (NULL == m_sound && !m_soundfile.empty()) {
         m_sound = ResSoundAgent::agent()->loadSound(
                 Path::dataReadPath(m_soundfile));
     }
 
     int channel = SoundAgent::agent()->playSound(m_sound);
-    if (false == m_subtitle.empty()) {
+    if (!m_subtitle.empty()) {
         runSubtitle();
     }
 

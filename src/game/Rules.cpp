@@ -59,7 +59,7 @@ Rules::takeField(Field *field)
     }
 
     m_mask = new MarkMask(m_model, field);
-    if (false == m_mask->getResist(DIR_NO).empty()) {
+    if (!m_mask->getResist(DIR_NO).empty()) {
         throw LayoutException(ExInfo("position is occupied")
                 .addInfo("loc", m_model->getLocation().toString()));
     }
@@ -134,8 +134,8 @@ bool
 Rules::checkOut()
 {
     bool result = false;
-    if (false == isWall() && false == m_model->isLost()
-            && false == m_model->isBusy())
+    if (!isWall() && !m_model->isLost()
+            && !m_model->isBusy())
     {
         //NOTE: normal objects must not go out of screen
         if (m_model->shouldGoOut()) {
@@ -161,10 +161,10 @@ Rules::checkDeadMove()
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (false == (*i)->isAlive()) {
+        if (!(*i)->isAlive()) {
             eDir resist_dir = (*i)->rules()->getDir();
             if (resist_dir != DIR_NO && resist_dir != DIR_UP) {
-                if (false == (*i)->rules()->isOnStack()) {
+                if (!(*i)->rules()->isOnStack()) {
                     return true;
                 }
             }
@@ -186,7 +186,7 @@ Rules::checkDeadFall()
 
     Cube::t_models::iterator end = killers.end();
     for (Cube::t_models::iterator i = killers.begin(); i != end; ++i) {
-        if (false == (*i)->rules()->isOnWall()) {
+        if (!(*i)->rules()->isOnWall()) {
             return true;
         }
     }
@@ -206,8 +206,8 @@ Rules::checkDeadStress()
 
     Cube::t_models::iterator end = killers.end();
     for (Cube::t_models::iterator i = killers.begin(); i != end; ++i) {
-        if (false == (*i)->rules()->isOnWall()) {
-            if (false == (*i)->rules()->isOnStrongFish((*i)->getWeight())) {
+        if (!(*i)->rules()->isOnWall()) {
+            if (!(*i)->rules()->isOnStrongFish((*i)->getWeight())) {
                 return true;
             }
         }
@@ -231,7 +231,7 @@ Rules::changeState()
         m_mask->unmask();
         m_model->change_goOut();
     }
-    if (false == m_model->isLost() && m_model->isInvisible()) {
+    if (!m_model->isLost() && m_model->isInvisible()) {
         m_mask->unmask();
         m_model->change_remove();
     }
@@ -302,7 +302,7 @@ Rules::freeOldPos()
 Rules::canFall()
 {
     bool result = false;
-    if (false == m_model->isLost()) {
+    if (!m_model->isLost()) {
         //NOTE: hack, apply heavy power on self
         result = canDir(DIR_DOWN, Cube::HEAVY);
     }
@@ -325,7 +325,7 @@ Rules::isOnStack()
     Cube::t_models resist = m_mask->getResist(DIR_DOWN);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (false == (*i)->isAlive()) {
+        if (!(*i)->isAlive()) {
             return true;
         }
     }
@@ -407,7 +407,7 @@ bool
 Rules::isFalling() const
 {
     bool result = false;
-    if (false == m_model->isAlive()) {
+    if (!m_model->isAlive()) {
         result = (m_dir == DIR_DOWN);
     }
     return result;
@@ -427,7 +427,7 @@ Rules::whoIsFalling()
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
         //NOTE: falling is propagated over fish
-        if (false == (*i)->rules()->isWall()) {
+        if (!(*i)->rules()->isWall()) {
             if ((*i)->rules()->isFalling()) {
                 result.push_back(*i);
             }
@@ -452,7 +452,7 @@ bool
 Rules::isHeavier(Cube::eWeight power) const
 {
     bool result = false;
-    if (false == isWall() && false == m_model->isAlive()) {
+    if (!isWall() && !m_model->isAlive()) {
         if (m_model->getWeight() > power) {
             result = true;
         }
@@ -475,7 +475,7 @@ Rules::whoIsHeavier(Cube::eWeight power)
     Cube::t_models resist = m_mask->getResist(DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (false == (*i)->rules()->isWall()) {
+        if (!(*i)->rules()->isWall()) {
             if ((*i)->rules()->isHeavier(power)) {
                 result.push_back(*i);
             }
@@ -508,7 +508,7 @@ Rules::canMoveOthers(eDir dir, Cube::eWeight power)
     Cube::t_models resist = m_mask->getResist(dir);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        if (false == (*i)->rules()->canDir(dir, power)) {
+        if (!(*i)->rules()->canDir(dir, power)) {
             result = false;
             break;
         }
@@ -531,7 +531,7 @@ Rules::canMoveOthers(eDir dir, Cube::eWeight power)
 Rules::canDir(eDir dir, Cube::eWeight power)
 {
     bool result = false;
-    if (false == m_model->isAlive() && power >= m_model->getWeight()) {
+    if (!m_model->isAlive() && power >= m_model->getWeight()) {
         result = canMoveOthers(dir, power);
     }
 
@@ -651,7 +651,7 @@ Rules::getAction() const
 std::string
 Rules::getState() const
 {
-    if (false == m_model->isAlive()) {
+    if (!m_model->isAlive()) {
         return "dead";
     }
     else if (m_pushing) {

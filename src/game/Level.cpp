@@ -235,7 +235,7 @@ Level::nextLoadAction()
 {
     bool room_complete = false;
     for (int i = 0; i < m_loadSpeed
-            && false == m_loadedMoves.empty(); ++i)
+            && !m_loadedMoves.empty(); ++i)
     {
         try {
             char symbol = m_loadedMoves[0];

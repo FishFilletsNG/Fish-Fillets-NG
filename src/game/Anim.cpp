@@ -52,7 +52,7 @@ Anim::drawAt(SDL_Surface *screen, int x, int y, eSide side)
         }
     }
 
-    if (false == m_specialAnimName.empty()) {
+    if (!m_specialAnimName.empty()) {
         surface =
             m_animPack[side]->getRes(m_specialAnimName, m_specialAnimPhase);
         m_effect.blit(screen, surface, x, y);

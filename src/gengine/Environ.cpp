@@ -130,7 +130,7 @@ Environ::getAsInt(const std::string &name,
     std::string value = getParam(name);
     bool ok;
     int result = StringTool::readInt(value.c_str(), &ok);
-    if (false == ok) {
+    if (!ok) {
         result = implicit;
     }
     return result;

@@ -34,7 +34,7 @@ WorldMap::~WorldMap()
 void
 WorldMap::activate()
 {
-    if (false == m_active) {
+    if (!m_active) {
         VideoAgent::agent()->acceptDrawer(this);
         m_active = true;
     }

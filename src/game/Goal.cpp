@@ -43,14 +43,14 @@ Goal::isSatisfy(const Cube *model) const
         result &= model->isOut(); 
     }
     else if (SATISFY_FALSE == m_out) {
-        result &= (false == model->isOut());
+        result &= (!model->isOut());
     }
 
     if (SATISFY_TRUE == m_alive) {
         result &= model->isAlive();
     }
     else if (SATISFY_FALSE == m_alive) {
-        result &= (false == model->isAlive());
+        result &= (!model->isAlive());
     }
 
     return result;

@@ -31,7 +31,7 @@ DialogAgent::own_update()
 {
     removeFirstNotTalking();
 
-    if (false == m_planned.empty()) {
+    if (!m_planned.empty()) {
         if (m_running.empty()) {
             PlannedDialog *dialog = m_planned.front();
             if (dialog->getDelay() > 0) {
@@ -116,7 +116,7 @@ DialogAgent::removeFirstNotTalking()
 {
     t_running::iterator end = m_running.end();
     for (t_running::iterator i = m_running.begin(); i != end; ++i) {
-        if (false == (*i)->isTalking()) {
+        if (!(*i)->isTalking()) {
             delete *i;
             m_running.erase(i);
             return;

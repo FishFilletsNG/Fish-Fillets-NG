@@ -60,7 +60,7 @@ Controls::addUnit(Unit *unit)
     void
 Controls::driving()
 {
-    if (false == finishSwitch()) {
+    if (!finishSwitch()) {
         driveUnit();
     }
 }
@@ -117,7 +117,7 @@ Controls::lockPhases()
         if ((*m_active)->isPushing()) {
             m_speedup = 0;
         }
-        else if (false == (*m_active)->isTurning()) {
+        else if (!(*m_active)->isTurning()) {
             m_speedup++;
         }
 
@@ -144,7 +144,7 @@ Controls::lockPhases()
 void
 Controls::checkActive()
 {
-    if (false == (*m_active)->canDrive()) {
+    if (!(*m_active)->canDrive()) {
         switchActive();
     }
 }
@@ -165,7 +165,7 @@ Controls::switchActive()
         else {
             ++m_active;
         }
-    } while (false == (*m_active)->canDrive() && m_active != start);
+    } while (!(*m_active)->canDrive() && m_active != start);
 
     if (start != m_active) {
         m_speedup = 0;

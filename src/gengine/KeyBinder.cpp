@@ -35,7 +35,7 @@ KeyBinder::addStroke(const KeyStroke &stroke, BaseMsg *msg)
     std::pair<t_strokes::iterator,bool> status =
         m_strokes.insert(
                 std::pair<KeyStroke,BaseMsg*>(stroke, msg));
-    if (false == status.second) {
+    if (!status.second) {
         throw LogicException(ExInfo("keystroke is occupied")
                 .addInfo("keystroke", stroke.toString()));
     }

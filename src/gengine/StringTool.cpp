@@ -31,7 +31,7 @@ StringTool::readInt(const char *strNum, bool *ok)
         }
     }
 
-    if (false == ok) {
+    if (!ok) {
         result = 0;
     }
 

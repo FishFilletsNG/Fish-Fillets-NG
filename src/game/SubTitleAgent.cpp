@@ -27,7 +27,7 @@ SubTitleAgent::own_init()
     void
 SubTitleAgent::own_update()
 {
-    if (false == m_titles.empty()) {
+    if (!m_titles.empty()) {
         shiftTitlesUp(TITLE_SPEED);
 
         if (m_titles.front()->isGone()) {
@@ -62,7 +62,7 @@ SubTitleAgent::newSubtitle(const std::string &original,
     SFont_Font *font = m_fonts->getRes(fontname);
 
     std::string subtitle = original;
-    while (false == subtitle.empty()) {
+    while (!subtitle.empty()) {
         subtitle = splitAndCreate(subtitle, font);
     }
 }
@@ -85,7 +85,7 @@ SubTitleAgent::splitAndCreate(const std::string &original,
     }
 
     std::string rest = "";
-    if (false == subtitle.empty()) {
+    if (!subtitle.empty()) {
         newShortSubtitle(subtitle, font);
 
         if (original.size() > subtitle.size()) {
@@ -108,7 +108,7 @@ SubTitleAgent::trimRest(std::string &buffer)
     int i;
     for (i = buffer.size() - 1; i >= 0; --i) {
         if (buffer[i] == ' ' &&
-                false == (i - 2 >= 0 && buffer[i - 2] == ' '))
+                !(i - 2 >= 0 && buffer[i - 2] == ' '))
         {
             break;
         }
@@ -169,7 +169,7 @@ SubTitleAgent::shiftFinalsUp(int rate)
 SubTitleAgent::lowestY()
 {
     int lowest = TITLE_BASE;
-    if (false == m_titles.empty()) {
+    if (!m_titles.empty()) {
         int lastest = m_titles.back()->getY() - TITLE_ROW;
         lowest = min(lowest, lastest);
     }

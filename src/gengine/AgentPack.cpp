@@ -52,7 +52,7 @@ AgentPack::addAgent(BaseAgent *agent)
     std::pair<t_agents::iterator,bool> status =
         m_agents.insert(
                 std::pair<std::string,BaseAgent*>(agent->getName(), agent));
-    if (false == status.second) {
+    if (!status.second) {
         throw NameException(ExInfo("agent already exists")
                 .addInfo("name", agent->getName()));
     }
@@ -96,7 +96,7 @@ AgentPack::getAgent(const std::string &name)
                 .addInfo("name", name));
     }
 
-    if (false == it->second->isInitialized()) {
+    if (!it->second->isInitialized()) {
         throw LogicException(ExInfo("agent is not initialized")
                 .addInfo("name", name));
     }
@@ -113,7 +113,7 @@ AgentPack::init(const std::string &stopAgent)
     t_agents::iterator stop = m_agents.find(stopAgent);
 
     for (t_agents::iterator i = m_agents.begin(); i != stop; ++i) {
-        if (false == i->second->isInitialized()) {
+        if (!i->second->isInitialized()) {
             i->second->init();
         }
     }

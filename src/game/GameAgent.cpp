@@ -232,14 +232,14 @@ GameAgent::receiveSimple(const SimpleMsg *msg)
     }
     else if (msg->equalsName("save")) {
         if (m_level) {
-            if (false == m_level->isPlanning()) {
+            if (!m_level->isPlanning()) {
                 m_level->action_save();
             }
         }
     }
     else if (msg->equalsName("switch")) {
         if (m_level) {
-            if (false == m_level->isPlanning()) {
+            if (!m_level->isPlanning()) {
                 m_level->switchFish();
             }
         }

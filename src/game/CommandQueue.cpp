@@ -43,7 +43,7 @@ bool
 CommandQueue::executeFirst()
 {
     bool result = false;
-    if (false == m_commands.empty()) {
+    if (!m_commands.empty()) {
         Command *command = m_commands.front();
         if (command->finish(m_count)) {
             m_commands.pop_front();

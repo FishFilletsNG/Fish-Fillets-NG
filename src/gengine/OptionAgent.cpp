@@ -92,10 +92,10 @@ OptionAgent::prepareDataPaths()
     if (home) {
         userdir = home;
         userdir += USER_DATA_DIR;
-        if (false == Path::isValid(userdir)) {
+        if (!Path::isValid(userdir)) {
             userdir = home;
             userdir += USER_DATA_DIR_ALTERNATIVE;
-            if (false == Path::isValid(userdir)) {
+            if (!Path::isValid(userdir)) {
                 userdir = "";
             }
             LOG_INFO(ExInfo("using alternative userdir path")

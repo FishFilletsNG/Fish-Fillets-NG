@@ -82,7 +82,7 @@ Application::init(int argc, char *argv[])
     void
 Application::run()
 {
-    while (false == m_quit) {
+    while (!m_quit) {
         m_agents->update();
     }
 }
