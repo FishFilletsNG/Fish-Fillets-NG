@@ -2,7 +2,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH fillets 6 "July  8, 2004"
+.TH fillets 6 "July 14, 2004"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -22,24 +22,20 @@ fillets \- puzzle game about witty fish saving the world sokoban style
 .RI [ options ]
 .br
 .SH DESCRIPTION
-This manual page was written for the Debian distribution
-because the original program does not have a manual page.
 .PP
-.\" TeX users may be more comfortable with the \fB<whatever>\fP and
-.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
-.\" respectively.
 \fBFish Fillets \fPis strictly a puzzle game. The goal in every of the seventy
 levels is always the same: find a safe way out. The fish utter witty remarks
 about their surroundings, the various inhabitants of their underwater realm
 quarrel among themselves or comment on the efforts of your fish. The whole
 game is accompanied by quiet, comforting music.
-.br
-.br
+.PP
 There is an excellent in game tutorial available, so you can start
 playing right away.
-.br
-.br
-So far the commandline options are undocumented. This is a known bug.
+.PP
+.SH OPTIONS
+.PP
+So far the commandline options are undocumented. This is a known bug
+which will hopefully be fixed in the next release.
 .\"OPTIONS
 .\".TP
 .\".B \-h, \-\-help
@@ -47,9 +43,57 @@ So far the commandline options are undocumented. This is a known bug.
 .\".TP
 .\".B \-v, \-\-version
 .\"Show version of program.
-.SH SEE ALSO
-.BR /usr/share/doc/fillets-ng/manual.html
+.PP
+.SH USAGE
+Up, down, left and right arrow keys control the current fish.
 .br
-.SH AUTHOR
+Use space bar to switch between the fish.
+.PP
+restart level - Backspace
+.br
+toggle fullscreen - F11
+.br
+save game - F2
+.br
+load game - F3
+.br
+show/hide level move counter - F5
+.br
+increase game speed - hold down Shift
+.PP
+Find more information in the "How to Play" html manual listed below.
+.PP
+.SH SEE ALSO
+.BR /usr/share/doc/fillets-ng/html/manual.html
+.br
+.BR http://fillets.sf.net 
+.br
+.SH AUTHORS
+.PP
+Fish Fillets - Next Generation was written by
+.PP
+Ivo Danihelka <ivo@danihelka.net>
+.br
+- main developer
+.br
+- developed new game engine
+.PP
+Pavel Danihelka <fillets@danihelka.net>
+.br
+- webmaster, level data, documentation
+.PP
+Frederic Panico <fratloev@yahoo.fr>
+.br
+- French translation
+.PP
+ALTAR interactive <info@altarinteractive.com>
+.br
+- developed original game in 1998 (for Win32)
+.br
+- released code and data under GNU/GPL in 03/2004
+.PP
+This manual page was written for the Debian distribution
+because the original program did not have a manual page.
+.PP
 This manual page was written by fabian linzberger <e@lefant.net>,
 for the Debian project (but may be used by others).
