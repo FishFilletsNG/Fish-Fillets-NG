@@ -1,7 +1,7 @@
 
 SUBDIRS = src
 
-EXTRA_DIST = Makefile.cvs ChangeLog main.aap
+EXTRA_DIST = ChangeLog main.aap
 
 ChangeLog:
 	touch ChangeLog

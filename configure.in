@@ -1,11 +1,11 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Makefile.cvs)
+AC_INIT(AUTHORS)
 AC_CANONICAL_TARGET
 
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
 # of the software package so it can generate rules for building a source
 # archive.
-AM_INIT_AUTOMAKE(fillets-ng, 0.3.0)
+AM_INIT_AUTOMAKE(fillets-ng, 0.4.0)
 
 # Checks for programs.
 AC_PROG_CXX
