@@ -30,14 +30,26 @@ MarkMask::MarkMask(Cube *model, Field *field)
 Cube::t_models
 MarkMask::getResist(Dir::eDir dir) const
 {
-    Cube::t_models models;
     V2 shift = Dir::dir2xy(dir);
     V2 shift_loc = shift.plus(m_model->getLocation());
 
+    return getPlacedResist(shift_loc);
+}
+//-----------------------------------------------------------------
+/**
+ * Return others which resist at given location.
+ * Pointers to NULL and own model are not included.
+ *
+ * @return unique pointers, not NULL
+ */
+Cube::t_models
+MarkMask::getPlacedResist(const V2 &loc) const
+{
+    Cube::t_models models;
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->marksEnd();
     for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
-        V2 mark = shift_loc.plus(*i);
+        V2 mark = loc.plus(*i);
 
         Cube *resist = m_field->getModel(mark);
         if (NULL != resist && m_model != resist) {

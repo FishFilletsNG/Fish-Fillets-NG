@@ -60,6 +60,19 @@ Controls::addUnit(Unit *unit)
 }
 //-----------------------------------------------------------------
 /**
+ * Returns active unit or NULL.
+ */
+const Unit *
+Controls::getActive()
+{
+    Unit *result = NULL;
+    if (m_active != m_units.end()) {
+        result = *m_active;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
  * Let drivers to drive.
  * Only one driver can drive at the same time.
  * @param input wrapped input
@@ -246,26 +259,6 @@ Controls::controlEvent(const KeyStroke &stroke)
 }
 //-----------------------------------------------------------------
 /**
- * Activate fish or move to desired location.
- */
-void
-Controls::controlField(const V2 &field, const Cube *occupant)
-{
-    if (!activateSelected(occupant)) {
-        moveTo(field);
-    }
-}
-//-----------------------------------------------------------------
-/**
- * Move to desired location, don't worry to push something.
- */
-void
-Controls::controlFieldHard(const V2 &field, const Cube *occupant)
-{
-    moveHardTo(field);
-}
-//-----------------------------------------------------------------
-/**
  * Activate fish under cursor.
  * @param cursor cursor location
  * @return true when fish was selected
@@ -282,18 +275,6 @@ Controls::activateSelected(const Cube *occupant)
         }
     }
     return false;
-}
-//-----------------------------------------------------------------
-void
-Controls::moveTo(const V2 &loc)
-{
-    //TODO: implement
-}
-//-----------------------------------------------------------------
-void
-Controls::moveHardTo(const V2 &loc)
-{
-    //TODO: implement
 }
 //-----------------------------------------------------------------
 /**

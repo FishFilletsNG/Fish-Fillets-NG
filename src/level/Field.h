@@ -22,7 +22,6 @@ class Field : public NoCopy {
         int getW() const { return m_w; }
         int getH() const { return m_h; }
 
-        const Cube *getBorder() { return m_border; }
         Cube *getModel(const V2 &loc);
         void setModel(const V2 &loc, Cube *model);
 };

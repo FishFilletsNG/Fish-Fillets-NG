@@ -12,6 +12,9 @@
 #include "Rules.h"
 #include "InputProvider.h"
 #include "Anim.h"
+#include "Shape.h"
+
+#include <assert.h>
 
 //-----------------------------------------------------------------
 /**
@@ -117,6 +120,27 @@ Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons) const
     }
     if (key == buttons.getDown()) {
         return m_symbols.getDown();
+    }
+    return ControlSym::SYM_NONE;
+}
+//-----------------------------------------------------------------
+/**
+ * Returns symbol for this direction.
+ */
+char
+Unit::myOrder(Dir::eDir dir) const
+{
+    switch (dir) {
+        case Dir::DIR_LEFT:
+            return m_symbols.getLeft();
+        case Dir::DIR_RIGHT:
+            return m_symbols.getRight();
+        case Dir::DIR_UP:
+            return m_symbols.getUp();
+        case Dir::DIR_DOWN:
+            return m_symbols.getDown();
+        default:
+            assert(!"unknown dir");
     }
     return ControlSym::SYM_NONE;
 }
@@ -231,6 +255,30 @@ bool
 Unit::equalsModel(const Cube *other) const
 {
     return m_model == other;
+}
+//-----------------------------------------------------------------
+V2
+Unit::getLoc() const
+{
+    return m_model->getLocation();
+}
+//-----------------------------------------------------------------
+int
+Unit::getW() const
+{
+    return m_model->shape()->getW();
+}
+//-----------------------------------------------------------------
+int
+Unit::getH() const
+{
+    return m_model->shape()->getH();
+}
+//-----------------------------------------------------------------
+bool
+Unit::isFreePlace(const V2 &loc) const
+{
+    return m_model->const_rules()->isFreePlace(loc);
 }
 //-----------------------------------------------------------------
 int

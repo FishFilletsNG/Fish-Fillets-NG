@@ -3,6 +3,7 @@
 
 class Path;
 class Field;
+class FinderAlg;
 class WavyPicture;
 class Controls;
 class KeyStroke;
@@ -28,6 +29,7 @@ class Room : public StepCounter, public Drawable {
     private:
         WavyPicture *m_bg;
         Field *m_field;
+        FinderAlg *m_finder;
         ResSoundPack *m_soundPack;
         Controls *m_controls;
         PhaseLocker *m_locker;

@@ -10,6 +10,7 @@
 
 #include "WavyPicture.h"
 #include "Field.h"
+#include "FinderAlg.h"
 #include "ResSoundPack.h"
 #include "Controls.h"
 #include "PhaseLocker.h"
@@ -29,6 +30,7 @@
 #include "ModelList.h"
 #include "Landslip.h"
 #include "MouseStroke.h"
+#include "MouseControl.h"
 
 #include <assert.h>
 
@@ -48,6 +50,7 @@ Room::Room(int w, int h, const Path &picture,
     m_levelScript = levelScript;
     m_bg = new WavyPicture(picture, V2(0, 0));
     m_field = new Field(w, h);
+    m_finder = new FinderAlg(w, h);
     m_controls = new Controls(m_locker);
     m_view = new View(ModelList(&m_models));
     m_lastAction = Cube::ACTION_NO;
@@ -74,6 +77,7 @@ Room::~Room()
         delete (*i);
     }
 
+    delete m_finder;
     delete m_field;
     delete m_bg;
 }
@@ -156,6 +160,12 @@ Room::nextRound(const InputProvider *input)
     if (isFresh()) {
         if (m_controls->driving(input)) {
             m_lastAction = Cube::ACTION_MOVE;
+        }
+        else {
+            MouseControl rat(m_controls, m_view, m_finder);
+            if (rat.mouseDrive(input)) {
+                m_lastAction = Cube::ACTION_MOVE;
+            }
         }
     }
 
@@ -314,13 +324,10 @@ Room::controlEvent(const KeyStroke &stroke)
     void
 Room::controlMouse(const MouseStroke &button)
 {
-    V2 fieldPos = m_view->getFieldPos(button.getLoc());
-    Cube *model = askField(fieldPos);
     if (button.isLeft()) {
-        m_controls->controlField(fieldPos, model);
-    }
-    else if (button.isRight()) {
-        m_controls->controlFieldHard(fieldPos, model);
+        V2 fieldPos = m_view->getFieldPos(button.getLoc());
+        Cube *model = askField(fieldPos);
+        m_controls->activateSelected(model);
     }
 }
 

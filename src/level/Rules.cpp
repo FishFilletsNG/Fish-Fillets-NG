@@ -635,6 +635,12 @@ Rules::isAtBorder() const
     return m_mask->getBorderDir() != Dir::DIR_NO;
 }
 //-----------------------------------------------------------------
+bool
+Rules::isFreePlace(const V2 &loc) const
+{
+    return m_mask->getPlacedResist(loc).empty();
+}
+//-----------------------------------------------------------------
 const Cube::t_models
 Rules::getResist(Dir::eDir dir) const
 {

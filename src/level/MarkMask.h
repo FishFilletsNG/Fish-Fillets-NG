@@ -1,6 +1,7 @@
 #ifndef HEADER_MARKMASK_H
 #define HEADER_MARKMASK_H
 
+class V2;
 class Field;
 
 #include "NoCopy.h"
@@ -22,6 +23,7 @@ class MarkMask : public NoCopy {
         MarkMask(Cube *model, Field *field);
 
         Cube::t_models getResist(Dir::eDir dir) const;
+        Cube::t_models getPlacedResist(const V2 &loc) const;
         void mask();
         void unmask();
 

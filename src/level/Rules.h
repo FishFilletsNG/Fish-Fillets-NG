@@ -1,6 +1,7 @@
 #ifndef HEADER_RULES_H
 #define HEADER_RULES_H
 
+class V2;
 class MarkMask;
 class Field;
 class OnCondition;
@@ -67,6 +68,7 @@ class Rules : public NoCopy {
         std::string getState() const;
         bool isOnStrongPad(Cube::eWeight weight);
         bool isAtBorder() const;
+        bool isFreePlace(const V2 &loc) const;
         const Cube::t_models getResist(Dir::eDir dir) const;
 };
 

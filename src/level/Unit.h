@@ -7,6 +7,8 @@ class InputProvider;
 #include "KeyControl.h"
 #include "ControlSym.h"
 #include "Object.h"
+#include "Dir.h"
+#include "V2.h"
 
 #include "SDL.h"
 #include <string>
@@ -40,12 +42,17 @@ class Unit : public Object {
 
         char mySymbol(SDLKey key) const;
         char mySymbolBorrowed(SDLKey key, const KeyControl &buttons) const;
+        char myOrder(Dir::eDir dir) const;
         char driveOrder(char move);
 
         bool isMoving() const;
         bool isTurning() const;
         bool isPushing() const;
         bool equalsModel(const Cube *other) const;
+        V2 getLoc() const;
+        int getW() const;
+        int getH() const;
+        bool isFreePlace(const V2 &loc) const;
 
         int countAnimPhases(const std::string &anim) const;
 };
