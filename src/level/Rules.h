@@ -20,6 +20,7 @@ class Rules : public NoCopy {
         bool m_readyToTurn;
         bool m_readyToActive;
         bool m_pushing;
+        bool m_touched;
         bool m_lastFall;
         int m_outDepth;
 
@@ -43,6 +44,7 @@ class Rules : public NoCopy {
         bool canDir(Dir::eDir dir, Cube::eWeight power);
         bool canMoveOthers(Dir::eDir dir, Cube::eWeight weight);
         bool touchSpec(Dir::eDir dir);
+        void setTouched(Dir::eDir dir);
         void moveDirBrute(Dir::eDir dir);
 
         void freeOldPos();

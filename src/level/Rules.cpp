@@ -30,6 +30,7 @@ Rules::Rules(Cube *model)
     m_readyToActive = false;
     m_dir = Dir::DIR_NO;
     m_pushing = false;
+    m_touched = false;
     m_outDepth = 0;
 
     m_model = model;
@@ -81,6 +82,7 @@ Rules::takeField(Field *field)
     void
 Rules::occupyNewPos()
 {
+    m_touched = false;
     if (m_dir != Dir::DIR_NO) {
         m_pushing = false;
 
@@ -529,23 +531,46 @@ Rules::touchSpec(Dir::eDir dir)
 }
 //-----------------------------------------------------------------
 /**
+ * Marks all resisted models as touched.
+ */
+void
+Rules::setTouched(Dir::eDir dir)
+{
+    m_touched = true;
+    if (!m_model->isWall()) {
+        m_mask->unmask();
+        Cube::t_models resist = m_mask->getResist(dir);
+        Cube::t_models::iterator end = resist.end();
+        for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
+            if (!(*i)->isAlive()) {
+                (*i)->rules()->setTouched(dir);
+            }
+        }
+        m_mask->mask();
+    }
+}
+//-----------------------------------------------------------------
+/**
  * Try to move.
  * Only m_dir will be set.
  * NOTE: we can move all resist or none
- * 
+ *
  * @return whether we have moved
  */
     bool
 Rules::actionMoveDir(Dir::eDir dir)
 {
     bool result = false;
-    if (touchSpec(dir)) {
+    if (canMoveOthers(dir, m_model->getPower())) {
+        moveDirBrute(dir);
         result = true;
     }
     else {
-        if (canMoveOthers(dir, m_model->getPower())) {
-            moveDirBrute(dir);
+        if (touchSpec(dir)) {
             result = true;
+        }
+        else {
+            setTouched(dir);
         }
     }
 
@@ -579,6 +604,7 @@ Rules::moveDirBrute(Dir::eDir dir)
 //-----------------------------------------------------------------
 /**
  * Return what we do the last round.
+ * Useful for script functions.
  * NOTE: dead is not action
  */
 std::string
@@ -608,18 +634,30 @@ Rules::getAction() const
 //-----------------------------------------------------------------
 /**
  * Return how we have feel the last round.
+ * Useful for script functions.
+ *
+ * States:
+ * "touched" ... the object is not pushed but there was a try
+ * "goout" ... go out of room
+ * "dead" ... is dead
+ * "talking" ... is talking
+ * "pushing" ... is pushing
+ * "normal" ... is alive and resting
  */
 std::string
 Rules::getState() const
 {
-    if (!m_model->isAlive()) {
+    if (m_touched) {
+        return "touched";
+    }
+    else if (m_outDepth == 1) {
+        return "goout";
+    }
+    else if (!m_model->isAlive()) {
         return "dead";
     }
     else if (m_model->isTalking()) {
         return "talking";
-    }
-    else if (m_outDepth == 1) {
-        return "goout";
     }
     else if (m_pushing) {
         return "pushing";

@@ -10,6 +10,7 @@
 
 #include "V2.h"
 #include "Cube.h"
+#include "Rules.h"
 #include "ModelFactory.h"
 
 #include <string.h> // memset()
@@ -24,6 +25,7 @@ Field::Field(int w, int h)
     m_h = h;
 
     m_border = ModelFactory::createBorder();
+    m_border->rules()->takeField(this);
 
     //NOTE: [y][x] indexes
     m_marks = new Cube**[m_h];
