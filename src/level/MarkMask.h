@@ -15,6 +15,7 @@ class MarkMask : public NoCopy {
         Cube *m_model;
         Field *m_field;
     private:
+        void removeBorder(Cube::t_models &models) const;
         void writeModel(Cube *model);
     public:
         MarkMask(Cube *model, Field *field);

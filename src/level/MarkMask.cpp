@@ -49,7 +49,26 @@ MarkMask::getResist(Rules::eDir dir) const
     Cube::t_models::iterator last = std::unique(models.begin(), models.end());
     models.erase(last, models.end());
 
+    removeBorder(models);
     return models;
+}
+//-----------------------------------------------------------------
+/**
+ * Remove border from list of models.
+ * List contains unique models.
+ */
+void
+MarkMask::removeBorder(Cube::t_models &models) const
+{
+    if (m_model->shouldGoOut()) {
+        Cube::t_models::iterator end = models.end();
+        for (Cube::t_models::iterator i = models.begin(); i != end; ++i) {
+            if (*i == m_field->getBorder()) {
+                models.erase(i);
+                return;
+            }
+        }
+    }
 }
 //-----------------------------------------------------------------
 /**
