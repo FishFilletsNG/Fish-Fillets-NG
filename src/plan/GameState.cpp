@@ -49,6 +49,7 @@ GameState::initState(StateManager *manager)
     LOG_DEBUG(ExInfo("initState").addInfo("name", getName()));
     m_manager = manager;
     m_active = true;
+    m_onBg = false;
     InputAgent::agent()->installHandler(m_handler);
     own_initState();
 }
@@ -82,15 +83,21 @@ GameState::pauseState()
     own_pauseState();
     InputAgent::agent()->installHandler(NULL);
     m_active = false;
+    m_onBg = false;
 }
 //-----------------------------------------------------------------
 /**
  * Reactivate state after pause.
+ * @throws LogicException when state is already active
  */
     void
 GameState::resumeState()
 {
     LOG_DEBUG(ExInfo("resumeState").addInfo("name", getName()));
+    if (m_active) {
+        throw LogicException(ExInfo("resume - state is already active")
+                .addInfo("name", getName()));
+    }
     m_active = true;
     InputAgent::agent()->installHandler(m_handler);
     own_resumeState();
@@ -104,13 +111,26 @@ GameState::cleanState()
 
     InputAgent::agent()->installHandler(NULL);
     m_active = false;
+    m_onBg = false;
     m_manager = NULL;
 }
 //-----------------------------------------------------------------
     void
 GameState::quitState()
 {
-    m_manager->popState();
+    m_manager->popState(this);
+}
+//-----------------------------------------------------------------
+void
+GameState::pushState(GameState *new_state)
+{
+    m_manager->pushState(this, new_state);
+}
+//-----------------------------------------------------------------
+void
+GameState::changeState(GameState *new_state)
+{
+    m_manager->changeState(this, new_state);
 }
 //-----------------------------------------------------------------
 void

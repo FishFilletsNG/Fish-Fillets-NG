@@ -29,7 +29,7 @@ GameAgent::own_init()
     worldmap->initWay(
             Path::dataReadPath("script/worldmap.lua"),
             Path::dataReadPath("script/worlddesc.lua"));
-    m_manager->changeState(worldmap);
+    m_manager->pushState(NULL, worldmap);
 
     enableConsole();
     keyBinding();

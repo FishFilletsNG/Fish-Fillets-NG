@@ -20,7 +20,6 @@ class GameState : public INamed, public NoCopy {
         bool m_active;
         bool m_onBg;
         InputHandler *m_handler;
-    protected:
         StateManager *m_manager;
     protected:
         void takeHandler(InputHandler *new_handler);
@@ -33,6 +32,8 @@ class GameState : public INamed, public NoCopy {
 
         virtual void own_noteBg() {}
         virtual void own_noteFg() {}
+
+        void changeState(GameState *new_state);
     public:
         GameState();
         virtual ~GameState();
@@ -45,7 +46,9 @@ class GameState : public INamed, public NoCopy {
         void pauseState();
         void resumeState();
         void cleanState();
+
         void quitState();
+        void pushState(GameState *new_state);
 
         void noteBg();
         void noteFg();

@@ -5,29 +5,31 @@ class GameState;
 
 #include "NoCopy.h"
 
-#include <vector>
+#include <list>
 
 /**
  * Stack of states.
  */
 class StateManager : public NoCopy {
     private:
-        typedef std::vector<GameState*> t_states;
+        typedef std::list<GameState*> t_states;
         t_states m_states;
         t_states m_trash;
     private:
         void emptyTrash();
-        void removeCurrent();
-        void resumeStack();
-        void resumeBg(t_states::iterator state);
-        void pauseRunning();
+        void removeState(GameState *state);
+        void insertAfter(GameState *who, GameState *new_state);
+        t_states::iterator findIter(GameState *who);
+        void checkStack();
+        void pauseBg(t_states::iterator stateIt);
+        void resumeBg(t_states::iterator stateIt);
     public:
         virtual ~StateManager();
         void updateGame();
 
-        void changeState(GameState *new_state);
-        void pushState(GameState *new_state);
-        void popState();
+        void changeState(GameState *who, GameState *new_state);
+        void pushState(GameState *who, GameState *new_state);
+        void popState(GameState *who);
 };
 
 #endif

@@ -24,14 +24,14 @@ class LevelStatus {
         ScriptState *createScript();
         std::string getSolutionFilename();
     public:
-        LevelStatus() { m_complete = false; m_wasRunning = true; }
+        LevelStatus() { m_complete = false; m_wasRunning = false; }
         void prepareRun(const std::string codename,
                 const std::string levelName);
         std::string getLevelName() const { return m_levelName; }
 
         void setComplete() { m_complete = true; }
         bool isComplete() const { return m_complete; }
-        void setRunning() { m_wasRunning = true; }
+        void setRunning(bool value) { m_wasRunning = value; }
         bool wasRunning() const { return m_wasRunning; }
 
         void readMoves(const std::string &moves);

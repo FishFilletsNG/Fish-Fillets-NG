@@ -109,6 +109,7 @@ WorldMap::initWay(const Path &way, const Path &descfile)
     void
 WorldMap::own_initState()
 {
+    m_levelStatus->setRunning(true);
     own_resumeState();
 }
 //-----------------------------------------------------------------
@@ -143,6 +144,7 @@ WorldMap::own_resumeState()
         if (m_levelStatus->isComplete()) {
             markSolved();
         }
+        m_levelStatus->setRunning(false);
         m_selected = NULL;
 
         SoundAgent::agent()->playMusic(
@@ -202,10 +204,10 @@ WorldMap::runSelected()
 
         if (m_selected->getState() == LevelNode::STATE_SOLVED) {
             Pedometer *pedometer = new Pedometer(m_levelStatus, level);
-            m_manager->pushState(pedometer);
+            pushState(pedometer);
         }
         else {
-            m_manager->pushState(level);
+            pushState(level);
         }
     }
     else {
@@ -302,6 +304,6 @@ WorldMap::runCredits()
 WorldMap::runOptions()
 {
     MenuOptions *options = new MenuOptions();
-    m_manager->pushState(options);
+    pushState(options);
 }
 

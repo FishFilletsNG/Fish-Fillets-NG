@@ -80,7 +80,7 @@ Level::own_initState()
         throw LogicException(ExInfo("level status is NULL")
                 .addInfo("codename", m_codename));
     }
-    m_levelStatus->setRunning();
+    m_levelStatus->setRunning(true);
     SoundAgent::agent()->stopMusic();
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
@@ -402,10 +402,7 @@ Level::nextShowAction()
     bool
 Level::action_restart()
 {
-    //TODO: list of drawers does not support drawers change
-    while (isOnBg()) {
-        quitState();
-    }
+    //FIXME: list of drawers does not support drawers change
     own_cleanState();
     m_restartCounter++;
     //TODO: is ok to run the script on second time?
@@ -523,15 +520,6 @@ Level::newDemo(Picture *new_bg, const Path &demofile)
     DemoMode *demo = new DemoMode();
     demo->runDemo(new_bg, demofile);
     pushState(demo);
-}
-//-----------------------------------------------------------------
-/**
- * Pause level and run new game state.
- */
-    void
-Level::pushState(GameState *new_state)
-{
-    m_manager->pushState(new_state);
 }
 
 //-----------------------------------------------------------------

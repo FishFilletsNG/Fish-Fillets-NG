@@ -38,6 +38,8 @@
     void
 VideoAgent::own_init()
 {
+    m_screen = NULL;
+    m_fullscreen = false;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDLException(ExInfo("Init"));
     }
@@ -124,9 +126,9 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     int fullscreen = options->getAsInt("fullscreen", 0);
     int videoFlags = getVideoFlags();
     if (fullscreen) {
-        m_fullscreen = true;
         videoFlags |= SDL_FULLSCREEN;
     }
+    m_fullscreen = fullscreen;
 
     //TODO: check VideoModeOK and available ListModes
     SDL_Surface *newScreen =
@@ -182,8 +184,13 @@ VideoAgent::getVideoFlags()
     void
 VideoAgent::toggleFullScreen()
 {
-    SDL_WM_ToggleFullScreen(m_screen);
-    m_fullscreen = !m_fullscreen;
+    int success = SDL_WM_ToggleFullScreen(m_screen);
+    if (success) {
+        m_fullscreen = !m_fullscreen;
+    }
+    else {
+        LOG_INFO(ExInfo("cannot toggle fullscreen"));
+    }
 }
 //-----------------------------------------------------------------
 /**

@@ -164,14 +164,14 @@ Pedometer::runSelected()
     void
 Pedometer::runLevel()
 {
-    m_manager->changeState(m_level);
+    changeState(m_level);
     m_level = NULL;
 }
 //-----------------------------------------------------------------
     void
 Pedometer::runReplay()
 {
-    m_manager->changeState(m_level);
+    changeState(m_level);
     m_level->loadReplay(m_solution);
     m_level = NULL;
 }
