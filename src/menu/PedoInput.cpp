@@ -6,9 +6,9 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  */
-#include "WorldInput.h"
+#include "PedoInput.h"
 
-#include "WorldMap.h"
+#include "Pedometer.h"
 #include "Keymap.h"
 
 #include "Log.h"
@@ -16,26 +16,25 @@
 #include "MouseStroke.h"
 
 //-----------------------------------------------------------------
-WorldInput::WorldInput(WorldMap *world)
+PedoInput::PedoInput(Pedometer *pedometer)
 {
-    m_world = world;
+    m_pedometer = pedometer;
     m_keymap = new Keymap();
     m_keymap->registerKey(KeyStroke(SDLK_ESCAPE, KMOD_NONE),
             KeyDesc(KEY_QUIT, "quit"));
 }
 //-----------------------------------------------------------------
-WorldInput::~WorldInput()
+PedoInput::~PedoInput()
 {
     delete m_keymap;
 }
 //-----------------------------------------------------------------
     void
-WorldInput::keyEvent(const KeyStroke &stroke)
+PedoInput::keyEvent(const KeyStroke &stroke)
 {
-    //TODO: 'O' ... options, 'I' ... intro, 'E' ... exit, 'C' ... credits
     switch (m_keymap->indexPressed(stroke)) {
         case KEY_QUIT:
-            m_world->quitState();
+            m_pedometer->quitState();
             break;
         case -1:
             break;
@@ -47,10 +46,10 @@ WorldInput::keyEvent(const KeyStroke &stroke)
 }
 //-----------------------------------------------------------------
 void
-WorldInput::mouseEvent(const MouseStroke &buttons)
+PedoInput::mouseEvent(const MouseStroke &buttons)
 {
     if (buttons.equals(MouseStroke(SDL_BUTTON_LEFT))) {
-        m_world->runSelected();
+        m_pedometer->runSelected();
     }
 }
 

@@ -87,7 +87,7 @@ Rules::occupyNewPos()
 
         V2 shift = dir2xy(m_dir);
         V2 oldLoc = m_model->getLocation();
-        m_model->change_setLocation(oldLoc.composition(shift));
+        m_model->change_setLocation(oldLoc.plus(shift));
 
         m_mask->mask();
     }

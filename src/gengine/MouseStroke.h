@@ -1,6 +1,8 @@
 #ifndef HEADER_MOUSESTROKE_H
 #define HEADER_MOUSESTROKE_H
 
+#include "V2.h"
+
 #include "SDL.h"
 #include <string>
 
@@ -10,14 +12,12 @@
 class MouseStroke {
     private:
         Uint8 m_button;
-        int m_x;
-        int m_y;
+        V2 m_loc;
     public:
         MouseStroke(const SDL_MouseButtonEvent &event);
         MouseStroke(Uint8 button, int x=0, int y=0);
 
-        int getX() const { return m_x; }
-        int getY() const { return m_y; }
+        V2 getLoc() const { return m_loc; }
         bool equals(const MouseStroke &other) const;
         std::string toString() const;
 };

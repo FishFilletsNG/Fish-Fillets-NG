@@ -22,6 +22,7 @@
 #include "LoadException.h"
 #include "ScriptException.h"
 #include "DemoMode.h"
+#include "SoundAgent.h"
 #include "minmax.h"
 
 #include <stdio.h>
@@ -63,6 +64,7 @@ Level::~Level()
     void
 Level::own_initState()
 {
+    SoundAgent::agent()->stopMusic();
     m_countdown = -1;
     m_roomState = ROOM_RUNNING;
     m_loadedMoves = "";
@@ -248,7 +250,7 @@ Level::nextPlayerAction()
 Level::saveSolution()
 {
     std::string current_moves = m_levelScript->room()->getMoves();
-    m_levelStatus->writeSolvedMoves(m_codename, current_moves);
+    m_levelStatus->writeSolvedMoves(current_moves);
 }
 //-----------------------------------------------------------------
 /**
@@ -287,7 +289,18 @@ Level::saveGame(const std::string &models)
 Level::loadGame(const std::string &moves)
 {
     m_loadedMoves = moves;
-    m_loadSpeed = min(50, max(5, m_loadedMoves.size() / 150));
+    m_loadSpeed = min(50, max(SPEED_REPLAY + 4, m_loadedMoves.size() / 150));
+}
+//-----------------------------------------------------------------
+/**
+ * Start replay mode.
+ * @param moves saved moves to load
+ */
+    void
+Level::loadReplay(const std::string &moves)
+{
+    m_loadedMoves = moves;
+    m_loadSpeed = SPEED_REPLAY;
 }
 //-----------------------------------------------------------------
 /**
@@ -314,7 +327,7 @@ Level::nextLoadAction()
         }
     }
 
-    if (m_loadedMoves.empty()) {
+    if (m_loadedMoves.empty() && m_loadSpeed > SPEED_REPLAY) {
         m_levelScript->scriptDo("script_loadState()");
     }
     return room_complete;

@@ -30,10 +30,6 @@ class ViewEffect {
         void blitReverse(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);
 
-        bool colorEquals(const SDL_Color &color1, const SDL_Color &color2);
-        SDL_Color getColor(SDL_Surface *surface, int x, int y);
-        void putColor(SDL_Surface *surface, int x, int y,
-                const SDL_Color &color);
     public:
         ViewEffect();
         void setEffect(eEffect effect);
@@ -41,9 +37,6 @@ class ViewEffect {
         bool isDisintegrated() const;
         bool isInvisible() const;
         void blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y);
-
-        static Uint32 getPixel(SDL_Surface *surface, int x, int y);
-        static void putPixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 };
 
 #endif

@@ -20,6 +20,8 @@ getStatus(lua_State *L)
 {
     return static_cast<LevelStatus*>(script_getLeader(L));
 }
+
+
 //-----------------------------------------------------------------
 /**
  * void status_readMoves(saved_moves)
@@ -35,7 +37,7 @@ LevelStatus::script_status_readMoves(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
     void
-LevelStatus::readMoves(const std::string savedMoves)
+LevelStatus::readMoves(const std::string &savedMoves)
 {
     m_savedMoves = savedMoves;
 }
@@ -54,16 +56,28 @@ LevelStatus::createScript()
     return script;
 }
 //-----------------------------------------------------------------
+std::string
+LevelStatus::getSolutionFilename(const std::string &codename)
+{
+    return "solved/" + codename + ".lua";
+}
+//-----------------------------------------------------------------
+std::string
+LevelStatus::getSolutionFilename()
+{
+    return getSolutionFilename(m_codename);
+}
+//-----------------------------------------------------------------
 /**
  * Read the best solution.
- * @return saved_moves
+ * @return saved_moves or empty string
  */
 std::string
-LevelStatus::readSolvedMoves(const std::string codename)
+LevelStatus::readSolvedMoves()
 {
     m_savedMoves = "";
 
-    Path oldSolution = Path::dataReadPath("solved/" + codename + ".lua");
+    Path oldSolution = Path::dataReadPath(getSolutionFilename());
     if (oldSolution.exists()) {
         ScriptState *script = createScript();
         try {
@@ -84,13 +98,12 @@ LevelStatus::readSolvedMoves(const std::string codename)
  * Save moves and models state.
  */
     void
-LevelStatus::writeSolvedMoves(const std::string codename,
-        const std::string moves)
+LevelStatus::writeSolvedMoves(const std::string &moves)
 {
-    std::string prevMoves = readSolvedMoves(codename);
+    std::string prevMoves = readSolvedMoves();
 
     if (prevMoves.empty() || moves.size() < prevMoves.size()) {
-        Path file = Path::dataWritePath("solved/" + codename + ".lua");
+        Path file = Path::dataWritePath(getSolutionFilename());
         FILE *saveFile = fopen(file.getNative().c_str(), "w");
         if (saveFile) {
             fputs("\nsaved_moves = '", saveFile);

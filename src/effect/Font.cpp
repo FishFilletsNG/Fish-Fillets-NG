@@ -78,13 +78,19 @@ Font::renderText(const std::string &text, const SDL_Color &color)
 
     SDL_Surface *surface = SDL_DisplayFormat(raw_surface);
     if (!surface) {
-        throw SDLException(ExInfo("SetColorKey"));
+        throw SDLException(ExInfo("DisplayFormat"));
     }
     SDL_FreeSurface(raw_surface);
 
     return surface;
 }
 //-----------------------------------------------------------------
+/**
+ * Render text with black outline around font.
+ * @param text utf-8 encoded text
+ * @param color text color
+ * @param outlineWidth outline width
+ */
 SDL_Surface *
 Font::renderTextOutlined(const std::string &text,
                 const SDL_Color &color, int outlineWidth)

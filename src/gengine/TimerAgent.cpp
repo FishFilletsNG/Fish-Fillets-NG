@@ -19,6 +19,20 @@ TimerAgent::own_init()
 }
 //-----------------------------------------------------------------
 /**
+ * Game is faster with pressed Shift.
+ */
+int
+TimerAgent::getTimeInterval()
+{
+    int result = TIMEINTERVAL;
+
+    if (SDL_GetModState() & KMOD_SHIFT) {
+        result = TIMEINTERVAL / 4;
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+/**
  * Sleep fixed number miliseconds.
  */
     void
@@ -33,7 +47,7 @@ TimerAgent::own_update()
 
     now = SDL_GetTicks();
     //NOTE: every cycle have fixed time interval
-    m_nextTime = now + TIMEINTERVAL;
+    m_nextTime = now + getTimeInterval();
 
     m_deltaTime = now - m_lastTime;
     m_lastTime = now;

@@ -21,8 +21,8 @@ class StateManager : public NoCopy {
         virtual ~StateManager();
         void updateGame();
 
-        void changeState(GameState *newState);
-        void pushState(GameState *newState);
+        void changeState(GameState *new_state);
+        void pushState(GameState *new_state);
         void popState();
 };
 

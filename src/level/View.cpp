@@ -63,7 +63,7 @@ View::drawModel(Cube *model)
             shift = shift.scale(m_animShift * m_shiftSize);
         }
 
-        V2 shift_loc = shift.composition(loc.scale(SCALE));
+        V2 shift_loc = shift.plus(loc.scale(SCALE));
 
         Anim::eSide side = Anim::SIDE_LEFT;
         if (!model->isLeft()) {

@@ -25,6 +25,7 @@
 #include "LevelDesc.h"
 #include "ScriptState.h"
 #include "Level.h"
+#include "Pedometer.h"
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap(const Path &bg)
@@ -93,12 +94,12 @@ WorldMap::own_updateState()
 }
 //-----------------------------------------------------------------
 /**
- * Stop music and hide menu.
+ * Hide menu.
+ * NOTE: level will stop music
  */
     void
 WorldMap::own_pauseState()
 {
-    SoundAgent::agent()->stopMusic();
     deactivate();
 }
 //-----------------------------------------------------------------
@@ -145,15 +146,25 @@ WorldMap::watchCursor()
 //-----------------------------------------------------------------
 /**
  * Start level under pressed button.
+ * Start pedometer when level is solved already.
  */
     void
 WorldMap::runSelected()
 {
     Level *level = createSelected();
-    if (level) {
+    if (level && m_selected) {
+        m_levelStatus->setCodename(m_selected->getCodename());
+        m_levelStatus->setLevelName(findLevelName(m_selected->getCodename()));
         m_levelStatus->setComplete(false);
         level->fillStatus(m_levelStatus);
-        m_manager->pushState(level);
+
+        if (m_selected->getState() == LevelNode::STATE_SOLVED) {
+            Pedometer *pedometer = new Pedometer(m_levelStatus, level);
+            m_manager->pushState(pedometer);
+        }
+        else {
+            m_manager->pushState(level);
+        }
     }
 }
 //-----------------------------------------------------------------
@@ -165,8 +176,8 @@ WorldMap::createSelected() const
 {
     Level *result = NULL;
     if (m_selected) {
-        std::string title = findDesc(m_selected->getCodeName());
-        title.append(": " + findLevelName(m_selected->getCodeName()));
+        std::string title = findDesc(m_selected->getCodename());
+        title.append(": " + findLevelName(m_selected->getCodename()));
         result = m_selected->createLevel();
         result->setDesc(title);
     }
@@ -192,7 +203,7 @@ WorldMap::draw()
     m_drawer->setScreen(m_screen);
     m_startNode->drawPath(m_drawer);
     if (m_selected) {
-        m_drawer->drawSelected(findLevelName(m_selected->getCodeName()));
+        m_drawer->drawSelected(findLevelName(m_selected->getCodename()));
     }
 }
 //-----------------------------------------------------------------

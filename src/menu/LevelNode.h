@@ -39,7 +39,7 @@ class LevelNode : public NoCopy {
         virtual ~LevelNode();
         int getDepth() const { return m_depth; }
 
-        std::string getCodeName() const { return m_codename; }
+        std::string getCodename() const { return m_codename; }
         void setState(eState state);
         V2 getLoc() const { return m_loc; }
         eState getState() const { return m_state; }

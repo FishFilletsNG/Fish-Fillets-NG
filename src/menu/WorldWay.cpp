@@ -12,6 +12,7 @@
 #include "LevelNode.h"
 #include "ScriptState.h"
 #include "LuaTable.h"
+#include "LevelStatus.h"
 #include "def-script.h"
 
 LevelNode *WorldWay::ms_startNode = NULL;
@@ -67,7 +68,9 @@ WorldWay::parseNode(lua_State *L, int depth)
     //NOTE: remove children table from stack
     lua_pop(L, 1);
 
-    if (Path::dataReadPath("solved/" + codename + ".lua").exists()) {
+    if (Path::dataReadPath(
+                LevelStatus::getSolutionFilename(codename)).exists())
+    {
         result->setState(LevelNode::STATE_SOLVED);
     }
     else if (hidden) {

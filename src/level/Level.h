@@ -23,6 +23,7 @@ class Command;
  */
 class Level : public GameState {
     private:
+        static const int SPEED_REPLAY = 1;
         enum eRoomState {
             ROOM_RUNNING,
             ROOM_COMPLETE,
@@ -68,6 +69,7 @@ class Level : public GameState {
 
         void saveGame(const std::string &models);
         void loadGame(const std::string &moves);
+        void loadReplay(const std::string &moves);
 
         bool action_restart();
         bool action_move(char symbol);

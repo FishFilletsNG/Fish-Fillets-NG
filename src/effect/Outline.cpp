@@ -9,7 +9,7 @@
 #include "Outline.h"
 
 #include "Log.h"
-#include "ViewEffect.h"
+#include "PixelTool.h"
 #include "SurfaceLock.h"
 
 //-----------------------------------------------------------------
@@ -80,7 +80,7 @@ Outline::drawAlongCopy(SDL_Surface *surface, Uint32 bgKey, SDL_Surface *copy)
 
     for (int py = 0; py < surface->h; ++py) {
         for (int px = 0; px < surface->w; ++px) {
-            if (ViewEffect::getPixel(copy, px, py) != bgKey) {
+            if (PixelTool::getPixel(copy, px, py) != bgKey) {
                 fillNeighbourhood(surface, bgKey, px, py);
             }
         }
@@ -97,22 +97,22 @@ void
 Outline::fillNeighbourhood(SDL_Surface *surface, Uint32 bgKey, int x, int y)
 {
     //TODO: optimize for speed
-    if (x > 0 && ViewEffect::getPixel(surface, x - 1, y) == bgKey) {
-        ViewEffect::putPixel(surface, x - 1, y, m_pixel);
+    if (x > 0 && PixelTool::getPixel(surface, x - 1, y) == bgKey) {
+        PixelTool::putPixel(surface, x - 1, y, m_pixel);
     }
-    if (y > 0 && ViewEffect::getPixel(surface, x, y - 1) == bgKey) {
-        ViewEffect::putPixel(surface, x, y - 1, m_pixel);
+    if (y > 0 && PixelTool::getPixel(surface, x, y - 1) == bgKey) {
+        PixelTool::putPixel(surface, x, y - 1, m_pixel);
     }
 
     if (x + 1 < surface->w &&
-            ViewEffect::getPixel(surface, x + 1, y) == bgKey)
+            PixelTool::getPixel(surface, x + 1, y) == bgKey)
     {
-        ViewEffect::putPixel(surface, x + 1, y, m_pixel);
+        PixelTool::putPixel(surface, x + 1, y, m_pixel);
     }
     if (y + 1 < surface->h &&
-            ViewEffect::getPixel(surface, x, y + 1) == bgKey)
+            PixelTool::getPixel(surface, x, y + 1) == bgKey)
     {
-        ViewEffect::putPixel(surface, x, y + 1, m_pixel);
+        PixelTool::putPixel(surface, x, y + 1, m_pixel);
     }
 }
 

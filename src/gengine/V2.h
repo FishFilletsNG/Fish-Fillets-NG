@@ -16,12 +16,16 @@ class V2 {
     public:
         V2(int x, int y) { m_x = x; m_y = y; }
 
-        int getX() const { return m_x; }
-        int getY() const { return m_y; }
+        inline int getX() const { return m_x; }
+        inline int getY() const { return m_y; }
 
-        V2 composition(const V2 &other) const
+        V2 plus(const V2 &other) const
         {
             return V2(m_x + other.m_x, m_y + other.m_y);
+        }
+        V2 minus(const V2 &other) const
+        {
+            return V2(m_x - other.m_x, m_y - other.m_y);
         }
         V2 scale(int rate) const
         {

@@ -32,12 +32,12 @@ MarkMask::getResist(Rules::eDir dir) const
 {
     Cube::t_models models;
     V2 shift = Rules::dir2xy(dir);
-    V2 shift_loc = shift.composition(m_model->getLocation());
+    V2 shift_loc = shift.plus(m_model->getLocation());
 
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
-        V2 mark = shift_loc.composition(*i);
+        V2 mark = shift_loc.plus(*i);
 
         Cube *resist = m_field->getModel(mark);
         if (NULL != resist && m_model != resist) {
@@ -77,7 +77,7 @@ MarkMask::writeModel(Cube *model)
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
-        V2 mark = loc.composition(*i);
+        V2 mark = loc.plus(*i);
         m_field->setModel(mark, model);
     }
 }
@@ -94,7 +94,7 @@ MarkMask::isAtBorder()
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->end();
     for (Shape::const_iterator i = shape->begin(); i != end; ++i) {
-        V2 mark = loc.composition(*i);
+        V2 mark = loc.plus(*i);
         if ((mark.getX() == 0 || mark.getX() == m_field->getW() - 1)
                 || (mark.getY() == 0 || mark.getY() == m_field->getH() - 1))
         {

@@ -17,6 +17,7 @@ class Picture : public IDrawer {
         SDL_Surface *m_surface;
     public:
         Picture(const Path &file, const V2 &loc);
+        Picture(SDL_Surface *new_surface, const V2 &loc);
         virtual ~Picture();
         virtual void draw();
 };

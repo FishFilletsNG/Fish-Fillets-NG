@@ -22,6 +22,16 @@ Picture::Picture(const Path &file, const V2 &loc)
 }
 //-----------------------------------------------------------------
 /**
+ * Use this surface.
+ */
+Picture::Picture(SDL_Surface *new_surface, const V2 &loc)
+    : m_loc(loc)
+{
+    m_surface = new_surface;
+}
+
+//-----------------------------------------------------------------
+/**
  * Free surface.
  */
 Picture::~Picture()

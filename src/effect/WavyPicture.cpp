@@ -35,7 +35,6 @@ WavyPicture::draw()
     //NOTE: Wspeed = 1.0/Wspd_in_orig
     SDL_Rect dest_rect;
     SDL_Rect line_rect;
-    line_rect.x = 0;
     line_rect.w = m_surface->w;
     line_rect.h = 1;
 

@@ -59,26 +59,26 @@ StateManager::removeCurrent()
  * Remove current state and set this one.
  */
 void
-StateManager::changeState(GameState *newState)
+StateManager::changeState(GameState *new_state)
 {
     removeCurrent();
 
-    newState->initState(this);
-    m_states.push_back(newState);
+    new_state->initState(this);
+    m_states.push_back(new_state);
 }
 //-----------------------------------------------------------------
 /**
  * Pause current state and set this one.
  */
 void
-StateManager::pushState(GameState *newState)
+StateManager::pushState(GameState *new_state)
 {
     if (!m_states.empty()) {
         m_states.back()->pauseState();
     }
 
-    newState->initState(this);
-    m_states.push_back(newState);
+    new_state->initState(this);
+    m_states.push_back(new_state);
 }
 //-----------------------------------------------------------------
 /**

@@ -25,7 +25,7 @@
 GameAgent::own_init()
 {
     m_manager = new StateManager();
-    //TODO: allow set different worldmap picture
+    //TODO: allow to set different worldmap picture
     WorldMap *worldmap = new WorldMap(
             Path::dataReadPath("images/menu/mapa-0.png"));
     worldmap->initWay(

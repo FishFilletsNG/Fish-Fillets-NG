@@ -15,10 +15,9 @@
  * Create new stroke from MouseButtonEvent.
  */
 MouseStroke::MouseStroke(const SDL_MouseButtonEvent &event)
+    : m_loc(event.x, event.y)
 {
     m_button = event.button;
-    m_x = event.x;
-    m_y = event.y;
 }
 //-----------------------------------------------------------------
 /**
@@ -27,10 +26,9 @@ MouseStroke::MouseStroke(const SDL_MouseButtonEvent &event)
  * (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT)
  */
 MouseStroke::MouseStroke(Uint8 button, int x, int y)
+    : m_loc(x, y)
 {
     m_button = button;
-    m_x = x;
-    m_y = y;
 }
 //-----------------------------------------------------------------
 /**

@@ -18,6 +18,8 @@ class TimerAgent : public BaseAgent {
         Uint32 m_nextTime;
         Uint32 m_deltaTime;
         int m_count;
+    private:
+        int getTimeInterval();
     protected:
         virtual void own_init();
         virtual void own_update();
