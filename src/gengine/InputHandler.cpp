@@ -8,6 +8,8 @@
  */
 #include "InputHandler.h"
 
+#include "ExInfo.h"
+
 //-----------------------------------------------------------------
 InputHandler::InputHandler()
 : m_mouseLoc(-1, -1)
@@ -45,5 +47,13 @@ bool
 InputHandler::isRightPressed() const
 {
     return m_buttons & SDL_BUTTON(3);
+}
+//-----------------------------------------------------------------
+std::string
+InputHandler::toString() const
+{
+    return ExInfo("input")
+        .addInfo("mouse", m_mouseLoc.toString())
+        .addInfo("buttons", m_buttons).info();
 }
 

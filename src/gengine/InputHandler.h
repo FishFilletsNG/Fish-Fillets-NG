@@ -35,6 +35,8 @@ class InputHandler : public InputProvider, public NoCopy {
         virtual bool isMiddlePressed() const;
         virtual bool isRightPressed() const;
         virtual V2 getMouseLoc() const { return m_mouseLoc; }
+
+        virtual std::string toString() const;
 };
 
 #endif

@@ -69,7 +69,8 @@ InputAgent::own_update()
 
     if (m_handler) {
         Uint8 buttons;
-        m_handler->mouseState(getMouseState(&buttons), buttons);
+        V2 mouseLoc = getMouseState(&buttons);
+        m_handler->mouseState(mouseLoc, buttons);
     }
 }
 //-----------------------------------------------------------------
@@ -93,7 +94,8 @@ InputAgent::installHandler(InputHandler *handler)
     if (m_handler) {
         m_handler->takePressed(m_keys);
         Uint8 buttons;
-        m_handler->mouseState(getMouseState(&buttons), buttons);
+        V2 mouseLoc = getMouseState(&buttons);
+        m_handler->mouseState(mouseLoc, buttons);
     }
 }
 //-----------------------------------------------------------------
@@ -107,7 +109,7 @@ InputAgent::getMouseState(Uint8 *out_buttons)
 {
     int x;
     int y;
-    int pressed = SDL_GetMouseState(&x, &y);
+    Uint8 pressed = SDL_GetMouseState(&x, &y);
     if (out_buttons) {
         *out_buttons = pressed;
     }

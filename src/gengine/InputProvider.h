@@ -4,6 +4,7 @@
 #include "V2.h"
 
 #include "SDL.h"
+#include <string>
 
 /**
  * Interface to pressed keys and mouse location.
@@ -16,6 +17,7 @@ class InputProvider {
         virtual bool isRightPressed() const = 0;
         virtual bool isMiddlePressed() const = 0;
         virtual V2 getMouseLoc() const = 0;
+        virtual std::string toString() const = 0;
 };
 
 #endif
