@@ -90,7 +90,7 @@ AC_LANG(C++)
 
 ###################################################
 # Checks for C++ libraries.
-# boost_filesystem
+# boost_filesystem, only need for nonPOSIX systems
 
 AC_ARG_WITH(boost, 
     AC_HELP_STRING([--with-boost=PFX], [Prefix where boost is installed]),
