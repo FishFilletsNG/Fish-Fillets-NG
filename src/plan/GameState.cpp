@@ -80,7 +80,6 @@ GameState::updateState()
     void
 GameState::pauseState()
 {
-    LOG_DEBUG(ExInfo("pauseState").addInfo("name", getName()));
     if (!m_active) {
         throw LogicException(ExInfo("pause - state is not active")
                 .addInfo("name", getName()));
@@ -98,7 +97,6 @@ GameState::pauseState()
     void
 GameState::resumeState()
 {
-    LOG_DEBUG(ExInfo("resumeState").addInfo("name", getName()));
     if (m_active) {
         throw LogicException(ExInfo("resume - state is already active")
                 .addInfo("name", getName()));
@@ -165,7 +163,6 @@ GameState::noteFg()
 void
 GameState::unHandlers()
 {
-    LOG_DEBUG(ExInfo("unHandlers").addInfo("state", getName()));
     InputAgent::agent()->installHandler(NULL);
     VideoAgent::agent()->removeDrawer(m_drawer);
 }
