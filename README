@@ -1,16 +1,17 @@
 Fish Fillets - Next Generation
 http://fillets.sf.net
 
-//-----------------------------------------------------------------
+
 Compile requirements
---------------------
+====================
+
 Library SDL = Simple DirectMedia Layer (video, input, sound)
 - libSDL >= 1.2, www.libsdl.org
 
 Library SDL_mixer (multiple sounds)
 - libSDL_mixer >= 1.2.5, http://www.libsdl.org/projects/SDL_mixer/
 
-Library SDL_image (png support)
+Library SDL_image (PNG support)
 - libSDL_image, http://www.libsdl.org/projects/SDL_image/
 
 Library SDL_ttf (TrueType UTF-8 fonts)
@@ -23,22 +24,43 @@ Library LUA (script language, used for debug console, configuration, levels,...)
 Library Boost - http://www.boost.org/
 - libboost_filesystem (portable filesystem paths)
 
-//-----------------------------------------------------------------
-How to run
-----------
-1. $ ./configure && make
-2. Download fillets-ng-data from http://fillets.sourceforge.net/download.php
-a) with install
-    3. # make install
-    4. Extract data to $(datadir)/games/fillets-ng
-    5. $ fillets
-b) without install
-    4. Extract data
-    5. $ ./src/game/fillets systemdir=path/to/data
 
-//-----------------------------------------------------------------
+
+How to run
+==========
+
+Supported platforms: Linux, FreeBSD
+
+I. Compile
+----------
+
+- compile the game
+$ tar xzf fillets-ng-x.y.tar.gz
+$ cd fillets-ng
+$ ./configure
+$ make
+$ make install
+
+
+II. Install data
+----------------
+
+- extract fillets-data.x.y.tar.gz to $(datadir)/games/fillets-ng/
+  default: /usr/local/share/games/fillets-ng/
+
+
+III. Install czech dialogs
+--------------------------
+
+- this step is OPTIONAL, useful only for czech speaking people
+- extract fillets-data-cs.x.y.tar.gz to $(datadir)/games/fillets-ng/
+  default: /usr/local/share/games/fillets-ng/
+
+
+
 Controls
---------
+========
+
 Up, down, left and right arrow keys control the current fish.
 Use space bar to switch between the fish.
 
