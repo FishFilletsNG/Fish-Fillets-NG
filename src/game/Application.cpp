@@ -24,6 +24,7 @@
 #include "DialogAgent.h"
 #include "SubTitleAgent.h"
 #include "ResourceException.h"
+#include "Font.h"
 
 #include "SimpleMsg.h"
 #include "StringMsg.h"
@@ -35,6 +36,7 @@ Application::Application()
 {
     m_quit = false;
     Random::init();
+    Font::init();
 
     m_agents = new AgentPack();
     //NOTE: MessagerAgent is added by AgentPack
@@ -56,6 +58,7 @@ Application::Application()
 Application::~Application()
 {
     delete m_agents;
+    Font::shutdown();
 }
 //-----------------------------------------------------------------
     void

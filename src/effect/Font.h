@@ -19,6 +19,8 @@ class Font : public NoCopy {
     public:
         Font(const Path &file_ttf, int height);
         ~Font();
+        static void init();
+        static void shutdown();
 
         int getHeight() { return TTF_FontHeight(m_ttfont); }
         int calcTextWidth(const std::string &text);

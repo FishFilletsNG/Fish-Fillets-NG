@@ -22,12 +22,6 @@
  */
 Font::Font(const Path &file_ttf, int height)
 {
-    if (!TTF_WasInit()) {
-        if (TTF_Init() < 0) {
-            throw TTFException(ExInfo("Init"));
-        }
-    }
-
     m_ttfont = TTF_OpenFont(file_ttf.getNative().c_str(), height);
     if (!m_ttfont) {
         throw TTFException(ExInfo("OpenFont")
@@ -41,9 +35,30 @@ Font::Font(const Path &file_ttf, int height)
 //-----------------------------------------------------------------
 Font::~Font()
 {
-    //TODO: who will call TTF_Quit()?
     TTF_CloseFont(m_ttfont);
 }
+//-----------------------------------------------------------------
+/**
+ * Prepare font rendering.
+ * @throws TTFException when cannot init SDL_ttf.
+ */
+void
+Font::init()
+{
+    if (TTF_Init() < 0) {
+        throw TTFException(ExInfo("Init"));
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Deinit font subsystem.
+ */
+void
+Font::shutdown()
+{
+    TTF_Quit();
+}
+
 //-----------------------------------------------------------------
     int
 Font::calcTextWidth(const std::string &text)
