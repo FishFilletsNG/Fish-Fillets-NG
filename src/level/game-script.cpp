@@ -18,6 +18,8 @@
 #include "Rules.h"
 #include "LevelScript.h"
 #include "ModelFactory.h"
+#include "Room.h"
+#include "RopeDecor.h"
 
 #include "def-script.h"
 
@@ -76,6 +78,41 @@ script_game_getCycles(lua_State *L) throw()
     END_NOEXCEPTION;
     //NOTE: return cycles
     return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void game_addDecor(decor_name, params...)
+ *
+ * decor_name:
+ * "rope" ... draw rope between models
+ *          params = (model_index1, model_index2,
+ *              shift_x1, shift_y1, shift_x2, shift_y2)
+ */
+    int
+script_game_addDecor(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    std::string decor_name = luaL_checkstring(L, 1);
+    if ("rope" == decor_name) {
+        int model_index1 = luaL_checkint(L, 2);
+        int model_index2 = luaL_checkint(L, 3);
+        int shift_x1 = luaL_checkint(L, 4);
+        int shift_y1 = luaL_checkint(L, 5);
+        int shift_x2 = luaL_checkint(L, 6);
+        int shift_y2 = luaL_checkint(L, 7);
+
+        Cube *model1 = getModel(L, model_index1);
+        Cube *model2 = getModel(L, model_index2);
+        getLevelScript(L)->room()->addDecor(new RopeDecor(model1, model2,
+                    V2(shift_x1, shift_y1), V2(shift_x2, shift_y2)));
+    }
+    else {
+        LOG_WARNING(ExInfo("unknown decor")
+                .addInfo("decor_name", decor_name));
+    }
+
+    END_NOEXCEPTION;
+    return 0;
 }
 
 //-----------------------------------------------------------------

@@ -10,6 +10,7 @@ class ResSoundPack;
 class PhaseLocker;
 class Planner;
 class View;
+class Decor;
 
 #include "NoCopy.h"
 #include "Path.h"
@@ -45,6 +46,7 @@ class Room : public NoCopy {
                 PhaseLocker *locker, Planner *levelScript);
         ~Room();
         void setWaves(double amplitude, double periode, double speed);
+        void addDecor(Decor *new_decor);
         void activate();
         void deactivate();
 

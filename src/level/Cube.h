@@ -73,6 +73,7 @@ class Cube : public NoCopy {
         bool isInvisible();
         Anim *anim();
         Rules *rules() { return m_rules; }
+        const Rules *const_rules() const { return m_rules; }
 
         virtual std::string toString() const;
 };

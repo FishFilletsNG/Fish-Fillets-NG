@@ -10,6 +10,7 @@
 
 #include "PhaseLocker.h"
 #include "ModelList.h"
+#include "Decor.h"
 
 #include "Cube.h"
 #include "Anim.h"
@@ -29,6 +30,31 @@ View::View(const ModelList &models)
     m_shiftSize = SCALE;
 }
 //-----------------------------------------------------------------
+View::~View()
+{
+    removeDecors();
+}
+//-----------------------------------------------------------------
+void
+View::removeDecors()
+{
+    t_decors::iterator end = m_decors.end();
+    for (t_decors::iterator i = m_decors.begin(); i != end; ++i) {
+        delete *i;
+    }
+    m_decors.clear();
+}
+//-----------------------------------------------------------------
+void
+View::drawDecors()
+{
+    t_decors::iterator end = m_decors.end();
+    for (t_decors::iterator i = m_decors.begin(); i != end; ++i) {
+        (*i)->drawOnScreen(this, m_screen);
+    }
+}
+
+//-----------------------------------------------------------------
 /**
  * Prepare new anim.
  */
@@ -44,6 +70,7 @@ View::draw()
 {
     ++m_animShift;
     m_models.drawOn(this);
+    drawDecors();
 }
 //-----------------------------------------------------------------
 /**
@@ -54,23 +81,14 @@ View::draw()
 View::drawModel(Cube *model)
 {
     if (!model->isLost()) {
-        V2 loc = model->getLocation();
-
-        V2 shift(0, 0);
-        Rules::eDir dir = model->rules()->getDir();
-        if (dir != Rules::DIR_NO) {
-            shift = Rules::dir2xy(dir);
-            shift = shift.scale(m_animShift * m_shiftSize);
-        }
-
-        V2 shift_loc = shift.plus(loc.scale(SCALE));
+        V2 screenPos = getScreenPos(model);
 
         Anim::eSide side = Anim::SIDE_LEFT;
         if (!model->isLeft()) {
             side = Anim::SIDE_RIGHT;
         }
         model->anim()->drawAt(m_screen,
-                shift_loc.getX(), shift_loc.getY(), side);
+                screenPos.getX(), screenPos.getY(), side);
     }
 }
 //-----------------------------------------------------------------
@@ -87,4 +105,16 @@ View::computeShiftSize(int phases)
         m_shiftSize = SCALE;
     }
 }
+//-----------------------------------------------------------------
+V2
+View::getScreenPos(const Cube *model) const
+{
+    V2 shift(0, 0);
+    Rules::eDir dir = model->const_rules()->getDir();
+    if (dir != Rules::DIR_NO) {
+        shift = Rules::dir2xy(dir);
+        shift = shift.scale(m_animShift * m_shiftSize);
+    }
 
+    return model->getLocation().scale(SCALE).plus(shift);
+}

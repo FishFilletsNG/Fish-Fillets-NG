@@ -23,9 +23,7 @@ void
 ModelList::drawOn(View *view) const
 {
     t_models::const_iterator end = m_models->end();
-    for (t_models::const_iterator i = m_models->begin(); i != end;
-            ++i)
-    {
+    for (t_models::const_iterator i = m_models->begin(); i != end; ++i) {
         view->drawModel(*i);
     }
 }

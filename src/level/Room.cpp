@@ -82,6 +82,12 @@ Room::setWaves(double amplitude, double periode, double speed)
 }
 //-----------------------------------------------------------------
 void
+Room::addDecor(Decor *new_decor)
+{
+    m_view->addDecor(new_decor);
+}
+//-----------------------------------------------------------------
+void
 Room::killPlan()
 {
     DialogAgent::agent()->killTalks();
