@@ -126,7 +126,12 @@ SubTitleAgent::trimRest(std::string &buffer)
     if (i <= 0) {
         LOG_WARNING(ExInfo("unbreakable string")
                 .addInfo("string", buffer));
-        buffer = "";
+        if (buffer.size() > 4) {
+            buffer.erase(buffer.size() - 4);
+        }
+        else {
+            buffer = "";
+        }
     }
     else {
         buffer.erase(i);

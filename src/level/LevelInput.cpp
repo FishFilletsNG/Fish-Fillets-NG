@@ -14,12 +14,12 @@
 #include "KeyStroke.h"
 #include "OptionAgent.h"
 #include "MenuOptions.h"
+#include "SubTitleAgent.h"
 
 //-----------------------------------------------------------------
 LevelInput::LevelInput(Level *level)
     : GameInput(level)
 {
-    //TODO: help on F1
     m_keymap->registerKey(KeyStroke(SDLK_SPACE, KMOD_NONE),
             KeyDesc(KEY_SWITCH, "switch"));
     m_keymap->registerKey(KeyStroke(SDLK_F2, KMOD_NONE),
@@ -30,6 +30,8 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_RESTART, "restart"));
     m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
             KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
+    m_keymap->registerKey(KeyStroke(SDLK_F1, KMOD_NONE),
+            KeyDesc(KEY_HELP, "help"));
 }
 //-----------------------------------------------------------------
 Level *
@@ -62,6 +64,10 @@ LevelInput::specKey(int keyIndex)
             break;
         case KEY_SHOW_STEPS:
             toggleShowSteps();
+            break;
+        case KEY_HELP:
+            SubTitleAgent::agent()->newSubtitle(
+                    "http://fillets.sf.net/manual.php", "font_white");
             break;
         default:
             GameInput::specKey(keyIndex);
