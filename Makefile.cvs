@@ -1,0 +1,7 @@
+
+all:
+	aclocal
+	automake -a
+	autoconf
+	-cvs2cl
+	@echo "Don't forget to run ./configure"

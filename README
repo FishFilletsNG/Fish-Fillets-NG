@@ -1,0 +1,36 @@
+Fish Fillets - Next Generation (implementation in C++).
+
+Compile requirements:
+- (autoconf, automake) OR aap
+- pkg-config
+
+
+Library SDL = Simple DirectMedia Layer (video, input, sound)
+- libSDL >= 1.2, www.libsdl.org
+
+Library SDL_mixer (multiple sounds)
+- libSDL_mixer, http://www.libsdl.org/projects/SDL_mixer/
+
+Library SDL_image (png, jpg support)
+- libSDL_image, http://www.libsdl.org/projects/SDL_image/
+
+Library LUA (script language, used for debug console, configuration, levels,...)
+- liblua50, www.lua.org
+- liblualib50
+
+Library Boost - http://www.boost.org/
+- libboost_filesystem (portable filesystem paths)
+
+//-----------------------------------------------------------------
+How to run:
+1. Compile (./configure && make) OR (app)
+2. Download data from http://sf.net/projects/fillets
+3. cp src/game/game path_do_data
+4. cd path_to_data
+5. ./game
+
+
+//-----------------------------------------------------------------
+Homepage:
+http://fillets.sf.net
+

@@ -1,0 +1,5 @@
+
+_top.SFont_obj = `src2obj("SFont.c")`
+
+all: $_top.SFont_obj
+
