@@ -482,10 +482,13 @@ Room::playSound(const std::string &name, int volume)
             m_soundPack->getRandomRes(name), volume);
 }
 //-----------------------------------------------------------------
+/**
+ * Shift room content.
+ * NOTE: background is not shifted
+ */
 void
 Room::setScreenShift(const V2 &shift)
 {
-    m_bg->setLoc(shift);
     m_view->setScreenShift(shift);
 }
 //-----------------------------------------------------------------
