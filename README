@@ -54,15 +54,6 @@ II. Install data
   default: /usr/local/share/games/fillets-ng/
 
 
-III. Install czech dialogs
---------------------------
-
-- this step is OPTIONAL, useful only for czech speaking people
-- download fillets-ng-data-cs from http://fillets.sourceforge.net/download.php
-- extract fillets-ng-data-cs.tar.gz to $(datadir)/games/fillets-ng/
-  default: /usr/local/share/games/fillets-ng/
-
-
 Controls
 ========
 
