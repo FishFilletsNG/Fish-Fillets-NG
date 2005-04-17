@@ -1,4 +1,13 @@
 Fish Fillets NG - 0.7.0
+* Italian translation
+* Polish translation
+* correction of English dialogs
+* step counter color depends on active fish
+* options menu is refreshed when lang is changed
+* added menu to choose speech ("cs" or "none")
+* enabled speech=cs as default
+* fixed fullscreen on win32
+* updated halloffame score (thanks to many)
 
 
 Fish Fillets NG - 0.6.1
