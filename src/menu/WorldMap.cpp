@@ -124,15 +124,14 @@ WorldMap::own_updateState()
     void
 WorldMap::own_resumeState()
 {
+    LevelNode *nextLevel = NULL;
     if (m_levelStatus->wasRunning()) {
-        LevelNode *nextLevel = NULL;
         if (m_levelStatus->isComplete()) {
             markSolved();
             if (checkEnding()) {
                 nextLevel = m_ending;
             }
         }
-        m_selected = nextLevel;
         m_levelStatus->setRunning(false);
 
         SoundAgent::agent()->playMusic(
@@ -143,6 +142,7 @@ WorldMap::own_resumeState()
         options->setParam("screen_height", m_bg->getH());
         VideoAgent::agent()->initVideoMode();
     }
+    m_selected = nextLevel;
 }
 //-----------------------------------------------------------------
 /**
