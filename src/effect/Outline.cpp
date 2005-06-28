@@ -85,7 +85,7 @@ Outline::drawAlongCopy(SDL_Surface *surface, Uint32 bgKey, SDL_Surface *copy)
 //-----------------------------------------------------------------
 /**
  * Fill neighboors around this point.
- * Neighboors with bgKey will be filled.
+ * Neighbours with bgKey will be filled.
  * Surface must be locked.
  * m_pixel must be precomputed.
  */

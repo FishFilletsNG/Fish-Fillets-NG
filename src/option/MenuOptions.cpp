@@ -161,12 +161,11 @@ MenuOptions::createLangPanel(const Labels &labels)
 //-----------------------------------------------------------------
 /**
  * Creates menu to select 'speech'.
- * NOTE: default speech is "cs".
+ * NOTE: default speech is customized in "script/init.lua"
  */
 IWidget *
 MenuOptions::createSpeechPanel(const Labels &labels)
 {
-    OptionAgent::agent()->setDefault("speech", "cs");
     HBox *speechBox = new HBox();
     speechBox->addWidget(new WiPicture(
                 Path::dataReadPath("images/menu/speech.png")));

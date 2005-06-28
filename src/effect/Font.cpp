@@ -122,9 +122,10 @@ SDL_Surface *
 Font::renderTextOutlined(const std::string &text,
                 const SDL_Color &color, int outlineWidth) const
 {
+    static const SDL_Color BLACK = {0, 0, 0, 255};
+    //NOTE: uses spaces to ensure space for outline
     SDL_Surface *surface = renderText(" " + text + " ", color);
-    SDL_Color black = {0, 0, 0, 255};
-    Outline outline(black, outlineWidth);
+    Outline outline(BLACK, outlineWidth);
 
     outline.drawOnColorKey(surface);
     return surface;
