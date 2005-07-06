@@ -81,9 +81,10 @@ ScriptState::callStack(int error, int params, int returns)
         if (NULL == msg) {
             msg = "(error with no message)";
         }
+        ExInfo info = ExInfo("script failure")
+            .addInfo("error", msg);
         lua_pop(m_state, 1);
-        throw ScriptException(ExInfo("script failure")
-                .addInfo("error", msg));
+        throw ScriptException(info);
     }
 }
 //-----------------------------------------------------------------

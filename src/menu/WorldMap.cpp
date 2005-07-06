@@ -184,7 +184,7 @@ WorldMap::watchCursor()
 WorldMap::runSelected()
 {
     Level *level = createSelected();
-    if (level && m_selected) {
+    if (level) {
         m_levelStatus->prepareRun(m_selected->getCodename(),
                 m_selected->getPoster(),
                 m_selected->getBestMoves(),
