@@ -5,7 +5,7 @@ AC_CANONICAL_TARGET
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
 # of the software package so it can generate rules for building a source
 # archive.
-AM_INIT_AUTOMAKE(fillets-ng, 0.7.0)
+AM_INIT_AUTOMAKE(fillets-ng, 0.7.1)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -26,13 +26,13 @@ AC_CHECK_LIB(m, sin, LIBS="$LIBS -lm")
 dnl ---- lua check ------------- (stolen from Stratagus)
 AC_ARG_WITH(lua,   [  --with-lua=PFX          Prefix where Lua is installed],
     LUAPFX="$withval", LUAPFX="")
-if test x$LUAPFX != x ; then
+if test "x$LUAPFX" != x ; then
     LUA_CFLAGS="-I$LUAPFX"
     LUA_LIBS="-L$LUAPFX -llua -llualib"
 else
 dnl Debian, and possibly other systems, include this script...
     AC_CHECK_PROGS(LUACONFIG, [lua-config lua-config50 lua-config5.0], "")
-    if test x$LUACONFIG != x; then
+    if test "x$LUACONFIG" != x; then
         LUA_CFLAGS="`[$LUACONFIG --include]`"
         LUA_LIBS="`[$LUACONFIG --libs]`"
     else dnl ...otherwise, attempt to guess
@@ -111,22 +111,31 @@ AC_LANG(C++)
 
 AC_ARG_WITH(boost, [  --with-boost=PFX        Prefix where boost is installed],
     BOOSTPFX="$withval", BOOSTPFX="")
-if test x$BOOSTPFX != x ; then
+if test "x$BOOSTPFX" != x ; then
     BOOST_LIBS="-lboost_filesystem"
-    if test x$BOOSTPFX != xyes ; then
+    if test "x$BOOSTPFX" != xyes ; then
         BOOST_CFLAGS="-I$BOOSTPFX"
         BOOST_LIBS="-L$BOOSTPFX $BOOST_LIBS"
     fi
 fi
-AM_CONDITIONAL(WITH_BOOST, test x$BOOSTPFX != x)
+AM_CONDITIONAL(WITH_BOOST, test "x$BOOSTPFX" != x)
 AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
 
 ###################################################
-# Check for windres for win32 icon. 
-AC_CHECK_PROGS(WINDRES, [i386-mingw32msvc-windres i586-mingw32msvc-windres], "")
-AM_CONDITIONAL(HAVE_WINDRES, test x$WINDRES != x)
-AC_SUBST(WINDRES)
+# Check for windres for win32 icon.
+case "$target" in
+    *-mingw32*)
+        AC_CHECK_PROGS(WINDRES, [i386-mingw32msvc-windres i586-mingw32msvc-windres], "")
+        AM_CONDITIONAL(HAVE_WINDRES, test "x$WINDRES" != x)
+        AC_SUBST(WINDRES)
+        ;;
+    *)
+        WINDRES=""
+        AM_CONDITIONAL(HAVE_WINDRES, false)
+        ;;
+esac
+
 
 ###################################################
 # Debug on/off
