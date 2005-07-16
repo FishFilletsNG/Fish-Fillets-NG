@@ -3,4 +3,3 @@ Makefile
 *.o
 .*.swp
 .deps
-fillets
