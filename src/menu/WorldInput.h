@@ -11,10 +11,14 @@ class WorldMap;
  */
 class WorldInput : public GameInput {
     private:
+        static const int KEY_TAB = 101;
+        static const int KEY_ENTER = 102;
+    private:
         WorldMap *getWorld();
     protected:
         virtual void enableSubtitles() {}
         virtual void enableHelp() {}
+        virtual void specKey(int keyIndex);
     public:
         WorldInput(WorldMap *world);
 

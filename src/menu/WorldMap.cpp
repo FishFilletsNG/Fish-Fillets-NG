@@ -33,6 +33,7 @@
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap()
+    : m_lastMouseLoc(-1, -1)
 {
     m_selected = NULL;
     m_startNode = NULL;
@@ -161,7 +162,10 @@ WorldMap::own_cleanState()
 WorldMap::watchCursor()
 {
     V2 mouseLoc = getInput()->getMouseLoc();
-    m_selected = m_startNode->findSelected(mouseLoc);
+    if (!m_lastMouseLoc.equals(mouseLoc)) {
+        m_lastMouseLoc = mouseLoc;
+        m_selected = m_startNode->findSelected(mouseLoc);
+    }
 
     m_activeMask = m_bg->getMaskAtWorld(mouseLoc);
     if (m_activeMask == m_maskIntro
@@ -174,6 +178,15 @@ WorldMap::watchCursor()
     else {
         m_bg->setNoActive();
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Select next unsolved level.
+ */
+    void
+WorldMap::selectNextLevel()
+{
+    m_selected = m_startNode->findNextOpen(m_selected);
 }
 //-----------------------------------------------------------------
 /**
@@ -262,6 +275,7 @@ WorldMap::drawOn(SDL_Surface *screen)
     m_drawer->setScreen(screen);
     m_startNode->drawPath(m_drawer);
     if (m_selected) {
+        m_drawer->drawSelect(m_selected->getLoc());
         m_drawer->drawSelected(findLevelName(m_selected->getCodename()));
     }
 }

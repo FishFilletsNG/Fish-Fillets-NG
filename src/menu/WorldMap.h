@@ -13,12 +13,14 @@ class LayeredPicture;
 #include "Drawable.h"
 #include "GameState.h"
 #include "DescFinder.h"
+#include "V2.h"
 
 /**
  * Map with path from one level to another.
  */
 class WorldMap : public GameState, public DescFinder, public Drawable {
     private:
+        V2 m_lastMouseLoc;
         LevelNode *m_startNode;
         LevelNode *m_selected;
         LevelNode *m_ending;
@@ -55,6 +57,7 @@ class WorldMap : public GameState, public DescFinder, public Drawable {
         void initMap(const Path &mapfile);
 
         virtual void drawOn(SDL_Surface *screen);
+        void selectNextLevel();
         void runSelected();
 
         void addDesc(const std::string &codename, LevelDesc *desc);

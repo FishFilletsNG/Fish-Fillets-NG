@@ -28,6 +28,7 @@ class NodeDrawer : public NoCopy {
 
         void drawNode(const LevelNode *node) const;
         void drawEdge(const LevelNode *start, const LevelNode *end) const;
+        void drawSelect(const V2 &loc) const;
         void drawSelected(const std::string &levelname) const;
 };
 

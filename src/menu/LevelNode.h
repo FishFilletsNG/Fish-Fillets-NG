@@ -36,6 +36,7 @@ class LevelNode : public NoCopy {
         std::string m_bestAuthor;
     private:
         bool isUnder(const V2 &cursor) const;
+        t_children findOpenNodes();
     public:
         LevelNode(const std::string &codename, const Path &datafile,
                 const V2 &loc, const std::string &poster="");
@@ -57,6 +58,7 @@ class LevelNode : public NoCopy {
         void addChild(LevelNode *new_node);
 
         LevelNode *findSelected(const V2 &cursor);
+        LevelNode *findNextOpen(const LevelNode *current);
         LevelNode *findNamed(const std::string &codename);
         bool areAllSolved() const;
         bool isLeaf() const { return m_children.empty(); }

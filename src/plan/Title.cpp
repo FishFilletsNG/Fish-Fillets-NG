@@ -102,8 +102,6 @@ Title::getY() const
     bool
 Title::isGone()
 {
-    //TEST: long time
     return (m_mintime < 0 || m_y < m_limitY);
-    //return m_y < m_limitY;
 }
 

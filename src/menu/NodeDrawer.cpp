@@ -40,6 +40,9 @@ NodeDrawer::NodeDrawer()
 
     m_imagePack->addImage("far",
             Path::dataReadPath("images/menu/n_far.png"));
+
+    m_imagePack->addImage("selected",
+            Path::dataReadPath("images/menu/n_selected.png"));
 }
 //-----------------------------------------------------------------
 NodeDrawer::~NodeDrawer()
@@ -102,6 +105,18 @@ NodeDrawer::drawDot(SDL_Surface *dot, const V2 &loc) const
     SDL_BlitSurface(dot, NULL, m_screen, &rect);
 }
 //-----------------------------------------------------------------
+/**
+ * Highlightes selected node.
+ */
+void
+NodeDrawer::drawSelect(const V2 &loc) const
+{
+    drawDot(m_imagePack->getRes("selected"), loc);
+}
+//-----------------------------------------------------------------
+/**
+ * Draws name of selected level.
+ */
 void
 NodeDrawer::drawSelected(const std::string &levelname) const
 {

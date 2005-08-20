@@ -37,6 +37,10 @@ class V2 {
             assert(rate != 0);
             return V2(m_x / rate, m_y / rate);
         }
+        bool equals(const V2 &other)
+        {
+            return m_x == other.m_x && m_y == other.m_y;
+        }
 
         std::string toString() const
         {

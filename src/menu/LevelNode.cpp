@@ -113,6 +113,57 @@ LevelNode::findSelected(const V2 &cursor)
 }
 //-----------------------------------------------------------------
 /**
+ * Find next OPEN node.
+ * @param current current selected node (could be NULL)
+ * @return next OPEN node or NULL
+ */
+LevelNode *
+LevelNode::findNextOpen(const LevelNode *current)
+{
+    bool beforeCurrent = true;
+
+    t_children opened = findOpenNodes();
+    t_children::const_iterator end = opened.end();
+    for (t_children::const_iterator i = opened.begin(); i != end; ++i) {
+        if (*i == current) {
+            beforeCurrent = false;
+        }
+        else if (!beforeCurrent) {
+            return *i;
+        }
+    }
+
+    if (opened.size() > 0) {
+        return opened[0];
+    }
+    else {
+        return NULL;
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Find all OPEN child nodes.
+ * @return vector of shared pointers
+ */
+    LevelNode::t_children
+LevelNode::findOpenNodes()
+{
+    t_children opened;
+    if (m_state >= STATE_OPEN) {
+        if (m_state == STATE_OPEN) {
+            opened.push_back(this);
+        }
+
+        t_children::const_iterator end = m_children.end();
+        for (t_children::const_iterator i = m_children.begin(); i != end; ++i) {
+            t_children nodes = (*i)->findOpenNodes();
+            opened.insert(opened.end(), nodes.begin(), nodes.end());
+        }
+    }
+    return opened;
+}
+//-----------------------------------------------------------------
+/**
  * Find named node in whole tree.
  * @return named node or NULL
  */
@@ -137,7 +188,7 @@ LevelNode::findNamed(const std::string &codename)
 }
 //-----------------------------------------------------------------
 /**
- * Returns true when all nodes are solved.
+ * Returns true when all child nodes are solved.
  */
 bool
 LevelNode::areAllSolved() const

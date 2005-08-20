@@ -70,7 +70,7 @@ Application::init(int argc, char *argv[])
     prepareOptions(argc, argv);
     customizeGame();
 
-    m_agents->init(Name::INPUT_NAME);
+    m_agents->init(Name::TIMER_NAME);
     addSoundAgent();
 
     m_agents->init();

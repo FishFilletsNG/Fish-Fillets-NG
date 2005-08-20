@@ -19,12 +19,32 @@ WorldInput::WorldInput(WorldMap *world)
     : GameInput(world)
 {
     //TODO: 'O' ... options, 'I' ... intro, 'E' ... exit, 'C' ... credits
+    KeyDesc key_tab(KEY_TAB, "select next level");
+    KeyDesc key_enter(KEY_ENTER, "run selected");
+
+    m_keymap->registerKey(KeyStroke(SDLK_TAB, KMOD_NONE), key_tab);
+    m_keymap->registerKey(KeyStroke(SDLK_RETURN, KMOD_NONE), key_enter);
 }
 //-----------------------------------------------------------------
 WorldMap *
 WorldInput::getWorld()
 {
     return dynamic_cast<WorldMap*>(m_state);
+}
+//-----------------------------------------------------------------
+void
+WorldInput::specKey(int keyIndex)
+{
+    switch (keyIndex) {
+        case KEY_TAB:
+            getWorld()->selectNextLevel();
+            break;
+        case KEY_ENTER:
+            getWorld()->runSelected();
+            break;
+        default:
+            GameInput::specKey(keyIndex);
+    }
 }
 //-----------------------------------------------------------------
 void
