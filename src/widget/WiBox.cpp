@@ -38,16 +38,17 @@ WiBox::drawOn(SDL_Surface *screen)
 std::string
 WiBox::own_getTip(const V2 &loc)
 {
-    if (!m_tip.empty()) {
-        return m_tip;
-    }
-
-    std::string result;
+    std::string result = m_tip;
     t_widgets::iterator end = m_widgets.end();
     for (t_widgets::iterator i = m_widgets.begin(); i != end; ++i) {
-        result = (*i)->getTip(loc);
-        if (!result.empty()) {
-            return result;
+        std::string subtip = (*i)->getTip(loc);
+        if (!subtip.empty()) {
+            if (result.empty()) {
+                return subtip;
+            }
+            else {
+                return result + " - " + subtip;
+            }
         }
     }
     return result;
