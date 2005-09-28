@@ -1,5 +1,5 @@
 
-INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
+INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS) $(FRIBIDI_CFLAGS)
 
 noinst_LIBRARIES = libplan.a
 

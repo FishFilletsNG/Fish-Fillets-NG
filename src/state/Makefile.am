@@ -1,5 +1,5 @@
 
-INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/src/widget -I@top_srcdir@/src/plan -I@top_srcdir@/src/option $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
+INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/src/widget -I@top_srcdir@/src/plan -I@top_srcdir@/src/option $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS) $(FRIBIDI_CFLAGS)
 
 noinst_LIBRARIES = libstate.a
 

@@ -14,6 +14,36 @@
 #include "SDLException.h"
 #include "Outline.h"
 
+#ifdef HAVE_FRIBIDI
+#include "fribidi.h"
+#endif
+
+std::string
+Font::biditize(const std::string &text)
+{
+#ifdef HAVE_FRIBIDI
+    FriBidiCharType base = FRIBIDI_TYPE_ON;
+    FriBidiChar logicalString[text.length() + 1];
+    FriBidiChar visualString[text.length() + 1];
+
+    int ucsLength = fribidi_utf8_to_unicode(const_cast<char*>(text.c_str()),
+            text.length(), logicalString);
+    fribidi_boolean ok = fribidi_log2vis(logicalString, ucsLength, &base,
+            visualString, NULL, NULL, NULL);
+    if (!ok) {
+        LOG_WARNING(ExInfo("cannot biditize text")
+                .addInfo("text", text));
+        return std::string(text);
+    }
+
+    char buffer[text.length() + 1];
+    int length = fribidi_unicode_to_utf8(visualString, ucsLength, buffer);
+    return std::string(buffer, length);
+#else
+    return text;
+#endif
+}
+
 //-----------------------------------------------------------------
 /**
  * Create new font from file.
@@ -81,7 +111,7 @@ Font::calcTextWidth(const std::string &text)
 SDL_Surface *
 Font::renderText(const std::string &text, const SDL_Color &color) const
 {
-    const char *content = text.c_str();
+    std::string content = biditize(text);
     if (text.empty()) {
         content = " ";
         LOG_WARNING(ExInfo("empty text to render")
@@ -90,7 +120,7 @@ Font::renderText(const std::string &text, const SDL_Color &color) const
                 .addInfo("b", color.b));
     }
 
-    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, content,
+    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, content.c_str(),
             color, m_bg);
     if (!raw_surface) {
         throw TTFException(ExInfo("RenderUTF8")

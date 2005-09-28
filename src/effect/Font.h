@@ -17,6 +17,8 @@ class Font : public NoCopy {
     private:
         TTF_Font *m_ttfont;
         SDL_Color m_bg;
+    private:
+        static std::string biditize(const std::string &text);
     public:
         Font(const Path &file_ttf, int height);
         ~Font();

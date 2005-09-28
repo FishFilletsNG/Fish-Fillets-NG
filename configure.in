@@ -98,8 +98,21 @@ AC_TRY_COMPILE([
     ], [
     SDL_SysWMinfo info;
     info.subsystem = SDL_SYSWM_X11;
-    ], [AC_DEFINE(HAVE_X11)])
+    ], [have_x11="yes"], [have_x11="no"])
 CPPFLAGS="$OLD_CPPFLAGS"
+if test "x$have_x11" = xyes; then
+    AC_DEFINE(HAVE_X11)
+fi
+
+
+###################################################
+# Test FriBidi
+PKG_CHECK_MODULES(FRIBIDI, fribidi, [have_fribidi="yes"], [have_fribidi="no"])
+AC_SUBST(FRIBIDI_CFLAGS)
+AC_SUBST(FRIBIDI_LIBS)
+if test "x$have_fribidi" = xyes; then
+    AC_DEFINE(HAVE_FRIBIDI)
+fi
 
 ###################################################
 # enable C++ language
@@ -129,10 +142,12 @@ case "$target" in
         AC_CHECK_PROGS(WINDRES, [i386-mingw32msvc-windres i586-mingw32msvc-windres], "")
         AM_CONDITIONAL(HAVE_WINDRES, test "x$WINDRES" != x)
         AC_SUBST(WINDRES)
+        have_windres="yes"
         ;;
     *)
         WINDRES=""
         AM_CONDITIONAL(HAVE_WINDRES, false)
+        have_windres="no"
         ;;
 esac
 
@@ -169,4 +184,12 @@ AC_OUTPUT([
            src/menu/Makefile
            src/game/Makefile
            ])
+
+AC_MSG_RESULT([
+
+Fish Fillets NG are now configured.
+   Checked components: X11=$have_x11, WINDRES=$have_windres, FRIBIDI=$have_fribidi
+
+You can now run make.
+])
 
