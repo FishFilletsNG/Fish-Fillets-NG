@@ -33,7 +33,7 @@ Font::biditize(const std::string &text)
     if (!ok) {
         LOG_WARNING(ExInfo("cannot biditize text")
                 .addInfo("text", text));
-        return std::string(text);
+        return text;
     }
 
     char buffer[text.length() + 1];

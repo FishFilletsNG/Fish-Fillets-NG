@@ -34,7 +34,7 @@ dnl Debian, and possibly other systems, include this script...
     AC_CHECK_PROGS(LUACONFIG, [lua-config lua-config50 lua-config5.0], "")
     if test "x$LUACONFIG" != x; then
         LUA_CFLAGS="`[$LUACONFIG --include]`"
-        LUA_LIBS="`[$LUACONFIG --libs]`"
+        LUA_LIBS="`[$LUACONFIG --static]`"
     else dnl ...otherwise, attempt to guess
         LUA_CFLAGS=""
         LUA_LIBS=""
