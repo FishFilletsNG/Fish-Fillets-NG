@@ -1,5 +1,8 @@
 Fish Fillets NG - 0.7.2
 * Experimental support for RTL texts
+* Tab/Enter are usable on worldmap
+* Flags show language tips
+* Lua is statically linked again
 
 
 Fish Fillets NG - 0.7.1
