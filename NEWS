@@ -1,3 +1,6 @@
+Fish Fillets NG - 0.7.3
+* Fixed missing n_selected.png. It is not needed any more.
+
 Fish Fillets NG - 0.7.2
 * Experimental support for RTL texts
 * Tab/Enter are usable on worldmap
