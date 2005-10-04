@@ -16,6 +16,7 @@
 #include "Path.h"
 #include "LevelNode.h"
 #include "TimerAgent.h"
+#include "minmax.h"
 
 #include "SDL_gfxPrimitives.h"
 
@@ -40,9 +41,6 @@ NodeDrawer::NodeDrawer()
 
     m_imagePack->addImage("far",
             Path::dataReadPath("images/menu/n_far.png"));
-
-    m_imagePack->addImage("selected",
-            Path::dataReadPath("images/menu/n_selected.png"));
 }
 //-----------------------------------------------------------------
 NodeDrawer::~NodeDrawer()
@@ -111,7 +109,12 @@ NodeDrawer::drawDot(SDL_Surface *dot, const V2 &loc) const
 void
 NodeDrawer::drawSelect(const V2 &loc) const
 {
-    drawDot(m_imagePack->getRes("selected"), loc);
+
+    const SDL_Surface *dot = m_imagePack->getRes("solved");
+    int radius = max(dot->w, dot->h) / 2 + 1;
+    Uint32 colorRGBA = 0xffc61880;
+
+    filledCircleColor(m_screen, loc.getX(), loc.getY(), radius, colorRGBA);
 }
 //-----------------------------------------------------------------
 /**
