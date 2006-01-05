@@ -23,8 +23,8 @@ Font::biditize(const std::string &text)
 {
 #ifdef HAVE_FRIBIDI
     FriBidiCharType base = FRIBIDI_TYPE_ON;
-    FriBidiChar logicalString[text.length() + 1];
-    FriBidiChar visualString[text.length() + 1];
+    FriBidiChar *logicalString = new FriBidiChar[text.length() + 1];
+    FriBidiChar *visualString = new FriBidiChar[text.length() + 1];
 
     int ucsLength = fribidi_utf8_to_unicode(const_cast<char*>(text.c_str()),
             text.length(), logicalString);
@@ -36,9 +36,13 @@ Font::biditize(const std::string &text)
         return text;
     }
 
-    char buffer[text.length() + 1];
+    char *buffer = new char[text.length() + 1];
     int length = fribidi_unicode_to_utf8(visualString, ucsLength, buffer);
-    return std::string(buffer, length);
+    std::string result = std::string(buffer, length);
+    delete[] buffer;
+    delete[] visualString;
+    delete[] logicalString;
+    return result;
 #else
     return text;
 #endif
