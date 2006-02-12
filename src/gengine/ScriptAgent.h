@@ -6,6 +6,7 @@ class ScriptState;
 
 #include "BaseAgent.h"
 #include "Name.h"
+#include "Scripter.h"
 
 #include <string>
 
@@ -17,16 +18,12 @@ extern "C" {
  * Global scripting.
  * It is used by OptionAgent and debug console.
  */
-class ScriptAgent : public BaseAgent {
+class ScriptAgent : public BaseAgent, public Scripter {
     AGENT(ScriptAgent, Name::SCRIPT_NAME);
-    private:
-        ScriptState *m_state;
     protected:
         virtual void own_init();
-        virtual void own_shutdown();
     public:
         void registerFunc(const char *name, lua_CFunction func);
-        void doFile(const Path &file);
 
         virtual void receiveString(const StringMsg *msg);
 };

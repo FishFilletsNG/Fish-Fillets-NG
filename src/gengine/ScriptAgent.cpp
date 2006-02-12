@@ -8,18 +8,10 @@
  */
 #include "ScriptAgent.h"
 
-#include "Log.h"
-#include "Path.h"
-#include "SimpleMsg.h"
-#include "IntMsg.h"
-#include "StringMsg.h"
-#include "MessagerAgent.h"
-#include "UnknownMsgException.h"
-#include "ScriptException.h"
-#include "OptionAgent.h"
 #include "ScriptState.h"
+#include "StringMsg.h"
+#include "UnknownMsgException.h"
 
-#include "def-script.h"
 #include "options-script.h"
 
 
@@ -27,28 +19,15 @@
     void
 ScriptAgent::own_init()
 {
-    m_state = new ScriptState();
-    m_state->registerFunc("sendMsg", script_options_sendMsg);
-    m_state->registerFunc("setParam", script_options_setParam);
-    m_state->registerFunc("getParam", script_options_getParam);
-}
-//-----------------------------------------------------------------
-    void
-ScriptAgent::own_shutdown()
-{
-    delete m_state;
+    registerFunc("sendMsg", script_options_sendMsg);
+    registerFunc("setParam", script_options_setParam);
+    registerFunc("getParam", script_options_getParam);
 }
 //-----------------------------------------------------------------
     void
 ScriptAgent::registerFunc(const char *name, lua_CFunction func)
 {
-    m_state->registerFunc(name, func);
-}
-//-----------------------------------------------------------------
-void
-ScriptAgent::doFile(const Path &file)
-{
-    m_state->doFile(file);
+    m_script->registerFunc(name, func);
 }
 //-----------------------------------------------------------------
 /**
@@ -61,7 +40,7 @@ ScriptAgent::doFile(const Path &file)
 ScriptAgent::receiveString(const StringMsg *msg)
 {
     if (msg->equalsName("dostring")) {
-        m_state->doString(msg->getValue());
+        scriptDo(msg->getValue());
     }
     else {
         throw UnknownMsgException(msg);

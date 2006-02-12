@@ -3027,7 +3027,7 @@ int filledpieColor(SDL_Surface * dst, Sint16 x, Sint16 y, Sint16 rad, Sint16 sta
     }
 
     /* Allocate vertex array */
-    vx = vy = (Uint16 *) malloc(2 * sizeof(Uint16) * numpoints);
+    vx = vy = (Sint16 *) malloc(2 * sizeof(Uint16) * numpoints);
     if (vx == NULL) {
 	return (-1);
     }

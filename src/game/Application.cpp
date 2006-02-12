@@ -143,7 +143,7 @@ Application::customizeGame()
 {
     Path initfile = Path::dataReadPath("script/init.lua");
     if (initfile.exists()) {
-        ScriptAgent::agent()->doFile(initfile);
+        ScriptAgent::agent()->scriptInclude(initfile);
     }
     else {
         throw ResourceException(ExInfo("init file not found")

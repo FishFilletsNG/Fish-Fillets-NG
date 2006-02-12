@@ -297,7 +297,7 @@ OptionAgent::setPersistent(const std::string &name, const std::string &value)
 
     try {
         if (config.exists()) {
-            ScriptAgent::agent()->doFile(config);
+            ScriptAgent::agent()->scriptInclude(config);
         }
     }
     catch (ScriptException &e) {
@@ -401,7 +401,7 @@ OptionAgent::readSystemConfig()
     try {
         Path systemConfig = Path::dataSystemPath(CONFIG_FILE);
         if (systemConfig.exists()) {
-            ScriptAgent::agent()->doFile(systemConfig);
+            ScriptAgent::agent()->scriptInclude(systemConfig);
         }
     }
     catch (ScriptException &e) {
@@ -415,7 +415,7 @@ OptionAgent::readUserConfig()
     try {
         Path userConfig = Path::dataUserPath(CONFIG_FILE);
         if (userConfig.exists()) {
-            ScriptAgent::agent()->doFile(userConfig);
+            ScriptAgent::agent()->scriptInclude(userConfig);
         }
     }
     catch (ScriptException &e) {
