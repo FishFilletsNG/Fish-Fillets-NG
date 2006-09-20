@@ -13,9 +13,6 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 
-CPPFLAGS="-I/usr/local/include $CPPFLAGS"
-LIBS="-L/usr/local/lib $LIBS"
-
 ###################################################
 # Check for libm
 AC_CHECK_LIB(m, sin, LIBS="$LIBS -lm")
@@ -36,22 +33,24 @@ dnl Debian, and possibly other systems, include this script...
         LUA_CFLAGS="`[$LUACONFIG --include]`"
         LUA_LIBS="`[$LUACONFIG --static]`"
     else dnl ...otherwise, attempt to guess
-        LUA_CFLAGS=""
-        LUA_LIBS=""
-        AC_CHECK_LIB(lua, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua",
-        [AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
-        [AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
-            [AC_MSG_ERROR([*** Lua5 is required.
-             Try --with-lua=PREFIX
-             You can download lua from http://www.lua.org])],
-             $LUA_LIBS)], $LUA_LIBS)], $LUA_LIBS)
+        PKG_CHECK_MODULES(LUA, lua, [], [
+            LUA_CFLAGS=""
+            LUA_LIBS=""
+            AC_CHECK_LIB(lua, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua",
+            [AC_CHECK_LIB(lua50, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua50",
+            [AC_CHECK_LIB(lua5.0, lua_setfenv, LUA_LIBS="$LUA_LIBS -llua5.0",
+                [AC_MSG_ERROR([*** Lua5 is required.
+                 Try --with-lua=PREFIX
+                 You can download lua from http://www.lua.org])],
+                 $LUA_LIBS)], $LUA_LIBS)], $LUA_LIBS)
 
-        AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
-        [AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib50",
-        [AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib5.0",
-            [AC_MSG_ERROR([*** Lualib5 is required.
-             You can download lua from http://www.lua.org])],
-             $LUA_LIBS)], $LUA_LIBS)], $LUA_LIBS)
+            AC_CHECK_LIB(lualib, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib",
+            [AC_CHECK_LIB(lualib50, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib50",
+            [AC_CHECK_LIB(lualib5.0, luaopen_base, LUA_LIBS="$LUA_LIBS -llualib5.0",
+                [AC_MSG_ERROR([*** Lualib5 is required.
+                 You can download lua from http://www.lua.org])],
+                 $LUA_LIBS)], $LUA_LIBS)], $LUA_LIBS)
+        ])
    fi
 fi
 AC_SUBST(LUA_CFLAGS)
@@ -89,21 +88,31 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 
 ###################################################
 # Test X11
-OLD_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-AC_TRY_COMPILE([
-    #include "SDL.h"
-    #include "SDL_syswm.h"
-    #include <X11/Xutil.h>
-    ], [
-    SDL_SysWMinfo info;
-    info.subsystem = SDL_SYSWM_X11;
-    ], [have_x11="yes"], [have_x11="no"])
-CPPFLAGS="$OLD_CPPFLAGS"
-if test "x$have_x11" = xyes; then
-    AC_DEFINE(HAVE_X11)
+X_LIBS=""
+AC_ARG_WITH(X,
+   [AC_HELP_STRING([--with-x],[enable X window manager support [default=detect]])],
+   [with_x11=$withval],[with_x11="maybe"])
+if test "x$with_x11" != "xno" ; then
+   AC_CHECK_LIB([X11], [Xutf8TextListToTextProperty], [with_x11="yes"], [with_x11="no"])
+   if test "x$with_x11" != "xno" ; then
+       OLD_CPPFLAGS="$CPPFLAGS"
+       CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+       AC_TRY_COMPILE([
+           #include "SDL.h"
+           #include "SDL_syswm.h"
+           #include <X11/Xutil.h>
+           ], [
+           SDL_SysWMinfo info;
+           info.subsystem = SDL_SYSWM_X11;
+           ], [have_x11="yes"], [have_x11="no"])
+       CPPFLAGS="$OLD_CPPFLAGS"
+       if test "x$have_x11" = xyes; then
+           AC_DEFINE(HAVE_X11)
+           X_LIBS="-lX11"
+       fi
+   fi
 fi
-
+AC_SUBST(X_LIBS)
 
 ###################################################
 # Test FriBidi
@@ -151,6 +160,11 @@ case "$target" in
         ;;
 esac
 
+###################################################
+# Mung up datadir if need be
+if test "${datadir}" = '${datarootdir}' ; then
+   datadir='${datarootdir}/games/${PACKAGE}'
+fi
 
 ###################################################
 # Debug on/off

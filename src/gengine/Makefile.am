@@ -1,6 +1,6 @@
 
 INCLUDES = $(SDL_CFLAGS) $(LUA_CFLAGS) $(BOOST_CFLAGS)
-AM_CPPFLAGS = -DSYSTEM_DATA_DIR=\""$(datadir)/games/@PACKAGE@"\"
+AM_CPPFLAGS = -DSYSTEM_DATA_DIR=\""@datadir@"\"
 
 if WITH_BOOST
 FSPATH_IMPL = FsPath_boost.cpp
