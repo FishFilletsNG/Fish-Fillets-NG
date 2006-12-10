@@ -18,6 +18,15 @@ AC_PROG_RANLIB
 AC_CHECK_LIB(m, sin, LIBS="$LIBS -lm")
 
 ###################################################
+# Test FriBidi
+PKG_CHECK_MODULES(FRIBIDI, fribidi, [have_fribidi="yes"], [have_fribidi="no"])
+AC_SUBST(FRIBIDI_CFLAGS)
+AC_SUBST(FRIBIDI_LIBS)
+if test "x$have_fribidi" = xyes; then
+    AC_DEFINE(HAVE_FRIBIDI)
+fi
+
+###################################################
 # Check for lua and define LUA_CFLAGS and LUA_LIBS
 
 dnl ---- lua check ------------- (stolen from Stratagus)
@@ -113,15 +122,6 @@ if test "x$with_x11" != "xno" ; then
    fi
 fi
 AC_SUBST(X_LIBS)
-
-###################################################
-# Test FriBidi
-PKG_CHECK_MODULES(FRIBIDI, fribidi, [have_fribidi="yes"], [have_fribidi="no"])
-AC_SUBST(FRIBIDI_CFLAGS)
-AC_SUBST(FRIBIDI_LIBS)
-if test "x$have_fribidi" = xyes; then
-    AC_DEFINE(HAVE_FRIBIDI)
-fi
 
 ###################################################
 # enable C++ language
