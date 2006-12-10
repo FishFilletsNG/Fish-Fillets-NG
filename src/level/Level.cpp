@@ -66,7 +66,7 @@ Level::~Level()
     own_cleanState();
     delete m_locker;
     //NOTE: m_show must be removed before levelScript
-    // because uses the same script
+    // because it uses the same script
     delete m_show;
     delete m_countdown;
     delete m_loading;

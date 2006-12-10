@@ -63,7 +63,7 @@ script_game_setRoomWaves(lua_State *L) throw()
  * int game_addModel(kind, x, y, shape)
  * Return model index.
  *
- *  table = addModel("light", 10, 30, "table.bmp",
+ *  table = addModel("light", 10, 30,
  *  [[
  *  XXXXX
  *  ..X

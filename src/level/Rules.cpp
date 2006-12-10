@@ -104,7 +104,7 @@ Rules::occupyNewPos()
  * - when any model rests SOLELY on models SOLELY on a fish
  *   with fish.power < model.weight
  * 
- * @return true when fish is dead
+ * @return true when fish has died
  */
     bool
 Rules::checkDead(Cube::eAction lastAction)
@@ -388,8 +388,8 @@ Rules::isFalling() const
  * Who is falling on us.
  * @return array of killers, they can fall undirect on us
  */
-    Cube::t_models 
-Rules::whoIsFalling() 
+    Cube::t_models
+Rules::whoIsFalling()
 {
     Cube::t_models result;
     m_mask->unmask();
