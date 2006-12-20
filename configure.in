@@ -98,6 +98,7 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 ###################################################
 # Test X11
 X_LIBS=""
+have_x11="no"
 AC_ARG_WITH(X,
    [AC_HELP_STRING([--with-x],[enable X window manager support [default=detect]])],
    [with_x11=$withval],[with_x11="maybe"])
