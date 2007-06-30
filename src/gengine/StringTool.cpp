@@ -98,3 +98,23 @@ StringTool::split(const std::string &str, char separator)
     return args;
 }
 
+//-----------------------------------------------------------------
+/**
+ * Return number of Unicode entities inside given UTF-8 text.
+ */
+    int
+StringTool::utf8Length(const std::string &str) {
+    int length = 0;
+    const char *p = str.c_str();
+    char c;
+    // How to recognize entity:
+    // Unicode entities start with 0xxxxxxx or 11xxxxxx,
+    // the other bytes start with 10xxxxxx.
+    // (thanks to Egmont Koblinger)
+    while ((c = *p++) != 0) {
+        if ((c & 0xC0) != 0x80) {
+            length++;
+        }
+    }
+    return length;
+}

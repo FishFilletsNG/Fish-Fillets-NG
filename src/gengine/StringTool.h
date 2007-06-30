@@ -19,6 +19,7 @@ class StringTool {
         static void replace(std::string &buffer,
                 const std::string &pattern, const std::string &newstring);
         static t_args split(const std::string &str, char separator);
+        static int utf8Length(const std::string &str);
 };
 
 #endif

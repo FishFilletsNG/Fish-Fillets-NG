@@ -86,7 +86,7 @@ Dialog::getFormatedSubtitle(const StringTool::t_args &args) const
 int
 Dialog::getMinTime() const
 {
-    return min(180, m_subtitle.size());
+    return min(180, StringTool::utf8Length(m_subtitle));
 }
 
 
