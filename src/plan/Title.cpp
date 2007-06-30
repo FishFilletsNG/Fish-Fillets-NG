@@ -11,6 +11,7 @@
 #include "Font.h"
 #include "Color.h"
 #include "OptionAgent.h"
+#include "StringTool.h"
 
 //-----------------------------------------------------------------
 /**
@@ -41,7 +42,7 @@ Title::Title(int baseY, int finalY, int bonusTime, int limitY,
     m_y = m_screenH - baseY;
     m_finalY = m_screenH - finalY;
     m_limitY = m_screenH - limitY;
-    m_mintime = m_content.size() * TIME_PER_CHAR;
+    m_mintime = StringTool::utf8Length(m_content) * TIME_PER_CHAR;
     if (m_mintime < TIME_MIN) {
         m_mintime = TIME_MIN;
     }
