@@ -97,11 +97,16 @@ Cube::getLastMoveDir() const
     return m_rules->getDir();
 }
 //-----------------------------------------------------------------
+/**
+ * Set params for special 'output_DIR' model.
+ * Used just for the 'spuntik' in windoze level.
+ */
 void
-Cube::setOutDir(Dir::eDir dir)
+Cube::setOutDir(Dir::eDir dir, int capacity, eWeight weight)
 {
-    m_outCapacity = 2;
+    m_outCapacity = capacity;
     m_outDir = dir;
+    m_weight = weight;
 }
 //-----------------------------------------------------------------
 /**

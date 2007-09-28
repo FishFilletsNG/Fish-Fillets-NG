@@ -81,7 +81,10 @@ class Cube : public NoCopy {
         Dir::eDir getLastMoveDir() const;
 
         bool isOutDir(Dir::eDir dir) const { return m_outDir == dir; }
-        void setOutDir(Dir::eDir outDir);
+        Dir::eDir getOutDir() { return m_outDir; }
+        int getOutCapacity() { return m_outCapacity; }
+        void setOutDir(Dir::eDir outDir,
+                int capacity=2, eWeight weight=Cube::FIXED);
         void decOutCapacity();
 
         bool isTalking() const;

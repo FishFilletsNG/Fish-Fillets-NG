@@ -37,6 +37,8 @@ extern int script_model_change_setLocation(lua_State *L) throw();
 extern int script_model_setViewShift(lua_State *L) throw();
 extern int script_model_getViewShift(lua_State *L) throw();
 extern int script_model_setBusy(lua_State *L) throw();
+extern int script_model_getExtraParams(lua_State *L) throw();
+extern int script_model_change_setExtraParams(lua_State *L) throw();
 extern int script_model_equals(lua_State *L) throw();
 
 extern int script_sound_addSound(lua_State *L) throw();

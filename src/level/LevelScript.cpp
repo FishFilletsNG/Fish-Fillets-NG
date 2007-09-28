@@ -152,6 +152,9 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("model_getViewShift",
             script_model_getViewShift);
     m_script->registerFunc("model_setBusy", script_model_setBusy);
+    m_script->registerFunc("model_getExtraParams", script_model_getExtraParams);
+    m_script->registerFunc("model_change_setExtraParams",
+            script_model_change_setExtraParams);
     m_script->registerFunc("model_equals", script_model_equals);
 
     m_script->registerFunc("sound_addSound", script_sound_addSound);

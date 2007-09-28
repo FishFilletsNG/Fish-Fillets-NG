@@ -652,6 +652,65 @@ script_model_setBusy(lua_State *L) throw()
     END_NOEXCEPTION;
     return 0;
 }
+//-----------------------------------------------------------------
+/**
+ * table model_getExtraParams(model_index)
+ *
+ * Returns extra parameters needed to restore after undo.
+ */
+    int
+script_model_getExtraParams(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    Cube *model = getModel(L, model_index);
+
+    lua_newtable(L);
+    lua_pushstring(L, "outDir");
+    lua_pushnumber(L, model->getOutDir());
+    lua_settable(L, -3);
+
+    lua_pushstring(L, "outCapacity");
+    lua_pushnumber(L, model->getOutCapacity());
+    lua_settable(L, -3);
+
+    lua_pushstring(L, "weight");
+    lua_pushnumber(L, model->getWeight());
+    lua_settable(L, -3);
+
+    END_NOEXCEPTION;
+    return 1;
+}
+//-----------------------------------------------------------------
+/**
+ * void model_change_setExtraParams(model_index, table)
+ *
+ * Restores extra parameters after undo.
+ */
+    int
+script_model_change_setExtraParams(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+
+    lua_pushstring(L, "outDir");
+    lua_gettable(L, 2);
+    int outDir = luaL_checkint(L, -1);
+
+    lua_pushstring(L, "outCapacity");
+    lua_gettable(L, 2);
+    int outCapacity = luaL_checkint(L, -1);
+
+    lua_pushstring(L, "weight");
+    lua_gettable(L, 2);
+    int weight = luaL_checkint(L, -1);
+
+    Cube *model = getModel(L, model_index);
+    model->setOutDir((Dir::eDir)outDir, outCapacity, (Cube::eWeight)weight);
+
+    END_NOEXCEPTION;
+    return 0;
+}
 
 //-----------------------------------------------------------------
 /**
