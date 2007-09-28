@@ -42,7 +42,7 @@ LevelCountDown::reset()
 //-----------------------------------------------------------------
 /**
  * Countdown to zero.
- * @param advisor advisor which known usable coundown values
+ * @param advisor advisor which know usable coundown values
  * @return true when counter is at zero
  */
 bool

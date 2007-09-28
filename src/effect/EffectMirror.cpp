@@ -15,7 +15,7 @@
 /**
  * Mirror effect. Draw left side inside.
  * The pixel in the middle will be used as a mask.
- * NOTE: mirror object should be draw as the last.
+ * NOTE: mirror object should be drawn as the last.
  */
 void
 EffectMirror::blit(SDL_Surface *screen, SDL_Surface *surface, int x, int y)
