@@ -281,6 +281,34 @@ Controls::activateSelected(const Cube *occupant)
     return false;
 }
 //-----------------------------------------------------------------
+    void
+Controls::setMoves(const std::string &moves)
+{
+    m_moves = moves;
+    if (!m_moves.empty()) {
+        activateDriven(m_moves[m_moves.size() - 1]);
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Activate fish driven by given symbol.
+ * @param symbol one of fish symbols
+ * @return true when fish was selected
+ */
+bool
+Controls::activateDriven(char symbol)
+{
+    t_units::iterator end = m_units.end();
+    for (t_units::iterator i = m_units.begin(); i != end; ++i) {
+        if ((*i)->isDrivenBy(symbol)) {
+            m_active = i;
+            m_switch = true;
+            return true;
+        }
+    }
+    return false;
+}
+//-----------------------------------------------------------------
 /**
  * Change active unit.
  * NOTE: change is without switch animation

@@ -355,7 +355,9 @@ Level::nextLoadAction()
 {
     m_loading->nextLoadAction();
     if (!isLoading()) {
-        m_levelScript->scriptDo("script_loadState()");
+        if (!m_insideUndo) {
+            m_levelScript->scriptDo("script_loadState()");
+        }
     }
 }
 //-----------------------------------------------------------------
@@ -427,6 +429,7 @@ Level::action_load()
         m_restartCounter--;
         action_restart();
         m_levelScript->scriptInclude(file);
+        m_insideUndo = false;
         m_levelScript->scriptDo("script_load()");
     }
     else {
@@ -448,8 +451,6 @@ Level::action_undo()
 
         m_insideUndo = true;
         m_levelScript->scriptDo("script_loadUndo()");
-        m_insideUndo = false;
-        m_levelScript->room()->checkActive();
     }
     return true;
 }

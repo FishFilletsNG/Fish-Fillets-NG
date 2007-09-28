@@ -47,6 +47,7 @@ class Unit {
         bool isMoving() const;
         bool isTurning() const;
         bool isPushing() const;
+        bool isDrivenBy(char symbol) const;
         bool equalsModel(const Cube *other) const;
         V2 getLoc() const;
         int getW() const;

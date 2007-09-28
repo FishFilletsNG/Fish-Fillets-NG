@@ -36,10 +36,11 @@ class Controls : public StepCounter, public NoCopy {
         bool driveUnit(const InputProvider *input);
         void setActive(t_units::iterator active);
         int getNeededPhases(int speedup) const;
+        bool activateDriven(char symbol);
     public:
         Controls(PhaseLocker *locker);
         ~Controls();
-        void setMoves(const std::string &moves) { m_moves = moves; }
+        void setMoves(const std::string &moves);
         void addUnit(Unit *unit);
         const Unit *getActive();
 

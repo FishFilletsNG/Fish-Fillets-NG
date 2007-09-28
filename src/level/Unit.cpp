@@ -248,6 +248,15 @@ Unit::isPushing() const
     return m_model->rules()->getState() == "pushing";
 }
 //-----------------------------------------------------------------
+bool
+Unit::isDrivenBy(char symbol) const
+{
+    return m_symbols.getLeft() == symbol
+        || m_symbols.getRight() == symbol
+        || m_symbols.getUp() == symbol
+        || m_symbols.getDown() == symbol;
+}
+//-----------------------------------------------------------------
 /**
  * Returns true when models are equal.
  */
