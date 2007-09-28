@@ -102,8 +102,13 @@ Rules::occupyNewPos()
 Rules::change_setLocation(const V2 &loc)
 {
     m_mask->unmask();
-    m_model->change_setLocation(loc);
-    m_mask->mask();
+    if (loc.getX() < 0 || loc.getY() < 0) {
+        m_model->change_goOut();
+    }
+    else {
+        m_model->change_setLocation(loc);
+        m_mask->mask();
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -523,7 +528,7 @@ Rules::canDir(Dir::eDir dir, Cube::eWeight power)
 //-----------------------------------------------------------------
 /**
  * There is one special case.
- * When model touch output_DIR then it goes out.
+ * When model touches output_DIR then it goes out.
  * This is used only in level 'windoze'.
  */
     bool

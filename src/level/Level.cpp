@@ -449,6 +449,7 @@ Level::action_undo()
         m_insideUndo = true;
         m_levelScript->scriptDo("script_loadUndo()");
         m_insideUndo = false;
+        m_levelScript->room()->checkActive();
     }
     return true;
 }
