@@ -102,7 +102,8 @@ Rules::occupyNewPos()
 Rules::change_setLocation(const V2 &loc)
 {
     m_mask->unmask();
-    if (loc.getX() < 0 || loc.getY() < 0) {
+    //HACK: model.out flag is recognized by its location
+    if (loc.getX() < 0 && loc.getY() < 0) {
         m_model->change_goOut();
     }
     else {
