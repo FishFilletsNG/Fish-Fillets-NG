@@ -46,6 +46,8 @@
 {
     m_desc = NULL;
     m_restartCounter = 1;
+    m_changedSteps = false;
+    m_insideUndo = false;
     m_depth = depth;
     m_newRound = false;
     m_locker = new PhaseLocker();
@@ -109,6 +111,8 @@ Level::own_initState()
     void
 Level::own_updateState()
 {
+    saveUndo();
+
     m_newRound = false;
     if (m_locker->getLocked() == 0) {
         m_newRound = true;
@@ -211,6 +215,31 @@ Level::updateLevel()
 }
 //-----------------------------------------------------------------
 /**
+ * Save state for undo.
+ */
+    void
+Level::saveUndo()
+{
+    if (!isLoading() && !isShowing()) {
+        if (m_levelScript->isRoom()) {
+            Room *room = m_levelScript->room();
+            if (m_changedSteps && room->isSolvable()) {
+
+                // Saving without the last move,
+                // because models are not at that position yet.
+                std::string moves = room->stepCounter()->getMoves();
+                if (!moves.empty()) {
+                    moves.erase(moves.size() - 1, 1);
+                    m_levelScript->scriptDo("script_saveUndo(\""
+                            + moves + "\")");
+                }
+                m_changedSteps = false;
+            }
+        }
+    }
+}
+//-----------------------------------------------------------------
+/**
  * Finish complete level.
  * Save solution.
  */
@@ -240,7 +269,11 @@ Level::finishLevel()
 Level::nextPlayerAction()
 {
     if (m_levelScript->isRoom()) {
-         m_levelScript->room()->nextRound(getInput());
+        Room *room = m_levelScript->room();
+        int stepsBefore = room->stepCounter()->getStepCount();
+        room->nextRound(getInput());
+
+        m_changedSteps = stepsBefore != room->stepCounter()->getStepCount();
     }
 }
 
@@ -293,7 +326,14 @@ Level::displaySaveStatus()
     void
 Level::loadGame(const std::string &moves)
 {
-    m_loading->loadGame(moves);
+    if (m_insideUndo) {
+        if (m_levelScript->isRoom()) {
+            m_levelScript->room()->setMoves(moves);
+        }
+    }
+    else {
+        m_loading->loadGame(moves);
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -341,8 +381,8 @@ Level::action_restart()
 {
     own_cleanState();
     m_restartCounter++;
-    //TODO: is ok to run the script on second time?
-    //NOTE: planned show remains after restart
+    //NOTE: The script is just overridden by itself,
+    // so planned shows and undo remain after restart.
     own_initState();
     return true;
 }
@@ -395,7 +435,23 @@ Level::action_load()
     }
     return true;
 }
+//-----------------------------------------------------------------
+/**
+ * Naive undo by reloading the level.
+ */
+    bool
+Level::action_undo()
+{
+    if (m_levelScript->isRoom()) {
+        m_restartCounter--;
+        action_restart();
 
+        m_insideUndo = true;
+        m_levelScript->scriptDo("script_loadUndo()");
+        m_insideUndo = false;
+    }
+    return true;
+}
 //-----------------------------------------------------------------
     void
 Level::switchFish()

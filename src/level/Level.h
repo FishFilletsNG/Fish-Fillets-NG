@@ -42,12 +42,15 @@ class Level : public GameState, public CountAdvisor {
         LevelCountDown *m_countdown;
         CommandQueue *m_show;
         int m_restartCounter;
+        bool m_changedSteps;
+        bool m_insideUndo;
         MultiDrawer *m_background;
         StatusDisplay *m_statusDisplay;
     private:
         void initScreen();
         void nextAction();
         void updateLevel();
+        void saveUndo();
         void finishLevel();
         void nextLoadAction();
         void nextShowAction();
@@ -77,6 +80,7 @@ class Level : public GameState, public CountAdvisor {
         bool action_move(char symbol);
         bool action_save();
         bool action_load();
+        bool action_undo();
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);

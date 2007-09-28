@@ -52,6 +52,7 @@ class Rules : public NoCopy {
         Rules(Cube *model);
         ~Rules();
         void takeField(Field *field);
+        void change_setLocation(const V2 &loc);
 
         void occupyNewPos();
         bool checkDead(Cube::eAction lastAction);

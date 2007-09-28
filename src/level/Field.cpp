@@ -66,15 +66,20 @@ Field::getModel(const V2 &loc)
 /**
  * Mark this location as occupied by model.
  * Locations out of field will not be filled.
+ * @param loc write location
+ * @param model model to put on given location 
+ * @param toOverride allowed model to overwrite or NULL
  */
 void
-Field::setModel(const V2 &loc, Cube *model)
+Field::setModel(const V2 &loc, Cube *model, Cube *toOverride)
 {
     int x = loc.getX();
     int y = loc.getY();
 
     if ((0 <= x && x < m_w) && (0 <= y && y < m_h)) {
-        m_marks[y][x] = model;
+        if (toOverride == NULL || m_marks[y][x] == toOverride) {
+            m_marks[y][x] = model;
+        }
     }
 }
 

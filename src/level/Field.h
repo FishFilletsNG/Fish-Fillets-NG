@@ -23,7 +23,7 @@ class Field : public NoCopy {
         int getH() const { return m_h; }
 
         Cube *getModel(const V2 &loc);
-        void setModel(const V2 &loc, Cube *model);
+        void setModel(const V2 &loc, Cube *model, Cube *toOverride);
 };
 
 #endif

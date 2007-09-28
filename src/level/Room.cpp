@@ -347,6 +347,12 @@ Room::stepCounter() const
 }
 //-----------------------------------------------------------------
     void
+Room::setMoves(const std::string &moves)
+{
+    m_controls->setMoves(moves);
+}
+//-----------------------------------------------------------------
+    void
 Room::checkActive()
 {
     return m_controls->checkActive();

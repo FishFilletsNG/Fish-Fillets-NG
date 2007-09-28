@@ -75,6 +75,7 @@ class Room : public Drawable {
         void checkActive();
         void unBusyUnits();
         const StepCounter *stepCounter() const;
+        void setMoves(const std::string &moves);
 
         int getW() const;
         int getH() const;

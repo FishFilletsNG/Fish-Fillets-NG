@@ -39,6 +39,7 @@ class Controls : public StepCounter, public NoCopy {
     public:
         Controls(PhaseLocker *locker);
         ~Controls();
+        void setMoves(const std::string &moves) { m_moves = moves; }
         void addUnit(Unit *unit);
         const Unit *getActive();
 

@@ -16,7 +16,7 @@ class MarkMask : public NoCopy {
         Cube *m_model;
         Field *m_field;
     private:
-        void writeModel(Cube *model);
+        void writeModel(Cube *model, Cube *toOverride);
         bool isBorderDir(Dir::eDir dir) const;
         bool isInRoom() const;
     public:

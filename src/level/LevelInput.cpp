@@ -30,6 +30,10 @@ LevelInput::LevelInput(Level *level)
             KeyDesc(KEY_RESTART, "restart"));
     m_keymap->registerKey(KeyStroke(SDLK_F5, KMOD_NONE),
             KeyDesc(KEY_SHOW_STEPS, "show number of steps"));
+
+    KeyDesc undo = KeyDesc(KEY_UNDO, "undo");
+    m_keymap->registerKey(KeyStroke(SDLK_MINUS, KMOD_NONE), undo);
+    m_keymap->registerKey(KeyStroke(SDLK_KP_MINUS, KMOD_NONE), undo);
 }
 //-----------------------------------------------------------------
 Level *
@@ -59,6 +63,10 @@ LevelInput::specKey(int keyIndex)
         case KEY_RESTART:
             getLevel()->interruptShow();
             getLevel()->action_restart();
+            break;
+        case KEY_UNDO:
+            getLevel()->interruptShow();
+            getLevel()->action_undo();
             break;
         case KEY_SHOW_STEPS:
             toggleParam("show_steps");

@@ -63,7 +63,7 @@ class Cube : public NoCopy {
         void change_goOut();
         void change_remove();
         void change_turnSide();
-        void change_setLocation(V2 loc) { m_loc = loc; }
+        void change_setLocation(const V2 &loc) { m_loc = loc; }
 
         V2 getLocation() const { return m_loc; }
         bool isAlive() const { return m_alive; }

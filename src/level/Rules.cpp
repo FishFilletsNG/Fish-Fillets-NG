@@ -95,6 +95,18 @@ Rules::occupyNewPos()
 }
 //-----------------------------------------------------------------
 /**
+ * Force model to a new position.
+ * Used just for undo loading.
+ */
+    void
+Rules::change_setLocation(const V2 &loc)
+{
+    m_mask->unmask();
+    m_model->change_setLocation(loc);
+    m_mask->mask();
+}
+//-----------------------------------------------------------------
+/**
  * Check dead fishes.
  * Fish is dead:
  * - when any model moves in dir != Dir::DIR_UP

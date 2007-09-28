@@ -70,7 +70,7 @@ MarkMask::getPlacedResist(const V2 &loc) const
 void
 MarkMask::mask()
 {
-    writeModel(m_model);
+    writeModel(m_model, NULL);
 }
 //-----------------------------------------------------------------
 /**
@@ -79,18 +79,18 @@ MarkMask::mask()
 void
 MarkMask::unmask()
 {
-    writeModel(NULL);
+    writeModel(NULL, m_model);
 }
 //-----------------------------------------------------------------
 void
-MarkMask::writeModel(Cube *model)
+MarkMask::writeModel(Cube *model, Cube *toOverride)
 {
     V2 loc = m_model->getLocation();
     const Shape *shape = m_model->shape();
     Shape::const_iterator end = shape->marksEnd();
     for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
-        m_field->setModel(mark, model);
+        m_field->setModel(mark, model, toOverride);
     }
 }
 

@@ -584,6 +584,24 @@ script_model_change_turnSide(lua_State *L) throw()
 }
 //-----------------------------------------------------------------
 /**
+ * void model_change_setLocation(model_index, x, y)
+ * Change model position (used to load undo).
+ */
+    int
+script_model_change_setLocation(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    int model_index = luaL_checkint(L, 1);
+    int x = luaL_checkint(L, 2);
+    int y = luaL_checkint(L, 3);
+    Cube *model = getModel(L, model_index);
+    model->rules()->change_setLocation(V2(x, y));
+
+    END_NOEXCEPTION;
+    return 0;
+}
+//-----------------------------------------------------------------
+/**
  * void model_setViewShift(model_index, shift_x, shift_y)
  * Shift view (used for obsolete animation effects).
  */

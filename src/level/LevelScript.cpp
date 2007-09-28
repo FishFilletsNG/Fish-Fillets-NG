@@ -145,6 +145,8 @@ LevelScript::registerGameFuncs()
     m_script->registerFunc("model_setGoal", script_model_setGoal);
     m_script->registerFunc("model_change_turnSide",
             script_model_change_turnSide);
+    m_script->registerFunc("model_change_setLocation",
+            script_model_change_setLocation);
     m_script->registerFunc("model_setViewShift",
             script_model_setViewShift);
     m_script->registerFunc("model_getViewShift",
