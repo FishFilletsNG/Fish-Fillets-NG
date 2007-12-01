@@ -665,18 +665,23 @@ script_model_getExtraParams(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     Cube *model = getModel(L, model_index);
 
-    lua_newtable(L);
-    lua_pushstring(L, "outDir");
-    lua_pushnumber(L, model->getOutDir());
-    lua_settable(L, -3);
+    if (model->getOutCapacity() != 0) {
+        lua_newtable(L);
+        lua_pushstring(L, "outDir");
+        lua_pushnumber(L, model->getOutDir());
+        lua_settable(L, -3);
 
-    lua_pushstring(L, "outCapacity");
-    lua_pushnumber(L, model->getOutCapacity());
-    lua_settable(L, -3);
+        lua_pushstring(L, "outCapacity");
+        lua_pushnumber(L, model->getOutCapacity());
+        lua_settable(L, -3);
 
-    lua_pushstring(L, "weight");
-    lua_pushnumber(L, model->getWeight());
-    lua_settable(L, -3);
+        lua_pushstring(L, "weight");
+        lua_pushnumber(L, model->getWeight());
+        lua_settable(L, -3);
+    }
+    else {
+        lua_pushnil(L);
+    }
 
     END_NOEXCEPTION;
     return 1;
@@ -693,20 +698,22 @@ script_model_change_setExtraParams(lua_State *L) throw()
     BEGIN_NOEXCEPTION;
     int model_index = luaL_checkint(L, 1);
 
-    lua_pushstring(L, "outDir");
-    lua_gettable(L, 2);
-    int outDir = luaL_checkint(L, -1);
+    if (!lua_isnil(L, 2)) {
+        lua_pushstring(L, "outDir");
+        lua_gettable(L, 2);
+        int outDir = luaL_checkint(L, -1);
 
-    lua_pushstring(L, "outCapacity");
-    lua_gettable(L, 2);
-    int outCapacity = luaL_checkint(L, -1);
+        lua_pushstring(L, "outCapacity");
+        lua_gettable(L, 2);
+        int outCapacity = luaL_checkint(L, -1);
 
-    lua_pushstring(L, "weight");
-    lua_gettable(L, 2);
-    int weight = luaL_checkint(L, -1);
+        lua_pushstring(L, "weight");
+        lua_gettable(L, 2);
+        int weight = luaL_checkint(L, -1);
 
-    Cube *model = getModel(L, model_index);
-    model->setOutDir((Dir::eDir)outDir, outCapacity, (Cube::eWeight)weight);
+        Cube *model = getModel(L, model_index);
+        model->setOutDir((Dir::eDir)outDir, outCapacity, (Cube::eWeight)weight);
+    }
 
     END_NOEXCEPTION;
     return 0;

@@ -121,6 +121,7 @@ Cube::decOutCapacity()
         if (m_outCapacity == 0) {
             m_outDir = Dir::DIR_NO;
             m_weight = LIGHT;
+            m_outCapacity = -1;
         }
     }
 }
