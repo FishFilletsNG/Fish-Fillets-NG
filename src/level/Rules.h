@@ -74,6 +74,7 @@ class Rules : public NoCopy {
         bool isAtBorder() const;
         bool isFreePlace(const V2 &loc) const;
         const Cube::t_models getResist(Dir::eDir dir) const;
+        bool isPushing() const { return m_pushing; };
 };
 
 #endif

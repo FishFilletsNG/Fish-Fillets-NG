@@ -245,7 +245,7 @@ Unit::isTurning() const
 bool
 Unit::isPushing() const
 {
-    return m_model->rules()->getState() == "pushing";
+    return m_model->rules()->isPushing();
 }
 //-----------------------------------------------------------------
 bool

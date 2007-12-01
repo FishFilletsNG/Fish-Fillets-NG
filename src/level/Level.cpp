@@ -233,10 +233,12 @@ Level::saveUndo()
                     m_levelScript->scriptDo("script_saveUndo(\""
                             + moves + "\")");
                 }
-                m_changedSteps = false;
+
+                int steps = room->stepCounter()->getStepCount();
             }
         }
     }
+    m_changedSteps = false;
 }
 //-----------------------------------------------------------------
 /**
@@ -273,7 +275,11 @@ Level::nextPlayerAction()
         int stepsBefore = room->stepCounter()->getStepCount();
         room->nextRound(getInput());
 
-        m_changedSteps = stepsBefore != room->stepCounter()->getStepCount();
+        int stepsAfter = room->stepCounter()->getStepCount();
+        if (stepsAfter > stepsBefore) {
+            m_changedSteps = room->stepCounter()->isPushing() ||
+                stepsAfter % 10 == 1;
+        }
     }
 }
 
