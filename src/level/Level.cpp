@@ -46,7 +46,6 @@
 {
     m_desc = NULL;
     m_restartCounter = 1;
-    m_changedSteps = false;
     m_insideUndo = false;
     m_depth = depth;
     m_newRound = false;
@@ -115,7 +114,6 @@ Level::own_updateState()
     if (m_locker->getLocked() == 0) {
         m_newRound = true;
         nextAction();
-        saveUndo();
     }
     updateLevel();
     m_locker->decLock();
@@ -215,32 +213,26 @@ Level::updateLevel()
 //-----------------------------------------------------------------
 /**
  * Save state for undo.
+ * Should be called after a player move,
+ * but still before level script update.
+ * @param oldMoves moves before the last move
  */
     void
-Level::saveUndo()
+Level::saveUndo(const std::string &oldMoves)
 {
-    if (!isLoading() && !isShowing()) {
-        if (m_levelScript->isRoom()) {
-            Room *room = m_levelScript->room();
-            if (m_changedSteps && room->isSolvable()) {
-
-                // Saving without the last move,
-                // because models are not at that position yet.
-                std::string moves = room->stepCounter()->getMoves();
-                if (!moves.empty()) {
-                    std::string forceSave = "false";
-                    if (room->stepCounter()->isPushing()) {
-                        forceSave = "true";
-                    }
-
-                    moves.erase(moves.size() - 1, 1);
-                    m_levelScript->scriptDo("script_saveUndo(\""
-                            + moves + "\"," + forceSave + ")");
-                }
-            }
-        }
+    if (oldMoves.empty()) {
+        return;
     }
-    m_changedSteps = false;
+
+    if (m_levelScript->isRoom()) {
+        Room *room = m_levelScript->room();
+        // Undo is always saved when the new move is pushing something.
+        bool forceSave = room->stepCounter()->isPushing();
+
+        std::string forceSaveValue = forceSave ? "true" : "false";
+        m_levelScript->scriptDo("script_saveUndo(\""
+                + oldMoves + "\"," + forceSaveValue + ")");
+    }
 }
 //-----------------------------------------------------------------
 /**
@@ -274,11 +266,14 @@ Level::nextPlayerAction()
 {
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
-        int stepsBefore = room->stepCounter()->getStepCount();
+        bool wasSolvable = room->isSolvable();
+        std::string oldMoves = room->stepCounter()->getMoves();
         room->nextRound(getInput());
 
-        int stepsAfter = room->stepCounter()->getStepCount();
-        m_changedSteps = stepsAfter > stepsBefore;
+        unsigned int stepsAfter = room->stepCounter()->getStepCount();
+        if (wasSolvable && stepsAfter != oldMoves.size()) {
+            saveUndo(oldMoves);
+        }
     }
 }
 

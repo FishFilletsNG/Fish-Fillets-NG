@@ -42,7 +42,6 @@ class Level : public GameState, public CountAdvisor {
         LevelCountDown *m_countdown;
         CommandQueue *m_show;
         int m_restartCounter;
-        bool m_changedSteps;
         bool m_insideUndo;
         MultiDrawer *m_background;
         StatusDisplay *m_statusDisplay;
@@ -50,7 +49,7 @@ class Level : public GameState, public CountAdvisor {
         void initScreen();
         void nextAction();
         void updateLevel();
-        void saveUndo();
+        void saveUndo(const std::string &oldMoves);
         void finishLevel();
         void nextLoadAction();
         void nextShowAction();
