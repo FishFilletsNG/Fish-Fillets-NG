@@ -111,12 +111,11 @@ Level::own_initState()
     void
 Level::own_updateState()
 {
-    saveUndo();
-
     m_newRound = false;
     if (m_locker->getLocked() == 0) {
         m_newRound = true;
         nextAction();
+        saveUndo();
     }
     updateLevel();
     m_locker->decLock();
@@ -229,9 +228,14 @@ Level::saveUndo()
                 // because models are not at that position yet.
                 std::string moves = room->stepCounter()->getMoves();
                 if (!moves.empty()) {
+                    std::string forceSave = "false";
+                    if (room->stepCounter()->isPushing()) {
+                        forceSave = "true";
+                    }
+
                     moves.erase(moves.size() - 1, 1);
                     m_levelScript->scriptDo("script_saveUndo(\""
-                            + moves + "\")");
+                            + moves + "," + forceSave + "\")");
                 }
 
                 int steps = room->stepCounter()->getStepCount();
@@ -276,10 +280,7 @@ Level::nextPlayerAction()
         room->nextRound(getInput());
 
         int stepsAfter = room->stepCounter()->getStepCount();
-        if (stepsAfter > stepsBefore) {
-            m_changedSteps = room->stepCounter()->isPushing() ||
-                stepsAfter % 10 == 1;
-        }
+        m_changedSteps = stepsAfter > stepsBefore;
     }
 }
 
