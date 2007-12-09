@@ -235,10 +235,8 @@ Level::saveUndo()
 
                     moves.erase(moves.size() - 1, 1);
                     m_levelScript->scriptDo("script_saveUndo(\""
-                            + moves + "," + forceSave + "\")");
+                            + moves + "\"," + forceSave + ")");
                 }
-
-                int steps = room->stepCounter()->getStepCount();
             }
         }
     }
