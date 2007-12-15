@@ -45,6 +45,7 @@ class Unit {
         char driveOrder(char move);
 
         bool isMoving() const;
+        bool isMovingDown() const;
         bool isTurning() const;
         bool isPushing() const;
         bool isDrivenBy(char symbol) const;

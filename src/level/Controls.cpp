@@ -369,14 +369,15 @@ Controls::isPowerful() const
 }
 //-----------------------------------------------------------------
 /**
- * Returns true when active fish is pushing a cube.
+ * Returns true when active fish is doing a dangerous move.
  */
 bool
-Controls::isPushing() const
+Controls::isDangerousMove() const
 {
     bool result = false;
     if (m_active != m_units.end()) {
-        result = (*m_active)->isPushing();
+        result = (*m_active)->isPushing()
+            || (*m_active)->isMovingDown();
     }
     return result;
 }

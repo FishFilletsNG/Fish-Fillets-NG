@@ -226,8 +226,7 @@ Level::saveUndo(const std::string &oldMoves)
 
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
-        // Undo is always saved when the new move is pushing something.
-        bool forceSave = room->stepCounter()->isPushing();
+        bool forceSave = room->stepCounter()->isDangerousMove();
 
         std::string forceSaveValue = forceSave ? "true" : "false";
         m_levelScript->scriptDo("script_saveUndo(\""
@@ -355,9 +354,7 @@ Level::nextLoadAction()
 {
     m_loading->nextLoadAction();
     if (!isLoading()) {
-        if (!m_insideUndo) {
-            m_levelScript->scriptDo("script_loadState()");
-        }
+        m_levelScript->scriptDo("script_loadState()");
     }
 }
 //-----------------------------------------------------------------

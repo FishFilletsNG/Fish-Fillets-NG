@@ -58,7 +58,7 @@ class Controls : public StepCounter, public NoCopy {
         virtual int getStepCount() const { return m_moves.size(); }
         virtual std::string getMoves() const { return m_moves; }
         virtual bool isPowerful() const;
-        virtual bool isPushing() const;
+        virtual bool isDangerousMove() const;
 };
 
 #endif

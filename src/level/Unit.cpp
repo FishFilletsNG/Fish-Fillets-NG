@@ -236,6 +236,12 @@ Unit::isMoving() const
 }
 //-----------------------------------------------------------------
 bool
+Unit::isMovingDown() const
+{
+    return m_model->rules()->getDir() == Dir::DIR_DOWN;
+}
+//-----------------------------------------------------------------
+bool
 Unit::isTurning() const
 {
     std::string action = m_model->rules()->getAction();
