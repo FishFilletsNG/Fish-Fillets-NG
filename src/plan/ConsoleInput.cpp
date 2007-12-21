@@ -95,7 +95,7 @@ ConsoleInput::specStroke(const KeyStroke &stroke)
     char c = stroke.getUnicode() & 0x7F;
     if (isprint(c)) {
         std::string input = getConsole()->getInput();
-        input.push_back(c);
+        input.append(1, c);
         getConsole()->setInput(input);
     }
 }

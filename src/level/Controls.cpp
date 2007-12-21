@@ -152,7 +152,7 @@ Controls::driveUnit(const InputProvider *input)
     }
 
     if (moved != ControlSym::SYM_NONE) {
-        m_moves.push_back(moved);
+        m_moves.append(1, moved);
     }
     return (moved != ControlSym::SYM_NONE);
 }
@@ -333,7 +333,7 @@ Controls::makeMove(char move)
     for (t_units::iterator i = m_units.begin(); i != end; ++i) {
         if ((*i)->driveOrder(move) == move) {
             setActive(i);
-            m_moves.push_back(move);
+            m_moves.append(1, move);
             return true;
         }
     }
