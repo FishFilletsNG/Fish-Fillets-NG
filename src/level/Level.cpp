@@ -98,7 +98,9 @@ Level::own_initState()
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
-    SoundAgent::agent()->stopMusic();
+    if (!m_insideUndo) {
+        SoundAgent::agent()->stopMusic();
+    }
     //TODO: escape "codename"
     m_levelScript->scriptDo("CODENAME = [[" + m_codename + "]]");
     m_levelScript->scriptInclude(m_datafile);
@@ -443,10 +445,10 @@ Level::action_load()
 Level::action_undo()
 {
     if (m_levelScript->isRoom()) {
+        m_insideUndo = true;
         m_restartCounter--;
         action_restart();
 
-        m_insideUndo = true;
         m_levelScript->scriptDo("script_loadUndo()");
     }
     return true;

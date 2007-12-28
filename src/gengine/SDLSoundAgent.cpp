@@ -112,7 +112,14 @@ void
 SDLSoundAgent::playMusic(const Path &file,
         BaseMsg *finished)
 {
+    // The same music is not restarted when it is not needed.
+    if (m_playingPath == file.getPosixName()
+            && ms_finished == NULL && finished == NULL) {
+        return;
+    }
+
     stopMusic();
+    m_playingPath = file.getPosixName();
 
     int loops = -1;
     if (finished) {
@@ -155,6 +162,7 @@ SDLSoundAgent::stopMusic()
         delete ms_finished;
         ms_finished = NULL;
     }
+    m_playingPath = "";
 }
 //-----------------------------------------------------------------
 /**

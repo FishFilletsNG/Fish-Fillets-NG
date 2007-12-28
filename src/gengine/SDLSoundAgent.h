@@ -14,6 +14,7 @@ class SDLSoundAgent : public SoundAgent {
     private:
     static BaseMsg *ms_finished;
     Mix_Music *m_music;
+    std::string m_playingPath;
     int m_soundVolume;
 
     private:
