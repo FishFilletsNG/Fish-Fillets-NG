@@ -23,6 +23,7 @@
 #include "UnknownMsgException.h"
 #include "minmax.h"
 
+#include <stdlib.h> //getenv
 #include <string.h> //strlen
 #include <locale.h> //setlocale
 

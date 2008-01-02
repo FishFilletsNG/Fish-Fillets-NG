@@ -8,6 +8,7 @@
  */
 #include "StringTool.h"
 
+#include <stdlib.h>
 #include <sstream>
 
 //-----------------------------------------------------------------

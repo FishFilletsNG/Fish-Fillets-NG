@@ -11,6 +11,8 @@
 #include "Rules.h"
 #include "minmax.h"
 
+#include <string.h>
+
 //-----------------------------------------------------------------
     Landslip::Landslip(const ModelList &models)
 : m_models(models)
