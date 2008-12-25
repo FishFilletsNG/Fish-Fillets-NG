@@ -14,14 +14,40 @@
 
 //-----------------------------------------------------------------
 /**
+ * Prepare color values
+ * based on the given shape and weight.
+ */
+    void
+ShapeBuilder::prepareColor(SDL_Color *color, const Shape *shape,
+        Cube::eWeight weight)
+{
+    static const SDL_Color LIGHT_BLUE = {128, 128, 255, 255};
+    static const SDL_Color HEAVY_BLUE = {0, 0, 255, 255};
+    static const SDL_Color GRAY = {128, 128, 128, 255};
+
+    if (NULL == color) {
+        return;
+    }
+
+    switch (weight) {
+        case Cube::LIGHT:
+            *color = LIGHT_BLUE;
+            break;
+        case Cube::HEAVY:
+            *color = HEAVY_BLUE;
+            break;
+        default:
+            *color = GRAY;
+            break;
+    }
+}
+//-----------------------------------------------------------------
+/**
  * Create new image for the given shape.
  */
     SDL_Surface *
 ShapeBuilder::createImage(const Shape *shape, Cube::eWeight weight)
 {
-    static const SDL_Color LIGHT_BLUE = {128, 128, 255, 255};
-    static const SDL_Color HEAVY_BLUE = {0, 0, 255, 255};
-    static const SDL_Color GRAY = {128, 128, 128, 255};
     static const SDL_Color TRANSPARENT = {255, 0, 255, 255};
 
     SDL_Surface *surface = SurfaceTool::createTransparent(
@@ -33,17 +59,7 @@ ShapeBuilder::createImage(const Shape *shape, Cube::eWeight weight)
     rect.h = View::SCALE;
 
     SDL_Color color;
-    switch (weight) {
-        case Cube::LIGHT:
-            color = LIGHT_BLUE;
-            break;
-        case Cube::HEAVY:
-            color = HEAVY_BLUE;
-            break;
-        default:
-            color = GRAY;
-            break;
-    }
+    prepareColor(&color, shape, weight);
 
     Shape::const_iterator end = shape->marksEnd();
     for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {

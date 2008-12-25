@@ -17,6 +17,8 @@ class ShapeBuilder {
         * ShapeBuilder is not meant to be instantiated.
          */
         ShapeBuilder() {}
+        static void prepareColor(SDL_Color *color, const Shape *shape,
+                Cube::eWeight weight);
     public:
         static SDL_Surface *createImage(const Shape *shape, Cube::eWeight weight);
 };
