@@ -267,9 +267,10 @@ Level::nextPlayerAction()
 {
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
-        bool wasSolvable = room->isSolvable();
         std::string oldMoves = room->stepCounter()->getMoves();
         room->nextRound(getInput());
+        // The old positions are now occupied, so check the isSolvable().
+        bool wasSolvable = room->isSolvable();
 
         unsigned int stepsAfter = room->stepCounter()->getStepCount();
         if (wasSolvable && stepsAfter != oldMoves.size()) {
