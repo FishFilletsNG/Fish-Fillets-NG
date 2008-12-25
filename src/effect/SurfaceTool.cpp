@@ -35,9 +35,30 @@ SurfaceTool::createEmpty(SDL_Surface *surface, int width, int height)
             surface->format->Bmask,
             surface->format->Amask);
     if (NULL == result) {
-        throw SDLException(ExInfo("ConvertSurface"));
+        throw SDLException(ExInfo("CreateRGBSurface"));
     }
     return result;
+}
+//-----------------------------------------------------------------
+/**
+ * Return new surface with transparent background.
+ */
+    SDL_Surface *
+SurfaceTool::createTransparent(int w, int h, const SDL_Color &transparent)
+{
+    SDL_Surface *surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCCOLORKEY,
+            w, h, 32,
+            0, 0, 0, 0);
+    if (NULL == surface) {
+        throw SDLException(ExInfo("CreateRGBSurface"));
+    }
+
+    Uint32 transparentKey = SDL_MapRGB(surface->format,
+            transparent.r, transparent.g, transparent.b);
+    SDL_SetColorKey(surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, transparentKey);
+
+    SurfaceTool::alphaFill(surface, NULL, transparent);
+    return surface;
 }
 //-----------------------------------------------------------------
 /**

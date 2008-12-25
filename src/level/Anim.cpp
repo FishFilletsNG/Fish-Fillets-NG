@@ -82,6 +82,16 @@ Anim::addAnim(const std::string &name, const Path &picture, eSide side)
 }
 //-----------------------------------------------------------------
 /**
+ * Add prepared picture to anim,
+ * default side is left side.
+ */
+    void
+Anim::addAnim(const std::string &name, SDL_Surface *new_image, eSide side)
+{
+    m_animPack[side]->addRes(name, new_image);
+}
+//-----------------------------------------------------------------
+/**
  * Run this animation.
  * Nothing is changed when animation is already running.
  */

@@ -20,6 +20,7 @@
 #include "ModelFactory.h"
 #include "Room.h"
 #include "RopeDecor.h"
+#include "ShapeBuilder.h"
 
 #include "EffectNone.h"
 #include "EffectMirror.h"
@@ -209,7 +210,13 @@ script_model_addAnim(lua_State *L) throw()
             luaL_optint(L, 4, Anim::SIDE_LEFT));
 
     Cube *model = getModel(L, model_index);
-    model->anim()->addAnim(anim_name, Path::dataReadPath(picture), lookDir);
+    if (picture[0] == '\0') {
+        model->anim()->addAnim(anim_name,
+                ShapeBuilder::createImage(model->shape(), model->getWeight()),
+                lookDir);
+    } else {
+        model->anim()->addAnim(anim_name, Path::dataReadPath(picture), lookDir);
+    }
     END_NOEXCEPTION;
     return 0;
 }

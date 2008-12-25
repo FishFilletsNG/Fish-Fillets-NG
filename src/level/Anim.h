@@ -39,6 +39,8 @@ class Anim : public NoCopy {
 
         void addAnim(const std::string &name, const Path &picture,
                 eSide side=SIDE_LEFT);
+        void addAnim(const std::string &name, SDL_Surface *new_image,
+                eSide side=SIDE_LEFT);
         void runAnim(const std::string &name, int start_phase=0);
         void setAnim(const std::string &name, int phase);
         void useSpecialAnim(const std::string &name, int phase);
