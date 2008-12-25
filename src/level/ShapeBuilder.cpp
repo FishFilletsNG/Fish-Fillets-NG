@@ -21,25 +21,44 @@
 ShapeBuilder::prepareColor(SDL_Color *color, const Shape *shape,
         Cube::eWeight weight)
 {
-    static const SDL_Color LIGHT_BLUE = {128, 128, 255, 255};
-    static const SDL_Color HEAVY_BLUE = {0, 0, 255, 255};
-    static const SDL_Color GRAY = {128, 128, 128, 255};
-
     if (NULL == color) {
         return;
     }
 
+    color->r = 0;
+    color->g = 0;
+    color->b = 0;
+    color->unused = 255;
+
     switch (weight) {
         case Cube::LIGHT:
-            *color = LIGHT_BLUE;
+            color->g = ShapeBuilder::calcShapeHash(shape) % 255;
+            color->r = 255 - color->g;
             break;
         case Cube::HEAVY:
-            *color = HEAVY_BLUE;
+            color->b = 50 + ShapeBuilder::calcShapeHash(shape) % (255 - 50);
             break;
         default:
-            *color = GRAY;
+            color->r = 128;
+            color->g = 128;
+            color->b = 128;
             break;
     }
+}
+//-----------------------------------------------------------------
+/**
+ * Calc an almost unique hash of the shape.
+ */
+    Uint32
+ShapeBuilder::calcShapeHash(const Shape *shape)
+{
+    Uint32 hash = 0;
+    Shape::const_iterator end = shape->marksEnd();
+    for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
+        hash = 31 * hash + i->getX();
+        hash = 31 * hash + i->getY();
+    }
+    return hash;
 }
 //-----------------------------------------------------------------
 /**

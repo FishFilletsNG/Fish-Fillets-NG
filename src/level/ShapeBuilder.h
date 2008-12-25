@@ -19,6 +19,7 @@ class ShapeBuilder {
         ShapeBuilder() {}
         static void prepareColor(SDL_Color *color, const Shape *shape,
                 Cube::eWeight weight);
+        static Uint32 calcShapeHash(const Shape *shape);
     public:
         static SDL_Surface *createImage(const Shape *shape, Cube::eWeight weight);
 };
