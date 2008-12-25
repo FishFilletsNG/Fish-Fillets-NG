@@ -137,13 +137,14 @@ Rules::checkDead(Cube::eAction lastAction)
                 break;
             case Cube::ACTION_MOVE:
                 dead = checkDeadMove();
-                if (!dead) {
-                    dead = checkDeadStress();
-                }
                 break;
             default:
                 dead = false;
                 break;
+        }
+
+        if (!dead) {
+            dead = checkDeadStress();
         }
 
         if (dead) {
