@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include "Environ.h"
+#include "LogicException.h"
 
 //-----------------------------------------------------------------
 void
@@ -67,6 +68,21 @@ OptionParams::getType(eType type) const
                     .addInfo("type", type));
     }
     return "unknown";
+}
+//-----------------------------------------------------------------
+/**
+ * Throws LogicException when the given option name or value is invalid.
+ */
+void
+OptionParams::checkValidity(const std::string &name, const std::string &/*value*/) const
+{
+    t_params::const_iterator it = m_params.find(name);
+    if (m_params.end() == it) {
+        throw LogicException(ExInfo("unknown option")
+                .addInfo("name", name));
+    }
+
+    //TODO: check value type
 }
 
 

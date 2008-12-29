@@ -38,6 +38,7 @@ class OptionParams : public NoCopy {
 
         std::string getHelp(const Environ *options) const;
         std::string getConfig(const Environ *options) const;
+        void checkValidity(const std::string &name, const std::string &value) const;
 };
 
 

@@ -178,12 +178,12 @@ OptionAgent::parseDashOpt(const std::string &arg,
 //-----------------------------------------------------------------
     void
 OptionAgent::parseParamOpt(const std::string &arg,
-                const OptionParams &/*params*/)
+                const OptionParams &params)
 {
-    //TODO: check params type
     std::string name;
     std::string value;
     if (splitOpt(arg, &name, &value)) {
+        params.checkValidity(name, value);
         setParam(name, value);
     }
     else {
