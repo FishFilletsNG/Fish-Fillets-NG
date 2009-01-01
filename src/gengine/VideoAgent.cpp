@@ -125,6 +125,17 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     //TODO: check VideoModeOK and available ListModes
     SDL_Surface *newScreen =
         SDL_SetVideoMode(screen_width, screen_height, screen_bpp, videoFlags);
+    if (NULL == newScreen && (videoFlags & SDL_FULLSCREEN)) {
+        LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")
+                .addInfo("width", screen_width)
+                .addInfo("height", screen_height)
+                .addInfo("bpp", screen_bpp));
+
+        videoFlags = videoFlags & ~SDL_FULLSCREEN;
+        newScreen = SDL_SetVideoMode(screen_width, screen_height, screen_bpp,
+                videoFlags);
+    }
+
     if (newScreen) {
         m_screen = newScreen;
         //NOTE: must be two times to change MouseState
