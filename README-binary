@@ -1,0 +1,29 @@
+Fish Fillets - Next Generation
+http://fillets.sf.net
+
+//-----------------------------------------------------------------
+How to run
+----------
+1. Download fillets-ng-data from http://fillets.sourceforge.net/download.php
+2. Extract data
+3. Run: ./fillets systemdir=path/to/data
+
+//-----------------------------------------------------------------
+Controls
+--------
+Up, down, left and right arrow keys control the current fish.
+Use space bar to switch between the fish.
+
+See also "How to Play" data/doc/html/manual.html
+
+restart level - Backspace
+undo - -
+help - F1
+save game - F2
+load game - F3
+show/hide move counter - F5
+show/hide subtitles - F6
+game menu - F10
+fullscreen - F11
+faster game - Shift
+
