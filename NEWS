@@ -1,3 +1,11 @@
+Fish Fillets NG - 0.8.1
+* Two extra levels (by Stephan Barth and Mirek Olsak).
+* Added support for translated images (by Leonid Myravjev).
+* Prevented music restart on undo.
+* Fixed checking for solvable room before undo saving.
+* Fixed checking for second dead fish.
+
+
 Fish Fillets NG - 0.8.0
 * Undo (on key '-')
 * Five extra levels (by Mirek Olsak)
