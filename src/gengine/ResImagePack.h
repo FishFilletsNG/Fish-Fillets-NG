@@ -11,6 +11,8 @@ class Path;
  * Image resources and image loading.
  */
 class ResImagePack : public ResourcePack<SDL_Surface*> {
+    private:
+        static Path localizedPath(const Path &original);
     protected:
         virtual void unloadRes(SDL_Surface *res);
     public:
