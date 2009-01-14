@@ -10,6 +10,7 @@
 
 #include "Log.h"
 #include "OptionAgent.h"
+#include "Dialog.h"
 #include "FsPath.h"
 #include "PathException.h"
 
@@ -82,7 +83,7 @@ Path::dataWritePath(const std::string &file)
 Path::dataSystemPath(const std::string &file)
 {
     std::string systemdir = OptionAgent::agent()->getParam("systemdir");
-    return Path(FsPath::join(systemdir, file));
+    return constructPath(systemdir, file);
 }
 //-----------------------------------------------------------------
 /**
@@ -93,7 +94,60 @@ Path::dataSystemPath(const std::string &file)
 Path::dataUserPath(const std::string &file)
 {
     std::string userdir = OptionAgent::agent()->getParam("userdir");
-    return Path(FsPath::join(userdir, file));
+    return constructPath(userdir, file);
+}
+//-----------------------------------------------------------------
+/**
+ * Create path to the given file in the given directory.
+ * Tries to use path to a localized resource if it exists.
+ */
+    Path
+Path::constructPath(const std::string &dir, const std::string &file)
+{
+    std::string localized = localizePath(file);
+    Path localizedPath = Path(FsPath::join(dir, localized));
+
+    if (localized == file) {
+        return localizedPath;
+    } else if (localizedPath.exists()) {
+        LOG_INFO(ExInfo("localized")
+                .addInfo("path", localizedPath.getNative()));
+        return localizedPath;
+    } else {
+        return Path(FsPath::join(dir, file));
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Return path to a localized resource or the original path.
+ * The localized path has format: <name>__<lang>.<extension>
+ *
+ * @param original original path
+ * @return localized path if it is meaningful or the original path
+ */
+    std::string
+Path::localizePath(const std::string &original)
+{
+    std::string::size_type dotPos = original.rfind('.');
+    if (dotPos == std::string::npos) {
+        return original;
+    }
+
+    std::string lang = OptionAgent::agent()->getParam("lang");
+    if (Dialog::DEFAULT_LANG == lang || lang.empty()) {
+        return original;
+    }
+
+    std::string appendix = "__" + lang;
+
+    std::string::size_type dirPos = original.rfind('/');
+    if (dirPos != std::string::npos && dotPos < dirPos) {
+        return original;
+    }
+
+    std::string path = original;
+    path.insert(dotPos, appendix);
+    return path;
 }
 
 //-----------------------------------------------------------------

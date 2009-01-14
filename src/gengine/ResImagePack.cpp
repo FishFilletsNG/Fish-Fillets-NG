@@ -11,48 +11,9 @@
 #include "Path.h"
 #include "ImgException.h"
 #include "SDLException.h"
-#include "OptionAgent.h"
-#include "Dialog.h"
 
 #include "SDL_image.h"
 
-//-----------------------------------------------------------------
-/**
- * Return path to a localized image or the original path.
- * The localized path has format: <name>__<lang>.<extension>
- *
- * @param original original path
- * @return localized path if it exists or the original path
- */
-Path
-ResImagePack::localizedPath(const Path &original)
-{
-    std::string path = original.getPosixName();
-    std::string::size_type dotPos = path.rfind('.');
-    if (dotPos == std::string::npos) {
-        return original;
-    }
-
-    std::string lang = OptionAgent::agent()->getParam("lang");
-    if (Dialog::DEFAULT_LANG == lang || lang.empty()) {
-        return original;
-    }
-
-    std::string appendix = "__" + lang;
-
-    std::string::size_type dirPos = path.rfind('/');
-    if (dirPos != std::string::npos && dotPos < dirPos) {
-        return original;
-    }
-
-    path.insert(dotPos, appendix);
-    Path localized = Path::dataReadPath(path);
-    if (localized.exists()) {
-        return localized;
-    } else {
-        return original;
-    }
-}
 //-----------------------------------------------------------------
 /**
  * Load unshared image from file
@@ -65,17 +26,16 @@ ResImagePack::localizedPath(const Path &original)
 SDL_Surface *
 ResImagePack::loadImage(const Path &file)
 {
-    Path localized = localizedPath(file);
-    SDL_Surface *raw_image = IMG_Load(localized.getNative().c_str());
+    SDL_Surface *raw_image = IMG_Load(file.getNative().c_str());
     if (NULL == raw_image) {
         throw ImgException(ExInfo("Load")
-                .addInfo("file", localized.getNative()));
+                .addInfo("file", file.getNative()));
     }
 
     SDL_Surface *surface = SDL_DisplayFormatAlpha(raw_image);
     if (NULL == surface) {
         throw SDLException(ExInfo("DisplayFormat")
-                .addInfo("file", localized.getNative()));
+                .addInfo("file", file.getNative()));
     }
     SDL_FreeSurface(raw_image);
 
