@@ -38,7 +38,7 @@ ResImagePack::localizedPath(const Path &original)
         return original;
     }
 
-    std::string appendix = "_" + lang;
+    std::string appendix = "__" + lang;
 
     std::string::size_type dirPos = path.rfind('/');
     if (dirPos != std::string::npos && dotPos < dirPos) {

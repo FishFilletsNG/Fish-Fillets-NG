@@ -81,6 +81,9 @@ Path::dataWritePath(const std::string &file)
     Path
 Path::dataSystemPath(const std::string &file)
 {
+    if(file[0] == '/')
+      return Path(file);
+    
     std::string systemdir = OptionAgent::agent()->getParam("systemdir");
     return Path(FsPath::join(systemdir, file));
 }
@@ -92,8 +95,9 @@ Path::dataSystemPath(const std::string &file)
     Path
 Path::dataUserPath(const std::string &file)
 {
-    std::string userdir = OptionAgent::agent()->getParam("userdir");
-    return Path(FsPath::join(userdir, file));
+		std::string userdir = OptionAgent::agent()->getParam("userdir");
+		return Path(FsPath::join(userdir, file));
+			
 }
 
 //-----------------------------------------------------------------
