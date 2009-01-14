@@ -19,7 +19,7 @@
 //-----------------------------------------------------------------
 /**
  * Return path to a localized image or the original path.
- * The localized path has format: <name>_<lang>.<extension>
+ * The localized path has format: <name>__<lang>.<extension>
  *
  * @param original original path
  * @return localized path if it exists or the original path
