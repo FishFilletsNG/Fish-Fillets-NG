@@ -12,8 +12,6 @@ class Dialog;
  * Multi-language dialogs pack.
  */
 class ResDialogPack : public ResourcePack<Dialog*> {
-    protected:
-        virtual void unloadRes(Dialog *res);
     private:
         int matchScore(const std::string &first,
                 const std::string &second) const;
@@ -23,6 +21,7 @@ class ResDialogPack : public ResourcePack<Dialog*> {
         virtual const char *getName() const { return "dialog_pack"; }
         const Dialog *findDialogHard(const std::string &name);
         const Dialog *findDialogSpeech(const std::string &name);
+        virtual void unloadRes(Dialog *res);
 };
 
 #endif

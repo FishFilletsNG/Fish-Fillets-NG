@@ -11,8 +11,14 @@
 #include "Path.h"
 #include "ImgException.h"
 #include "SDLException.h"
+#include "Log.h"
 
 #include "SDL_image.h"
+
+// The set cache size allow to contain all fish images and animations
+// from level 'barrel'.
+ResCache<SDL_Surface*> *ResImagePack::CACHE = new ResCache<SDL_Surface*>(
+        265, new ResImagePack(false));
 
 //-----------------------------------------------------------------
 /**
@@ -51,13 +57,27 @@ ResImagePack::loadImage(const Path &file)
 void
 ResImagePack::addImage(const std::string &name, const Path &file)
 {
-    SDL_Surface *surface = loadImage(file);
+    SDL_Surface *surface;
+    if (m_caching_enabled) {
+        surface = CACHE->get(file.getPosixName());
+        if (!surface) {
+            surface = loadImage(file);
+            CACHE->put(file.getPosixName(), surface);
+        }
+    } else {
+        surface = loadImage(file);
+    }
+
     addRes(name, surface);
 }
 //-----------------------------------------------------------------
 void
 ResImagePack::unloadRes(SDL_Surface *res)
 {
-    SDL_FreeSurface(res);
+    if (m_caching_enabled) {
+        CACHE->release(res);
+    } else {
+        SDL_FreeSurface(res);
+    }
 }
 

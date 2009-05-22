@@ -8,10 +8,9 @@
  * Pack of color aliases.
  */
 class ResColorPack : public ResourcePack<Color*> {
-    protected:
-        virtual void unloadRes(Color *res) { delete res; }
     public:
         virtual const char *getName() const { return "color_pack"; }
+        virtual void unloadRes(Color *res) { delete res; }
 };
 
 #endif

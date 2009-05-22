@@ -4,6 +4,7 @@
 class Path;
 
 #include "ResourcePack.h"
+#include "ResCache.h"
 
 #include "SDL.h"
 
@@ -11,13 +12,18 @@ class Path;
  * Image resources and image loading.
  */
 class ResImagePack : public ResourcePack<SDL_Surface*> {
-    protected:
-        virtual void unloadRes(SDL_Surface *res);
+    private:
+        static ResCache<SDL_Surface*> *CACHE;
+        bool m_caching_enabled;
     public:
+        explicit ResImagePack(bool caching_enabled=true) {
+            m_caching_enabled = caching_enabled;
+        }
         virtual const char *getName() const { return "image_pack"; }
 
         static SDL_Surface *loadImage(const Path &file);
         void addImage(const std::string &name, const Path &file);
+        virtual void unloadRes(SDL_Surface *res);
 };
 
 #endif

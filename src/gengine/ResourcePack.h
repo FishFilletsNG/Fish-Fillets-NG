@@ -22,9 +22,13 @@ class ResourcePack : public INamed {
     typedef typename t_reses::iterator t_resIterator;
     typedef typename t_reses::const_iterator t_constIterator;
     t_reses m_reses;
-    virtual void unloadRes(T res) = 0;
 
     public:
+    /**
+     * Frees the given resource.
+     */
+    virtual void unloadRes(T res) = 0;
+
     //NOTE: we cannot call virtual functions from desctructor,
     // call removeAll before delete
     virtual ~ResourcePack()
