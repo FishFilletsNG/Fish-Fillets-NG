@@ -42,6 +42,14 @@ MovieState::own_initState()
 }
 //-----------------------------------------------------------------
     void
+MovieState::own_updateState()
+{
+    if(m_movie->GetStatus() != SMPEG_PLAYING) {
+        quitState();
+    }
+}
+//-----------------------------------------------------------------
+    void
 MovieState::own_cleanState()
 {
     delete m_movie;

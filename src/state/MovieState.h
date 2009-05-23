@@ -16,7 +16,7 @@ class MovieState : public GameState {
         SDL_Movie *m_movie;
     protected:
         virtual void own_initState();
-        virtual void own_updateState() {}
+        virtual void own_updateState();
         virtual void own_pauseState() {}
         virtual void own_resumeState() {}
         virtual void own_cleanState();
