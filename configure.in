@@ -96,6 +96,14 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 )
 
 ###################################################
+# Check for SMPEG
+AC_CHECK_LIB([smpeg], [SMPEG_new], [have_smpeg="yes"], [have_smpeg="no"])
+if test "x$have_smpeg" = xyes; then
+    SDL_LIBS="-lsmpeg $SDL_LIBS"
+    AC_DEFINE(HAVE_SMPEG)
+fi
+
+###################################################
 # Test X11
 X_LIBS=""
 have_x11="no"
@@ -203,7 +211,7 @@ AC_OUTPUT([
 AC_MSG_RESULT([
 
 Fish Fillets NG are now configured.
-   Checked components: X11=$have_x11, WINDRES=$have_windres, FRIBIDI=$have_fribidi
+   Checked components: X11=$have_x11, WINDRES=$have_windres, FRIBIDI=$have_fribidi, SMPEG=$have_smpeg
 
 You can now run make.
 ])

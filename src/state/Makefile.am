@@ -3,5 +3,5 @@ INCLUDES = -I@top_srcdir@/src/gengine -I@top_srcdir@/src/effect -I@top_srcdir@/s
 
 noinst_LIBRARIES = libstate.a
 
-libstate_a_SOURCES = DemoInput.cpp DemoInput.h DemoMode.cpp DemoMode.h GameInput.cpp GameInput.h PosterState.cpp PosterState.h PosterScroller.cpp PosterScroller.h demo-script.cpp demo-script.h
+libstate_a_SOURCES = DemoInput.cpp DemoInput.h DemoMode.cpp DemoMode.h GameInput.cpp GameInput.h PosterState.cpp PosterState.h PosterScroller.cpp PosterScroller.h MovieState.cpp MovieState.h SDL_movie.h demo-script.cpp demo-script.h
 

@@ -18,10 +18,11 @@ class BaseMsg;
 class SoundAgent : public BaseAgent {
     AGENT(SoundAgent, Name::SOUND_NAME);
     protected:
-        void own_init();
+        virtual void own_init();
         virtual void setSoundVolume(int volume) = 0;
         virtual void setMusicVolume(int volume) = 0;
     public:
+        virtual void reinit();
         virtual int playSound(Mix_Chunk *sound, int volume,
                 int loops=0) = 0;
 

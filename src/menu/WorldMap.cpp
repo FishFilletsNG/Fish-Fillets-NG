@@ -30,6 +30,8 @@
 #include "MenuOptions.h"
 #include "DemoMode.h"
 #include "PosterScroller.h"
+#include "MovieState.h"
+#include "Log.h"
 
 //-----------------------------------------------------------------
 WorldMap::WorldMap()
@@ -135,8 +137,6 @@ WorldMap::own_resumeState()
         }
         m_levelStatus->setRunning(false);
 
-        SoundAgent::agent()->playMusic(
-                Path::dataReadPath("music/menu.ogg"), NULL);
         OptionAgent *options = OptionAgent::agent();
         options->setParam("caption", findDesc("menu"));
         options->setParam("screen_width", m_bg->getW());
@@ -144,6 +144,9 @@ WorldMap::own_resumeState()
         VideoAgent::agent()->initVideoMode();
     }
     m_selected = nextLevel;
+
+    SoundAgent::agent()->playMusic(
+            Path::dataReadPath("music/menu.ogg"), NULL);
 }
 //-----------------------------------------------------------------
 /**
@@ -313,7 +316,17 @@ WorldMap::findDesc(const std::string &codename) const
     void
 WorldMap::runIntro()
 {
-    //TODO: intro as video
+#ifdef HAVE_SMPEG
+    Path movieFile = Path::dataReadPath("images/menu/intro.mpg");
+    if (movieFile.exists()) {
+        pushState(new MovieState(movieFile));
+        return;
+    }
+
+    LOG_WARNING(ExInfo("cannot find intro")
+            .addInfo("file", movieFile.getNative()));
+#endif
+
     pushState(new DemoMode(Path::dataReadPath("script/share/demo_intro.lua")));
 }
 //-----------------------------------------------------------------

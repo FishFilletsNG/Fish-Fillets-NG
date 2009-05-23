@@ -19,14 +19,23 @@
     void
 SoundAgent::own_init()
 {
+    reinit();
+
+    registerWatcher("volume_sound");
+    registerWatcher("volume_music");
+}
+//-----------------------------------------------------------------
+/**
+ * Reininitalize the sound system.
+ */
+    void
+SoundAgent::reinit()
+{
     OptionAgent *options = OptionAgent::agent();
     options->setDefault("volume_sound", 90);
     options->setDefault("volume_music", 50);
     setSoundVolume(options->getAsInt("volume_sound"));
     setMusicVolume(options->getAsInt("volume_music"));
-
-    registerWatcher("volume_sound");
-    registerWatcher("volume_music");
 }
 //-----------------------------------------------------------------
 /**

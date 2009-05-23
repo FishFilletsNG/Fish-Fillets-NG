@@ -147,7 +147,7 @@ StateManager::findIter(GameState *who)
 /**
  * Preserve stack consistency.
  * - Node at top must be running.
- * - Only running node which allowBg have running states below.
+ * - Only running node with allowBg have running states below.
  * @throws LogicException stack is empty
  */
 void

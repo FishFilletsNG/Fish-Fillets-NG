@@ -27,6 +27,23 @@ BaseMsg *SDLSoundAgent::ms_finished = NULL;
     void
 SDLSoundAgent::own_init()
 {
+    SoundAgent::own_init();
+}
+//-----------------------------------------------------------------
+    void
+SDLSoundAgent::own_shutdown()
+{
+    stopMusic();
+    Mix_CloseAudio();
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+}
+//-----------------------------------------------------------------
+/**
+ * Reinit the sound subsystem.
+ */
+    void
+SDLSoundAgent::reinit()
+{
     m_music = NULL;
     m_soundVolume = MIX_MAX_VOLUME;
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
@@ -40,15 +57,7 @@ SDLSoundAgent::own_init()
     }
     Mix_AllocateChannels(16);
 
-    SoundAgent::own_init();
-}
-//-----------------------------------------------------------------
-    void
-SDLSoundAgent::own_shutdown()
-{
-    stopMusic();
-    Mix_CloseAudio();
-    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    SoundAgent::reinit();
 }
 //-----------------------------------------------------------------
 /**

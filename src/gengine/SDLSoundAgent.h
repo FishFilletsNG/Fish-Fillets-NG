@@ -25,6 +25,7 @@ class SDLSoundAgent : public SoundAgent {
     protected:
         virtual void own_init();
         virtual void own_shutdown();
+        virtual void reinit();
 
         virtual void setSoundVolume(int volume);
         virtual void setMusicVolume(int volume);
