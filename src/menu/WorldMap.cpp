@@ -71,7 +71,6 @@ WorldMap::~WorldMap()
     void
 WorldMap::prepareBg()
 {
-    //TODO: allow to set differect images
     m_bg = new LayeredPicture(
             Path::dataReadPath("images/menu/map.png"),
             V2(0, 0),

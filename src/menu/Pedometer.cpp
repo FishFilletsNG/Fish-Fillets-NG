@@ -59,7 +59,6 @@ Pedometer::~Pedometer()
     void
 Pedometer::prepareBg()
 {
-    //TODO: allow to set differect images
     SDL_Surface *bgSurface = ResImagePack::loadImage(
             Path::dataReadPath("images/menu/map.png"));
     NodeDrawer drawer;
@@ -85,7 +84,6 @@ Pedometer::prepareRack()
     static const int POS_X = 193;
     static const int POS_Y = 141;
 
-    //TODO: allow to set differect images
     m_rack = new LayeredPicture(
             Path::dataReadPath("images/menu/pedometer.png"),
             V2(POS_X, POS_Y),

@@ -23,7 +23,6 @@
 //-----------------------------------------------------------------
 NodeDrawer::NodeDrawer()
 {
-    //TODO: allow to set font and color
     m_font = new Font(Path::dataReadPath("font/font_menu.ttf"), 22);
 
     m_imagePack = new ResImagePack();
