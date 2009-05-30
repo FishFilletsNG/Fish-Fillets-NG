@@ -5,7 +5,7 @@ AC_CANONICAL_TARGET
 # The AM_INIT_AUTOMAKE macro tells automake the name and version number
 # of the software package so it can generate rules for building a source
 # archive.
-AM_INIT_AUTOMAKE(fillets-ng, 0.8.1)
+AM_INIT_AUTOMAKE(fillets-ng, 0.8.2)
 
 # Checks for programs.
 AC_PROG_CXX
@@ -96,14 +96,6 @@ AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
 )
 
 ###################################################
-# Check for SMPEG
-AC_CHECK_LIB([smpeg], [SMPEG_new], [have_smpeg="yes"], [have_smpeg="no"])
-if test "x$have_smpeg" = xyes; then
-    SDL_LIBS="-lsmpeg $SDL_LIBS"
-    AC_DEFINE(HAVE_SMPEG)
-fi
-
-###################################################
 # Test X11
 X_LIBS=""
 have_x11="no"
@@ -152,6 +144,15 @@ fi
 AM_CONDITIONAL(WITH_BOOST, test "x$BOOSTPFX" != x)
 AC_SUBST(BOOST_CFLAGS)
 AC_SUBST(BOOST_LIBS)
+
+###################################################
+# Check for SMPEG
+AC_CHECK_LIB([smpeg], [SMPEG_new], [have_smpeg="yes"], [have_smpeg="no"],
+             $SDL_CFLAGS $SDL_LIBS)
+if test "x$have_smpeg" = xyes; then
+    SDL_LIBS="-lsmpeg $SDL_LIBS"
+    AC_DEFINE(HAVE_SMPEG)
+fi
 
 ###################################################
 # Check for windres for win32 icon.
