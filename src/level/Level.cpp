@@ -47,6 +47,7 @@
     m_desc = NULL;
     m_restartCounter = 1;
     m_insideUndo = false;
+    m_wasDangerousMove = false;
     m_depth = depth;
     m_newRound = false;
     m_locker = new PhaseLocker();
@@ -228,7 +229,9 @@ Level::saveUndo(const std::string &oldMoves)
 
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
-        bool forceSave = room->stepCounter()->isDangerousMove();
+        // Forcing a new save prevents overwriting the last saved undo.
+        bool forceSave = m_wasDangerousMove;
+        m_wasDangerousMove = room->stepCounter()->isDangerousMove();
 
         std::string forceSaveValue = forceSave ? "true" : "false";
         m_levelScript->scriptDo("script_saveUndo(\""
@@ -271,6 +274,7 @@ Level::nextPlayerAction()
         room->nextRound(getInput());
         // The old positions are now occupied, so check the isSolvable().
         bool wasSolvable = room->isSolvable();
+        m_wasDangerousMove = m_wasDangerousMove || room->isFalling();
 
         unsigned int stepsAfter = room->stepCounter()->getStepCount();
         if (wasSolvable && stepsAfter != oldMoves.size()) {

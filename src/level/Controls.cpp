@@ -369,15 +369,14 @@ Controls::isPowerful() const
 }
 //-----------------------------------------------------------------
 /**
- * Returns true when active fish is doing a dangerous move.
+ * Returns true when the active fish is doing a dangerous move.
  */
 bool
 Controls::isDangerousMove() const
 {
     bool result = false;
     if (m_active != m_units.end()) {
-        result = (*m_active)->isPushing()
-            || (*m_active)->isMovingDown();
+        result = (*m_active)->isPushing();
     }
     return result;
 }

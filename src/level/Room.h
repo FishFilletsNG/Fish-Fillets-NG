@@ -72,6 +72,7 @@ class Room : public Drawable {
         bool cannotMove() const;
         bool isSolvable() const;
         bool isSolved() const;
+        bool isFalling() const { return m_lastAction == Cube::ACTION_FALL; }
         void checkActive();
         void unBusyUnits();
         const StepCounter *stepCounter() const;

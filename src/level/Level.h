@@ -43,6 +43,7 @@ class Level : public GameState, public CountAdvisor {
         CommandQueue *m_show;
         int m_restartCounter;
         bool m_insideUndo;
+        bool m_wasDangerousMove;
         MultiDrawer *m_background;
         StatusDisplay *m_statusDisplay;
     private:
