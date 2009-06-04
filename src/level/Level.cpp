@@ -273,8 +273,8 @@ Level::nextPlayerAction()
         bool wasSolvable = room->isSolvable();
         m_wasDangerousMove = m_wasDangerousMove || room->isFalling();
 
-        unsigned int stepsAfter = room->stepCounter()->getStepCount();
-        if (wasSolvable && stepsAfter != oldMoves.size()) {
+        bool seenByScript = room->stepCounter()->getStepCount() > 0;
+        if (wasSolvable && !room->isFalling() && seenByScript) {
             saveUndo(oldMoves);
         }
     }
