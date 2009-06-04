@@ -17,7 +17,8 @@ class LevelInput : public GameInput {
         static const int KEY_LOAD = 103;
         static const int KEY_RESTART = 104;
         static const int KEY_UNDO = 105;
-        static const int KEY_SHOW_STEPS = 106;
+        static const int KEY_REDO = 106;
+        static const int KEY_SHOW_STEPS = 107;
     private:
         Level *getLevel();
     protected:

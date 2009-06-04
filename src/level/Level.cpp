@@ -33,6 +33,7 @@
 #include "StatusDisplay.h"
 #include "Picture.h"
 #include "DialogStack.h"
+#include "StringTool.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -223,10 +224,6 @@ Level::updateLevel()
     void
 Level::saveUndo(const std::string &oldMoves)
 {
-    if (oldMoves.empty()) {
-        return;
-    }
-
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
         // Forcing a new save prevents overwriting the last saved undo.
@@ -257,7 +254,7 @@ Level::finishLevel()
         }
     }
     else if (m_countdown->isWrongEnough()) {
-        action_restart();
+        action_restart(1);
     }
 }
 //-----------------------------------------------------------------
@@ -333,6 +330,7 @@ Level::displaySaveStatus()
 Level::loadGame(const std::string &moves)
 {
     if (m_insideUndo) {
+        action_restart(0);
         if (m_levelScript->isRoom()) {
             m_levelScript->room()->setMoves(moves);
         }
@@ -383,10 +381,10 @@ Level::nextShowAction()
  * @return true
  */
     bool
-Level::action_restart()
+Level::action_restart(int increment)
 {
     own_cleanState();
-    m_restartCounter++;
+    m_restartCounter += increment;
     //NOTE: The script is just overridden by itself,
     // so planned shows and undo remain after restart.
     own_initState();
@@ -431,7 +429,7 @@ Level::action_load()
     Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
     if (file.exists()) {
         m_restartCounter--;
-        action_restart();
+        action_restart(1);
         m_levelScript->scriptInclude(file);
         m_insideUndo = false;
         m_levelScript->scriptDo("script_load()");
@@ -447,14 +445,12 @@ Level::action_load()
  * Naive undo by reloading the level.
  */
     bool
-Level::action_undo()
+Level::action_undo(int steps)
 {
     if (m_levelScript->isRoom()) {
         m_insideUndo = true;
-        m_restartCounter--;
-        action_restart();
-
-        m_levelScript->scriptDo("script_loadUndo()");
+        std::string strSteps = StringTool::toString(steps);
+        m_levelScript->scriptDo("script_loadUndo(" + strSteps + ")");
     }
     return true;
 }

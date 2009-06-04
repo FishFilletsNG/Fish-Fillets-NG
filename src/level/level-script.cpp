@@ -118,7 +118,7 @@ script_level_action_load(lua_State *L) throw()
 script_level_action_restart(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
-    bool sucess = getLevel(L)->action_restart();
+    bool sucess = getLevel(L)->action_restart(1);
     lua_pushboolean(L, sucess);
     END_NOEXCEPTION;
     //NOTE: return sucess

@@ -76,11 +76,11 @@ class Level : public GameState, public CountAdvisor {
         void loadGame(const std::string &moves);
         void loadReplay(const std::string &moves);
 
-        bool action_restart();
+        bool action_restart(int increment);
         bool action_move(char symbol);
         bool action_save();
         bool action_load();
-        bool action_undo();
+        bool action_undo(int steps);
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
