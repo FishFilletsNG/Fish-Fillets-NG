@@ -448,8 +448,11 @@ Level::action_undo(int steps)
 {
     if (m_levelScript->isRoom()) {
         m_insideUndo = true;
+
+        std::string moves = m_levelScript->room()->stepCounter()->getMoves();
         std::string strSteps = StringTool::toString(steps);
-        m_levelScript->scriptDo("script_loadUndo(" + strSteps + ")");
+        m_levelScript->scriptDo("script_loadUndo(\""
+               + moves + "\"," + strSteps + ")");
     }
     return true;
 }
