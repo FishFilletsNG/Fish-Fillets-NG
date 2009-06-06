@@ -11,8 +11,15 @@
 #include "Log.h"
 #include "Path.h"
 #include "ResImagePack.h"
-#include "EffectNone.h"
 #include "LogicException.h"
+#include "StringTool.h"
+
+#include "EffectNone.h"
+#include "EffectMirror.h"
+#include "EffectInvisible.h"
+#include "EffectReverse.h"
+#include "EffectZx.h"
+
 
 //-----------------------------------------------------------------
 /**
@@ -181,4 +188,94 @@ Anim::countAnimPhases(const std::string &anim, eSide side) const
 {
     return m_animPack[side]->countRes(anim);
 }
+//-----------------------------------------------------------------
+    void
+Anim::setEffect(const std::string &effectName) {
+    if (EffectNone::NAME == effectName) {
+        changeEffect(new EffectNone());
+    }
+    else if (EffectMirror::NAME == effectName) {
+        changeEffect(new EffectMirror());
+    }
+    else if (EffectInvisible::NAME == effectName) {
+        changeEffect(new EffectInvisible());
+    }
+    else if (EffectReverse::NAME == effectName) {
+        changeEffect(new EffectReverse());
+    }
+    else if (EffectZx::NAME == effectName) {
+        changeEffect(new EffectZx());
+    }
+    else {
+        ExInfo error = ExInfo("unknown view effect")
+            .addInfo("effect", effectName);
+        LOG_WARNING(error);
+    }
+}
 
+//-----------------------------------------------------------------
+static std::string
+encode(const std::string &input)
+{
+    std::string output = input;
+    StringTool::replace(output, "&", "&amp;");
+    StringTool::replace(output, ",", "&comma;");
+    return output;
+}
+//-----------------------------------------------------------------
+static std::string
+encode(int value)
+{
+    return StringTool::toString(value);
+}
+//-----------------------------------------------------------------
+static std::string
+decode(const std::string &input)
+{
+    std::string output = input;
+    StringTool::replace(output, "&comma;", ",");
+    StringTool::replace(output, "&amp;", "&");
+    return output;
+}
+//-----------------------------------------------------------------
+static int
+decodeInt(const std::string &input)
+{
+    bool ok;
+    int result = StringTool::readInt(input.c_str(), &ok);
+    if (!ok) {
+        LOG_WARNING(ExInfo("invalid int")
+                .addInfo("input", input));
+    }
+    return result;
+}
+//-----------------------------------------------------------------
+std::string
+Anim::getState() const
+{
+    //TODO: encode also other properties
+    std::string output;
+    output += encode(m_effect->getName());
+    output += "," + encode(m_viewShift.getX());
+    output += "," + encode(m_viewShift.getY());
+    return output;
+}
+//-----------------------------------------------------------------
+void
+Anim::restoreState(const std::string &state)
+{
+    StringTool::t_args values = StringTool::split(state, ',');
+    if (values.size() != 3) {
+        LOG_WARNING(ExInfo("invalid anim state")
+                .addInfo("state", state));
+        return;
+    }
+
+    int i = 0;
+    std::string effectName = decode(values[i++]);
+    int x = decodeInt(values[i++]);
+    int y = decodeInt(values[i++]);
+
+    setEffect(effectName);
+    m_viewShift = V2(x, y);
+}

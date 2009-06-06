@@ -22,12 +22,6 @@
 #include "RopeDecor.h"
 #include "ShapeBuilder.h"
 
-#include "EffectNone.h"
-#include "EffectMirror.h"
-#include "EffectInvisible.h"
-#include "EffectReverse.h"
-#include "EffectZx.h"
-
 #include "def-script.h"
 
 //-----------------------------------------------------------------
@@ -41,30 +35,6 @@ getLevelScript(lua_State *L)
 getModel(lua_State *L, int model_index)
 {
     return getLevelScript(L)->getModel(model_index);
-}
-//-----------------------------------------------------------------
-    static void
-setEffect(Cube *model, const std::string &effectName) {
-    if (EffectNone::NAME == effectName) {
-        model->anim()->changeEffect(new EffectNone());
-    }
-    else if (EffectMirror::NAME == effectName) {
-        model->anim()->changeEffect(new EffectMirror());
-    }
-    else if (EffectInvisible::NAME == effectName) {
-        model->anim()->changeEffect(new EffectInvisible());
-    }
-    else if (EffectReverse::NAME == effectName) {
-        model->anim()->changeEffect(new EffectReverse());
-    }
-    else if (EffectZx::NAME == effectName) {
-        model->anim()->changeEffect(new EffectZx());
-    }
-    else {
-        ExInfo error = ExInfo("unknown view effect")
-            .addInfo("effect", effectName);
-        LOG_WARNING(error);
-    }
 }
 
 //-----------------------------------------------------------------
@@ -329,7 +299,7 @@ script_model_setEffect(lua_State *L) throw()
     int model_index = luaL_checkint(L, 1);
     std::string effectName = luaL_checkstring(L, 2);
     Cube *model = getModel(L, model_index);
-    setEffect(model, effectName);
+    model->anim()->setEffect(effectName);
 
     END_NOEXCEPTION;
     return 0;
@@ -689,8 +659,8 @@ script_model_getExtraParams(lua_State *L) throw()
     lua_pushnumber(L, model->getWeight());
     lua_settable(L, -3);
 
-    lua_pushstring(L, "effect");
-    lua_pushstring(L, model->anim()->getEffectName());
+    lua_pushstring(L, "anim");
+    lua_pushstring(L, model->anim()->getState().c_str());
     lua_settable(L, -3);
 
     END_NOEXCEPTION;
@@ -720,14 +690,14 @@ script_model_change_setExtraParams(lua_State *L) throw()
     lua_gettable(L, 2);
     int weight = luaL_checkint(L, -1);
 
-    lua_pushstring(L, "effect");
+    lua_pushstring(L, "anim");
     lua_gettable(L, 2);
-    std::string effectName = luaL_checkstring(L, -1);
+    std::string animState = luaL_checkstring(L, -1);
 
     Cube *model = getModel(L, model_index);
     model->setOutDir((Dir::eDir)outDir, outCapacity, (Cube::eWeight)weight);
     model->setExtraParams();
-    setEffect(model, effectName);
+    model->anim()->restoreState(animState);
 
     END_NOEXCEPTION;
     return 0;
