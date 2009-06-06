@@ -13,6 +13,7 @@
 #include "PixelIterator.h"
 #include "Random.h"
 
+const char *EffectZx::NAME = "zx";
 const double EffectZx::STRIPE_STANDARD = 38.5;
 const double EffectZx::STRIPE_NARROW = 3.4;
 //-----------------------------------------------------------------

@@ -13,6 +13,8 @@ class EffectDisintegrate : public ViewEffect {
         int m_disint;
     public:
         EffectDisintegrate();
+        static const char *NAME;
+        virtual const char* getName() const { return NAME; }
         virtual void updateEffect();
         virtual bool isDisintegrated() const;
         virtual bool isInvisible() const;

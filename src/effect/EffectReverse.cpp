@@ -11,6 +11,7 @@
 #include "SurfaceLock.h"
 #include "PixelTool.h"
 
+const char *EffectReverse::NAME = "reverse";
 //-----------------------------------------------------------------
 /**
  * Reverse left and right.

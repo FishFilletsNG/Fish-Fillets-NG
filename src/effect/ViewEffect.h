@@ -13,6 +13,7 @@ class ViewEffect {
          * Update effect after blit.
          */
         virtual void updateEffect() {}
+        virtual const char* getName() const = 0;
         virtual bool isDisintegrated() const { return false; }
         virtual bool isInvisible() const { return false; }
         virtual void blit(SDL_Surface *screen, SDL_Surface *surface,

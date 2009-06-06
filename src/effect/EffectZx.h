@@ -22,6 +22,8 @@ class EffectZx : public ViewEffect {
         double m_stripeHeight;
     public:
         EffectZx();
+        static const char *NAME;
+        virtual const char* getName() const { return NAME; }
         virtual void updateEffect();
         virtual void blit(SDL_Surface *screen, SDL_Surface *surface,
                 int x, int y);

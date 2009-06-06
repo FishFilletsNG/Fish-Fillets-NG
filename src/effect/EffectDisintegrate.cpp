@@ -12,6 +12,7 @@
 #include "PixelTool.h"
 #include "Random.h"
 
+const char *EffectDisintegrate::NAME = "disintegrate";
 //-----------------------------------------------------------------
 /**
  * Start as not disintegrated.

@@ -11,6 +11,7 @@
 #include "SurfaceLock.h"
 #include "PixelTool.h"
 
+const char *EffectMirror::NAME = "mirror";
 //-----------------------------------------------------------------
 /**
  * Mirror effect. Draw left side inside.

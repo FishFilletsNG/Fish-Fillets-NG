@@ -306,19 +306,19 @@ script_model_setEffect(lua_State *L) throw()
     std::string effect_name = luaL_checkstring(L, 2);
 
     Cube *model = getModel(L, model_index);
-    if ("none" == effect_name) {
+    if (EffectNone::NAME == effect_name) {
         model->anim()->changeEffect(new EffectNone());
     }
-    else if ("mirror" == effect_name) {
+    else if (EffectMirror::NAME == effect_name) {
         model->anim()->changeEffect(new EffectMirror());
     }
-    else if ("invisible" == effect_name) {
+    else if (EffectInvisible::NAME == effect_name) {
         model->anim()->changeEffect(new EffectInvisible());
     }
-    else if ("reverse" == effect_name) {
+    else if (EffectReverse::NAME == effect_name) {
         model->anim()->changeEffect(new EffectReverse());
     }
-    else if ("zx" == effect_name) {
+    else if (EffectZx::NAME == effect_name) {
         model->anim()->changeEffect(new EffectZx());
     }
     else {

@@ -8,6 +8,7 @@
  */
 #include "EffectNone.h"
 
+const char *EffectNone::NAME = "none";
 //-----------------------------------------------------------------
 /**
  * Blit without special effect.
