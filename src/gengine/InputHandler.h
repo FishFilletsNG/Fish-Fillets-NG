@@ -28,6 +28,7 @@ class InputHandler : public InputProvider, public NoCopy {
         void mouseState(const V2 &loc, Uint8 buttons);
 
         virtual void keyEvent(const KeyStroke &/*stroke*/) {}
+        virtual void keyUp(const KeyStroke &/*stroke*/) {}
         virtual void mouseEvent(const MouseStroke &/*buttons*/) {}
 
         virtual bool isPressed(SDLKey key) const;

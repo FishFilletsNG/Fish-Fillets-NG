@@ -57,7 +57,12 @@ InputAgent::own_update()
                     m_handler->keyEvent(KeyStroke(event.key.keysym));
                 }
                 break;
-            case SDL_MOUSEBUTTONUP:
+            case SDL_KEYUP:
+                if (m_handler) {
+                    m_handler->keyUp(KeyStroke(event.key.keysym));
+                }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
                 if (m_handler) {
                     m_handler->mouseEvent(MouseStroke(event.button));
                 }

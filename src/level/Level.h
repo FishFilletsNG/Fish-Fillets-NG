@@ -42,7 +42,7 @@ class Level : public GameState, public CountAdvisor {
         LevelCountDown *m_countdown;
         CommandQueue *m_show;
         int m_restartCounter;
-        bool m_insideUndo;
+        int m_undoSteps;
         bool m_wasDangerousMove;
         MultiDrawer *m_background;
         StatusDisplay *m_statusDisplay;
@@ -54,9 +54,11 @@ class Level : public GameState, public CountAdvisor {
         void finishLevel();
         void nextLoadAction();
         void nextShowAction();
+        void nextUndoAction();
         void nextPlayerAction();
         void saveSolution();
         void displaySaveStatus();
+        bool isUndoing() const;
     protected:
         virtual void own_initState();
         virtual void own_updateState();
@@ -80,7 +82,8 @@ class Level : public GameState, public CountAdvisor {
         bool action_move(char symbol);
         bool action_save();
         bool action_load();
-        bool action_undo(int steps);
+        void action_undo(int steps);
+        void action_undo_finish();
 
         void switchFish();
         void controlEvent(const KeyStroke &stroke);
@@ -94,6 +97,7 @@ class Level : public GameState, public CountAdvisor {
         void createRoom(int w, int h, const Path &picture);
         void newDemo(const Path &demofile);
 
+        bool isActing() const;
         bool isLoading() const;
         void togglePause();
         bool isShowing() const;

@@ -52,12 +52,12 @@ LevelInput::specKey(int keyIndex)
 {
     switch (keyIndex) {
         case KEY_SWITCH:
-            if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+            if (!getLevel()->isActing()) {
                 getLevel()->switchFish();
             }
             break;
         case KEY_SAVE:
-            if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+            if (!getLevel()->isActing()) {
                 getLevel()->action_save();
             }
             break;
@@ -88,7 +88,7 @@ LevelInput::specKey(int keyIndex)
 void
 LevelInput::specStroke(const KeyStroke &stroke)
 {
-    if (!getLevel()->isShowing() && !getLevel()->isLoading()) {
+    if (!getLevel()->isActing()) {
         getLevel()->controlEvent(stroke);
     }
 }
@@ -97,5 +97,18 @@ void
 LevelInput::mouseEvent(const MouseStroke &buttons)
 {
     getLevel()->controlMouse(buttons);
+}
+//-----------------------------------------------------------------
+void
+LevelInput::keyUp(const KeyStroke &stroke) {
+    int index = m_keymap->indexPressed(stroke);
+    switch (index) {
+        case KEY_UNDO:
+        case KEY_REDO:
+            getLevel()->action_undo_finish();
+            break;
+        default:
+            break;
+    }
 }
 

@@ -47,7 +47,7 @@
 {
     m_desc = NULL;
     m_restartCounter = 1;
-    m_insideUndo = false;
+    m_undoSteps = 0;
     m_wasDangerousMove = false;
     m_depth = depth;
     m_newRound = false;
@@ -100,7 +100,7 @@ Level::own_initState()
     //NOTE: let level first to draw and then play
     m_locker->reset();
     m_locker->ensurePhases(1);
-    if (!m_insideUndo) {
+    if (!isUndoing()) {
         SoundAgent::agent()->stopMusic();
     }
     //TODO: escape "codename"
@@ -174,6 +174,18 @@ Level::own_noteFg()
 
 //-----------------------------------------------------------------
 bool
+Level::isUndoing() const
+{
+    return m_undoSteps != 0;
+}
+//-----------------------------------------------------------------
+bool
+Level::isActing() const
+{
+    return isShowing() || isLoading() || isUndoing();
+}
+//-----------------------------------------------------------------
+bool
 Level::isLoading() const
 {
     return m_loading->isLoading();
@@ -191,16 +203,17 @@ Level::togglePause()
     void
 Level::nextAction()
 {
-    if (isLoading()) {
+    if (isUndoing()) {
+        nextUndoAction();
+    }
+    else if (isLoading()) {
         nextLoadAction();
     }
+    else if (isShowing()) {
+        nextShowAction();
+    }
     else {
-        if (isShowing()) {
-            nextShowAction();
-        }
-        else {
-            nextPlayerAction();
-        }
+        nextPlayerAction();
     }
 }
 //-----------------------------------------------------------------
@@ -210,7 +223,7 @@ Level::nextAction()
     void
 Level::updateLevel()
 {
-    if (!isLoading()) {
+    if (!isUndoing() && !isLoading()) {
         m_levelScript->updateScript();
     }
 }
@@ -328,8 +341,7 @@ Level::displaySaveStatus()
     void
 Level::loadGame(const std::string &moves)
 {
-    if (m_insideUndo) {
-        action_restart(0);
+    if (isUndoing()) {
         if (m_levelScript->isRoom()) {
             m_levelScript->room()->setMoves(moves);
         }
@@ -372,6 +384,20 @@ Level::nextShowAction()
         m_levelScript->room()->beginFall();
         m_show->executeFirst();
         m_levelScript->room()->finishRound();
+    }
+}
+//-----------------------------------------------------------------
+/**
+ * Do the next undo step.
+ */
+    void
+Level::nextUndoAction()
+{
+    if (m_levelScript->isRoom()) {
+        std::string moves = m_levelScript->room()->stepCounter()->getMoves();
+        std::string strSteps = StringTool::toString(m_undoSteps);
+        m_levelScript->scriptDo("script_loadUndo(\""
+               + moves + "\"," + strSteps + ")");
     }
 }
 //-----------------------------------------------------------------
@@ -427,10 +453,10 @@ Level::action_load()
 {
     Path file = Path::dataReadPath("saves/" + m_codename + ".lua");
     if (file.exists()) {
+        m_undoSteps = 0;
         m_restartCounter--;
         action_restart(1);
         m_levelScript->scriptInclude(file);
-        m_insideUndo = false;
         m_levelScript->scriptDo("script_load()");
     }
     else {
@@ -441,20 +467,33 @@ Level::action_load()
 }
 //-----------------------------------------------------------------
 /**
- * Naive undo by reloading the level.
+ * Start the undoing.
+ * @param steps 1 for undo, -1 for redo
  */
-    bool
+    void
 Level::action_undo(int steps)
 {
-    if (m_levelScript->isRoom()) {
-        m_insideUndo = true;
-
-        std::string moves = m_levelScript->room()->stepCounter()->getMoves();
-        std::string strSteps = StringTool::toString(steps);
-        m_levelScript->scriptDo("script_loadUndo(\""
-               + moves + "\"," + strSteps + ")");
+    m_undoSteps = steps;
+    nextUndoAction();
+}
+//-----------------------------------------------------------------
+/**
+ * Restart the room at the next undo position.
+ */
+    void
+Level::action_undo_finish()
+{
+    if (!isUndoing()) {
+        return;
     }
-    return true;
+
+    if (m_levelScript->isRoom()) {
+        action_restart(0);
+        m_levelScript->scriptDo("script_loadFinalUndo()");
+    } else {
+        action_restart(0);
+    }
+    m_undoSteps = 0;
 }
 //-----------------------------------------------------------------
     void
