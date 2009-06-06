@@ -253,7 +253,6 @@ decodeInt(const std::string &input)
 std::string
 Anim::getState() const
 {
-    //TODO: encode also other properties
     std::string output;
     output += encode(m_effect->getName());
     output += "," + encode(m_viewShift.getX());
