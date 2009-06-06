@@ -15,7 +15,7 @@
 
 #include "SDL_image.h"
 
-// The set cache size allow to contain all fish images and animations
+// The set cache size allows to contain all fish images and animations
 // from level 'barrel'.
 ResCache<SDL_Surface*> *ResImagePack::CACHE = new ResCache<SDL_Surface*>(
         265, new ResImagePack(false));
