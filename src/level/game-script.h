@@ -11,6 +11,7 @@ extern int script_game_getCycles(lua_State *L) throw();
 extern int script_game_addDecor(lua_State *L) throw();
 extern int script_game_setScreenShift(lua_State *L) throw();
 extern int script_game_changeBg(lua_State *L) throw();
+extern int script_game_getBg(lua_State *L) throw();
 extern int script_game_checkActive(lua_State *L) throw();
 extern int script_game_setFastFalling(lua_State *L) throw();
 

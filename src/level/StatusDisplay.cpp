@@ -25,7 +25,7 @@ StatusDisplay::~StatusDisplay()
 }
 //-----------------------------------------------------------------
 /**
- * Dislay this picture given number of times.
+ * Dislay this picture the given number of times.
  */
 void
 StatusDisplay::displayStatus(Picture *new_picture, int time)

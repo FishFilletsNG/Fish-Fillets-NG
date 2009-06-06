@@ -140,7 +140,7 @@ script_level_createRoom(lua_State *L) throw()
     int h = luaL_checkint(L, 2);
     const char *picture = luaL_checkstring(L, 3);
 
-    getLevel(L)->createRoom(w, h, Path::dataReadPath(picture));
+    getLevel(L)->createRoom(w, h, picture);
     END_NOEXCEPTION;
     return 0;
 }

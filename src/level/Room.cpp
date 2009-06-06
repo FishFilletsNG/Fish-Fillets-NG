@@ -31,6 +31,7 @@
 #include "Landslip.h"
 #include "MouseStroke.h"
 #include "MouseControl.h"
+#include "Path.h"
 
 #include <assert.h>
 
@@ -43,13 +44,14 @@
  * @param locker shared locker for anim
  * @param levelScript shared planner to interrupt
  */
-Room::Room(int w, int h, const Path &picture,
+Room::Room(int w, int h, const std::string &picture,
         PhaseLocker *locker, Planner *levelScript)
 {
     m_locker = locker;
     m_levelScript = levelScript;
     m_fastFalling = false;
-    m_bg = new WavyPicture(picture, V2(0, 0));
+    m_bg = new WavyPicture(Path::dataReadPath(picture), V2(0, 0));
+    m_bgFilename = picture;
     m_field = new Field(w, h);
     m_finder = new FinderAlg(w, h);
     m_controls = new Controls(m_locker);
@@ -520,9 +522,12 @@ Room::setScreenShift(const V2 &shift)
 }
 //-----------------------------------------------------------------
 void
-Room::changeBg(const Path &picture)
+Room::changeBg(const std::string &picture)
 {
-    m_bg->changePicture(picture);
+    if (picture != m_bgFilename) {
+        m_bg->changePicture(Path::dataReadPath(picture));
+        m_bgFilename = picture;
+    }
 }
 //-----------------------------------------------------------------
     void

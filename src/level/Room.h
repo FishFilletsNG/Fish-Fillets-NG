@@ -28,6 +28,7 @@ class StepCounter;
 class Room : public Drawable {
     private:
         WavyPicture *m_bg;
+        std::string m_bgFilename;
         Field *m_field;
         FinderAlg *m_finder;
         ResSoundPack *m_soundPack;
@@ -47,7 +48,7 @@ class Room : public Drawable {
         void playDead(Cube *model);
         bool isFresh() const { return m_lastAction == Cube::ACTION_NO; }
     public:
-        Room(int w, int h, const Path &picture,
+        Room(int w, int h, const std::string &picture,
                 PhaseLocker *locker, Planner *levelScript);
         ~Room();
         void setWaves(float amplitude, float periode, float speed);
@@ -85,7 +86,8 @@ class Room : public Drawable {
         void playSound(const std::string &name, int volume=100);
 
         void setScreenShift(const V2 &shift);
-        void changeBg(const Path &picture);
+        void changeBg(const std::string &picture);
+        std::string getBg() const { return m_bgFilename; }
         virtual void drawOn(SDL_Surface *screen);
 };
 

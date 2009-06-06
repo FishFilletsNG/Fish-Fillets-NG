@@ -525,7 +525,7 @@ Level::controlMouse(const MouseStroke &button)
  * and change screen resolution.
  */
     void
-Level::createRoom(int w, int h, const Path &picture)
+Level::createRoom(int w, int h, const std::string &picture)
 {
     Room *room = new Room(w, h, picture, m_locker, m_levelScript);
     room->addDecor(new StepDecor(room->stepCounter()));

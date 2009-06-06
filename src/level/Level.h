@@ -94,7 +94,7 @@ class Level : public GameState, public CountAdvisor {
         int getDepth() const { return m_depth; }
         bool isNewRound() const { return m_newRound; }
 
-        void createRoom(int w, int h, const Path &picture);
+        void createRoom(int w, int h, const std::string &picture);
         void newDemo(const Path &demofile);
 
         bool isActing() const;

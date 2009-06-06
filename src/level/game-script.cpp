@@ -154,9 +154,23 @@ script_game_changeBg(lua_State *L) throw()
 {
     BEGIN_NOEXCEPTION;
     const char *picture = luaL_checkstring(L, 1);
-    getLevelScript(L)->room()->changeBg(Path::dataReadPath(picture));
+    getLevelScript(L)->room()->changeBg(picture);
     END_NOEXCEPTION;
     return 0;
+}
+//-----------------------------------------------------------------
+/**
+ * string game_getBg()
+ * Return the name of the currently used bg picture.
+ */
+    int
+script_game_getBg(lua_State *L) throw()
+{
+    BEGIN_NOEXCEPTION;
+    lua_pushstring(L, getLevelScript(L)->room()->getBg().c_str());
+    END_NOEXCEPTION;
+    //NOTE: return bg
+    return 1;
 }
 //-----------------------------------------------------------------
 /**
