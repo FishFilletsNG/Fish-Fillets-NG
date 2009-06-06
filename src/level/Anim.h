@@ -50,6 +50,7 @@ class Anim : public NoCopy {
         void changeEffect(ViewEffect *new_effect);
         void setViewShift(const V2 &shift) { m_viewShift = shift; }
         V2 getViewShift() const { return m_viewShift; };
+        const char* getEffectName() const { return m_effect->getName(); };
 
         int countAnimPhases(const std::string &anim,
                 eSide side=SIDE_LEFT) const;
