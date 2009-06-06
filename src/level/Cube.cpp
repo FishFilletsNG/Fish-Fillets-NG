@@ -110,6 +110,17 @@ Cube::setOutDir(Dir::eDir dir, int capacity, eWeight weight)
 }
 //-----------------------------------------------------------------
 /**
+ * Set extra parameters from a saved undo state.
+ * They have to restore just the parameters used by the View.
+ */
+void
+Cube::setExtraParams()
+{
+    m_lost = false;
+    m_rules->resetLastDir();
+}
+//-----------------------------------------------------------------
+/**
  * Special model 'output_DIR' has capacity to absorb two fishes,
  * then it changes to normal 'item_light'.
  */

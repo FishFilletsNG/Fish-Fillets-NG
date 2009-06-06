@@ -86,6 +86,7 @@ class Cube : public NoCopy {
         void setOutDir(Dir::eDir outDir,
                 int capacity=2, eWeight weight=Cube::FIXED);
         void decOutCapacity();
+        void setExtraParams();
 
         bool isTalking() const;
         void takeDialogs(const DialogStack *dialogs) { m_dialogs = dialogs; }

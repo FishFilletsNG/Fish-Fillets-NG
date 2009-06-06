@@ -48,7 +48,7 @@ Random::randomReal(double bound)
 //-----------------------------------------------------------------
 /**
  * Return a value from interval <0,255>.
- * @param index index of byte, the byte and a index is alway the same
+ * @param index index of byte, the byte at a index is alway the same
  */
     unsigned char
 Random::aByte(unsigned int index)

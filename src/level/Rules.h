@@ -75,6 +75,7 @@ class Rules : public NoCopy {
         bool isFreePlace(const V2 &loc) const;
         const Cube::t_models getResist(Dir::eDir dir) const;
         bool isPushing() const { return m_pushing; };
+        void resetLastDir() { m_dir = Dir::DIR_NO; }
 };
 
 #endif
