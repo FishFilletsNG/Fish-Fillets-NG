@@ -258,6 +258,11 @@ Anim::getState() const
     output += encode(m_effect->getName());
     output += "," + encode(m_viewShift.getX());
     output += "," + encode(m_viewShift.getY());
+    output += "," + encode(m_animName);
+    output += "," + encode(m_animPhase);
+    output += "," + encode(m_run);
+    output += "," + encode(m_specialAnimName);
+    output += "," + encode(m_specialAnimPhase);
     return output;
 }
 //-----------------------------------------------------------------
@@ -265,7 +270,7 @@ void
 Anim::restoreState(const std::string &state)
 {
     StringTool::t_args values = StringTool::split(state, ',');
-    if (values.size() != 3) {
+    if (values.size() != 8) {
         LOG_WARNING(ExInfo("invalid anim state")
                 .addInfo("state", state));
         return;
@@ -275,6 +280,11 @@ Anim::restoreState(const std::string &state)
     std::string effectName = decode(values[i++]);
     int x = decodeInt(values[i++]);
     int y = decodeInt(values[i++]);
+    m_animName = decode(values[i++]);
+    m_animPhase = decodeInt(values[i++]);
+    m_run = decodeInt(values[i++]);
+    m_specialAnimName = decode(values[i++]);
+    m_specialAnimPhase = decodeInt(values[i++]);
 
     setEffect(effectName);
     m_viewShift = V2(x, y);
