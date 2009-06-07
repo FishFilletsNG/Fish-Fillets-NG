@@ -477,6 +477,7 @@ Level::action_load()
 Level::action_undo(int steps)
 {
     m_undoSteps = steps;
+    m_levelScript->killPlan();
     m_countdown->reset();
     nextUndoAction();
 }
