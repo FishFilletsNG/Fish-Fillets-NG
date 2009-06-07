@@ -22,23 +22,13 @@ Library LUA (script language, used for debug console, configuration, levels,...)
 - liblualib50
 
 
-(To compile on non-POSIX system, use src/gengine/FsPath_boost.cpp
- instead of src/gengine/FsPath.cpp
-
-    Library Boost - http://www.boost.org/
-    - libboost_filesystem (portable filesystem paths)
-)
-
-
 How to run
 ==========
-
-Supported platforms: Linux, FreeBSD
 
 I. Compile
 ----------
 
-- compile the game
+- Compile the game:
 $ tar xzf fillets-ng.tar.gz
 $ cd fillets-ng
 $ ./configure
@@ -49,10 +39,13 @@ $ make install
 II. Install data
 ----------------
 
-- download fillets-ng-data from http://fillets.sourceforge.net/download.php
-- extract fillets-ng-data.tar.gz to $(datadir)/games/fillets-ng/
+- Download fillets-ng-data from http://fillets.sourceforge.net/download.php
+- Extract fillets-ng-data.tar.gz to a $datadir.
   default: /usr/local/share/games/fillets-ng/
 
+III. Run it
+-----------
+$ ./src/game/fillets systemdir=$datadir
 
 Controls
 ========
@@ -60,10 +53,10 @@ Controls
 Up, down, left and right arrow keys control the current fish.
 Use space bar to switch between the fish.
 
-See also "How to Play" data/doc/html/manual.html
+See also "How to Play" $datadir/doc/html/manual.html
 
 restart level - Backspace
-undo - -
+undo - -/+
 help - F1
 save game - F2
 load game - F3

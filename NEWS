@@ -1,3 +1,15 @@
+Fish Fillets NG - 0.9.0
+* Level 'linux' (by Mirek Olsak).
+* Level 'electromagnet' (by Stephan Barth).
+* Embedded intro video (thanks to Mirek Olsak).
+* Faster undo (hold -) (thanks to Mirek Olsak).
+* Redo (hold +).
+* Czech spoken dialogs for level 'keys' (thanks to Mirek Olsak).
+* Updated Bulgarian translation (by Damyan Ivanov).
+* Updated Swedish translation (by Olov Gustavsson).
+* Enhanced graphics for the NG levels (by Fank Skalicky).
+
+
 Fish Fillets NG - 0.8.1
 * Two extra levels (by Stephan Barth and Mirek Olsak).
 * Added support for translated images (by Leonid Myravjev).
