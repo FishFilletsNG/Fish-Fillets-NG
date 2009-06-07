@@ -169,7 +169,7 @@ StateManager::checkStack()
 }
 //-----------------------------------------------------------------
 /**
- * Pause all running states below on stack which all not allowed.
+ * Pause all running states below on stack which are not allowed.
  * The toppers will be paused first but the order should be insignificant
  * @param stateIt states bellow will be check
  */
@@ -189,8 +189,9 @@ StateManager::pauseBg(t_states::iterator stateIt)
 }
 //-----------------------------------------------------------------
 /**
- * Recursive resume given state and all states below on stack which is allowed.
- * The lowers will be resumed first but the order should be insignificant.
+ * Recursively resume the given state and all states below on stack
+ * which are allowed.
+ * The lower ones will be resumed first but the order should be insignificant.
  * @param stateIt state to run
  */
 void
@@ -211,10 +212,7 @@ StateManager::resumeBg(t_states::iterator stateIt)
 /**
  * Let all running states to install input and draw handler.
  * And all paused states will uninstall their handlers.
- * The lowers will be called first, order is insignificant.
- *
- * NOTE: first the handlers will be uninstalled and then
- * installed back in right order
+ * The lowers will be called first, the order is significant.
  */
 void
 StateManager::installHandlers()

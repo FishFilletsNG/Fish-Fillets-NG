@@ -131,6 +131,7 @@ Level::own_updateState()
 Level::own_pauseState()
 {
     m_levelScript->killPlan();
+    action_undo_finish();
 }
 //-----------------------------------------------------------------
     void
@@ -159,6 +160,7 @@ Level::own_noteBg()
     if (m_loading->isLoading() && !m_loading->isPaused()) {
         m_loading->togglePause();
     }
+    action_undo_finish();
 }
 //-----------------------------------------------------------------
     void
@@ -168,7 +170,7 @@ Level::own_noteFg()
     if (m_loading->isLoading() && m_loading->isPaused()) {
         m_loading->togglePause();
     }
-    //NOTE: ensure that unwanted mouse press will not move a fish
+    //NOTE: ensure that an unwanted mouse press will not move a fish
     m_locker->ensurePhases(3);
 }
 
