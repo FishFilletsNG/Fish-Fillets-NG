@@ -483,7 +483,7 @@ Level::action_undo(int steps)
 }
 //-----------------------------------------------------------------
 /**
- * Restart the room at the next undo position.
+ * Restart the room at the current undo position.
  */
     void
 Level::action_undo_finish()
