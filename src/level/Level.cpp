@@ -408,6 +408,9 @@ Level::nextUndoAction()
     bool
 Level::action_restart(int increment)
 {
+    if (increment > 0) {
+        m_undoSteps = 0;
+    }
     own_cleanState();
     m_restartCounter += increment;
     //NOTE: The script is just overridden by itself,
@@ -474,6 +477,7 @@ Level::action_load()
 Level::action_undo(int steps)
 {
     m_undoSteps = steps;
+    m_countdown->reset();
     nextUndoAction();
 }
 //-----------------------------------------------------------------
@@ -590,7 +594,10 @@ int
 Level::getCountForSolved() const
 {
     int countdown = 10;
-    if (isLoading()) {
+    if (isUndoing()) {
+        countdown = -1;
+    }
+    else if (isLoading()) {
         countdown = 0;
     }
     else if (m_levelScript->dialogs()->areRunning()) {
