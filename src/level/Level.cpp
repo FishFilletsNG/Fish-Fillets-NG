@@ -493,9 +493,7 @@ Level::action_undo_finish()
     }
 
     action_restart(0);
-    if (m_levelScript->isRoom()) {
-        m_levelScript->scriptDo("script_loadFinalUndo()");
-    }
+    m_levelScript->scriptDo("script_loadFinalUndo()");
     m_undoSteps = 0;
 }
 //-----------------------------------------------------------------
