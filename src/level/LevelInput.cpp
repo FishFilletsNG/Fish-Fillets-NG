@@ -62,20 +62,23 @@ LevelInput::specKey(int keyIndex)
             }
             break;
         case KEY_LOAD:
-            getLevel()->interruptShow();
-            getLevel()->action_load();
+            if (!getLevel()->isShowing()) {
+                getLevel()->action_load();
+            }
             break;
         case KEY_RESTART:
             getLevel()->interruptShow();
             getLevel()->action_restart(1);
             break;
         case KEY_UNDO:
-            getLevel()->interruptShow();
-            getLevel()->action_undo(1);
+            if (!getLevel()->isShowing()) {
+                getLevel()->action_undo(1);
+            }
             break;
         case KEY_REDO:
-            getLevel()->interruptShow();
-            getLevel()->action_undo(-1);
+            if (!getLevel()->isShowing()) {
+                getLevel()->action_undo(-1);
+            }
             break;
         case KEY_SHOW_STEPS:
             toggleParam("show_steps");
