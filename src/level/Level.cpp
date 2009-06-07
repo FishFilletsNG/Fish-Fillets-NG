@@ -239,13 +239,12 @@ Level::saveUndo(const std::string &oldMoves)
 {
     if (m_levelScript->isRoom()) {
         Room *room = m_levelScript->room();
-        // Forcing a new save prevents overwriting the last saved undo.
-        bool forceSave = m_wasDangerousMove;
+        bool keepLast = m_wasDangerousMove;
         m_wasDangerousMove = room->stepCounter()->isDangerousMove();
 
-        std::string forceSaveValue = forceSave ? "true" : "false";
+        std::string keepLastValue = keepLast ? "true" : "false";
         m_levelScript->scriptDo("script_saveUndo(\""
-                + oldMoves + "\"," + forceSaveValue + ")");
+                + oldMoves + "\"," + keepLastValue + ")");
     }
 }
 //-----------------------------------------------------------------
