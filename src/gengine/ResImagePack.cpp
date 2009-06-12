@@ -11,6 +11,7 @@
 #include "Path.h"
 #include "ImgException.h"
 #include "SDLException.h"
+#include "OptionAgent.h"
 #include "Log.h"
 
 #include "SDL_image.h"
@@ -20,6 +21,14 @@
 ResCache<SDL_Surface*> *ResImagePack::CACHE = new ResCache<SDL_Surface*>(
         265, new ResImagePack(false));
 
+//-----------------------------------------------------------------
+ResImagePack::ResImagePack(bool caching_enabled) {
+    m_caching_enabled = false;
+    if (caching_enabled) {
+        m_caching_enabled = OptionAgent::agent()->getAsBool(
+                "cache_images", true);
+    }
+}
 //-----------------------------------------------------------------
 /**
  * Load unshared image from file

@@ -16,9 +16,7 @@ class ResImagePack : public ResourcePack<SDL_Surface*> {
         static ResCache<SDL_Surface*> *CACHE;
         bool m_caching_enabled;
     public:
-        explicit ResImagePack(bool caching_enabled=true) {
-            m_caching_enabled = caching_enabled;
-        }
+        explicit ResImagePack(bool caching_enabled=true);
         virtual const char *getName() const { return "image_pack"; }
 
         static SDL_Surface *loadImage(const Path &file);

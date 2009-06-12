@@ -108,13 +108,13 @@ Application::prepareOptions(int argc, char *argv[])
 {
     OptionParams params;
     params.addParam("loglevel", OptionParams::TYPE_NUMBER,
-            "Loglevel uses same numbers as syslog");
+            "Debug with loglevel 7 (default=6)");
     params.addParam("systemdir", OptionParams::TYPE_PATH,
             "Path to game data");
     params.addParam("userdir", OptionParams::TYPE_PATH,
             "Path to game data");
     params.addParam("lang", OptionParams::TYPE_STRING,
-            "2-letter code (en, cs, fr, de)");
+            "2-letter code (e.g., en, cs, fr, de)");
     params.addParam("speech", OptionParams::TYPE_STRING,
             "Lang for speech");
     params.addParam("subtitles", OptionParams::TYPE_BOOLEAN,
@@ -122,7 +122,7 @@ Application::prepareOptions(int argc, char *argv[])
     params.addParam("fullscreen", OptionParams::TYPE_BOOLEAN,
             "Turn fullscreen on/off");
     params.addParam("show_steps", OptionParams::TYPE_BOOLEAN,
-            "Show step counter in level");
+            "Show a step counter in levels");
     params.addParam("sound", OptionParams::TYPE_BOOLEAN,
             "Turn sound on/off");
     params.addParam("volume_sound", OptionParams::TYPE_NUMBER,
@@ -130,7 +130,9 @@ Application::prepareOptions(int argc, char *argv[])
     params.addParam("volume_music", OptionParams::TYPE_NUMBER,
             "Music volume in percentage");
     params.addParam("worldmap", OptionParams::TYPE_STRING,
-            "Path to worldmap file");
+            "Path to the worldmap file");
+    params.addParam("cache_images", OptionParams::TYPE_BOOLEAN,
+            "Cache images (default=true)");
     OptionAgent::agent()->parseCmdOpt(argc, argv, params);
 }
 //-----------------------------------------------------------------
