@@ -148,7 +148,7 @@ AC_SUBST(BOOST_LIBS)
 ###################################################
 # Check for SMPEG
 AC_CHECK_LIB([smpeg], [SMPEG_new], [have_smpeg="yes"], [have_smpeg="no"],
-             $SDL_CFLAGS $SDL_LIBS)
+             $SDL_LIBS)
 if test "x$have_smpeg" = xyes; then
     SDL_LIBS="-lsmpeg $SDL_LIBS"
     AC_DEFINE(HAVE_SMPEG)
