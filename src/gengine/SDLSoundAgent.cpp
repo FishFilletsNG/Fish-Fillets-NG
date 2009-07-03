@@ -51,7 +51,7 @@ SDLSoundAgent::reinit()
     }
 
     int frequency =
-       OptionAgent::agent()->getAsInt("sound_frequency", MIX_DEFAULT_FREQUENCY);
+       OptionAgent::agent()->getAsInt("sound_frequency", 44100);
     if(Mix_OpenAudio(frequency, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
         throw MixException(ExInfo("Mix_OpenAudio"));
     }

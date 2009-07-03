@@ -133,6 +133,8 @@ Application::prepareOptions(int argc, char *argv[])
             "Path to the worldmap file");
     params.addParam("cache_images", OptionParams::TYPE_BOOLEAN,
             "Cache images (default=true)");
+    params.addParam("sound_frequency", OptionParams::TYPE_NUMBER,
+            "Sound sample rate (default=44100)");
     OptionAgent::agent()->parseCmdOpt(argc, argv, params);
 }
 //-----------------------------------------------------------------
