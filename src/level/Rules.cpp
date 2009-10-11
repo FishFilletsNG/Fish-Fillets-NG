@@ -261,7 +261,7 @@ Rules::actionOut()
     {
         //NOTE: normal objects are not allowed to go out of screen
         if (m_model->shouldGoOut()) {
-            if (m_outDepth > 0 && m_mask->isFullyOut()) {
+            if (m_mask->isFullyOut()) {
                 m_model->change_goOut();
                 m_outDepth = -1;
             } else {
