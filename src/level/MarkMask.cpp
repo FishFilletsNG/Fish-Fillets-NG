@@ -11,6 +11,7 @@
 #include "Cube.h"
 #include "Shape.h"
 #include "Field.h"
+#include "Rules.h"
 
 #include <algorithm>
 
@@ -108,19 +109,19 @@ MarkMask::getBorderDir() const
     Shape::const_iterator end = shape->marksEnd();
     for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
         V2 mark = loc.plus(*i);
-        if (mark.getX() == 0 && isBorderDir(Dir::DIR_LEFT)) {
+        if (mark.getX() == 0 && canGo(Dir::DIR_LEFT)) {
             return Dir::DIR_LEFT;
         }
         else if (mark.getX() == m_field->getW() - 1 &&
-                isBorderDir(Dir::DIR_RIGHT))
+                canGo(Dir::DIR_RIGHT))
         {
             return Dir::DIR_RIGHT;
         }
-        else if (mark.getY() == 0 && isBorderDir(Dir::DIR_UP)) {
+        else if (mark.getY() == 0 && canGo(Dir::DIR_UP)) {
             return Dir::DIR_UP;
         }
         else if (mark.getY() == m_field->getH() - 1 &&
-                isBorderDir(Dir::DIR_DOWN))
+                canGo(Dir::DIR_DOWN))
         {
             return Dir::DIR_DOWN;
         }
@@ -130,18 +131,31 @@ MarkMask::getBorderDir() const
 }
 //-----------------------------------------------------------------
 /**
- * Test whether there is only border in this direction.
+ * Test whether there is only border
+ * or other unblocked objects that should go out
+ * in the given direction.
  */
     bool
-MarkMask::isBorderDir(Dir::eDir dir) const
+MarkMask::canGo(Dir::eDir dir) const
 {
-    bool result = false;
-    Cube::t_models resist = getResist(dir);
-    if (resist.size() == 1) {
-        if (resist[0]->getIndex() == -1) {
-            result = true;
+   return m_model->rules()->canMoveOthers(dir, Cube::HEAVY);
+}
+//-----------------------------------------------------------------
+/**
+ * Returns true when the object is fully out of the field.
+ */
+    bool
+MarkMask::isFullyOut() const
+{
+    V2 loc = m_model->getLocation();
+    const Shape *shape = m_model->shape();
+    Shape::const_iterator end = shape->marksEnd();
+    for (Shape::const_iterator i = shape->marksBegin(); i != end; ++i) {
+        V2 mark = loc.plus(*i);
+        Cube *place = m_field->getModel(mark);
+        if (place == NULL || !place->isBorder()) {
+            return false;
         }
     }
-    return result;
+    return true;
 }
-

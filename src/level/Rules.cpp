@@ -261,15 +261,16 @@ Rules::actionOut()
     {
         //NOTE: normal objects are not allowed to go out of screen
         if (m_model->shouldGoOut()) {
-            Dir::eDir borderDir = m_mask->getBorderDir();
-            if (borderDir != Dir::DIR_NO) {
-                m_dir = borderDir;
-                m_outDepth += 1;
-            }
-            else {
-                if (m_outDepth > 0) {
-                    m_model->change_goOut();
-                    m_outDepth = -1;
+            if (m_outDepth > 0 && m_mask->isFullyOut()) {
+                m_model->change_goOut();
+                m_outDepth = -1;
+            } else {
+                Dir::eDir borderDir = m_mask->getBorderDir();
+                if (borderDir != Dir::DIR_NO) {
+                    moveDirBrute(borderDir);
+                    m_outDepth += 1;
+                } else {
+                    m_outDepth = 0;
                 }
             }
         }
@@ -498,6 +499,9 @@ Rules::canMoveOthers(Dir::eDir dir, Cube::eWeight power)
     Cube::t_models resist = m_mask->getResist(dir);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
+        if (m_model->shouldGoOut() && (*i)->isBorder()) {
+            continue;
+        }
         if (!(*i)->rules()->canDir(dir, power)) {
             result = false;
             break;
@@ -609,11 +613,11 @@ Rules::moveDirBrute(Dir::eDir dir)
 
     Cube::t_models resist = m_mask->getResist(dir);
     Cube::t_models::iterator end = resist.end();
-    if (end != resist.begin()) {
-        m_pushing = true;
-    }
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
-        (*i)->rules()->moveDirBrute(dir);
+        if (!(*i)->isBorder()) {
+            (*i)->rules()->moveDirBrute(dir);
+            m_pushing = true;
+        }
     }
 
     m_dir = dir;

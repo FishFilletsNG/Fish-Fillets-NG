@@ -42,7 +42,6 @@ class Rules : public NoCopy {
         Cube::t_models whoIsHeavier(Cube::eWeight power);
 
         bool canDir(Dir::eDir dir, Cube::eWeight power);
-        bool canMoveOthers(Dir::eDir dir, Cube::eWeight weight);
         bool touchSpec(Dir::eDir dir);
         void setTouched(Dir::eDir dir);
         void moveDirBrute(Dir::eDir dir);
@@ -76,6 +75,7 @@ class Rules : public NoCopy {
         const Cube::t_models getResist(Dir::eDir dir) const;
         bool isPushing() const { return m_pushing; };
         void resetLastDir() { m_dir = Dir::DIR_NO; }
+        bool canMoveOthers(Dir::eDir dir, Cube::eWeight weight);
 };
 
 #endif
