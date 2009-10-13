@@ -64,6 +64,16 @@ Cube::change_die()
 }
 //-----------------------------------------------------------------
 /**
+ * Make the object unmovable
+ * when it is going out of the room.
+ */
+    void
+Cube::change_goingOut()
+{
+    m_weight = Cube::FIXED;
+}
+//-----------------------------------------------------------------
+/**
  * Go out of room.
  */
     void

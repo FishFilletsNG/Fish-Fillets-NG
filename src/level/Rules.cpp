@@ -256,8 +256,7 @@ Rules::changeState()
 int
 Rules::actionOut()
 {
-    if (!m_model->isWall() && !m_model->isLost()
-            && !m_model->isBusy())
+    if (!m_model->isLost() && !m_model->isBusy() && m_dir == Dir::DIR_NO)
     {
         //NOTE: normal objects are not allowed to go out of screen
         if (m_model->shouldGoOut()) {
@@ -267,6 +266,7 @@ Rules::actionOut()
             } else {
                 Dir::eDir borderDir = m_mask->getBorderDir();
                 if (borderDir != Dir::DIR_NO) {
+                    m_model->change_goingOut();
                     moveDirBrute(borderDir);
                     m_outDepth += 1;
                 } else {
@@ -526,6 +526,10 @@ Rules::canDir(Dir::eDir dir, Cube::eWeight power)
 {
     bool result = false;
     if (!m_model->isAlive() && power >= m_model->getWeight()) {
+        // A special case when outgoing object is pushing with FIXED power.
+        if (m_model->isWall() && !m_model->shouldGoOut()) {
+            return false;
+        }
         result = canMoveOthers(dir, power);
     }
 

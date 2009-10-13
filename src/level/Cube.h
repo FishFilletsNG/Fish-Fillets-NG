@@ -60,6 +60,7 @@ class Cube : public NoCopy {
         void setBusy(bool busy) { m_busy = busy; }
 
         void change_die();
+        void change_goingOut();
         void change_goOut();
         void change_remove();
         void change_turnSide();

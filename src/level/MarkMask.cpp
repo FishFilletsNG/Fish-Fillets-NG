@@ -138,7 +138,7 @@ MarkMask::getBorderDir() const
     bool
 MarkMask::canGo(Dir::eDir dir) const
 {
-   return m_model->rules()->canMoveOthers(dir, Cube::HEAVY);
+   return m_model->rules()->canMoveOthers(dir, Cube::FIXED);
 }
 //-----------------------------------------------------------------
 /**
