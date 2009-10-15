@@ -53,7 +53,7 @@ void
 Slider::drawOn(SDL_Surface *screen)
 {
     int value = OptionAgent::agent()->getAsInt(m_param);
-    SDL_Color gray = {0x00, 0x00, 0x00, 128};
+    SDL_Color gray = {0x00, 0x00, 0x00, 129};
     Uint32 green = SDL_MapRGB(screen->format, 0x00, 0xff, 0x00);
 
     SDL_Rect rect;
