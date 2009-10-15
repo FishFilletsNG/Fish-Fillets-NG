@@ -31,6 +31,7 @@
 #include "StringMsg.h"
 
 #include "SDL.h"
+#include <stdio.h> // for fflush, stdout
 
 //-----------------------------------------------------------------
 Application::Application()
@@ -213,6 +214,9 @@ Application::receiveSimple(const SimpleMsg *msg)
         if (level >= Log::LEVEL_ERROR) {
             OptionAgent::agent()->setParam("loglevel", level);
         }
+    }
+    else if (msg->equalsName("flush_stdout")) {
+        fflush(stdout);
     }
     else {
         LOG_WARNING(ExInfo("unknown msg")
