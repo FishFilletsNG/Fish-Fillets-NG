@@ -1,5 +1,5 @@
 Fish Fillets NG - 0.9.2
-* Fixed undefined behavior in the last levels. The outgoing objects could be stopped by obstacle (thanks Josef Peterka for pointing it out).
+* Fixed undefined behavior in the last levels. The outgoing objects could be stopped by an obstacle (thanks Josef Peterka for pointing it out).
 * Fixed strange background colors on the F10 and F1 screens. SDL-1.2.14 would fix these too.
 
 
