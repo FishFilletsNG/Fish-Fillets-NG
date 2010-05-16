@@ -45,7 +45,9 @@ SDLSoundAgent::own_shutdown()
 SDLSoundAgent::reinit()
 {
     m_music = NULL;
+    m_looper = NULL;
     m_soundVolume = MIX_MAX_VOLUME;
+    m_musicVolume = MIX_MAX_VOLUME;
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0) {
         throw SDLException(ExInfo("SDL_InitSubSystem"));
     }
@@ -130,20 +132,22 @@ SDLSoundAgent::playMusic(const Path &file,
     stopMusic();
     m_playingPath = file.getPosixName();
 
-    int loops = -1;
     if (finished) {
         ms_finished = finished;
-        loops = 1;
-    }
-
-    m_music = Mix_LoadMUS(file.getNative().c_str());
-    if (m_music && (0 == Mix_PlayMusic(m_music, loops))) {
-        Mix_HookMusicFinished(musicFinished);
+        m_music = Mix_LoadMUS(file.getNative().c_str());
+        if (m_music && (0 == Mix_PlayMusic(m_music, 1))) {
+            Mix_HookMusicFinished(musicFinished);
+        }
+        else {
+            LOG_WARNING(ExInfo("cannot play music")
+                    .addInfo("music", file.getNative())
+                    .addInfo("Mix", Mix_GetError()));
+        }
     }
     else {
-        LOG_WARNING(ExInfo("cannot play music")
-                .addInfo("music", file.getNative())
-                .addInfo("Mix", Mix_GetError()));
+        m_looper = new SDLMusicLooper(file);
+        m_looper->setVolume(m_musicVolume);
+        m_looper->start();
     }
 }
 //-----------------------------------------------------------------
@@ -153,12 +157,28 @@ SDLSoundAgent::playMusic(const Path &file,
     void
 SDLSoundAgent::setMusicVolume(int volume)
 {
-    Mix_VolumeMusic(MIX_MAX_VOLUME * volume / 100);
+    m_musicVolume = MIX_MAX_VOLUME * volume / 100;
+    if (m_musicVolume > MIX_MAX_VOLUME) {
+        m_musicVolume = MIX_MAX_VOLUME;
+    }
+    else if (m_musicVolume < 0) {
+        m_musicVolume = 0;
+    }
+    Mix_VolumeMusic(m_musicVolume);
+    if (m_looper) {
+        m_looper->setVolume(m_musicVolume);
+    }
 }
 //-----------------------------------------------------------------
     void
 SDLSoundAgent::stopMusic()
 {
+    if (m_looper) {
+        m_looper->stop();
+        delete m_looper;
+        m_looper = NULL;
+    }
+
     if(Mix_PlayingMusic()) {
         Mix_HookMusicFinished(NULL);
         Mix_HaltMusic();

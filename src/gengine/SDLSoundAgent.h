@@ -2,6 +2,7 @@
 #define HEADER_SDLSOUNDAGENT_H
 
 #include "SoundAgent.h"
+#include "SDLMusicLooper.h"
 
 #include "SDL.h"
 #include "SDL_mixer.h"
@@ -14,8 +15,10 @@ class SDLSoundAgent : public SoundAgent {
     private:
     static BaseMsg *ms_finished;
     Mix_Music *m_music;
+    SDLMusicLooper *m_looper;
     std::string m_playingPath;
     int m_soundVolume;
+    int m_musicVolume;
 
     private:
         std::string generateIdName(const Path &file);
