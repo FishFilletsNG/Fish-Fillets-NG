@@ -122,7 +122,7 @@ WorldBranch::bestSolution(const std::string &codename, int moves,
         node->bestSolution(moves, author);
     }
     else {
-        throw LogicException(ExInfo("there is no such node")
+        LOG_WARNING(ExInfo("there is no such node")
                 .addInfo("codename", codename)
                 .addInfo("moves", moves)
                 .addInfo("author", author));
