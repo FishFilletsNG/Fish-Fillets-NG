@@ -16,6 +16,7 @@
 #include "OnStack.h"
 #include "OnWall.h"
 #include "OnStrongPad.h"
+#include "OptionAgent.h"
 
 #include <assert.h>
 
@@ -164,14 +165,22 @@ Rules::checkDead(Cube::eAction lastAction)
     bool
 Rules::checkDeadMove()
 {
+    bool strict = OptionAgent::agent()->getAsBool("strict_rules", true);
+
     Cube::t_models resist = m_mask->getResist(Dir::DIR_UP);
     Cube::t_models::iterator end = resist.end();
     for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
         if (!(*i)->isAlive()) {
             Dir::eDir resist_dir = (*i)->rules()->getDir();
             if (resist_dir != Dir::DIR_NO && resist_dir != Dir::DIR_UP) {
-                if (!(*i)->rules()->isOnStack()) {
-                    return true;
+                if (strict) {
+                    if (!(*i)->rules()->isOnWall()) {
+                        return true;
+                    }
+                } else {
+                    if (!(*i)->rules()->isOnStack()) {
+                        return true;
+                    }
                 }
             }
         }
