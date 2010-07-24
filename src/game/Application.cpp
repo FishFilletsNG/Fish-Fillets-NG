@@ -137,7 +137,7 @@ Application::prepareOptions(int argc, char *argv[])
     params.addParam("sound_frequency", OptionParams::TYPE_NUMBER,
             "Sound sample rate (default=44100)");
     params.addParam("strict_rules", OptionParams::TYPE_BOOLEAN,
-            "Disallow pushing a leaning stack of objects.");
+            "Disallow pushing a leaning stack of objects (default=true)");
     OptionAgent::agent()->parseCmdOpt(argc, argv, params);
 }
 //-----------------------------------------------------------------
