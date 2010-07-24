@@ -58,10 +58,7 @@ MarkMask::getPlacedResist(const V2 &loc) const
         }
     }
 
-    std::sort(models.begin(), models.end());
-    Cube::t_models::iterator last = std::unique(models.begin(), models.end());
-    models.erase(last, models.end());
-
+    unique(&models);
     return models;
 }
 //-----------------------------------------------------------------
@@ -158,4 +155,15 @@ MarkMask::isFullyOut() const
         }
     }
     return true;
+}
+//-----------------------------------------------------------------
+/**
+ * Removes duplicities from the given models.
+ */
+    void
+MarkMask::unique(Cube::t_models *models)
+{
+    std::sort(models->begin(), models->end());
+    Cube::t_models::iterator last = std::unique(models->begin(), models->end());
+    models->erase(last, models->end());
 }

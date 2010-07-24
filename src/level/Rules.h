@@ -35,6 +35,8 @@ class Rules : public NoCopy {
         bool isOnCond(const OnCondition &cond);
         bool isOnWall();
 
+        bool isOnHolderBacks();
+        Cube::t_models getPads();
         bool isFalling() const;
         Cube::t_models whoIsFalling();
 

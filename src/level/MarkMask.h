@@ -29,6 +29,8 @@ class MarkMask : public NoCopy {
 
         Dir::eDir getBorderDir() const;
         bool isFullyOut() const;
+
+        static void unique(Cube::t_models *models);
 };
 
 #endif

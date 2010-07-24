@@ -174,7 +174,7 @@ Rules::checkDeadMove()
             Dir::eDir resist_dir = (*i)->rules()->getDir();
             if (resist_dir != Dir::DIR_NO && resist_dir != Dir::DIR_UP) {
                 if (strict) {
-                    if (!(*i)->rules()->isOnWall()) {
+                    if ((*i)->rules()->isOnHolderBacks()) {
                         return true;
                     }
                 } else {
@@ -398,7 +398,56 @@ Rules::isOnStrongPad(Cube::eWeight weight)
 {
     return isOnCond(OnStrongPad(weight));
 }
+//-----------------------------------------------------------------
+/**
+ * Returns true if the object is laying just on alive holders
+ * and they all have at least a part of their backs
+ * directly under this object.
+ *
+ * Pushing the object would kill all the holders.
+ * The object would be free to fall.
+ */
+    bool
+Rules::isOnHolderBacks()
+{
+    unsigned int numDirectHolders = 0;
+    Cube::t_models resist = m_mask->getResist(Dir::DIR_DOWN);
+    Cube::t_models::iterator end = resist.end();
+    for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
+        if ((*i)->isAlive()) {
+            ++numDirectHolders;
+        }
+    }
 
+    Cube::t_models pads = getPads();
+    MarkMask::unique(&pads);
+    return numDirectHolders == pads.size();
+}
+//-----------------------------------------------------------------
+/**
+ * Returns all alive fish and walls under this object.
+ */
+    Cube::t_models
+Rules::getPads()
+{
+    Cube::t_models pads;
+    m_mask->unmask();
+
+    Cube::t_models resist = m_mask->getResist(Dir::DIR_DOWN);
+    Cube::t_models::iterator end = resist.end();
+    for (Cube::t_models::iterator i = resist.begin(); i != end; ++i) {
+        if ((*i)->isAlive() || (*i)->isWall()) {
+            pads.push_back(*i);
+        } else {
+            Cube::t_models distance_pads = (*i)->rules()->getPads();
+            pads.insert(pads.end(), distance_pads.begin(),
+                    distance_pads.end());
+        }
+    }
+
+    m_mask->mask();
+    return pads;
+}
 //-----------------------------------------------------------------
 /**
  * Whether object is falling.
