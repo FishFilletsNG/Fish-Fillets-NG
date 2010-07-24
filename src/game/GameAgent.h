@@ -6,6 +6,8 @@ class StateManager;
 #include "BaseAgent.h"
 #include "Name.h"
 
+#include <string>
+
 /**
  * Create game.
  * GameAgent uses StateManager to manage
@@ -16,6 +18,7 @@ class GameAgent : public BaseAgent {
     private:
         StateManager *m_manager;
     private:
+        void replaySolution(const std::string &codename);
         void keyBinding();
     protected:
         virtual void own_init();

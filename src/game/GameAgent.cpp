@@ -19,6 +19,8 @@
 #include "IntMsg.h"
 #include "Path.h"
 #include "OptionAgent.h"
+#include "LevelStatus.h"
+#include "Level.h"
 
 #include "SDL.h"
 
@@ -27,13 +29,45 @@
 GameAgent::own_init()
 {
     m_manager = new StateManager();
-    Path pathMap = Path::dataReadPath(OptionAgent::agent()->getParam(
-                "worldmap", "script/worldmap.lua"));
-    WorldMap *worldmap = new WorldMap();
-    worldmap->initMap(pathMap);
-    m_manager->pushState(NULL, worldmap);
+    std::string replayLevel = OptionAgent::agent()->getParam("replay_level");
+    if (replayLevel == "") {
+        Path pathMap = Path::dataReadPath(OptionAgent::agent()->getParam(
+                    "worldmap", "script/worldmap.lua"));
+        WorldMap *worldmap = new WorldMap();
+        worldmap->initMap(pathMap);
+        m_manager->pushState(NULL, worldmap);
+    } else {
+        replaySolution(replayLevel);
+    }
 
     keyBinding();
+}
+//-----------------------------------------------------------------
+/**
+ * Replays the given solution instead of starting the game.
+ * It is used only for testing.
+ */
+    void
+GameAgent::replaySolution(const std::string &codename)
+{
+    static LevelStatus *levelStatus = NULL;
+    static DescFinder *desc = NULL;
+    if (levelStatus == NULL) {
+        levelStatus = new LevelStatus();
+        desc = new WorldMap();
+    }
+
+    levelStatus->prepareRun(codename, "", 0, "");
+    std::string moves = levelStatus->readSolvedMoves();
+
+    Path datafile = Path::dataReadPath(
+        "script/" + codename + "/init.lua");
+    Level *level = new Level(codename, datafile, 0);
+    level->fillStatus(levelStatus);
+    level->fillDesc(desc);
+
+    m_manager->pushState(NULL, level);
+    level->loadReplay(moves);
 }
 //-----------------------------------------------------------------
 /**
