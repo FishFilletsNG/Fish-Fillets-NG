@@ -1,3 +1,16 @@
+Fish Fillets NG - 1.0.0
+* Dutch spoken dialogs (by Astrid de Wijn and friends).
+* Disallowed a move, to be consistent with the original Fish Fillets.
+  Pushing of partially supported objects is disallowed.
+  The object has to be supported by a wall or by a fish
+  who isn't directly under it.
+  <img src="/img/pushing_partially_supported.png"/>
+
+  You could switch back to the less restrictive rules
+  by using "strict_rules=0" config option.
+  Thanks Brian Raiter for reporting the discrepancy.
+
+
 Fish Fillets NG - 0.9.3
 * Fixed compilation with the newer fribidi-0.19.2.
 
