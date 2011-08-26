@@ -237,6 +237,9 @@ Room::prepareRound()
     //NOTE: we must call this functions sequential for all objects
     Cube::t_models::iterator end = m_models.end();
     for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
+        (*i)->rules()->freeOldPos();
+    }
+    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
         (*i)->rules()->occupyNewPos();
     }
     for (Cube::t_models::iterator j = m_models.begin(); j != end; ++j) {
@@ -311,11 +314,6 @@ Room::finishRound(bool interactive)
         m_controls->lockPhases();
     }
     m_view->noteNewRound(m_locker->getLocked());
-
-    Cube::t_models::iterator end = m_models.end();
-    for (Cube::t_models::iterator i = m_models.begin(); i != end; ++i) {
-        (*i)->rules()->finishRound();
-    }
 }
 
 //-----------------------------------------------------------------

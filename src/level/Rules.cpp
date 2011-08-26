@@ -79,6 +79,8 @@ Rules::takeField(Field *field)
  * Accomplish last move in m_dir direction.
  * Mask to a new position.
  * Change model position.
+ *
+ * It complements the unmasking in freeOldPos().
  */
     void
 Rules::occupyNewPos()
@@ -308,15 +310,6 @@ Rules::clearLastFall()
     bool last = m_lastFall;
     m_lastFall = false;
     return last;
-}
-//-----------------------------------------------------------------
-/**
- * Unmask from old position.
- */
-    void
-Rules::finishRound()
-{
-    freeOldPos();
 }
 //-----------------------------------------------------------------
 /**

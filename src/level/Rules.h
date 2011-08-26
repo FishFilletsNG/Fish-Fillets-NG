@@ -47,8 +47,6 @@ class Rules : public NoCopy {
         bool touchSpec(Dir::eDir dir);
         void setTouched(Dir::eDir dir);
         void moveDirBrute(Dir::eDir dir);
-
-        void freeOldPos();
     public:
         Rules(Cube *model);
         ~Rules();
@@ -58,7 +56,7 @@ class Rules : public NoCopy {
         void occupyNewPos();
         bool checkDead(Cube::eAction lastAction);
         void changeState();
-        void finishRound();
+        void freeOldPos();
 
         int actionOut();
         void actionFall();
