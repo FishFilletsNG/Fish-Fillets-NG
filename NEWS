@@ -1,3 +1,8 @@
+Fish Fillets NG - 1.0.1
+* Fixed a bug in the last levels. Fish were unable to swim to some places.
+  It happened next to the room border. The bug was introduced in version 0.9.2.
+  Big thanks Radek and Mirek Olsak for discovering it.
+
 Fish Fillets NG - 1.0.0
 * Dutch spoken dialogs (by Astrid de Wijn and friends).
 * Disallowed a move, to be consistent with the original Fish Fillets.
