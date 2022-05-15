@@ -15,9 +15,9 @@
  */
 KeyControl::KeyControl()
 {
-    m_up = SDLK_UP;
-    m_down = SDLK_DOWN;
-    m_left = SDLK_LEFT;
-    m_right = SDLK_RIGHT;
+    m_up = SDL_SCANCODE_UP;
+    m_down = SDL_SCANCODE_DOWN;
+    m_left = SDL_SCANCODE_LEFT;
+    m_right = SDL_SCANCODE_RIGHT;
 }
 
