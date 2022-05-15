@@ -243,7 +243,7 @@ Controls::switchActive()
 void
 Controls::controlEvent(const KeyStroke &stroke)
 {
-    SDLKey key = stroke.getKey();
+    SDL_Keycode key = stroke.getKey();
 
     if (m_strokeSymbol == ControlSym::SYM_NONE) {
         if (m_active != m_units.end()) {

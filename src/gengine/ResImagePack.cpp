@@ -47,7 +47,7 @@ ResImagePack::loadImage(const Path &file)
                 .addInfo("file", file.getNative()));
     }
 
-    SDL_Surface *surface = SDL_DisplayFormatAlpha(raw_image);
+    SDL_Surface *surface = SDL_ConvertSurfaceFormat(raw_image, SDL_PIXELFORMAT_RGBA8888, 0);
     if (NULL == surface) {
         throw SDLException(ExInfo("DisplayFormat")
                 .addInfo("file", file.getNative()));

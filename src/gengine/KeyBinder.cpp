@@ -65,7 +65,7 @@ KeyBinder::removeStroke(const KeyStroke &stroke)
  * find keystroke and send message.
  */
 void
-KeyBinder::keyDown(const SDL_keysym &keysym) const
+KeyBinder::keyDown(const SDL_Keysym &keysym) const
 {
     KeyStroke stroke(keysym);
     t_strokes::const_iterator it = m_strokes.find(stroke);

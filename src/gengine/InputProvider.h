@@ -12,7 +12,7 @@
 class InputProvider {
     public:
         virtual ~InputProvider() {}
-        virtual bool isPressed(SDLKey key) const = 0;
+        virtual bool isPressed(SDL_Keycode key) const = 0;
         virtual bool isLeftPressed() const = 0;
         virtual bool isRightPressed() const = 0;
         virtual bool isMiddlePressed() const = 0;

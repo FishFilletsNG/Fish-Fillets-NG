@@ -27,17 +27,17 @@ static bool sysSetCaption(SDL_SysWMinfo *info, const std::string &title);
  * @param title UTF-8 string
  */
     void
-SysVideo::setCaption(const std::string &title)
+SysVideo::setCaption(SDL_Window *window, const std::string &title)
 {
     bool done = false;
     SDL_SysWMinfo info;
     SDL_VERSION(&info.version);
-    if (SDL_GetWMInfo(&info) > 0) {
+    if (SDL_GetWindowWMInfo(window, &info) > 0) {
         done = sysSetCaption(&info, title);
     }
 
     if (!done) {
-        SDL_WM_SetCaption(title.c_str(), NULL);
+        SDL_SetWindowTitle(window, title.c_str());
     }
 }
 //-----------------------------------------------------------------

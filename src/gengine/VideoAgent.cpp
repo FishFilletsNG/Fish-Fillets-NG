@@ -33,6 +33,8 @@
 VideoAgent::own_init()
 {
     m_screen = NULL;
+    m_window = NULL;
+    m_renderer = NULL;
     m_fullscreen = false;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDLException(ExInfo("Init"));
@@ -53,7 +55,7 @@ VideoAgent::own_init()
 VideoAgent::own_update()
 {
     drawOn(m_screen);
-    SDL_Flip(m_screen);
+    SDL_RenderPresent(m_renderer);
 }
 //-----------------------------------------------------------------
 /**
@@ -62,6 +64,7 @@ VideoAgent::own_update()
     void
 VideoAgent::own_shutdown()
 {
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
 
@@ -79,7 +82,7 @@ VideoAgent::setIcon(const Path &file)
                 .addInfo("file", file.getNative()));
     }
 
-    SDL_WM_SetIcon(icon, NULL);
+    SDL_SetWindowIcon(m_window, icon);
     SDL_FreeSurface(icon);
 }
 
@@ -98,7 +101,7 @@ VideoAgent::initVideoMode()
     int screen_width = options->getAsInt("screen_width", 640);
     int screen_height = options->getAsInt("screen_height", 480);
 
-    SysVideo::setCaption(options->getParam("caption", "A game"));
+    SysVideo::setCaption(m_window, options->getParam("caption", "A game"));
     if (NULL == m_screen
             || m_screen->w != screen_width
             || m_screen->h != screen_height)
@@ -119,28 +122,31 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     int videoFlags = getVideoFlags();
     m_fullscreen = options->getAsBool("fullscreen", false);
     if (m_fullscreen) {
-        videoFlags |= SDL_FULLSCREEN;
+        videoFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
 
     //TODO: check VideoModeOK and available ListModes
-    SDL_Surface *newScreen =
-        SDL_SetVideoMode(screen_width, screen_height, screen_bpp, videoFlags);
-    if (NULL == newScreen && (videoFlags & SDL_FULLSCREEN)) {
+    SDL_Window *newScreen =
+        SDL_CreateWindow("Fish Fillets NG",
+        		SDL_WINDOWPOS_UNDEFINED,
+				SDL_WINDOWPOS_UNDEFINED,
+				screen_width, screen_height, videoFlags);
+    if (NULL == newScreen && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
         LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")
                 .addInfo("width", screen_width)
                 .addInfo("height", screen_height)
                 .addInfo("bpp", screen_bpp));
 
-        videoFlags = videoFlags & ~SDL_FULLSCREEN;
-        newScreen = SDL_SetVideoMode(screen_width, screen_height, screen_bpp,
-                videoFlags);
+        videoFlags = videoFlags & ~SDL_WINDOW_FULLSCREEN_DESKTOP;
+        newScreen = SDL_CreateWindow("Fish Fillets NG", SDL_WINDOWPOS_UNDEFINED,
+        		SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, videoFlags);
     }
 
     if (newScreen) {
-        m_screen = newScreen;
+        m_window = newScreen;
         //NOTE: must be two times to change MouseState
-        SDL_WarpMouse(screen_width / 2, screen_height / 2);
-        SDL_WarpMouse(screen_width / 2, screen_height / 2);
+        SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
+        SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
     }
     else {
         throw SDLException(ExInfo("SetVideoMode")
@@ -158,8 +164,8 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
 VideoAgent::getVideoFlags()
 {
     int videoFlags  = 0;
-    videoFlags |= SDL_HWPALETTE;
-    videoFlags |= SDL_ANYFORMAT;
+    //videoFlags |= SDL_HWPALETTE;
+    //videoFlags |= SDL_ANYFORMAT;
     videoFlags |= SDL_SWSURFACE;
 
     return videoFlags;
@@ -171,7 +177,7 @@ VideoAgent::getVideoFlags()
     void
 VideoAgent::toggleFullScreen()
 {
-    int success = SDL_WM_ToggleFullScreen(m_screen);
+    int success = SDL_SetWindowFullscreen(m_window, m_fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (success) {
         m_fullscreen = !m_fullscreen;
     }

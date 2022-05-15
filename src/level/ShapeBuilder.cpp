@@ -28,7 +28,7 @@ ShapeBuilder::prepareColor(SDL_Color *color, const Shape *shape,
     color->r = 0;
     color->g = 0;
     color->b = 0;
-    color->unused = 255;
+    color->a = 255;
 
     switch (weight) {
         case Cube::LIGHT:

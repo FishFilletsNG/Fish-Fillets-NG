@@ -49,7 +49,9 @@ PixelIterator::setPos(const V2 &pos)
 bool
 PixelIterator::isTransparent() const
 {
-    return getPixel() == m_surface->format->colorkey;
+	Uint32 key;
+	SDL_GetColorKey(m_surface, &key);
+    return getPixel() == key;
 }
 //-----------------------------------------------------------------
 SDL_Color
@@ -57,7 +59,7 @@ PixelIterator::getColor() const
 {
     SDL_Color color;
     SDL_GetRGBA(getPixel(), m_surface->format,
-            &color.r, &color.g, &color.b, &color.unused);
+            &color.r, &color.g, &color.b, &color.a);
     return color;
 }
 //-----------------------------------------------------------------
@@ -71,7 +73,7 @@ PixelIterator::getPixel() const
 PixelIterator::putColor(const SDL_Color &color)
 {
     Uint32 pixel = SDL_MapRGBA(m_surface->format,
-            color.r, color.g, color.b, color.unused);
+            color.r, color.g, color.b, color.a);
     putPixel(pixel);
 }
 //-----------------------------------------------------------------

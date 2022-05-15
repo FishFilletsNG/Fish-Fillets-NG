@@ -19,6 +19,8 @@ class VideoAgent : public BaseAgent, public MultiDrawer {
     AGENT(VideoAgent, Name::VIDEO_NAME);
     private:
         SDL_Surface *m_screen;
+        SDL_Window *m_window;
+        SDL_Renderer *m_renderer;
         bool m_fullscreen;
 
     private:

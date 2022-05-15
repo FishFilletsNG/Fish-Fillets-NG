@@ -41,7 +41,7 @@ PixelTool::getColor(SDL_Surface *surface, int x, int y)
 {
     SDL_Color color;
     SDL_GetRGBA(getPixel(surface, x, y), surface->format,
-            &color.r, &color.g, &color.b, &color.unused);
+            &color.r, &color.g, &color.b, &color.a);
     return color;
 }
 //-----------------------------------------------------------------
@@ -55,7 +55,7 @@ PixelTool::putColor(SDL_Surface *surface, int x, int y,
         const SDL_Color &color)
 {
     Uint32 pixel = SDL_MapRGBA(surface->format,
-            color.r, color.g, color.b, color.unused);
+            color.r, color.g, color.b, color.a);
     putPixel(surface, x, y, pixel);
 }
 //-----------------------------------------------------------------

@@ -34,9 +34,9 @@ InputAgent::own_init()
 {
     m_keyBinder = new KeyBinder();
     m_handler = NULL;
-    m_keys = SDL_GetKeyState(NULL);
+    m_keys = SDL_GetKeyboardState(NULL);
 
-    SDL_EnableUNICODE(1);
+    //SDL_EnableUNICODE(1);
 }
 //-----------------------------------------------------------------
     void

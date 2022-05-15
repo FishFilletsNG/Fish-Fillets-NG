@@ -21,7 +21,7 @@ class KeyBinder : public NoCopy {
         void addStroke(const KeyStroke &stroke, BaseMsg *msg);
         void removeStroke(const KeyStroke &stroke);
 
-        void keyDown(const SDL_keysym &keysym) const;
+        void keyDown(const SDL_Keysym &keysym) const;
 };
 
 #endif
