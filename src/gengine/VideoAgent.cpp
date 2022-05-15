@@ -55,7 +55,8 @@ VideoAgent::own_init()
 VideoAgent::own_update()
 {
     drawOn(m_screen);
-    SDL_RenderPresent(m_renderer);
+    //SDL_RenderPresent(m_renderer);
+    SDL_UpdateWindowSurface(m_window);
 }
 //-----------------------------------------------------------------
 /**
@@ -144,6 +145,7 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
 
     if (newScreen) {
         m_window = newScreen;
+        m_screen = SDL_GetWindowSurface(m_window);
         //NOTE: must be two times to change MouseState
         SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
         SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
