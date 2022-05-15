@@ -55,8 +55,10 @@ VideoAgent::own_init()
 VideoAgent::own_update()
 {
     drawOn(m_screen);
-    //SDL_RenderPresent(m_renderer);
-    SDL_UpdateWindowSurface(m_window);
+    SDL_UpdateTexture(m_texture, NULL, m_screen->pixels, m_screen->w * sizeof (Uint32));
+    SDL_RenderClear(m_renderer);
+    SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
+    SDL_RenderPresent(m_renderer);
 }
 //-----------------------------------------------------------------
 /**
@@ -127,11 +129,15 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     }
 
     //TODO: check VideoModeOK and available ListModes
-    SDL_Window *newScreen =
-        SDL_CreateWindow("Fish Fillets NG",
-        		SDL_WINDOWPOS_UNDEFINED,
-				SDL_WINDOWPOS_UNDEFINED,
-				screen_width, screen_height, videoFlags);
+    SDL_Window *newScreen;
+    if (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
+        SDL_CreateWindowAndRenderer(0, 0, videoFlags, &newScreen, &m_renderer);
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
+        SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
+    }
+    else {
+        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &newScreen, &m_renderer);
+    }
     if (NULL == newScreen && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
         LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")
                 .addInfo("width", screen_width)
@@ -139,13 +145,29 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
                 .addInfo("bpp", screen_bpp));
 
         videoFlags = videoFlags & ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-        newScreen = SDL_CreateWindow("Fish Fillets NG", SDL_WINDOWPOS_UNDEFINED,
-        		SDL_WINDOWPOS_UNDEFINED, screen_width, screen_height, videoFlags);
+        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &newScreen, &m_renderer);
     }
-
+    Uint32 rmask, gmask, bmask, amask;
+    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
+       on the endianness (byte order) of the machine */
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
     if (newScreen) {
         m_window = newScreen;
-        m_screen = SDL_GetWindowSurface(m_window);
+        m_screen = SDL_CreateRGBSurface(0, screen_width, screen_height, 32, rmask, gmask, bmask, amask);
+        m_texture = SDL_CreateTexture(m_renderer,
+                                       SDL_PIXELFORMAT_ABGR8888,
+                                       SDL_TEXTUREACCESS_STREAMING,
+                                       screen_width, screen_height);
         //NOTE: must be two times to change MouseState
         SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
         SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
