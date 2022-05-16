@@ -67,6 +67,10 @@ VideoAgent::own_update()
     void
 VideoAgent::own_shutdown()
 {
+
+    SDL_DestroyTexture(m_texture);
+    SDL_FreeSurface(m_screen);
+    SDL_DestroyRenderer(m_renderer);
     SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
@@ -129,23 +133,44 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     }
 
     //TODO: check VideoModeOK and available ListModes
-    SDL_Window *newScreen;
+
     if (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
-        SDL_CreateWindowAndRenderer(0, 0, videoFlags, &newScreen, &m_renderer);
+        if (m_window) {
+            SDL_DestroyTexture(m_texture);
+            SDL_FreeSurface(m_screen);
+            SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            if (!m_renderer) {
+                SDL_CreateRenderer(m_window, -1, 0);
+            }
+        }
+        else {
+            SDL_CreateWindowAndRenderer(0, 0, videoFlags, &m_window, &m_renderer);
+        }
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
         SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
     }
     else {
-        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &newScreen, &m_renderer);
+        if (m_window) {
+            SDL_SetWindowFullscreen(m_window, 0);
+            SDL_SetWindowResizable(m_window, SDL_TRUE);
+            SDL_SetWindowSize(m_window, screen_width, screen_height);
+            SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
+            SDL_SetWindowResizable(m_window, SDL_FALSE);
+            SDL_DestroyTexture(m_texture);
+            SDL_FreeSurface(m_screen);
+        }
+        else {
+            SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &m_window, &m_renderer);
+        }
     }
-    if (NULL == newScreen && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
+    if (NULL == m_window && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
         LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")
                 .addInfo("width", screen_width)
                 .addInfo("height", screen_height)
                 .addInfo("bpp", screen_bpp));
 
         videoFlags = videoFlags & ~SDL_WINDOW_FULLSCREEN_DESKTOP;
-        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &newScreen, &m_renderer);
+        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &m_window, &m_renderer);
     }
     Uint32 rmask, gmask, bmask, amask;
     /* SDL interprets each pixel as a 32-bit number, so our masks must depend
@@ -161,8 +186,7 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     bmask = 0x00ff0000;
     amask = 0xff000000;
 #endif
-    if (newScreen) {
-        m_window = newScreen;
+    if (m_window) {
         m_screen = SDL_CreateRGBSurface(0, screen_width, screen_height, 32, rmask, gmask, bmask, amask);
         m_texture = SDL_CreateTexture(m_renderer,
                                        SDL_PIXELFORMAT_ABGR8888,
