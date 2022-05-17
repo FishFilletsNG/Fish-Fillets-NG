@@ -47,14 +47,18 @@ ResImagePack::loadImage(const Path &file)
                 .addInfo("file", file.getNative()));
     }
 
+    /* This code causes pink corners on the 'solved' and 'next puzzle' map markers
+     * It turns out that SDL_ConvertSurfaceFormat doesn't copy palette information (i.e the color key)
+     * Commenting this part out fixes those pink artifacts.
     SDL_Surface *surface = SDL_ConvertSurfaceFormat(raw_image, SDL_PIXELFORMAT_RGBA8888, 0);
     if (NULL == surface) {
         throw SDLException(ExInfo("DisplayFormat")
                 .addInfo("file", file.getNative()));
     }
     SDL_FreeSurface(raw_image);
+    */
 
-    return surface;
+    return raw_image;
 }
 //-----------------------------------------------------------------
 /**
