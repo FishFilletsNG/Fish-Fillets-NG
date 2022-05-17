@@ -145,9 +145,11 @@ SDLSoundAgent::playMusic(const Path &file,
         }
     }
     else {
-        m_looper = new SDLMusicLooper(file);
+        m_music = Mix_LoadMUS(file.getNative().c_str());
+        Mix_PlayMusic(m_music, -1);
+        /*m_looper = new SDLMusicLooper(file);
         m_looper->setVolume(m_musicVolume);
-        m_looper->start();
+        m_looper->start();*/
     }
 }
 //-----------------------------------------------------------------
