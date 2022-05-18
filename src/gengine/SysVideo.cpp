@@ -13,9 +13,9 @@
 #include "SDL.h"
 #if !defined(HAVE_X11) && !defined(WIN32)
     void
-SysVideo::setCaption(const std::string &title)
+SysVideo::setCaption(SDL_Window *window, const std::string &title)
 {
-    SDL_WM_SetCaption(title.c_str(), NULL);
+    SDL_SetWindowTitle(window, title.c_str());
 }
 #else
 #include "SDL_syswm.h"
