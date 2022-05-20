@@ -13,13 +13,19 @@ class MouseStroke {
     private:
         Uint8 m_button;
         V2 m_loc;
+        static float scaleX, scaleY;
+        static V2 letterbox, logicalRes, renderRes;
     public:
         MouseStroke(const SDL_MouseButtonEvent &event);
 
         bool isLeft() const { return m_button == SDL_BUTTON_LEFT; }
         bool isMiddle() const { return m_button == SDL_BUTTON_MIDDLE; }
         bool isRight() const { return m_button == SDL_BUTTON_RIGHT; }
-        V2 getLoc() const { return m_loc; }
+        static void setScale(float x, float y);
+        static void getScale(float& x, float& y);
+        static void setLetterbox(V2 letterbox);
+        static void setResolution(V2 logical, V2 render);
+        V2 getLoc() const;
         std::string toString() const;
 };
 

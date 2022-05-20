@@ -19,6 +19,7 @@
 #include "UnknownMsgException.h"
 #include "OptionAgent.h"
 #include "SysVideo.h"
+#include "MouseStroke.h"
 
 #include "SDL_image.h"
 #include <stdlib.h> // atexit()
@@ -116,6 +117,36 @@ VideoAgent::initVideoMode()
         changeVideoMode(screen_width, screen_height);
     }
 }
+
+/* Calculate fullscreen letterboxing
+ * Returns the size of the left/top blank area (i.e 1/2 of the total blank area in that direction)
+ */
+V2 VideoAgent::calculateLetterbox(int w, int h, int renderW, int renderH)
+{
+	assert(w && h && renderW && renderH);
+    if (renderW == w && renderH == h) {
+        // Windowed?
+        return V2(0, 0);
+    }
+    float aspectRatio = (w+0.0)/h;
+    float aspectRatio2 = (renderW+0.0)/renderH;
+    if (abs(aspectRatio - aspectRatio2) < 0.001) {
+        // Same aspect ratio
+        return V2(0, 0);
+    }
+    if (aspectRatio < aspectRatio2) {
+        // letterbox on sides
+        float scale = (renderH + 0.0) / h;
+        float scaledW = scale * w;
+        return V2((renderW - scaledW)/2, 0);
+    }
+    else {
+        // letterbox above/below
+        float scale= (renderW + 0.0) / w;
+        float scaledH = scale * h;
+        return V2(0, (renderH - scaledH)/2);
+    }
+}
 //-----------------------------------------------------------------
 /**
  * Init new video mode.
@@ -148,6 +179,15 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
         }
         SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
         SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
+        int w, h;
+        SDL_GetRendererOutputSize(m_renderer, &w, &h);
+        V2 letterbox = calculateLetterbox(screen_width, screen_height, w, h);
+        int usableW, usableH;
+        usableW = w-letterbox.getX()*2;
+        usableH = h-letterbox.getY()*2;
+        MouseStroke::setScale((screen_width+0.0)/usableW, (screen_height+0.0)/usableH);
+        MouseStroke::setLetterbox(letterbox);
+        MouseStroke::setResolution(V2(screen_width, screen_height), V2(w, h));
     }
     else {
         if (m_window) {
@@ -162,6 +202,11 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
         else {
             SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &m_window, &m_renderer);
         }
+        int w, h;
+        SDL_GetRendererOutputSize(m_renderer, &w, &h);
+        MouseStroke::setScale(1.0, 1.0);
+        MouseStroke::setLetterbox(V2(0, 0));
+        MouseStroke::setResolution(V2(screen_width, screen_height), V2(w, h));
     }
     if (NULL == m_window && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
         LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")

@@ -6,6 +6,7 @@ class Path;
 #include "BaseAgent.h"
 #include "MultiDrawer.h"
 #include "Name.h"
+#include "V2.h"
 
 #include "SDL.h"
 
@@ -29,6 +30,8 @@ class VideoAgent : public BaseAgent, public MultiDrawer {
         void changeVideoMode(int screen_width, int screen_height);
         int getVideoFlags();
         void toggleFullScreen();
+        /* Calculate fullscreen letterboxing */
+        V2 calculateLetterbox(int w, int h, int renderW, int renderH);
     protected:
         virtual void own_init();
         virtual void own_update();
