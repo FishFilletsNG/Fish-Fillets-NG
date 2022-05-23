@@ -15,7 +15,7 @@
  * Create new stroke from MouseButtonEvent.
  */
 MouseStroke::MouseStroke(const SDL_MouseButtonEvent &event)
-    : m_loc(event.x, event.y)
+    : m_loc(event.x, event.y), m_doScale(true)
 {
     m_button = event.button;
 }
@@ -45,6 +45,11 @@ void MouseStroke::getScale(float& x, float& y)
     x=scaleX;
     y=scaleY;
 }
+// Only needed for options menu in fullscreen
+void MouseStroke::disableScaling()
+{
+    m_doScale = false;
+}
 void MouseStroke::setLetterbox(V2 letterbox)
 {
     MouseStroke::letterbox = letterbox;
@@ -56,13 +61,11 @@ void MouseStroke::setResolution(V2 logical, V2 render)
 }
 V2 MouseStroke::getLoc() const
 {
-    if (letterbox.getX() && (m_loc.getX() < letterbox.getX() || m_loc.getX() > renderRes.getX()-letterbox.getX())) {
-        // the mouse cursor is in the blank area left or right
-        return V2(-1, -1);
+    if (m_doScale) {
+        return V2((m_loc.getX() - letterbox.getX()) * scaleX, (m_loc.getY() - letterbox.getY()) * scaleY);
     }
-    if (letterbox.getY() && (m_loc.getY() < letterbox.getY() || m_loc.getY() > renderRes.getY()-letterbox.getY())) {
-        // mouse cursor is in above/below letterbox
-        return V2(-1, -1);
+    else {
+        // in options menu, probably
+        return m_loc;
     }
-    return V2((m_loc.getX() - letterbox.getX()) * scaleX, (m_loc.getY() - letterbox.getY()) * scaleY);
 }

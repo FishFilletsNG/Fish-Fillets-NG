@@ -18,6 +18,7 @@
 #include "Slider.h"
 #include "SelectLang.h"
 #include "RadioBox.h"
+#include "MouseStroke.h"
 
 #include "Font.h"
 #include "Labels.h"
@@ -216,6 +217,7 @@ MenuOptions::createStatusBar(int width)
     void
 MenuOptions::mouseButton(const MouseStroke &stroke)
 {
+    const_cast<MouseStroke&>(stroke).disableScaling();
     m_container->mouseButton(stroke);
 }
 //-----------------------------------------------------------------

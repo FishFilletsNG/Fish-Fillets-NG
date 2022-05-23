@@ -13,6 +13,7 @@ class MouseStroke {
     private:
         Uint8 m_button;
         V2 m_loc;
+        bool m_doScale;
         static float scaleX, scaleY;
         static V2 letterbox, logicalRes, renderRes;
     public:
@@ -23,6 +24,7 @@ class MouseStroke {
         bool isRight() const { return m_button == SDL_BUTTON_RIGHT; }
         static void setScale(float x, float y);
         static void getScale(float& x, float& y);
+        void disableScaling();
         static void setLetterbox(V2 letterbox);
         static void setResolution(V2 logical, V2 render);
         V2 getLoc() const;
