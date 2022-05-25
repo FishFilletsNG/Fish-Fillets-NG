@@ -42,10 +42,12 @@ VideoAgent::own_init()
     }
     atexit(SDL_Quit);
 
-    setIcon(Path::dataReadPath("images/icon.png"));
-
     registerWatcher("fullscreen");
     initVideoMode();
+
+    // The icon must be set after window creation otherwise setting the icon
+    // has no effect and a generic icon is shown instead.
+    setIcon(Path::dataReadPath("images/icon.png"));
 }
 //-----------------------------------------------------------------
 /**
