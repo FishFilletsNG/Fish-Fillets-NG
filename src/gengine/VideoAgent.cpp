@@ -329,3 +329,7 @@ VideoAgent::receiveString(const StringMsg *msg)
     }
 }
 
+SDL_PixelFormat* VideoAgent::getPixelFormat() {
+    return m_screen->format;
+    //return SDL_GetWindowSurface(m_window)->format;
+}

@@ -39,6 +39,7 @@ class VideoAgent : public BaseAgent, public MultiDrawer {
     public:
         virtual void receiveSimple(const SimpleMsg *msg);
         virtual void receiveString(const StringMsg *msg);
+        SDL_PixelFormat *getPixelFormat();
 
         void initVideoMode();
 };
