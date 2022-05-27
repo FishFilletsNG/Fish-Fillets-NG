@@ -16,6 +16,7 @@ class Path;
 class Font : public NoCopy {
     private:
         TTF_Font *m_ttfont;
+        TTF_Font *m_outline;
         SDL_Color m_bg;
     private:
         static std::string biditize(const std::string &text);
@@ -28,7 +29,7 @@ class Font : public NoCopy {
         int getHeight() { return TTF_FontHeight(m_ttfont); }
         int calcTextWidth(const std::string &text);
         SDL_Surface *renderText(const std::string &text,
-                const SDL_Color &color) const;
+                const SDL_Color &color, TTF_Font* font=NULL) const;
         SDL_Surface *renderTextOutlined(const std::string &text,
                 const SDL_Color &color, int outlineWidth=1) const;
 };

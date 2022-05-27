@@ -13,6 +13,7 @@
 #include "TTFException.h"
 #include "SDLException.h"
 #include "Outline.h"
+#include "VideoAgent.h"
 
 #ifdef HAVE_FRIBIDI
 #include "fribidi.h"
@@ -60,8 +61,15 @@ Font::biditize(const std::string &text)
  */
 Font::Font(const Path &file_ttf, int height)
 {
+    /**
+     * Using two fonts, one with outline width set and the other without, we can render both to different
+     * surfaces and then blit one surface onto the other to outline text.
+     * This way produces thicker outlines, which makes the dialogue easier to see on levels like Picnic Boat.
+     * https://gamedev.stackexchange.com/questions/119642/how-to-use-sdl-ttfs-outlines
+    */
     m_ttfont = TTF_OpenFont(file_ttf.getNative().c_str(), height);
-    if (!m_ttfont) {
+    m_outline = TTF_OpenFont(file_ttf.getNative().c_str(), height);
+    if (!m_ttfont || !m_outline) {
         throw TTFException(ExInfo("OpenFont")
                 .addInfo("file", file_ttf.getNative()));
     }
@@ -73,6 +81,7 @@ Font::Font(const Path &file_ttf, int height)
 //-----------------------------------------------------------------
 Font::~Font()
 {
+    TTF_CloseFont(m_outline);
     TTF_CloseFont(m_ttfont);
 }
 //-----------------------------------------------------------------
@@ -115,9 +124,12 @@ Font::calcTextWidth(const std::string &text)
  * @throws SDLException when converting fails
  */
 SDL_Surface *
-Font::renderText(const std::string &text, const SDL_Color &color) const
+Font::renderText(const std::string &text, const SDL_Color &color, TTF_Font* font) const
 {
     std::string content = biditize(text);
+    if (!font) {
+        font = m_ttfont;
+    }
     if (text.empty()) {
         content = " ";
         LOG_WARNING(ExInfo("empty text to render")
@@ -126,22 +138,27 @@ Font::renderText(const std::string &text, const SDL_Color &color) const
                 .addInfo("b", color.b));
     }
 
-    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(m_ttfont, content.c_str(),
+    SDL_Surface *raw_surface = TTF_RenderUTF8_Shaded(font, content.c_str(),
             color, m_bg);
     if (!raw_surface) {
         throw TTFException(ExInfo("RenderUTF8")
                 .addInfo("text", text));
     }
 
-    //NOTE: at index 0 is bg color
-    if (SDL_SetColorKey(raw_surface, SDL_TRUE, 0) < 0) {
-        throw SDLException(ExInfo("SetColorKey"));
+    SDL_Surface *surface = SDL_ConvertSurface(raw_surface, VideoAgent::agent()->getPixelFormat(), 0);
+    if (!surface) {
+        throw SDLException(ExInfo("ConvertSurface"));
     }
 
-    SDL_Surface *surface = SDL_ConvertSurfaceFormat(raw_surface, SDL_PIXELFORMAT_RGBA8888, 0);
-    if (!surface) {
-        throw SDLException(ExInfo("DisplayFormat"));
+    //NOTE: at index 0 is bg color
+    if (SDL_SetColorKey(surface, SDL_TRUE, reinterpret_cast<Uint32*>(surface->pixels)[0]) < 0) {
+        throw SDLException(ExInfo("SetColorKey"));
     }
+    // Enabling run length encoding(RLE) should make surfaces with a color key blit faster.
+    if (SDL_SetSurfaceRLE(surface, SDL_TRUE) < 0) {
+        LOG_WARNING(ExInfo("SetSurfaceRLE"));
+    }
+
     SDL_FreeSurface(raw_surface);
 
     return surface;
@@ -160,10 +177,15 @@ Font::renderTextOutlined(const std::string &text,
 {
     static const SDL_Color BLACK = {0, 0, 0, 255};
     //NOTE: uses spaces to ensure space for outline
-    SDL_Surface *surface = renderText(" " + text + " ", color);
-    Outline outline(BLACK, outlineWidth);
+    SDL_Surface *surface = renderText(" " + text + " ", color, m_ttfont);
+    TTF_SetFontOutline(m_outline, outlineWidth);
+    SDL_Surface *outlinedText = renderText(" " + text + " ", BLACK, m_outline);
+    SDL_Rect rect = {outlineWidth, outlineWidth, surface->w, surface->h};
+    SDL_BlitSurface(surface, NULL, outlinedText, &rect);
+    SDL_FreeSurface(surface);
+    /*Outline outline(BLACK, outlineWidth);
 
-    outline.drawOnColorKey(surface);
-    return surface;
+    outline.drawOnColorKey(surface);*/
+    return outlinedText;
 }
 
