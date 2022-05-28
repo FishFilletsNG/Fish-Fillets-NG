@@ -48,6 +48,15 @@ ResImagePack::loadImage(const Path &file)
                 .addInfo("file", file.getNative()));
     }
 
+    // ConvertSurface might change the format so we need to convert the color
+    // key to RGB, convert the surface, and then convert back from RGB to color key.
+    Uint32 key;
+    Uint8 r, g, b;
+    int key_enabled = SDL_GetColorKey(raw_image, &key) >= 0;
+    if (key_enabled) {
+        SDL_GetRGB(key, raw_image->format, &r, &g, &b);
+    }
+
     /* SDL_ConvertSurfaceFormat causes pink corners on the 'solved' and 'next puzzle' map markers
      * It turns out that SDL_ConvertSurfaceFormat doesn't copy palette information (i.e the color key)
      * Commenting the next few lines out out fixes those pink artifacts, but the death animation
@@ -61,6 +70,11 @@ ResImagePack::loadImage(const Path &file)
                 .addInfo("file", file.getNative()));
     }
     SDL_FreeSurface(raw_image);
+
+    if (key_enabled) {
+        key = SDL_MapRGB(surface->format, r, g, b);
+        SDL_SetColorKey(surface, SDL_TRUE, key);
+    }
 
     return surface;
 }
