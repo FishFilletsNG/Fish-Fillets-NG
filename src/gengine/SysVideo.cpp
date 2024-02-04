@@ -55,14 +55,14 @@ sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
     bool result = false;
 #ifdef X_HAVE_UTF8_STRING
     if (info->subsystem == SDL_SYSWM_X11) {
-        info->info.x11.lock_func();
+        XLockDisplay(info->info.x11.display);
 
         XTextProperty titleprop;
         char *text_list = const_cast<char*>(title.c_str());
         int error = Xutf8TextListToTextProperty(info->info.x11.display,
                 &text_list, 1, XUTF8StringStyle, &titleprop);
         if (!error) {
-            XSetWMName(info->info.x11.display, info->info.x11.wmwindow,
+            XSetWMName(info->info.x11.display, info->info.x11.window,
                     &titleprop);
             XFree(titleprop.value);
             result = true;
@@ -73,7 +73,7 @@ sysSetCaption(SDL_SysWMinfo *info, const std::string &title)
                     .addInfo("title", title));
         }
 
-        info->info.x11.unlock_func();
+        XUnlockDisplay(info->info.x11.display);
     }
 #endif
     return result;
