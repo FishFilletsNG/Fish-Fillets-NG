@@ -27,7 +27,8 @@ Outline::Outline(const SDL_Color &color, int width)
 void
 Outline::drawOnColorKey(SDL_Surface *surface)
 {
-    Uint32 bgKey = surface->format->colorkey;
+    Uint32 bgKey;
+    SDL_GetColorKey(surface, &bgKey);
     drawOn(surface, bgKey);
 }
 //-----------------------------------------------------------------

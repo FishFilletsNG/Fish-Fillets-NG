@@ -19,6 +19,7 @@
 #include "UnknownMsgException.h"
 #include "OptionAgent.h"
 #include "SysVideo.h"
+#include "MouseStroke.h"
 
 #include "SDL_image.h"
 #include <stdlib.h> // atexit()
@@ -33,16 +34,20 @@
 VideoAgent::own_init()
 {
     m_screen = NULL;
+    m_window = NULL;
+    m_renderer = NULL;
     m_fullscreen = false;
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         throw SDLException(ExInfo("Init"));
     }
     atexit(SDL_Quit);
 
-    setIcon(Path::dataReadPath("images/icon.png"));
-
     registerWatcher("fullscreen");
     initVideoMode();
+
+    // The icon must be set after window creation otherwise setting the icon
+    // has no effect and a generic icon is shown instead.
+    setIcon(Path::dataReadPath("images/icon.png"));
 }
 //-----------------------------------------------------------------
 /**
@@ -53,7 +58,10 @@ VideoAgent::own_init()
 VideoAgent::own_update()
 {
     drawOn(m_screen);
-    SDL_Flip(m_screen);
+    SDL_UpdateTexture(m_texture, NULL, m_screen->pixels, m_screen->w * sizeof (Uint32));
+    SDL_RenderClear(m_renderer);
+    SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
+    SDL_RenderPresent(m_renderer);
 }
 //-----------------------------------------------------------------
 /**
@@ -62,6 +70,11 @@ VideoAgent::own_update()
     void
 VideoAgent::own_shutdown()
 {
+
+    SDL_DestroyTexture(m_texture);
+    SDL_FreeSurface(m_screen);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
     SDL_Quit();
 }
 
@@ -79,7 +92,7 @@ VideoAgent::setIcon(const Path &file)
                 .addInfo("file", file.getNative()));
     }
 
-    SDL_WM_SetIcon(icon, NULL);
+    SDL_SetWindowIcon(m_window, icon);
     SDL_FreeSurface(icon);
 }
 
@@ -98,12 +111,42 @@ VideoAgent::initVideoMode()
     int screen_width = options->getAsInt("screen_width", 640);
     int screen_height = options->getAsInt("screen_height", 480);
 
-    SysVideo::setCaption(options->getParam("caption", "A game"));
+    SysVideo::setCaption(m_window, options->getParam("caption", "A game"));
     if (NULL == m_screen
             || m_screen->w != screen_width
             || m_screen->h != screen_height)
     {
         changeVideoMode(screen_width, screen_height);
+    }
+}
+
+/* Calculate fullscreen letterboxing
+ * Returns the size of the left/top blank area (i.e 1/2 of the total blank area in that direction)
+ */
+V2 VideoAgent::calculateLetterbox(int w, int h, int renderW, int renderH)
+{
+	assert(w && h && renderW && renderH);
+    if (renderW == w && renderH == h) {
+        // Windowed?
+        return V2(0, 0);
+    }
+    float aspectRatio = (w+0.0)/h;
+    float aspectRatio2 = (renderW+0.0)/renderH;
+    if (abs(aspectRatio - aspectRatio2) < 0.001) {
+        // Same aspect ratio
+        return V2(0, 0);
+    }
+    if (aspectRatio < aspectRatio2) {
+        // letterbox on sides
+        float scale = (renderH + 0.0) / h;
+        float scaledW = scale * w;
+        return V2((renderW - scaledW)/2, 0);
+    }
+    else {
+        // letterbox above/below
+        float scale= (renderW + 0.0) / w;
+        float scaledH = scale * h;
+        return V2(0, (renderH - scaledH)/2);
     }
 }
 //-----------------------------------------------------------------
@@ -119,28 +162,86 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
     int videoFlags = getVideoFlags();
     m_fullscreen = options->getAsBool("fullscreen", false);
     if (m_fullscreen) {
-        videoFlags |= SDL_FULLSCREEN;
+        videoFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
     }
 
     //TODO: check VideoModeOK and available ListModes
-    SDL_Surface *newScreen =
-        SDL_SetVideoMode(screen_width, screen_height, screen_bpp, videoFlags);
-    if (NULL == newScreen && (videoFlags & SDL_FULLSCREEN)) {
+
+    if (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP) {
+        if (m_window) {
+            SDL_DestroyTexture(m_texture);
+            SDL_FreeSurface(m_screen);
+            SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            if (!m_renderer) {
+                SDL_CreateRenderer(m_window, -1, 0);
+            }
+        }
+        else {
+            SDL_CreateWindowAndRenderer(0, 0, videoFlags, &m_window, &m_renderer);
+        }
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
+        SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
+        int w, h;
+        SDL_GetRendererOutputSize(m_renderer, &w, &h);
+        V2 letterbox = calculateLetterbox(screen_width, screen_height, w, h);
+        int usableW, usableH;
+        usableW = w-letterbox.getX()*2;
+        usableH = h-letterbox.getY()*2;
+        MouseStroke::setScale((screen_width+0.0)/usableW, (screen_height+0.0)/usableH);
+        MouseStroke::setLetterbox(letterbox);
+        MouseStroke::setResolution(V2(screen_width, screen_height), V2(w, h));
+    }
+    else {
+        if (m_window) {
+            SDL_SetWindowFullscreen(m_window, 0);
+            SDL_SetWindowResizable(m_window, SDL_TRUE);
+            SDL_SetWindowSize(m_window, screen_width, screen_height);
+            SDL_RenderSetLogicalSize(m_renderer, screen_width, screen_height);
+            SDL_SetWindowResizable(m_window, SDL_FALSE);
+            SDL_DestroyTexture(m_texture);
+            SDL_FreeSurface(m_screen);
+        }
+        else {
+            SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &m_window, &m_renderer);
+        }
+        int w, h;
+        SDL_GetRendererOutputSize(m_renderer, &w, &h);
+        MouseStroke::setScale(1.0, 1.0);
+        MouseStroke::setLetterbox(V2(0, 0));
+        MouseStroke::setResolution(V2(screen_width, screen_height), V2(w, h));
+    }
+    if (NULL == m_window && (videoFlags & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
         LOG_WARNING(ExInfo("unable to use fullscreen resolution, trying windowed")
                 .addInfo("width", screen_width)
                 .addInfo("height", screen_height)
                 .addInfo("bpp", screen_bpp));
 
-        videoFlags = videoFlags & ~SDL_FULLSCREEN;
-        newScreen = SDL_SetVideoMode(screen_width, screen_height, screen_bpp,
-                videoFlags);
+        videoFlags = videoFlags & ~SDL_WINDOW_FULLSCREEN_DESKTOP;
+        SDL_CreateWindowAndRenderer(screen_width, screen_height, videoFlags, &m_window, &m_renderer);
     }
-
-    if (newScreen) {
-        m_screen = newScreen;
+    Uint32 rmask, gmask, bmask, amask;
+    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
+       on the endianness (byte order) of the machine */
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+    if (m_window) {
+        m_screen = SDL_CreateRGBSurface(0, screen_width, screen_height, 32, rmask, gmask, bmask, amask);
+        m_texture = SDL_CreateTexture(m_renderer,
+                                       SDL_PIXELFORMAT_ABGR8888,
+                                       SDL_TEXTUREACCESS_STREAMING,
+                                       screen_width, screen_height);
         //NOTE: must be two times to change MouseState
-        SDL_WarpMouse(screen_width / 2, screen_height / 2);
-        SDL_WarpMouse(screen_width / 2, screen_height / 2);
+        SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
+        SDL_WarpMouseInWindow(m_window, screen_width / 2, screen_height / 2);
     }
     else {
         throw SDLException(ExInfo("SetVideoMode")
@@ -158,8 +259,8 @@ VideoAgent::changeVideoMode(int screen_width, int screen_height)
 VideoAgent::getVideoFlags()
 {
     int videoFlags  = 0;
-    videoFlags |= SDL_HWPALETTE;
-    videoFlags |= SDL_ANYFORMAT;
+    //videoFlags |= SDL_HWPALETTE;
+    //videoFlags |= SDL_ANYFORMAT;
     videoFlags |= SDL_SWSURFACE;
 
     return videoFlags;
@@ -171,7 +272,7 @@ VideoAgent::getVideoFlags()
     void
 VideoAgent::toggleFullScreen()
 {
-    int success = SDL_WM_ToggleFullScreen(m_screen);
+    int success = SDL_SetWindowFullscreen(m_window, m_fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
     if (success) {
         m_fullscreen = !m_fullscreen;
     }
@@ -228,3 +329,7 @@ VideoAgent::receiveString(const StringMsg *msg)
     }
 }
 
+SDL_PixelFormat* VideoAgent::getPixelFormat() {
+    return m_screen->format;
+    //return SDL_GetWindowSurface(m_window)->format;
+}

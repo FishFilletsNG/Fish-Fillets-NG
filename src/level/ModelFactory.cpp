@@ -103,28 +103,28 @@ ModelFactory::createUnit(const std::string &kind)
     Unit *result = NULL;
     if ("fish_small" == kind) {
         KeyControl smallfish;
-        smallfish.setUp(SDLK_i);
-        smallfish.setDown(SDLK_k);
-        smallfish.setLeft(SDLK_j);
-        smallfish.setRight(SDLK_l);
+        smallfish.setUp(SDL_SCANCODE_I);
+        smallfish.setDown(SDL_SCANCODE_K);
+        smallfish.setLeft(SDL_SCANCODE_J);
+        smallfish.setRight(SDL_SCANCODE_L);
         result = new Unit(smallfish, ControlSym('u', 'd', 'l', 'r'), true);
     }
     else if ("fish_big" == kind) {
         KeyControl bigfish;
-        bigfish.setUp(SDLK_w);
-        bigfish.setDown(SDLK_s);
-        bigfish.setLeft(SDLK_a);
-        bigfish.setRight(SDLK_d);
+        bigfish.setUp(SDL_SCANCODE_W);
+        bigfish.setDown(SDL_SCANCODE_S);
+        bigfish.setLeft(SDL_SCANCODE_A);
+        bigfish.setRight(SDL_SCANCODE_D);
         result = new Unit(bigfish, ControlSym('U', 'D', 'L', 'R'));
     }
     else if (StringTool::startsWith(kind, "fish_extra") ||
         StringTool::startsWith(kind, "fish_EXTRA"))
     {
         KeyControl extrafish;
-        extrafish.setUp(SDLK_LAST);
-        extrafish.setDown(SDLK_LAST);
-        extrafish.setLeft(SDLK_LAST);
-        extrafish.setRight(SDLK_LAST);
+        extrafish.setUp(SDL_NUM_SCANCODES);
+        extrafish.setDown(SDL_NUM_SCANCODES);
+        extrafish.setLeft(SDL_NUM_SCANCODES);
+        extrafish.setRight(SDL_NUM_SCANCODES);
         result = new Unit(extrafish, parseExtraControlSym(kind));
     }
     return result;

@@ -98,7 +98,7 @@ LayeredPicture::drawOn(SDL_Surface *screen)
 
             if (sample == m_activeColor) {
                 SDL_Color lower = PixelTool::getColor(m_lowerLayer, px, py);
-                if (lower.unused == 255) {
+                if (lower.a == 255) {
                     PixelTool::putColor(screen,
                             m_loc.getX() + px, world_y, lower);
                 }

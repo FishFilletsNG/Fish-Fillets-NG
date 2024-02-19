@@ -34,9 +34,9 @@ InputAgent::own_init()
 {
     m_keyBinder = new KeyBinder();
     m_handler = NULL;
-    m_keys = SDL_GetKeyState(NULL);
+    m_keys = SDL_GetKeyboardState(NULL);
 
-    SDL_EnableUNICODE(1);
+    //SDL_EnableUNICODE(1);
 }
 //-----------------------------------------------------------------
     void
@@ -115,10 +115,16 @@ InputAgent::getMouseState(Uint8 *out_buttons)
     int x;
     int y;
     Uint8 pressed = SDL_GetMouseState(&x, &y);
+    // Scale and translate x and y coordinates.
+    SDL_MouseButtonEvent m;
+    m.x = x;
+    m.y = y;
+    m.button = SDL_BUTTON_LEFT;
+    MouseStroke s(m);
     if (out_buttons) {
         *out_buttons = pressed;
     }
-    return V2(x, y);
+    return s.getLoc();
 }
 
 

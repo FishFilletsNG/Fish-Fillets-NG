@@ -16,7 +16,7 @@ class InputHandler;
 class InputAgent : public BaseAgent {
     AGENT(InputAgent, Name::INPUT_NAME);
     private:
-        Uint8 *m_keys;
+        const Uint8 *m_keys;
         KeyBinder *m_keyBinder;
         InputHandler *m_handler;
     private:

@@ -77,20 +77,20 @@ AM_PATH_SDL($SDL_VERSION,
 ###################################################
 # Checks for C libraries.
 # SDL_mixer
-AC_CHECK_LIB([SDL_mixer], [Mix_OpenAudio],
-             SDL_LIBS="-lSDL_mixer $SDL_LIBS",
+AC_CHECK_LIB([SDL2_mixer], [Mix_OpenAudio],
+             SDL_LIBS="-lSDL2_mixer $SDL_LIBS",
              [AC_MSG_ERROR([*** SDL_mixer-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )
 # SDL_image
-AC_CHECK_LIB([SDL_image], [IMG_Load],
-             SDL_LIBS="-lSDL_image $SDL_LIBS",
+AC_CHECK_LIB([SDL2_image], [IMG_Load],
+             SDL_LIBS="-lSDL2_image $SDL_LIBS",
              [AC_MSG_ERROR([*** SDL_image-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )
 # SDL_ttf
-AC_CHECK_LIB([SDL_ttf], [TTF_OpenFont],
-             SDL_LIBS="-lSDL_ttf $SDL_LIBS",
+AC_CHECK_LIB([SDL2_ttf], [TTF_OpenFont],
+             SDL_LIBS="-lSDL2_ttf $SDL_LIBS",
              [AC_MSG_ERROR([*** SDL_ttf-devel library not found!])],
              $SDL_CFLAGS $SDL_LIBS
 )

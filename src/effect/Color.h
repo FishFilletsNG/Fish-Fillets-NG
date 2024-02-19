@@ -13,7 +13,7 @@ class Color : public SDL_Color {
             this->r = red;
             this->g = green;
             this->b = blue;
-            this->unused = alpha;
+            this->a = alpha;
         }
 };
 

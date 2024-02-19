@@ -46,7 +46,7 @@ SurfaceTool::createEmpty(SDL_Surface *surface, int width, int height)
     SDL_Surface *
 SurfaceTool::createTransparent(int w, int h, const SDL_Color &transparent)
 {
-    SDL_Surface *surface = SDL_CreateRGBSurface(SDL_SWSURFACE|SDL_SRCCOLORKEY,
+    SDL_Surface *surface = SDL_CreateRGBSurface(SDL_SWSURFACE,//|SDL_SRCCOLORKEY,
             w, h, 32,
             0, 0, 0, 0);
     if (NULL == surface) {
@@ -55,7 +55,8 @@ SurfaceTool::createTransparent(int w, int h, const SDL_Color &transparent)
 
     Uint32 transparentKey = SDL_MapRGB(surface->format,
             transparent.r, transparent.g, transparent.b);
-    SDL_SetColorKey(surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, transparentKey);
+    SDL_SetSurfaceRLE(surface, SDL_TRUE);
+    SDL_SetColorKey(surface, SDL_TRUE, transparentKey);
 
     SurfaceTool::alphaFill(surface, NULL, transparent);
     return surface;
@@ -96,9 +97,11 @@ SurfaceTool::alphaFill(SDL_Surface *surface, SDL_Rect *dstrect,
         h = dstrect->h;
     }
     SDL_Surface *canvas = createEmpty(surface, w, h);
-    Uint32 pixel = SDL_MapRGB(canvas->format, color.r, color.g, color.b);
+    Uint32 pixel = SDL_MapRGBA(canvas->format, color.r, color.g, color.b, color.a);
     SDL_FillRect(canvas, NULL, pixel);
-    SDL_SetAlpha(canvas, SDL_SRCALPHA|SDL_RLEACCEL, color.unused);
+    SDL_SetSurfaceRLE(canvas, SDL_TRUE);
+    //FIXME: how to do this in SDL2?
+    //SDL_SetAlpha(canvas, SDL_SRCALPHA, color.a);
 
     SDL_BlitSurface(canvas, NULL, surface, dstrect);
     SDL_FreeSurface(canvas);

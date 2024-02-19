@@ -97,7 +97,7 @@ Unit::activate()
  * @return symbol or SYM_NONE for unknown key
  */
 char
-Unit::mySymbol(SDLKey key) const
+Unit::mySymbol(SDL_Keycode key) const
 {
     return mySymbolBorrowed(key, m_buttons);
 }
@@ -107,7 +107,7 @@ Unit::mySymbol(SDLKey key) const
  * @return symbol or SYM_NONE for unknown key
  */
 char
-Unit::mySymbolBorrowed(SDLKey key, const KeyControl &buttons) const
+Unit::mySymbolBorrowed(SDL_Keycode key, const KeyControl &buttons) const
 {
     if (key == buttons.getLeft()) {
         return m_symbols.getLeft();

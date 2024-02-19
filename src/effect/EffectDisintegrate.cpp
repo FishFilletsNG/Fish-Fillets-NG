@@ -63,7 +63,7 @@ EffectDisintegrate::blit(SDL_Surface *screen, SDL_Surface *surface,
         for (int px = 0; px < surface->w; ++px) {
             if (Random::aByte(py * surface->w + px) < m_disint) {
                 SDL_Color pixel = PixelTool::getColor(surface, px, py);
-                if (pixel.unused == 255) {
+                if (pixel.a == 255) {
                     PixelTool::putColor(screen, x + px, y + py, pixel);
                 }
             }

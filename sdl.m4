@@ -22,19 +22,19 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
   if test x$sdl_exec_prefix != x ; then
      sdl_args="$sdl_args --exec-prefix=$sdl_exec_prefix"
      if test x${SDL_CONFIG+set} != xset ; then
-        SDL_CONFIG=$sdl_exec_prefix/bin/sdl-config
+        SDL_CONFIG=$sdl_exec_prefix/bin/sdl2-config
      fi
   fi
   if test x$sdl_prefix != x ; then
      sdl_args="$sdl_args --prefix=$sdl_prefix"
      if test x${SDL_CONFIG+set} != xset ; then
-        SDL_CONFIG=$sdl_prefix/bin/sdl-config
+        SDL_CONFIG=$sdl_prefix/bin/sdl2-config
      fi
   fi
 
   AC_REQUIRE([AC_CANONICAL_TARGET])
   PATH="$prefix/bin:$prefix/usr/bin:$PATH"
-  AC_PATH_PROG(SDL_CONFIG, sdl-config, no, [$PATH])
+  AC_PATH_PROG(SDL_CONFIG, sdl2-config, no, [$PATH])
   min_sdl_version=ifelse([$1], ,0.11.0,$1)
   AC_MSG_CHECKING(for SDL - version >= $min_sdl_version)
   no_sdl=""
@@ -98,6 +98,7 @@ int main (int argc, char *argv[])
      printf("%s, bad version string\n", "$min_sdl_version");
      exit(1);
    }
+  free(tmp_version);
 
    if (($sdl_major_version > major) ||
       (($sdl_major_version == major) && ($sdl_minor_version > minor)) ||

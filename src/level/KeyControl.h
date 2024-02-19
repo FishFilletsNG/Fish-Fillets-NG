@@ -8,21 +8,21 @@
  */
 class KeyControl {
     private:
-        SDLKey m_up;
-        SDLKey m_down;
-        SDLKey m_left;
-        SDLKey m_right;
+        SDL_Scancode m_up;
+        SDL_Scancode m_down;
+        SDL_Scancode m_left;
+        SDL_Scancode m_right;
     public:
         KeyControl();
-        void setUp(SDLKey key) { m_up = key; }
-        void setDown(SDLKey key) { m_down = key; }
-        void setLeft(SDLKey key) { m_left = key; }
-        void setRight(SDLKey key) { m_right = key; }
+        void setUp(SDL_Scancode key) { m_up = key; }
+        void setDown(SDL_Scancode key) { m_down = key; }
+        void setLeft(SDL_Scancode key) { m_left = key; }
+        void setRight(SDL_Scancode key) { m_right = key; }
 
-        SDLKey getUp() const { return m_up; }
-        SDLKey getDown() const { return m_down; }
-        SDLKey getLeft() const { return m_left; }
-        SDLKey getRight() const { return m_right; }
+        SDL_Scancode getUp() const { return m_up; }
+        SDL_Scancode getDown() const { return m_down; }
+        SDL_Scancode getLeft() const { return m_left; }
+        SDL_Scancode getRight() const { return m_right; }
 };
 
 #endif
